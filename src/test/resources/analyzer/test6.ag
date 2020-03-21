@@ -1,0 +1,3 @@
+Foo:
+bar(Bar bar)* Bar;
+baz(Baz baz){1,2} Baz;

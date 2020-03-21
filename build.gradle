@@ -1,0 +1,63 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+    id 'com.github.ben-manes.versions' version '0.28.0'
+    id 'com.github.johnrengelman.shadow' version '5.2.0'
+    id 'com.github.sherter.google-java-format' version '0.8'
+    id 'com.intershop.gradle.javacc' version '4.0.0'
+    id 'com.palantir.graal' version '0.6.0-112-gca0b727'
+}
+
+group 'silverchain'
+
+version '0.1.0'
+
+sourceCompatibility = 1.8
+
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+}
+
+javacc {
+    javaCCVersion = '7.0.5'
+    configs {
+        parser {
+            inputFile = file('src/main/javacc/silverchain.jj')
+            packageName = 'silverchain.parser'
+        }
+    }
+}
+
+graal {
+    graalVersion '19.2.0'
+    nativeImage {
+        mainClass 'silverchain.Silverchain'
+        outputName 'silverchain'
+    }
+}
+
+shadowJar {
+    manifest.attributes(
+            'Main-Class' : 'silverchain.Silverchain',
+            'Version': "${project.version}"
+    )
+}
+
+test {
+    useJUnitPlatform()
+}
+
+check {
+    dependsOn jacocoTestReport
+}
+
+jacoco {
+    toolVersion = '0.8.5'
+}

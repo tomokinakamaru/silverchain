@@ -1,0 +1,4 @@
+foo.Foo<T, S; U>:
+
+foo(T t) bar(S s) Bar<T, S>;
+baz(U u) Bar<U, U>;

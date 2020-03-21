@@ -1,0 +1,3 @@
+Foo:
+bar(Bar bar) Foo;
+baz(Baz baz) Foo;
