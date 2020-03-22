@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import silverchain.grammar.Method;
 import silverchain.grammar.TypeArguments;
 import silverchain.grammar.TypeReference;
@@ -55,13 +56,8 @@ final class GraphNodeAdapter {
     return new ArrayList<>(set);
   }
 
-  List<String> typeReferences() {
-    return node.edges()
-        .stream()
-        .filter(e -> e.label().is(TypeReference.class))
-        .map(e -> e.label().as(TypeReference.class))
-        .map(ASTEncoder::encode)
-        .collect(Collectors.toList());
+  List<String> superInterfaces() {
+    return typeReferences().map(ASTEncoder::encode).collect(Collectors.toList());
   }
 
   List<GraphEdgeAdapter> edges() {
@@ -72,11 +68,15 @@ final class GraphNodeAdapter {
         .collect(Collectors.toList());
   }
 
-  private Set<String> findTypeParameters() {
+  private Stream<TypeReference> typeReferences() {
     return node.edges()
         .stream()
         .filter(e -> e.label().is(TypeReference.class))
-        .map(e -> e.label().as(TypeReference.class))
+        .map(e -> e.label().as(TypeReference.class));
+  }
+
+  private Set<String> findTypeParameters() {
+    return typeReferences()
         .map(this::findTypeParameters)
         .flatMap(Collection::stream)
         .collect(Collectors.toCollection(LinkedHashSet::new));

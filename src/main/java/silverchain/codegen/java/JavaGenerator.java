@@ -31,7 +31,7 @@ public final class JavaGenerator {
         .append("public interface ")
         .append(node.name())
         .append("<", node.tags(), ", ", ">")
-        .append(" extends ", node.typeReferences(), ", ", null)
+        .append(" extends ", node.superInterfaces(), ", ", null)
         .append(" {");
 
     for (GraphEdgeAdapter edge : node.edges()) {
