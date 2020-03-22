@@ -29,7 +29,11 @@ final class GraphNodeAdapter {
   }
 
   String name() {
-    return graph.typeName();
+    List<String> list = typeReferences().map(r -> r.name().name()).collect(Collectors.toList());
+    if (list.isEmpty()) {
+      return graph.typeName();
+    }
+    return String.join("Or", list);
   }
 
   String packageName() {
