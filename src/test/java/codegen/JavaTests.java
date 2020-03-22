@@ -26,7 +26,6 @@ final class JavaTests {
     for (GeneratedFile file : files) {
       String generated = file.content();
       String expected = read(fileName, file.path());
-      System.out.println(generated);
       assert generated.equals(expected);
     }
   }
