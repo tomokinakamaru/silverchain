@@ -21,6 +21,11 @@ final class JavaTests {
     test("test1.ag");
   }
 
+  @Test
+  void test2() {
+    test("test2.ag");
+  }
+
   private void test(String fileName) {
     List<GeneratedFile> files = new JavaGenerator(analyzer.analyze(fileName)).generate();
     for (GeneratedFile file : files) {

@@ -29,6 +29,9 @@ final class GraphNodeAdapter {
   }
 
   String name() {
+    if (graph.indexOf(node) == -1) {
+      return "void";
+    }
     List<String> list = typeReferences().map(r -> r.name().name()).collect(Collectors.toList());
     if (list.isEmpty()) {
       return graph.typeName();
@@ -39,10 +42,20 @@ final class GraphNodeAdapter {
   String packageName() {
     int number = graph.indexOf(node);
     String qualifier = graph.typePackageName();
-    if (qualifier == null) {
-      return number == 0 ? null : "state" + number;
+
+    if (number == -1) {
+      return null;
     }
-    return number == 0 ? qualifier : qualifier + ".state" + number;
+    if (qualifier == null) {
+      if (number == 0) {
+        return null;
+      }
+      return "state" + number;
+    }
+    if (number == 0) {
+      return qualifier;
+    }
+    return qualifier + ".state" + number;
   }
 
   String qualifiedName() {
