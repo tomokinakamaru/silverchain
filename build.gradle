@@ -54,6 +54,10 @@ test {
     useJUnitPlatform()
 }
 
+googleJavaFormat {
+    exclude 'src/test/resources/**/*'
+}
+
 check {
     dependsOn jacocoTestReport
 }
