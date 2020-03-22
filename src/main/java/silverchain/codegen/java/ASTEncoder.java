@@ -13,9 +13,6 @@ final class ASTEncoder {
   private ASTEncoder() {}
 
   static String encode(QualifiedName name) {
-    if (name == null) {
-      return null;
-    }
     if (name.qualifier() == null) {
       return name.name();
     }

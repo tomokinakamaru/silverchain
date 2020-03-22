@@ -1,47 +1,38 @@
 package codegen;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
-import silverchain.codegen.GeneratedFile;
+import silverchain.analyzer.Analyzer;
 import silverchain.codegen.java.JavaGenerator;
-import utility.ResourceAnalyzer;
+import silverchain.grammar.Grammar;
+import silverchain.parser.ParseException;
+import silverchain.parser.Parser;
 
-final class JavaTests {
+public final class JavaTests {
 
-  private static final ResourceAnalyzer analyzer = new ResourceAnalyzer("codegen", "java");
-
-  @Test
-  void test1() {
-    test("test1.ag");
-  }
+  private static final Path resources = Paths.get("src").resolve("test").resolve("resources");
 
   @Test
-  void test2() {
-    test("test2.ag");
+  void test1() throws FileNotFoundException, ParseException {
+    test("test1");
   }
 
-  private void test(String fileName) {
-    List<GeneratedFile> files = new JavaGenerator(analyzer.analyze(fileName)).generate();
-    for (GeneratedFile file : files) {
-      String generated = file.content();
-      String expected = read(fileName, file.path());
-      assert generated.equals(expected);
-    }
+  @Test
+  void test2() throws FileNotFoundException, ParseException {
+    test("test2");
   }
 
-  private String read(String inputFile, Path outputPath) {
-    Path path = Paths.get(inputFile.replace(".ag", "")).resolve(outputPath);
-    return read(path);
-  }
-
-  private String read(Path path) {
-    Reader reader = new InputStreamReader(analyzer.read(path.toString()));
-    return new BufferedReader(reader).lines().collect(Collectors.joining("\n"));
+  private void test(String name) throws ParseException, FileNotFoundException {
+    Path path = resources.resolve("java").resolve(name + ".ag");
+    InputStream stream = new FileInputStream(path.toString());
+    Grammar grammar = new Parser(stream).grammar();
+    Analyzer analyzer = new Analyzer(grammar);
+    JavaGenerator generator = new JavaGenerator(analyzer.graph().compile(analyzer.option()));
+    GeneratedFileTester tester = new GeneratedFileTester("java", name);
+    tester.test(generator.generate());
   }
 }

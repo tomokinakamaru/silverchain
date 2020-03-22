@@ -1,223 +1,107 @@
 package analyzer;
 
-import java.util.List;
+import java.io.ByteArrayInputStream;
 import org.junit.jupiter.api.Test;
-import silverchain.graph.GraphNode;
-import utility.ResourceAnalyzer;
+import silverchain.analyzer.Analyzer;
+import silverchain.grammar.Grammar;
+import silverchain.parser.ParseException;
+import silverchain.parser.Parser;
+import utility.GraphTester;
 
 final class Tests {
 
-  private static final ResourceAnalyzer analyzer = new ResourceAnalyzer("analyzer");
-
   @Test
-  void test1() {
-    List<GraphNode> nodes = test("test1.ag");
-    assert nodes.size() == 2;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 0;
-    assert nodes.get(1).tags().size() == 2;
+  void test1() throws ParseException {
+    test("Foo<T,S;U>:").edge(0, 1, "Foo<T,S;U>").noEdge(1).noTags(0).tags(1, "T", "S").endNodes(1);
   }
 
   @Test
-  void test2() {
-    List<GraphNode> nodes = test("test2.ag");
-    assert nodes.size() == 4;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 1;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert !nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 1;
-    assert nodes.get(2).tags().size() == 0;
-
-    assert !nodes.get(3).isStart();
-    assert nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 0;
-    assert nodes.get(3).tags().size() == 0;
+  void test2() throws ParseException {
+    test("Foo: bar(Bar bar) Baz;")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "bar(Bar bar)")
+        .edge(2, 3, "Baz")
+        .noEdge(3)
+        .noTags(0, 1, 2, 3)
+        .endNodes(3);
   }
 
   @Test
-  void test3() {
-    List<GraphNode> nodes = test("test3.ag");
-    assert nodes.size() == 5;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 1;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert !nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 1;
-    assert nodes.get(2).tags().size() == 0;
-
-    assert !nodes.get(3).isStart();
-    assert !nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 1;
-    assert nodes.get(3).tags().size() == 0;
-
-    assert !nodes.get(4).isStart();
-    assert nodes.get(4).isEnd();
-    assert nodes.get(4).edges().size() == 0;
-    assert nodes.get(4).tags().size() == 0;
+  void test3() throws ParseException {
+    test("Foo: bar(Bar bar) baz(Baz baz) Foo;")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "bar(Bar bar)")
+        .edge(2, 3, "baz(Baz baz)")
+        .edge(3, 4, "Foo")
+        .noEdge(4)
+        .noTags(0, 1, 2, 3, 4)
+        .endNodes(4);
   }
 
   @Test
-  void test4() {
-    List<GraphNode> nodes = test("test4.ag");
-    assert nodes.size() == 4;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 2;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert !nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 1;
-    assert nodes.get(2).tags().size() == 0;
-
-    assert !nodes.get(3).isStart();
-    assert nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 0;
-    assert nodes.get(3).tags().size() == 0;
+  void test4() throws ParseException {
+    test("Foo: bar(Bar bar) | baz(Baz baz) Foo;")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "bar(Bar bar)", "baz(Baz baz)")
+        .edge(2, 3, "Foo")
+        .noEdge(3)
+        .noTags(0, 1, 2, 3)
+        .endNodes(3);
   }
 
   @Test
-  void test5() {
-    List<GraphNode> nodes = test("test5.ag");
-    assert nodes.size() == 4;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 2;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert !nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 1;
-    assert nodes.get(2).tags().size() == 0;
-
-    assert !nodes.get(3).isStart();
-    assert nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 0;
-    assert nodes.get(3).tags().size() == 0;
+  void test5() throws ParseException {
+    test("Foo: bar(Bar bar) Foo; baz(Baz baz) Foo;")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "bar(Bar bar)", "baz(Baz baz)")
+        .edge(2, 3, "Foo")
+        .noEdge(3)
+        .noTags(0, 1, 2, 3)
+        .endNodes(3);
   }
 
   @Test
-  void test6() {
-    List<GraphNode> nodes = test("test6.ag");
-    assert nodes.size() == 6;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 3;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 0;
-    assert nodes.get(2).tags().size() == 0;
-
-    assert !nodes.get(3).isStart();
-    assert !nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 2;
-    assert nodes.get(3).tags().size() == 0;
-
-    assert !nodes.get(4).isStart();
-    assert !nodes.get(4).isEnd();
-    assert nodes.get(4).edges().size() == 2;
-    assert nodes.get(4).tags().size() == 0;
-
-    assert !nodes.get(5).isStart();
-    assert !nodes.get(5).isEnd();
-    assert nodes.get(5).edges().size() == 1;
-    assert nodes.get(5).tags().size() == 0;
+  void test6() throws ParseException {
+    test("Foo: bar(Bar bar)* Bar; baz(Baz baz){1,2} Baz;")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "Bar")
+        .edge(1, 3, "bar(Bar bar)")
+        .edge(1, 4, "baz(Baz baz)")
+        .edge(3, 3, "bar(Bar bar)")
+        .edge(3, 2, "Bar")
+        .edge(4, 5, "baz(Baz baz)")
+        .edge(5, 2, "Baz")
+        .noEdge(2)
+        .noTags(0, 1, 2, 3, 4, 5)
+        .endNodes(2);
   }
 
   @Test
-  void test7() {
-    List<GraphNode> nodes = test("test7.ag");
-    assert nodes.size() == 4;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 1;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert !nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 1;
-    assert nodes.get(2).tags().size() == 1;
-
-    assert !nodes.get(3).isStart();
-    assert nodes.get(3).isEnd();
-    assert nodes.get(3).edges().size() == 0;
-    assert nodes.get(3).tags().size() == 1;
+  void test7() throws ParseException {
+    test("Foo<;T>: bar(Bar<T> bar) Baz<T>;")
+        .edge(0, 1, "Foo<;T>")
+        .edge(1, 2, "bar(Bar<T> bar)")
+        .edge(2, 3, "Baz<T>")
+        .noEdge(3)
+        .noTags(0, 1)
+        .tags(2, "T")
+        .tags(3, "T")
+        .endNodes(3);
   }
 
   @Test
-  void test8() {
-    List<GraphNode> nodes = test("test8.ag");
-    assert nodes.size() == 3;
-
-    assert nodes.get(0).isStart();
-    assert !nodes.get(0).isEnd();
-    assert nodes.get(0).edges().size() == 1;
-    assert nodes.get(0).tags().size() == 0;
-
-    assert !nodes.get(1).isStart();
-    assert !nodes.get(1).isEnd();
-    assert nodes.get(1).edges().size() == 1;
-    assert nodes.get(1).tags().size() == 0;
-
-    assert !nodes.get(2).isStart();
-    assert nodes.get(2).isEnd();
-    assert nodes.get(2).edges().size() == 0;
-    assert nodes.get(2).tags().size() == 0;
+  void test8() throws ParseException {
+    test("Foo: bar(Bar bar);")
+        .edge(0, 1, "Foo")
+        .edge(1, 2, "bar(Bar bar)")
+        .noEdge(2)
+        .noTags(0, 1, 2)
+        .endNodes(2);
   }
 
-  private List<GraphNode> test(String fileName) {
-    return analyzer.analyze(fileName);
+  private GraphTester test(String text) throws ParseException {
+    Grammar grammar = new Parser(new ByteArrayInputStream(text.getBytes())).grammar();
+    Analyzer analyzer = new Analyzer(grammar);
+    return new GraphTester(analyzer.graph().compile(analyzer.option()));
   }
 }

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
-final class Tests {
+final class ParserTests {
 
   @Test
   void testQualifiedName() {

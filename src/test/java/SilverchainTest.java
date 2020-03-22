@@ -1,3 +1,4 @@
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -6,18 +7,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import silverchain.Silverchain;
 import silverchain.parser.ParseException;
-import utility.ResourceReader;
 
 final class SilverchainTest {
-
-  private static final ResourceReader reader = new ResourceReader("codegen", "java");
 
   private static final Path outputDirectory = Paths.get("build").resolve("silverchain");
 
   @Test
   void test() throws IOException, ParseException {
     Silverchain silverchain = new Silverchain("-o", outputDirectory.toString());
-    silverchain.run(reader.read("test1.ag"));
+    silverchain.run(new ByteArrayInputStream("Foo: foo();".getBytes()));
   }
 
   @BeforeAll
