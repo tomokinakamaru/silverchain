@@ -42,7 +42,8 @@ final class ASTEncoder {
   }
 
   static String encode(Method method) {
-    return method.name() + "(" + encode(method.parameters()) + ")";
+    String s = encode(method.parameters());
+    return method.name() + "(" + (s == null ? "" : s) + ")";
   }
 
   static String encode(MethodParameters parameters) {
