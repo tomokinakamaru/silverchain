@@ -1,9 +1,12 @@
 package silverchain.analyzer;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import silverchain.grammar.ASTNode;
+import silverchain.grammar.Method;
+import silverchain.grammar.Type;
 import silverchain.graph.GraphCompileOption;
 import silverchain.graph.GraphLabel;
 
@@ -27,6 +30,9 @@ final class GraphOption extends GraphCompileOption {
 
   @Override
   protected List<String> getTags(GraphLabel label) {
-    return new ParamRefCollector(parameters).apply(label.as(ASTNode.class));
+    if (label.is(Method.class) || label.is(Type.class)) {
+      return new ParamRefCollector(parameters).apply(label.as(ASTNode.class));
+    }
+    return Collections.emptyList();
   }
 }
