@@ -12,6 +12,7 @@ import silverchain.grammar.QualifiedName;
 import silverchain.grammar.Type;
 import silverchain.grammar.TypeArgument;
 import silverchain.grammar.TypeArguments;
+import silverchain.grammar.TypeParameterList;
 import silverchain.grammar.TypeReference;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
@@ -22,7 +23,7 @@ final class GraphAnalyzer {
 
   private final Type type;
 
-  private final Set<String> parameterNames;
+  private final List<String> parameterNames;
 
   private final Map<GraphNode, TypeReference> typeReferences;
 
@@ -37,23 +38,66 @@ final class GraphAnalyzer {
     return nodes;
   }
 
-  String name(GraphNode node) {
+  List<String> parameters() {
+    return parameterNames;
+  }
+
+  QualifiedName packageName() {
+    return type.name().qualifier();
+  }
+
+  String name() {
     return type.name().name();
   }
 
-  QualifiedName packageName(GraphNode node) {
+  int indexOf(GraphNode node) {
+    return nodes.indexOf(node);
+  }
+
+  String implModifier(GraphNode node) {
     int n = nodes.indexOf(node);
-    QualifiedName qualifier = type.name().qualifier();
+    return n == 0 ? "public " : "";
+  }
+
+  String implName(GraphNode node) {
+    int n = nodes.indexOf(node);
+    return n == 0 ? type.name().name() : "State" + n;
+  }
+
+  QualifiedName implQualifiedName(GraphNode node) {
+    return new QualifiedName(packageName(), implName(node));
+  }
+
+  String apiModifier(GraphNode node) {
+    int n = nodes.indexOf(node);
+    return n == 0 ? "" : "public ";
+  }
+
+  String apiName(GraphNode node) {
+    int n = nodes.indexOf(node);
+    return n == 0 ? "I" + type.name().name() : type.name().name();
+  }
+
+  QualifiedName apiPackageName(GraphNode node) {
+    int n = nodes.indexOf(node);
+    QualifiedName qualifier = packageName();
     return n == 0 ? qualifier : new QualifiedName(qualifier, "state" + n);
   }
 
-  QualifiedName qualifiedName(GraphNode node) {
-    return new QualifiedName(packageName(node), name(node));
+  QualifiedName apiQualifiedName(GraphNode node) {
+    return new QualifiedName(apiPackageName(node), apiName(node));
+  }
+
+  TypeReference listenerDestination(GraphEdge edge) {
+    if (nodes.contains(edge.destination())) {
+      return null;
+    }
+    return typeReferences.get(edge.destination());
   }
 
   TypeReference destination(GraphEdge edge) {
     if (nodes.contains(edge.destination())) {
-      QualifiedName qualifiedName = qualifiedName(edge.destination());
+      QualifiedName qualifiedName = apiQualifiedName(edge.destination());
       TypeArguments typeArguments = typeArguments(edge.destination().tags());
       return new TypeReference(qualifiedName, typeArguments);
     }
@@ -126,8 +170,23 @@ final class GraphAnalyzer {
     return nodes.get(0).edges().get(0).label().as(Type.class);
   }
 
-  private static Set<String> parameterNames(List<GraphNode> nodes) {
-    return nodes.stream().flatMap(n -> n.tags().stream()).collect(Collectors.toSet());
+  private static List<String> parameterNames(List<GraphNode> nodes) {
+    List<String> list = new ArrayList<>();
+    Type type = type(nodes);
+    if (type.parameters() != null) {
+      list.addAll(parameterNames(type.parameters().publicList()));
+      list.addAll(parameterNames(type.parameters().privateList()));
+    }
+    return list;
+  }
+
+  private static List<String> parameterNames(TypeParameterList list) {
+    List<String> ls = new ArrayList<>();
+    while (list != null) {
+      ls.add(list.head().name());
+      list = list.tail();
+    }
+    return ls;
   }
 
   private static Map<GraphNode, TypeReference> typeReferences(List<GraphNode> nodes) {
