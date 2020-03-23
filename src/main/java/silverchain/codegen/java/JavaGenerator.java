@@ -48,7 +48,7 @@ public final class JavaGenerator {
           .append(";\n");
     }
 
-    codeBuilder.append("}");
+    codeBuilder.append("}\n");
 
     return codeBuilder.generate(path(analyzer.qualifiedName(node)));
   }

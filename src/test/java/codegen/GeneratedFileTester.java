@@ -36,7 +36,7 @@ public final class GeneratedFileTester {
 
   private void test(GeneratedFile file) {
     String generated = file.content();
-    String expected = read(path.resolve(file.path())).trim();
+    String expected = read(path.resolve(file.path()));
     assert generated.equals(expected);
   }
 
