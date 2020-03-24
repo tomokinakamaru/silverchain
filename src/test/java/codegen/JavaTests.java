@@ -31,7 +31,7 @@ public final class JavaTests {
     InputStream stream = new FileInputStream(path.toString());
     Grammar grammar = new Parser(stream).grammar();
     Analyzer analyzer = new Analyzer(grammar);
-    JavaGenerator generator = new JavaGenerator(analyzer.graph().compile(analyzer.option()));
+    JavaGenerator generator = new JavaGenerator(analyzer.analyze());
     GeneratedFileTester tester = new GeneratedFileTester("java", name);
     tester.test(generator.generate());
   }

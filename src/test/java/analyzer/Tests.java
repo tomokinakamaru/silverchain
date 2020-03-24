@@ -102,6 +102,6 @@ final class Tests {
   private GraphTester test(String text) throws ParseException {
     Grammar grammar = new Parser(new ByteArrayInputStream(text.getBytes())).grammar();
     Analyzer analyzer = new Analyzer(grammar);
-    return new GraphTester(analyzer.graph().compile(analyzer.option()));
+    return new GraphTester(analyzer.analyze());
   }
 }

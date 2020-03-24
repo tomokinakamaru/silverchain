@@ -1,5 +1,6 @@
 package graph;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,9 @@ final class TestOption extends GraphCompileOption {
   @Override
   protected List<Object> getTags(GraphLabel label) {
     String s = label.as(String.class);
-    return s.contains(":") ? Arrays.asList(s.split(":")[1].split(",")) : Collections.emptyList();
+    if (s.contains(":")) {
+      return new ArrayList<>(Arrays.asList(s.split(":")[1].split(",")));
+    }
+    return Collections.emptyList();
   }
 }

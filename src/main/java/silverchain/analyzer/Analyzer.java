@@ -1,8 +1,9 @@
 package silverchain.analyzer;
 
+import java.util.List;
 import silverchain.grammar.Grammar;
 import silverchain.graph.Graph;
-import silverchain.graph.GraphCompileOption;
+import silverchain.graph.GraphNode;
 
 public final class Analyzer {
 
@@ -12,11 +13,16 @@ public final class Analyzer {
     this.grammar = grammar;
   }
 
-  public Graph graph() {
+  public List<GraphNode> analyze() {
+    return graph().compile(option());
+  }
+
+  private Graph graph() {
     return new GraphBuilder().apply(grammar);
   }
 
-  public GraphCompileOption option() {
-    return new GraphOption(new ParamDefCollector().apply(grammar));
+  private GraphOption option() {
+    new ReferenceResolver().apply(grammar);
+    return new GraphOption();
   }
 }

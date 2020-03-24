@@ -10,8 +10,6 @@ import silverchain.analyzer.Analyzer;
 import silverchain.codegen.GeneratedFile;
 import silverchain.codegen.java.JavaGenerator;
 import silverchain.grammar.Grammar;
-import silverchain.graph.Graph;
-import silverchain.graph.GraphCompileOption;
 import silverchain.graph.GraphNode;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
@@ -44,9 +42,7 @@ public final class Silverchain {
     Parser parser = new Parser(stream);
     Grammar grammar = parser.grammar();
     Analyzer analyzer = new Analyzer(grammar);
-    Graph graph = analyzer.graph();
-    GraphCompileOption option = analyzer.option();
-    List<GraphNode> nodes = graph.compile(option);
+    List<GraphNode> nodes = analyzer.analyze();
     JavaGenerator generator = new JavaGenerator(nodes);
     for (GeneratedFile file : generator.generate()) {
       file.save(outputDirectory);
