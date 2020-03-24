@@ -1,11 +1,23 @@
 package silverchain.grammar;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
 
   public TypeArguments(TypeArgument head, TypeArguments tail) {
     super(head, tail);
+  }
+
+  public List<TypeParameter> referents() {
+    return toList()
+        .stream()
+        .map(TypeArgument::referents)
+        .flatMap(Collection::stream)
+        .distinct()
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
