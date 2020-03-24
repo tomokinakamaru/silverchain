@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
 
@@ -56,9 +57,11 @@ public final class GraphTester {
   }
 
   public GraphTester tags(int i, String tag, String... tags) {
-    Set<String> set = new HashSet<>(Arrays.asList(tags));
-    set.add(tag);
-    assert new HashSet<>(nodes.get(i).tags()).equals(set);
+    Set<String> set1 =
+        nodes.get(i).tags().stream().map(t -> t.raw().toString()).collect(Collectors.toSet());
+    Set<String> set2 = new HashSet<>(Arrays.asList(tags));
+    set2.add(tag);
+    assert set1.equals(set2);
     return this;
   }
 

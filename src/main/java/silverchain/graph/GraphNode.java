@@ -5,7 +5,7 @@ import java.util.List;
 
 public final class GraphNode {
 
-  Tags tags;
+  GraphTags tags;
 
   List<GraphEdge> sortedEdges;
 
@@ -15,7 +15,7 @@ public final class GraphNode {
 
   GraphNode() {}
 
-  public List<String> tags() {
+  public List<GraphTag> tags() {
     return new ArrayList<>(tags);
   }
 

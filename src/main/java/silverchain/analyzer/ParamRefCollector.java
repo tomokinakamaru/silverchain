@@ -4,22 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import silverchain.grammar.ASTNode;
+import silverchain.grammar.QualifiedName;
 import silverchain.grammar.Type;
+import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeParameterList;
 import silverchain.grammar.TypeReference;
 import silverchain.grammar.Visitor;
 
 final class ParamRefCollector extends Visitor {
 
-  private final Set<String> definedParameters;
+  private final Set<TypeParameter> definedParameters;
 
-  private final List<String> parameters = new ArrayList<>();
+  private final List<TypeParameter> parameters = new ArrayList<>();
 
-  ParamRefCollector(Set<String> definedParameters) {
+  ParamRefCollector(Set<TypeParameter> definedParameters) {
     this.definedParameters = definedParameters;
   }
 
-  List<String> apply(ASTNode node) {
+  List<TypeParameter> apply(ASTNode node) {
     node.accept(this);
     return parameters;
   }
@@ -29,7 +31,7 @@ final class ParamRefCollector extends Visitor {
     if (node.parameters() != null) {
       TypeParameterList list = node.parameters().publicList();
       while (list != null) {
-        parameters.add(list.head().name());
+        parameters.add(list.head());
         list = list.tail();
       }
     }
@@ -37,9 +39,13 @@ final class ParamRefCollector extends Visitor {
 
   @Override
   protected void visit(TypeReference node) {
-    String name = node.name().toString();
-    if (definedParameters.contains(name)) {
-      parameters.add(name);
+    QualifiedName name = node.name();
+    if (name.qualifier() == null) {
+      definedParameters
+          .stream()
+          .filter(p -> p.name().equals(name.name()))
+          .findFirst()
+          .ifPresent(parameters::add);
     }
   }
 }

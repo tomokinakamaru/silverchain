@@ -68,14 +68,20 @@ public final class Graph {
 
   private void propagateTags() {
     GraphNode initial = startNodes.iterator().next();
-    initial.tags = new Tags();
+    initial.tags = new GraphTags();
 
     Traverser<GraphNode> traverser = new Traverser<>(initial);
     while (traverser.hasNext()) {
       GraphNode src = traverser.next();
       for (GraphEdge edge : edges.from(src)) {
         GraphNode dst = edge.destination;
-        Tags tags = new Tags(src.tags, option.getTags(edge.label));
+        GraphTags tags = new GraphTags(src.tags);
+        for (Object obj : option.getTags(edge.label)) {
+          GraphTag tag = new GraphTag(obj);
+          if (tags.stream().noneMatch(t -> option.equals(t, tag))) {
+            tags.add(tag);
+          }
+        }
 
         if (dst.tags == null) {
           dst.tags = tags;

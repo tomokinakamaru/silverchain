@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import silverchain.codegen.GeneratedFile;
 import silverchain.grammar.Method;
 import silverchain.grammar.MethodParameter;
@@ -14,6 +15,7 @@ import silverchain.grammar.MethodParameters;
 import silverchain.grammar.QualifiedName;
 import silverchain.grammar.TypeArgument;
 import silverchain.grammar.TypeArguments;
+import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeReference;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
@@ -42,13 +44,13 @@ public final class JavaGenerator {
         .append(analyzer.apiModifier(node))
         .append("interface ")
         .append(analyzer.apiName(node))
-        .append("<", node.tags(), ", ", ">")
+        .append("<", encode(analyzer.tags(node)), ">")
         .append(" {");
 
     for (GraphEdge edge : node.edges()) {
       codeBuilder
           .append("\n  ")
-          .append("<", analyzer.tags(edge), ", ", "> ")
+          .append("<", encode(analyzer.tags(edge)), "> ")
           .append(encode(analyzer.destination(edge)))
           .append(" ")
           .append(encode(edge.label().as(Method.class)))
@@ -70,23 +72,23 @@ public final class JavaGenerator {
         .append(analyzer.implModifier(node))
         .append("class ")
         .append(analyzer.implName(node))
-        .append("<", node.tags(), ", ", ">")
+        .append("<", encode(analyzer.tags(node)), ">")
         .append(" implements ")
         .append(encode(analyzer.apiQualifiedName(node)))
-        .append("<", node.tags(), ", ", ">")
+        .append("<", encode(analyzer.tags(node)), ">")
         .append(" {");
 
     if (analyzer.indexOf(node) != 0) {
       codeBuilder
           .append("\n  private final ")
           .append(listenerName)
-          .append("<", analyzer.parameters(), ", ", ">")
+          .append("<", encode(analyzer.parameters()), ">")
           .append(" listener;\n\n  ")
           .append(analyzer.implModifier(node))
           .append(analyzer.implName(node))
           .append("(")
           .append(listenerName)
-          .append("<", analyzer.parameters(), ", ", ">")
+          .append("<", encode(analyzer.parameters()), ">")
           .append(" listener")
           .append(")")
           .append("{\n    ")
@@ -97,7 +99,7 @@ public final class JavaGenerator {
     for (GraphEdge edge : node.edges()) {
       codeBuilder
           .append("\n  @Override\n  public ")
-          .append("<", analyzer.tags(edge), ", ", "> ")
+          .append("<", encode(analyzer.tags(edge)), "> ")
           .append(encode(analyzer.destination(edge)))
           .append(" ")
           .append(encode(edge.label().as(Method.class)))
@@ -106,15 +108,18 @@ public final class JavaGenerator {
       if (analyzer.indexOf(node) == 0) {
         codeBuilder.append(listenerName);
         if (!analyzer.parameters().isEmpty()) {
-          List<String> params = new ArrayList<>(analyzer.parameters());
-          List<String> knownParams = node.tags();
+          List<String> list = new ArrayList<>();
+          List<TypeParameter> params = new ArrayList<>(analyzer.parameters());
+          List<TypeParameter> knownParams = analyzer.tags(node);
           knownParams.addAll(analyzer.tags(edge));
-          for (int i = 0; i < params.size(); i++) {
-            if (!knownParams.contains(params.get(i))) {
-              params.set(i, "?");
+          for (TypeParameter param : params) {
+            if (knownParams.contains(param)) {
+              list.add(param.name());
+            } else {
+              list.add("?");
             }
           }
-          codeBuilder.append("<", params, ", ", ">");
+          codeBuilder.append("<", list, ", ", ">");
         }
         codeBuilder.append(" listener = new ").append(listenerName);
         if (!analyzer.parameters().isEmpty()) {
@@ -160,7 +165,7 @@ public final class JavaGenerator {
         .append("package ", encode(analyzer.packageName()), ";\n\n")
         .append("interface ")
         .append(name)
-        .append("<", analyzer.parameters(), ", ", ">")
+        .append("<", encode(analyzer.parameters()), ">")
         .append(" {");
 
     Set<Method> methods = new HashSet<>();
@@ -187,6 +192,14 @@ public final class JavaGenerator {
 
   private static Path path(QualifiedName name) {
     return Paths.get(String.join(File.separator, encode(name).split("\\.")) + ".java");
+  }
+
+  private static String encode(List<TypeParameter> parameters) {
+    return parameters.stream().map(JavaGenerator::encode).collect(Collectors.joining(", "));
+  }
+
+  private static String encode(TypeParameter parameter) {
+    return parameter.name();
   }
 
   private static String encode(QualifiedName name) {

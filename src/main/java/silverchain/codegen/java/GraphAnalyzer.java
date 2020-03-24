@@ -12,10 +12,12 @@ import silverchain.grammar.QualifiedName;
 import silverchain.grammar.Type;
 import silverchain.grammar.TypeArgument;
 import silverchain.grammar.TypeArguments;
+import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeParameterList;
 import silverchain.grammar.TypeReference;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
+import silverchain.graph.GraphTag;
 
 final class GraphAnalyzer {
 
@@ -23,14 +25,14 @@ final class GraphAnalyzer {
 
   private final Type type;
 
-  private final List<String> parameterNames;
+  private final List<TypeParameter> definedParameters;
 
   private final Map<GraphNode, TypeReference> typeReferences;
 
   GraphAnalyzer(List<GraphNode> nodes) {
     this.nodes = nodes(nodes);
     this.type = type(nodes);
-    this.parameterNames = parameterNames(nodes);
+    this.definedParameters = parameterNames(nodes);
     this.typeReferences = typeReferences(nodes);
   }
 
@@ -38,8 +40,8 @@ final class GraphAnalyzer {
     return nodes;
   }
 
-  List<String> parameters() {
-    return parameterNames;
+  List<TypeParameter> parameters() {
+    return definedParameters;
   }
 
   QualifiedName packageName() {
@@ -104,42 +106,53 @@ final class GraphAnalyzer {
     return typeReferences.get(edge.destination());
   }
 
-  List<String> tags(GraphEdge edge) {
-    List<String> list = parameters(edge.destination());
+  List<TypeParameter> tags(GraphNode node) {
+    return node.tags()
+        .stream()
+        .map(t -> t.as(TypeParameter.class))
+        .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  List<TypeParameter> tags(GraphEdge edge) {
+    List<TypeParameter> list = parameters(edge.destination());
     list.removeAll(parameters(edge.source()));
     return list;
   }
 
-  private List<String> parameters(GraphNode node) {
+  private List<TypeParameter> parameters(GraphNode node) {
     TypeReference reference = typeReferences.get(node);
-    return reference == null ? node.tags() : new ArrayList<>(findTypeParameters(reference));
+    if (reference == null) {
+      return node.tags().stream().map(t -> t.as(TypeParameter.class)).collect(Collectors.toList());
+    }
+    return new ArrayList<>(findTypeParameters(reference));
   }
 
-  private Set<String> findTypeParameters(TypeReference reference) {
+  private Set<TypeParameter> findTypeParameters(TypeReference reference) {
     if (reference == null) {
       return Collections.emptySet();
     }
-    Set<String> set = new LinkedHashSet<>();
+    Set<TypeParameter> set = new LinkedHashSet<>();
     QualifiedName name = reference.name();
-    if (parameterNames.contains(name.name()) && name.qualifier() == null) {
-      set.add(name.name());
+    TypeParameter p = parameter(reference);
+    if (p != null) {
+      set.add(p);
     }
     set.addAll(findTypeParameters(reference.arguments()));
     return set;
   }
 
-  private Set<String> findTypeParameters(TypeArguments arguments) {
+  private Set<TypeParameter> findTypeParameters(TypeArguments arguments) {
     if (arguments == null) {
       return Collections.emptySet();
     }
-    Set<String> set = findTypeParameters(arguments.head());
+    Set<TypeParameter> set = findTypeParameters(arguments.head());
     if (arguments.tail() != null) {
       set.addAll(findTypeParameters(arguments.tail()));
     }
     return set;
   }
 
-  private Set<String> findTypeParameters(TypeArgument argument) {
+  private Set<TypeParameter> findTypeParameters(TypeArgument argument) {
     return findTypeParameters(argument.reference());
   }
 
@@ -152,7 +165,7 @@ final class GraphAnalyzer {
         .collect(Collectors.toList());
   }
 
-  private static TypeArguments typeArguments(List<String> names) {
+  private static TypeArguments typeArguments(List<GraphTag> names) {
     TypeArguments args = null;
     for (int i = names.size() - 1; i >= 0; i--) {
       args = new TypeArguments(typeArgument(names.get(i)), args);
@@ -160,8 +173,8 @@ final class GraphAnalyzer {
     return args;
   }
 
-  private static TypeArgument typeArgument(String name) {
-    QualifiedName qualifiedName = new QualifiedName(null, name);
+  private static TypeArgument typeArgument(GraphTag name) {
+    QualifiedName qualifiedName = new QualifiedName(null, name.as(TypeParameter.class).name());
     TypeReference reference = new TypeReference(qualifiedName, null);
     return new TypeArgument(reference);
   }
@@ -170,8 +183,8 @@ final class GraphAnalyzer {
     return nodes.get(0).edges().get(0).label().as(Type.class);
   }
 
-  private static List<String> parameterNames(List<GraphNode> nodes) {
-    List<String> list = new ArrayList<>();
+  private static List<TypeParameter> parameterNames(List<GraphNode> nodes) {
+    List<TypeParameter> list = new ArrayList<>();
     Type type = type(nodes);
     if (type.parameters() != null) {
       list.addAll(parameterNames(type.parameters().publicList()));
@@ -180,10 +193,10 @@ final class GraphAnalyzer {
     return list;
   }
 
-  private static List<String> parameterNames(TypeParameterList list) {
-    List<String> ls = new ArrayList<>();
+  private static List<TypeParameter> parameterNames(TypeParameterList list) {
+    List<TypeParameter> ls = new ArrayList<>();
     while (list != null) {
-      ls.add(list.head().name());
+      ls.add(list.head());
       list = list.tail();
     }
     return ls;
@@ -207,5 +220,15 @@ final class GraphAnalyzer {
         .orElseThrow(RuntimeException::new)
         .label()
         .as(TypeReference.class);
+  }
+
+  private TypeParameter parameter(TypeReference reference) {
+    if (reference.name().qualifier() == null) {
+      String name = reference.name().name();
+      if (definedParameters.stream().anyMatch(p -> p.name().equals(name))) {
+        return new TypeParameter(name);
+      }
+    }
+    return null;
   }
 }
