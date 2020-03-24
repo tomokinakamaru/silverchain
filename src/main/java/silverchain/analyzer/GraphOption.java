@@ -3,7 +3,6 @@ package silverchain.analyzer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import silverchain.grammar.ASTNode;
 import silverchain.grammar.Method;
 import silverchain.grammar.Type;
@@ -16,7 +15,7 @@ final class GraphOption extends GraphCompileOption {
 
   @Override
   protected boolean equals(GraphLabel label1, GraphLabel label2) {
-    return Objects.equals(label1.raw(), label2.raw());
+    return label1.raw().equals(label2.raw());
   }
 
   @Override
