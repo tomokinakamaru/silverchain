@@ -1,5 +1,7 @@
 package silverchain.grammar;
 
+import java.util.stream.Collectors;
+
 public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
 
   public TypeArguments(TypeArgument head, TypeArguments tail) {
@@ -8,7 +10,6 @@ public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
 
   @Override
   public String toString() {
-    String s = tail() == null ? "" : "," + tail().toString();
-    return head().toString() + s;
+    return toList().stream().map(TypeArgument::toString).collect(Collectors.joining(","));
   }
 }

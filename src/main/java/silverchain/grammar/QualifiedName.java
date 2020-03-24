@@ -1,5 +1,8 @@
 package silverchain.grammar;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public final class QualifiedName extends ASTNode2<QualifiedName, String> {
 
   public QualifiedName(QualifiedName qualifier, String name) {
@@ -12,6 +15,16 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
 
   public String name() {
     return right();
+  }
+
+  public List<String> toList() {
+    List<String> list = new ArrayList<>();
+    QualifiedName name = this;
+    while (name != null) {
+      list.add(0, name.name());
+      name = name.qualifier();
+    }
+    return list;
   }
 
   @Override

@@ -1,5 +1,7 @@
 package silverchain.grammar;
 
+import java.util.stream.Collectors;
+
 public final class MethodParameters extends ASTNodeN<MethodParameter, MethodParameters> {
 
   public MethodParameters(MethodParameter head, MethodParameters tail) {
@@ -8,7 +10,6 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
 
   @Override
   public String toString() {
-    String s = tail() == null ? "" : "," + tail().toString();
-    return head().toString() + s;
+    return toList().stream().map(MethodParameter::toString).collect(Collectors.joining(","));
   }
 }

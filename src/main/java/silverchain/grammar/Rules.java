@@ -1,5 +1,7 @@
 package silverchain.grammar;
 
+import java.util.stream.Collectors;
+
 public final class Rules extends ASTNodeN<Rule, Rules> {
 
   public Rules(Rule head, Rules tail) {
@@ -8,7 +10,6 @@ public final class Rules extends ASTNodeN<Rule, Rules> {
 
   @Override
   public String toString() {
-    String s = tail() == null ? "" : " " + tail().toString();
-    return head().toString() + s;
+    return toList().stream().map(Rule::toString).collect(Collectors.joining(" "));
   }
 }

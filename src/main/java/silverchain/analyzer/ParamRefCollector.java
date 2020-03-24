@@ -7,7 +7,6 @@ import silverchain.grammar.ASTNode;
 import silverchain.grammar.QualifiedName;
 import silverchain.grammar.Type;
 import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeParameterList;
 import silverchain.grammar.TypeReference;
 import silverchain.grammar.Visitor;
 
@@ -28,12 +27,8 @@ final class ParamRefCollector extends Visitor {
 
   @Override
   protected void visit(Type node) {
-    if (node.parameters() != null) {
-      TypeParameterList list = node.parameters().publicList();
-      while (list != null) {
-        parameters.add(list.head());
-        list = list.tail();
-      }
+    if (node.parameters() != null && node.parameters().publicList() != null) {
+      parameters.addAll(node.parameters().publicList().toList());
     }
   }
 

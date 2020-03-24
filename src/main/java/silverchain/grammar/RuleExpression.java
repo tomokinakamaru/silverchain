@@ -1,5 +1,7 @@
 package silverchain.grammar;
 
+import java.util.stream.Collectors;
+
 public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
 
   public RuleExpression(RuleTerm head, RuleExpression tail) {
@@ -8,7 +10,6 @@ public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
 
   @Override
   public String toString() {
-    String s = tail() == null ? "" : "|" + tail().toString();
-    return head().toString() + s;
+    return toList().stream().map(RuleTerm::toString).collect(Collectors.joining("|"));
   }
 }
