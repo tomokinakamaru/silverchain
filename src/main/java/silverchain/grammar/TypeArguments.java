@@ -12,8 +12,7 @@ public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
   }
 
   public List<TypeParameter> referents() {
-    return toList()
-        .stream()
+    return stream()
         .map(TypeArgument::referents)
         .flatMap(Collection::stream)
         .distinct()
@@ -22,6 +21,6 @@ public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
 
   @Override
   public String toString() {
-    return toList().stream().map(TypeArgument::toString).collect(Collectors.joining(","));
+    return stream().map(TypeArgument::toString).collect(Collectors.joining(","));
   }
 }

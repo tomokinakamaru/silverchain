@@ -2,6 +2,7 @@ package silverchain.grammar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> {
 
@@ -17,7 +18,7 @@ public abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, 
     return right();
   }
 
-  public final List<T> toList() {
+  public final List<T> list() {
     List<T> list = new ArrayList<>();
     ASTNodeN<T, S> node = this;
     while (node != null) {
@@ -25,5 +26,9 @@ public abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, 
       node = node.tail();
     }
     return list;
+  }
+
+  public final Stream<T> stream() {
+    return list().stream();
   }
 }

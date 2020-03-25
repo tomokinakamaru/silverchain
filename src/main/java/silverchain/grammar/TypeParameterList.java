@@ -10,6 +10,6 @@ public final class TypeParameterList extends ASTNodeN<TypeParameter, TypeParamet
 
   @Override
   public String toString() {
-    return toList().stream().map(TypeParameter::toString).collect(Collectors.joining(","));
+    return stream().map(TypeParameter::toString).collect(Collectors.joining(","));
   }
 }

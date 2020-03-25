@@ -194,7 +194,7 @@ final class GraphAnalyzer {
   }
 
   private static List<TypeParameter> parameterNames(TypeParameterList list) {
-    return list == null ? Collections.emptyList() : list.toList();
+    return list == null ? Collections.emptyList() : list.list();
   }
 
   private static Map<GraphNode, TypeReference> typeReferences(List<GraphNode> nodes) {

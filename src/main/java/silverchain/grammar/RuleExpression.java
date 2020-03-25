@@ -10,6 +10,6 @@ public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
 
   @Override
   public String toString() {
-    return toList().stream().map(RuleTerm::toString).collect(Collectors.joining("|"));
+    return stream().map(RuleTerm::toString).collect(Collectors.joining("|"));
   }
 }

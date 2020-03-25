@@ -12,8 +12,7 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
   }
 
   public List<TypeParameter> referents() {
-    return toList()
-        .stream()
+    return stream()
         .map(MethodParameter::referents)
         .flatMap(Collection::stream)
         .distinct()
@@ -22,6 +21,6 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
 
   @Override
   public String toString() {
-    return toList().stream().map(MethodParameter::toString).collect(Collectors.joining(","));
+    return stream().map(MethodParameter::toString).collect(Collectors.joining(","));
   }
 }

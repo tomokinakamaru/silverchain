@@ -10,6 +10,6 @@ public final class Rules extends ASTNodeN<Rule, Rules> {
 
   @Override
   public String toString() {
-    return toList().stream().map(Rule::toString).collect(Collectors.joining(" "));
+    return stream().map(Rule::toString).collect(Collectors.joining(" "));
   }
 }

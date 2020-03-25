@@ -36,7 +36,7 @@ final class GraphOption extends GraphCompileOption {
     if (label.is(Type.class)) {
       TypeParameters parameters = label.as(Type.class).parameters();
       if (parameters != null && parameters.publicList() != null) {
-        return new ArrayList<>(parameters.publicList().toList());
+        return new ArrayList<>(parameters.publicList().list());
       }
     }
     return Collections.emptyList();
