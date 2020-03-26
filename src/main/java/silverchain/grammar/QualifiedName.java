@@ -17,7 +17,7 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
     return right();
   }
 
-  public List<String> toList() {
+  public List<String> list() {
     List<String> list = new ArrayList<>();
     QualifiedName name = this;
     while (name != null) {
