@@ -38,7 +38,7 @@ javacc {
 graal {
     graalVersion '19.2.0'
     nativeImage {
-        mainClass 'silverchain.Silverchain'
+        mainClass 'silverchain.EntryPoint'
         outputName 'silverchain'
     }
 }
