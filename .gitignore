@@ -1,5 +1,5 @@
-# Created by https://www.gitignore.io/api/gradle,kotlin,intellij+all,eclipse
-# Edit at https://www.gitignore.io/?templates=gradle,kotlin,intellij+all,eclipse
+# Created by https://www.gitignore.io/api/java,gradle,eclipse,intellij+all
+# Edit at https://www.gitignore.io/?templates=java,gradle,eclipse,intellij+all
 
 ### Eclipse ###
 .metadata
@@ -156,7 +156,7 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
-### Kotlin ###
+### Java ###
 # Compiled class file
 *.class
 
@@ -200,4 +200,4 @@ gradle-app.setting
 ### Gradle Patch ###
 **/build/
 
-# End of https://www.gitignore.io/api/gradle,kotlin,intellij+all,eclipse
+# End of https://www.gitignore.io/api/java,gradle,eclipse,intellij+all
