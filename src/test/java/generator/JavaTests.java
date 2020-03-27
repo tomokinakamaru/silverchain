@@ -5,10 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import silverchain.analyzer.Analyzer;
+import silverchain.generator.GeneratedFile;
 import silverchain.generator.java.JavaGenerator;
 import silverchain.grammar.Grammars;
+import silverchain.graph.GraphNode;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -36,8 +40,13 @@ public final class JavaTests {
     InputStream stream = new FileInputStream(path.toString());
     Grammars grammars = new Parser(stream).grammars();
     Analyzer analyzer = new Analyzer(grammars);
-    JavaGenerator generator = new JavaGenerator(analyzer.analyze());
+
+    List<GeneratedFile> files = new ArrayList<>();
+    for (List<GraphNode> nodes : analyzer.analyze()) {
+      JavaGenerator generator = new JavaGenerator(nodes);
+      files.addAll(generator.generate());
+    }
     GeneratedFileTester tester = new GeneratedFileTester("java", name);
-    tester.test(generator.generate());
+    tester.test(files);
   }
 }

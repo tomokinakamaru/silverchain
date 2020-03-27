@@ -10,18 +10,16 @@ import silverchain.graph.GraphNode;
 
 public final class JavaGenerator extends Generator {
 
-  public JavaGenerator(List<List<GraphNode>> nodes) {
+  public JavaGenerator(List<GraphNode> nodes) {
     super(nodes);
   }
 
-  public void generate(List<List<GraphNode>> nodes) {
-    for (List<GraphNode> list : nodes) {
-      JavaDiagram diagram = new JavaDiagramBuilder().build(list);
-      List<JavaState> states = diagram.numberedStates();
-      states.forEach(this::generateStateInterface);
-      states.forEach(s -> generateStateClass(diagram, s));
-      generateActionInterface(diagram);
-    }
+  protected void generate(List<GraphNode> nodes) {
+    JavaDiagram diagram = new JavaDiagramBuilder().build(nodes);
+    List<JavaState> states = diagram.numberedStates();
+    states.forEach(this::generateStateInterface);
+    states.forEach(s -> generateStateClass(diagram, s));
+    generateActionInterface(diagram);
   }
 
   private void generateStateInterface(JavaState state) {
