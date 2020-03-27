@@ -45,7 +45,7 @@ graal {
 
 shadowJar {
     manifest.attributes(
-            'Main-Class' : 'silverchain.Silverchain',
+            'Main-Class' : 'silverchain.EntryPoint',
             'Version': "${project.version}"
     )
 }

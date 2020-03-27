@@ -14,7 +14,8 @@ final class SilverchainTest {
 
   @Test
   void test() throws IOException, ParseException {
-    Silverchain silverchain = new Silverchain("-o", outputDirectory.toString());
+    Silverchain silverchain = new Silverchain();
+    silverchain.outputDirectory(outputDirectory);
     silverchain.run(new ByteArrayInputStream("Foo: foo() Foo;".getBytes()));
   }
 
