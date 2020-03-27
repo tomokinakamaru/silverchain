@@ -15,8 +15,6 @@ public abstract class Diagram<
 
   final List<S> states = new ArrayList<>();
 
-  protected Diagram() {}
-
   public List<S> states() {
     return new ArrayList<>(states);
   }

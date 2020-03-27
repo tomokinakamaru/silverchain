@@ -22,8 +22,6 @@ public abstract class State<
 
   final List<T> transitions = new ArrayList<>();
 
-  protected State() {}
-
   public boolean isEnd() {
     return isEnd;
   }

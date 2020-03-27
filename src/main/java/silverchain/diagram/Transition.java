@@ -11,8 +11,6 @@ public abstract class Transition<
 
   S destination;
 
-  protected Transition() {}
-
   public Method method() {
     return method;
   }
