@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import silverchain.analyzer.Analyzer;
 import silverchain.generator.java.JavaGenerator;
-import silverchain.grammar.Grammar;
+import silverchain.grammar.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -34,8 +34,8 @@ public final class JavaTests {
   private void test(String name) throws ParseException, FileNotFoundException {
     Path path = resources.resolve("java").resolve(name + ".ag");
     InputStream stream = new FileInputStream(path.toString());
-    Grammar grammar = new Parser(stream).grammar();
-    Analyzer analyzer = new Analyzer(grammar);
+    Grammars grammars = new Parser(stream).grammars();
+    Analyzer analyzer = new Analyzer(grammars);
     JavaGenerator generator = new JavaGenerator(analyzer.analyze());
     GeneratedFileTester tester = new GeneratedFileTester("java", name);
     tester.test(generator.generate());

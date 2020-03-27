@@ -153,7 +153,13 @@ Rules rules(): { Rule r; Rules rs = null; } {
 }
 
 Grammar grammar(): { Type t; Rules rs = null; } {
-  t = type() ":" (rs = rules())? <EOF> {
+  t = type() ":" (rs = rules())? {
     return new Grammar(t, rs);
+  }
+}
+
+Grammars grammars(): { Grammar g; Grammars gs = null; } {
+  g = grammar() (gs = grammars())? <EOF> {
+    return new Grammars(g, gs);
   }
 }

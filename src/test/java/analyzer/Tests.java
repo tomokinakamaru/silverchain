@@ -3,7 +3,7 @@ package analyzer;
 import java.io.ByteArrayInputStream;
 import org.junit.jupiter.api.Test;
 import silverchain.analyzer.Analyzer;
-import silverchain.grammar.Grammar;
+import silverchain.grammar.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 import utility.GraphTester;
@@ -100,8 +100,8 @@ final class Tests {
   }
 
   private GraphTester test(String text) throws ParseException {
-    Grammar grammar = new Parser(new ByteArrayInputStream(text.getBytes())).grammar();
-    Analyzer analyzer = new Analyzer(grammar);
-    return new GraphTester(analyzer.analyze());
+    Grammars grammars = new Parser(new ByteArrayInputStream(text.getBytes())).grammars();
+    Analyzer analyzer = new Analyzer(grammars);
+    return new GraphTester(analyzer.analyze().get(0));
   }
 }

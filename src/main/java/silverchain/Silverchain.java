@@ -20,7 +20,7 @@ public final class Silverchain {
 
   public void run(InputStream stream) throws ParseException, IOException {
     Parser parser = new Parser(stream);
-    Analyzer analyzer = new Analyzer(parser.grammar());
+    Analyzer analyzer = new Analyzer(parser.grammars());
     JavaGenerator generator = new JavaGenerator(analyzer.analyze());
     for (GeneratedFile file : generator.generate()) {
       file.save(outputDirectory);

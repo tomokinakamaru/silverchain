@@ -8,7 +8,7 @@ import silverchain.graph.GraphNode;
 
 public abstract class Generator {
 
-  private final List<GraphNode> nodes;
+  private final List<List<GraphNode>> nodes;
 
   private final List<GeneratedFile> files;
 
@@ -16,9 +16,9 @@ public abstract class Generator {
 
   private StringBuilder stringBuilder;
 
-  protected abstract void generate(List<GraphNode> nodes);
+  protected abstract void generate(List<List<GraphNode>> nodes);
 
-  protected Generator(List<GraphNode> nodes) {
+  protected Generator(List<List<GraphNode>> nodes) {
     this.nodes = nodes;
     this.files = new ArrayList<>();
   }

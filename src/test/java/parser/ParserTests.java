@@ -127,6 +127,12 @@ final class ParserTests {
     test(Parser::grammar, "Foo: foo() Foo;");
   }
 
+  @Test
+  void testGrammars() {
+    test(Parser::grammars, "Foo:");
+    test(Parser::grammars, "Foo: Bar:");
+  }
+
   private void test(RuleSelector<Parser, ?> selector, String text) {
     test(selector, text, text);
   }
