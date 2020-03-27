@@ -1,4 +1,4 @@
-package codegen;
+package generator;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.nio.file.Paths;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import silverchain.codegen.GeneratedFile;
+import silverchain.generator.GeneratedFile;
 
 public final class GeneratedFileTester {
 

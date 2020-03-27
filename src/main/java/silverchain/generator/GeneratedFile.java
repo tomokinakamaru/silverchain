@@ -1,4 +1,4 @@
-package silverchain.codegen;
+package silverchain.generator;
 
 import java.io.IOException;
 import java.nio.file.Files;

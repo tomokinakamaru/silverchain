@@ -1,4 +1,4 @@
-package silverchain.codegen.java;
+package silverchain.generator.java;
 
 import static java.util.stream.Collectors.joining;
 

@@ -1,4 +1,4 @@
-package silverchain.codegen;
+package silverchain.generator;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

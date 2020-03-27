@@ -1,8 +1,8 @@
-package silverchain.codegen.java;
+package silverchain.generator.java;
 
-import static silverchain.codegen.java.GrammarEncoder.encode;
-import static silverchain.codegen.java.GrammarEncoder.encodeAsDeclaration;
-import static silverchain.codegen.java.GrammarEncoder.encodeAsInvocation;
+import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.GrammarEncoder.encodeAsDeclaration;
+import static silverchain.generator.java.GrammarEncoder.encodeAsInvocation;
 
 import java.util.ArrayList;
 import java.util.List;

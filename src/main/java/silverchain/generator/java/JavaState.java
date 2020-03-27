@@ -1,7 +1,7 @@
-package silverchain.codegen.java;
+package silverchain.generator.java;
 
-import static silverchain.codegen.java.GrammarEncoder.encode;
-import static silverchain.codegen.java.Utility.qualifiedName;
+import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.Utility.qualifiedName;
 
 import java.util.Collections;
 import java.util.List;

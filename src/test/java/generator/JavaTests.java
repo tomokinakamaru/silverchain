@@ -1,4 +1,4 @@
-package codegen;
+package generator;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.Test;
 import silverchain.analyzer.Analyzer;
-import silverchain.codegen.java.JavaGenerator;
+import silverchain.generator.java.JavaGenerator;
 import silverchain.grammar.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;

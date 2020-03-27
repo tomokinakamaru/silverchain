@@ -1,4 +1,4 @@
-package silverchain.codegen.java;
+package silverchain.generator.java;
 
 import silverchain.diagram.DiagramBuilder;
 

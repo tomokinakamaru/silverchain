@@ -1,11 +1,11 @@
-package silverchain.codegen.java;
+package silverchain.generator.java;
 
-import static silverchain.codegen.java.GrammarEncoder.encode;
-import static silverchain.codegen.java.Utility.filePath;
-import static silverchain.codegen.java.Utility.packageDeclaration;
+import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.Utility.filePath;
+import static silverchain.generator.java.Utility.packageDeclaration;
 
 import java.util.List;
-import silverchain.codegen.Generator;
+import silverchain.generator.Generator;
 import silverchain.graph.GraphNode;
 
 public final class JavaGenerator extends Generator {
