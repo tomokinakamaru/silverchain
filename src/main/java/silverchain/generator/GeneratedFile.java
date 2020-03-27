@@ -25,9 +25,7 @@ public final class GeneratedFile {
 
   public void save(Path path) throws IOException {
     Path p = path.resolve(this.path);
-    if (p.getParent() != null) {
-      Files.createDirectories(p.getParent());
-    }
+    Files.createDirectories(p.getParent());
     Files.write(p, content.getBytes());
   }
 }

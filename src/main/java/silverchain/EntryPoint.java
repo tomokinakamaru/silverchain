@@ -1,6 +1,9 @@
 package silverchain;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import silverchain.parser.ParseException;
 
@@ -13,18 +16,48 @@ public final class EntryPoint {
   }
 
   public static void main(String[] args) throws ParseException, IOException {
-    Silverchain silverchain = new Silverchain();
+    boolean printHelp = false;
+    InputStream inputStream = System.in;
+    Path outputDirectory = Paths.get(".");
 
     for (int i = 0; i < args.length; i++) {
       String arg = args[i];
-      if (arg.equals("-o")) {
-        silverchain.outputDirectory(Paths.get(args[i + 1]));
-        i++;
-      } else {
-        throw new RuntimeException("Unknown argument: " + arg);
+      switch (arg) {
+        case "-h":
+        case "--help":
+          printHelp = true;
+          break;
+
+        case "-i":
+          inputStream = new FileInputStream(Paths.get(args[i + 1]).toString());
+          i++;
+          break;
+
+        case "-o":
+          outputDirectory = Paths.get(args[i + 1]);
+          i++;
+          break;
+
+        default:
+          throw new RuntimeException("Unknown argument: " + arg);
       }
     }
 
-    silverchain.run(System.in);
+    if (printHelp) {
+      printHelp();
+    } else {
+      Silverchain silverchain = new Silverchain();
+      silverchain.outputDirectory(outputDirectory);
+      silverchain.run(inputStream);
+    }
+  }
+
+  private static void printHelp() {
+    System.out.println("usage: silverchain [-h] [-i <path>] [-o <path>]");
+    System.out.println();
+    System.out.println("optional arguments:");
+    System.out.println("  -h, --help  show this help message and exit");
+    System.out.println("  -i <path>   specify input file");
+    System.out.println("  -o <path>   specify output directory");
   }
 }
