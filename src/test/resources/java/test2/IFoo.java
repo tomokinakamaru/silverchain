@@ -1,4 +1,4 @@
-interface IFoo {
+interface IFoo<T> {
 
-  state1.Foo foo(String s, String t);
+  state1.Foo<T> foo(String s, T t);
 }

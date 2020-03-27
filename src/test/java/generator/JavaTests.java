@@ -26,6 +26,11 @@ public final class JavaTests {
     test("test2");
   }
 
+  @Test
+  void test3() throws FileNotFoundException, ParseException {
+    test("test3");
+  }
+
   private void test(String name) throws ParseException, FileNotFoundException {
     Path path = resources.resolve("java").resolve(name + ".ag");
     InputStream stream = new FileInputStream(path.toString());

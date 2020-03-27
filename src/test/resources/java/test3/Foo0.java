@@ -1,5 +1,5 @@
 @SuppressWarnings({"rawtypes", "unchecked"})
-class Foo0<T> implements IFoo<T> {
+class Foo0 implements IFoo {
 
   IFooAction action;
 
@@ -8,7 +8,7 @@ class Foo0<T> implements IFoo<T> {
   }
 
   @Override
-  public state1.Foo<T> foo(String s, T t) {
+  public <T> state1.Foo<T> foo(String s, T t) {
     this.action.state0$foo(s, t);
     return new Foo1(this.action);
   }
