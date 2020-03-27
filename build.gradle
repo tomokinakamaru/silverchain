@@ -5,7 +5,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'com.github.sherter.google-java-format' version '0.8'
     id 'com.intershop.gradle.javacc' version '4.0.0'
-    id 'com.palantir.graal' version '0.6.0-112-gca0b727'
+    id 'com.palantir.graal' version '0.6.0-114-gfe95739'
 }
 
 group 'silverchain'
@@ -21,8 +21,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.6.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.6.1'
 }
 
 javacc {
