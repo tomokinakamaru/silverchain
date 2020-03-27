@@ -16,6 +16,8 @@ import silverchain.grammar.TypeReference;
 
 final class GrammarEncoder {
 
+  private GrammarEncoder() {}
+
   /* Type parameter ----------------------------------------------------------------------------- */
   static String encode(List<TypeParameter> parameters) {
     return parameters.isEmpty() ? "" : "<" + csv(parameters, GrammarEncoder::encode) + ">";
