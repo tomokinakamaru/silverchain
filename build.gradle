@@ -65,3 +65,11 @@ check {
 jacoco {
     toolVersion = '0.8.5'
 }
+
+jacocoTestReport {
+    afterEvaluate {
+        classDirectories.from = files(classDirectories.files.collect {
+            fileTree(dir: it, exclude: ['silverchain/parser/**'])
+        })
+    }
+}
