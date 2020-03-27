@@ -15,10 +15,6 @@ public abstract class Diagram<
 
   final List<S> states = new ArrayList<>();
 
-  public List<S> states() {
-    return new ArrayList<>(states);
-  }
-
   public List<S> numberedStates() {
     return states.stream().filter(S::isNumbered).collect(Collectors.toCollection(ArrayList::new));
   }

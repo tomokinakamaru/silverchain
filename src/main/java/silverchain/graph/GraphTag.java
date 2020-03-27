@@ -15,8 +15,4 @@ public final class GraphTag {
   public <T> T as(Class<T> clazz) {
     return clazz.cast(object);
   }
-
-  public <T> boolean is(Class<T> clazz) {
-    return object.getClass() == clazz;
-  }
 }
