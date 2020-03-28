@@ -16,7 +16,7 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
   @Override
   public String toString() {
-    String s = parameters() == null ? "" : "<" + parameters().toString() + ">";
+    String s = parameters() == null ? "" : "[" + parameters().toString() + "]";
     return name().toString() + s;
   }
 }

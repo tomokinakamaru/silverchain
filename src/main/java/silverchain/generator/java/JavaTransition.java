@@ -1,6 +1,5 @@
 package silverchain.generator.java;
 
-import static silverchain.generator.java.GrammarEncoder.encode;
 import static silverchain.generator.java.GrammarEncoder.encodeAsDeclaration;
 import static silverchain.generator.java.GrammarEncoder.encodeAsInvocation;
 
@@ -16,7 +15,7 @@ final class JavaTransition extends Transition<JavaDiagram, JavaState, JavaTransi
     if (parameters().isEmpty()) {
       return decl;
     }
-    return encode(parameters()) + " " + decl;
+    return encodeAsDeclaration(parameters()) + " " + decl;
   }
 
   String actionMethodDeclaration(boolean withPrefix) {

@@ -15,8 +15,8 @@ final class ASTTests {
   @SuppressWarnings({"ConstantConditions", "EqualsBetweenInconvertibleTypes", "EqualsWithItself"})
   @Test
   void testEquals() {
-    TypeParameter p1 = new TypeParameter("T");
-    TypeParameter p2 = new TypeParameter("T");
+    TypeParameter p1 = new TypeParameter("T", null);
+    TypeParameter p2 = new TypeParameter("T", null);
     TypeParameterList ps = new TypeParameterList(p1, null);
     assert p1.equals(p2);
     assert p1.equals(p1);
@@ -26,21 +26,21 @@ final class ASTTests {
 
   @Test
   void testHashCode() {
-    TypeParameter p1 = new TypeParameter("T");
-    TypeParameter p2 = new TypeParameter("T");
+    TypeParameter p1 = new TypeParameter("T", null);
+    TypeParameter p2 = new TypeParameter("T", null);
     assert p1.hashCode() == p2.hashCode();
   }
 
   @Test
   void testCompareTo() {
-    TypeParameter p1 = new TypeParameter("S");
-    TypeParameter p2 = new TypeParameter("T");
+    TypeParameter p1 = new TypeParameter("S", null);
+    TypeParameter p2 = new TypeParameter("T", null);
     assert p1.compareTo(p2) < 0;
   }
 
   @Test
   void testAccept() throws ParseException {
-    String text = "Foo<T;S>: foo(T t) bar(Bar<S> b)*;";
+    String text = "Foo[T;S]: foo(T t) bar(Bar[S] b)*;";
 
     List<String> list =
         Arrays.asList(

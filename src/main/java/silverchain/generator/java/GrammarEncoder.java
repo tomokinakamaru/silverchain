@@ -12,6 +12,7 @@ import silverchain.grammar.QualifiedName;
 import silverchain.grammar.TypeArgument;
 import silverchain.grammar.TypeArguments;
 import silverchain.grammar.TypeParameter;
+import silverchain.grammar.TypeParameterBound;
 import silverchain.grammar.TypeReference;
 
 final class GrammarEncoder {
@@ -19,12 +20,23 @@ final class GrammarEncoder {
   private GrammarEncoder() {}
 
   /* Type parameter ----------------------------------------------------------------------------- */
-  static String encode(List<TypeParameter> parameters) {
-    return parameters.isEmpty() ? "" : "<" + csv(parameters, GrammarEncoder::encode) + ">";
+  static String encodeAsDeclaration(List<TypeParameter> parameters) {
+    return parameters.isEmpty() ? "" : "<" + csv(parameters, p -> encode(p, true)) + ">";
   }
 
-  private static String encode(TypeParameter parameter) {
-    return parameter.name();
+  static String encodeAsArgument(List<TypeParameter> parameters) {
+    return parameters.isEmpty() ? "" : "<" + csv(parameters, p -> encode(p, false)) + ">";
+  }
+
+  private static String encode(TypeParameter parameter, boolean includeBound) {
+    return parameter.name() + (includeBound ? encode(parameter.bound()) : "");
+  }
+
+  private static String encode(TypeParameterBound bound) {
+    if (bound == null) {
+      return "";
+    }
+    return " " + (bound.isUpper() ? "extends" : "super") + " " + encode(bound.reference());
   }
 
   /* Method ------------------------------------------------------------------------------------- */

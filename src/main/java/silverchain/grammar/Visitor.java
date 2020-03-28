@@ -36,6 +36,8 @@ public abstract class Visitor {
 
   protected void visit(TypeParameter node) {}
 
+  protected void visit(TypeParameterBound node) {}
+
   protected void visit(TypeParameterList node) {}
 
   protected void visit(TypeParameters node) {}

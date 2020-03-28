@@ -42,7 +42,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
 
   @Override
   public String toString() {
-    String s = arguments() == null ? "" : "<" + arguments().toString() + ">";
+    String s = arguments() == null ? "" : "[" + arguments().toString() + "]";
     return name().toString() + s;
   }
 }

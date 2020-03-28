@@ -12,7 +12,7 @@ final class Tests {
 
   @Test
   void test1() throws ParseException {
-    test("Foo<T,S;U>:").edge(0, 1, "Foo<T,S;U>").noEdge(1).noTags(0).tags(1, "T", "S").endNodes(1);
+    test("Foo[T,S;U]:").edge(0, 1, "Foo[T,S;U]").noEdge(1).noTags(0).tags(1, "T", "S").endNodes(1);
   }
 
   @Test
@@ -78,10 +78,10 @@ final class Tests {
 
   @Test
   void test7() throws ParseException {
-    test("Foo<;T>: bar(Bar<T> bar) Baz<T>;")
-        .edge(0, 1, "Foo<;T>")
-        .edge(1, 2, "bar(Bar<T> bar)")
-        .edge(2, 3, "Baz<T>")
+    test("Foo[;T]: bar(Bar[T] bar) Baz[T];")
+        .edge(0, 1, "Foo[;T]")
+        .edge(1, 2, "bar(Bar[T] bar)")
+        .edge(2, 3, "Baz[T]")
         .noEdge(3)
         .noTags(0, 1)
         .tags(2, "T")

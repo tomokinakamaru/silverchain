@@ -36,10 +36,10 @@ final class ParserTests {
   @Test
   void testType() {
     test(Parser::type, "Foo");
-    test(Parser::type, "Foo<T;S>");
-    test(Parser::type, "Foo<T,S>");
-    test(Parser::type, "Foo<T,S;U>");
-    test(Parser::type, "Foo<T;S,U>");
+    test(Parser::type, "Foo[T;S]");
+    test(Parser::type, "Foo[T,S]");
+    test(Parser::type, "Foo[T,S;U]");
+    test(Parser::type, "Foo[T;S,U]");
   }
 
   @Test
@@ -56,7 +56,7 @@ final class ParserTests {
   @Test
   void testTypeReference() {
     test(Parser::typeReference, "Foo");
-    test(Parser::typeReference, "foo.Bar<T>");
+    test(Parser::typeReference, "foo.Bar[T]");
   }
 
   @Test

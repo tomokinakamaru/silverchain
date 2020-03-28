@@ -1,6 +1,7 @@
 package silverchain.generator.java;
 
 import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.GrammarEncoder.encodeAsArgument;
 import static silverchain.generator.java.Utility.countUniqueSignatures;
 import static silverchain.generator.java.Utility.qualifiedName;
 
@@ -44,7 +45,7 @@ final class JavaState extends State<JavaDiagram, JavaState, JavaTransition> {
 
   String reference() {
     if (isNumbered()) {
-      return interfaceQualifiedName() + encode(parameters());
+      return interfaceQualifiedName() + encodeAsArgument(parameters());
     }
     return typeReference().map(GrammarEncoder::encode).orElse("void");
   }

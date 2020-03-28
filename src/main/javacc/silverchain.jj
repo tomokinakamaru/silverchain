@@ -30,9 +30,18 @@ QualifiedName qualifiedName(): { Token t; List<String> ls = new ArrayList<>(); }
   }
 }
 
-TypeParameter typeParameter(): { Token t; } {
-  t = <NAME> {
-    return new TypeParameter(t.image);
+TypeParameter typeParameter(): { Token t; TypeParameterBound b = null; } {
+  t = <NAME> (b = typeParameterBound())?{
+    return new TypeParameter(t.image, b);
+  }
+}
+
+TypeParameterBound typeParameterBound(): { TypeReference r; } {
+  "<:" r = typeReference() {
+    return new TypeParameterBound(true, r);
+  } |
+  ":>" r = typeReference() {
+    return new TypeParameterBound(false, r);
   }
 }
 
@@ -52,7 +61,7 @@ TypeParameters typeParameters(): { TypeParameterList ts1; TypeParameterList ts2 
 }
 
 Type type(): { QualifiedName q; TypeParameters ts = null; } {
-  q = qualifiedName() ("<" ts = typeParameters() ">")? {
+  q = qualifiedName() ("[" ts = typeParameters() "]")? {
     return new Type(q, ts);
   }
 }
@@ -70,7 +79,7 @@ TypeArguments typeArguments(): { TypeArgument t; TypeArguments ts = null; } {
 }
 
 TypeReference typeReference(): { QualifiedName q; TypeArguments ts = null; } {
-  q = qualifiedName() ("<" ts = typeArguments() ">") ? {
+  q = qualifiedName() ("[" ts = typeArguments() "]") ? {
     return new TypeReference(q, ts);
   }
 }

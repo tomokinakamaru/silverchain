@@ -39,6 +39,8 @@ public abstract class ASTNode implements Comparable<ASTNode> {
       visitor.visit((TypeArguments) this);
     } else if (this instanceof TypeParameter) {
       visitor.visit((TypeParameter) this);
+    } else if (this instanceof TypeParameterBound) {
+      visitor.visit((TypeParameterBound) this);
     } else if (this instanceof TypeParameterList) {
       visitor.visit((TypeParameterList) this);
     } else if (this instanceof TypeParameters) {

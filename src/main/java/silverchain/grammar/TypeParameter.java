@@ -1,17 +1,21 @@
 package silverchain.grammar;
 
-public final class TypeParameter extends ASTNode1<String> {
+public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
 
-  public TypeParameter(String name) {
-    super(name);
+  public TypeParameter(String name, TypeParameterBound bound) {
+    super(name, bound);
   }
 
   public String name() {
-    return object();
+    return left();
+  }
+
+  public TypeParameterBound bound() {
+    return right();
   }
 
   @Override
   public String toString() {
-    return name();
+    return name() + (bound() == null ? "" : bound().toString());
   }
 }

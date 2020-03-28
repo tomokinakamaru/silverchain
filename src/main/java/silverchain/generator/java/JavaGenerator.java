@@ -1,6 +1,6 @@
 package silverchain.generator.java;
 
-import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.GrammarEncoder.encodeAsDeclaration;
 import static silverchain.generator.java.Utility.filePath;
 import static silverchain.generator.java.Utility.packageDeclaration;
 
@@ -34,7 +34,7 @@ public final class JavaGenerator extends Generator {
     write(state.interfaceModifier());
     write("interface ");
     write(state.interfaceName());
-    write(encode(state.parameters()));
+    write(encodeAsDeclaration(state.parameters()));
     write(" {\n");
 
     for (JavaTransition transition : state.transitions()) {
@@ -53,7 +53,7 @@ public final class JavaGenerator extends Generator {
 
     write("@SuppressWarnings({\"rawtypes\", \"unchecked\"})\nclass ");
     write(state.implementationName());
-    write(encode(state.parameters()));
+    write(encodeAsDeclaration(state.parameters()));
     write(" implements ");
     write(state.reference());
     write(" {\n\n  ");
@@ -85,7 +85,7 @@ public final class JavaGenerator extends Generator {
 
     write("interface ");
     write(diagram.actionInterfaceName());
-    write(encode(diagram.parameters()));
+    write(encodeAsDeclaration(diagram.parameters()));
     write(" {\n");
 
     for (JavaState state : diagram.numberedStates()) {
