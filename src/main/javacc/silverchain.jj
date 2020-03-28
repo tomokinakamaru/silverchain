@@ -42,12 +42,9 @@ TypeParameterList typeParameterList(): { TypeParameter t; TypeParameterList ts =
   }
 }
 
-TypeParameters typeParameters(): { TypeParameterList ts1; TypeParameterList ts2; } {
-  ts1 = typeParameterList() ";" ts2 = typeParameterList() {
+TypeParameters typeParameters(): { TypeParameterList ts1; TypeParameterList ts2 = null; } {
+  ts1 = typeParameterList() (";" ts2 = typeParameterList())? {
     return new TypeParameters(ts1, ts2);
-  } |
-  ts1 = typeParameterList() {
-    return new TypeParameters(ts1, null);
   } |
   ";" ts2 = typeParameterList() {
     return new TypeParameters(null, ts2);
