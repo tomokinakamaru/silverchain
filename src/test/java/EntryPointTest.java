@@ -1,4 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static utility.FileDeleter.delete;
 
 import java.io.ByteArrayInputStream;
@@ -12,7 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import silverchain.EntryPoint;
+import silverchain.command.EntryPoint;
 import silverchain.parser.ParseException;
 
 public class EntryPointTest {
@@ -24,19 +23,19 @@ public class EntryPointTest {
   private static final Path outputDirectory = Paths.get("build").resolve("silverchain");
 
   private static final String helpMessage =
-      "usage: silverchain [-h] [-v] [-i <path>] [-o <path>]\n"
+      "usage: silverchain [options]\n"
           + "\n"
-          + "optional arguments:\n"
-          + "  -h, --help     show this help message and exit\n"
-          + "  -v, --version  show version and exit\n"
-          + "  -i <path>      specify input file\n"
-          + "  -o <path>      specify output directory\n";
+          + "options:\n"
+          + "  -h, --help           show this message and exit\n"
+          + "  -v, --version        show version and exit\n"
+          + "  -i, --input <path>   input grammar file\n"
+          + "  -o, --output <path>  output directory\n";
 
   @Test
   void test1() throws IOException, ParseException {
     InputStream stream = new ByteArrayInputStream("Foo: foo() Foo;".getBytes());
     System.setIn(stream);
-    EntryPoint.run("-o", outputDirectory.toString());
+    EntryPoint.run("--output", outputDirectory.toString());
   }
 
   @Test
@@ -54,8 +53,12 @@ public class EntryPointTest {
   }
 
   @Test
-  void test3() {
-    assertThrows(RuntimeException.class, () -> EntryPoint.run("-foo"));
+  void test3() throws IOException, ParseException {
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(outputStream);
+    System.setErr(printStream);
+    assert EntryPoint.run("-foo") == 1;
+    assert outputStream.toString().equals("error: unknown option -foo\n" + helpMessage);
   }
 
   @Test

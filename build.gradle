@@ -38,13 +38,13 @@ javacc {
 graal {
     graalVersion '19.2.0'
     nativeImage {
-        mainClass 'silverchain.EntryPoint'
+        mainClass 'silverchain.command.EntryPoint'
         outputName 'silverchain'
     }
 }
 
 shadowJar {
-    manifest.attributes('Main-Class' : 'silverchain.EntryPoint')
+    manifest.attributes('Main-Class' : 'silverchain.command.EntryPoint')
 }
 
 test {
