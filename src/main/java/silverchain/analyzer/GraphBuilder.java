@@ -4,7 +4,8 @@ import static silverchain.graph.GraphBuilders.atom;
 import static silverchain.graph.GraphBuilders.join;
 import static silverchain.graph.GraphBuilders.repeat;
 
-import java.util.Stack;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.function.BiFunction;
 import silverchain.grammar.Grammar;
 import silverchain.grammar.Method;
@@ -20,7 +21,7 @@ import silverchain.graph.GraphBuilders;
 
 final class GraphBuilder extends Visitor {
 
-  private final Stack<Graph> stack = new Stack<>();
+  private final Deque<Graph> stack = new ArrayDeque<>();
 
   Graph apply(Grammar grammar) {
     grammar.accept(this);
