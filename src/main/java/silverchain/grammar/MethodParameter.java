@@ -24,4 +24,10 @@ public final class MethodParameter extends ASTNode2<TypeReference, String> {
   public String toString() {
     return type().toString() + " " + name();
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

@@ -32,4 +32,10 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
     String s = qualifier() == null ? "" : qualifier().toString() + ".";
     return s + name();
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

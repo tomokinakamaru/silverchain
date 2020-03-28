@@ -20,13 +20,12 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   @Override
-  public final void accept(Visitor visitor) {
+  public void accept(Visitor visitor) {
     if (left instanceof ASTNode) {
       ((ASTNode) left).accept(visitor);
     }
     if (right instanceof ASTNode) {
       ((ASTNode) right).accept(visitor);
     }
-    super.accept(visitor);
   }
 }

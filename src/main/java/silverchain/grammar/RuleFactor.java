@@ -19,4 +19,10 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
     String s = operator() == null ? "" : operator().toString();
     return element().toString() + s;
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

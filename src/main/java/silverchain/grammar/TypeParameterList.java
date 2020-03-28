@@ -12,4 +12,10 @@ public final class TypeParameterList extends ASTNodeN<TypeParameter, TypeParamet
   public String toString() {
     return stream().map(TypeParameter::toString).collect(Collectors.joining(","));
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

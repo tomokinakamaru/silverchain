@@ -14,4 +14,10 @@ public final class TypeParameter extends ASTNode1<String> {
   public String toString() {
     return name();
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

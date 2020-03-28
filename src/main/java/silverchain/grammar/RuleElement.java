@@ -21,4 +21,10 @@ public final class RuleElement extends ASTNode2<Method, RuleExpression> {
     }
     return method().toString();
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

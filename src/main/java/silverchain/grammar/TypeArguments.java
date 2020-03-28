@@ -23,4 +23,10 @@ public final class TypeArguments extends ASTNodeN<TypeArgument, TypeArguments> {
   public String toString() {
     return stream().map(TypeArgument::toString).collect(Collectors.joining(","));
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

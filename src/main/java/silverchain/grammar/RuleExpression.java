@@ -12,4 +12,10 @@ public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
   public String toString() {
     return stream().map(RuleTerm::toString).collect(Collectors.joining("|"));
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

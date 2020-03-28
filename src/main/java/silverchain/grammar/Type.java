@@ -19,4 +19,10 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
     String s = parameters() == null ? "" : "<" + parameters().toString() + ">";
     return name().toString() + s;
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }

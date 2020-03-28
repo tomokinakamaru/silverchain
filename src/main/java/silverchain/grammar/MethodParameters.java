@@ -23,4 +23,10 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
   public String toString() {
     return stream().map(MethodParameter::toString).collect(Collectors.joining(","));
   }
+
+  @Override
+  public void accept(Visitor visitor) {
+    super.accept(visitor);
+    visitor.visit(this);
+  }
 }
