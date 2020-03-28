@@ -61,12 +61,13 @@ public final class EntryPoint {
   }
 
   private static void printHelp() {
-    System.out.println("usage: silverchain [-h] [-i <path>] [-o <path>]");
+    System.out.println("usage: silverchain [-h] [-v] [-i <path>] [-o <path>]");
     System.out.println();
     System.out.println("optional arguments:");
-    System.out.println("  -h, --help  show this help message and exit");
-    System.out.println("  -i <path>   specify input file");
-    System.out.println("  -o <path>   specify output directory");
+    System.out.println("  -h, --help     show this help message and exit");
+    System.out.println("  -v, --version  show version and exit");
+    System.out.println("  -i <path>      specify input file");
+    System.out.println("  -o <path>      specify output directory");
   }
 
   private static void printVersion() {

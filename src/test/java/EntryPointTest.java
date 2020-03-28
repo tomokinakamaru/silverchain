@@ -24,12 +24,13 @@ public class EntryPointTest {
   private static final Path outputDirectory = Paths.get("build").resolve("silverchain");
 
   private static final String helpMessage =
-      "usage: silverchain [-h] [-i <path>] [-o <path>]\n"
+      "usage: silverchain [-h] [-v] [-i <path>] [-o <path>]\n"
           + "\n"
           + "optional arguments:\n"
-          + "  -h, --help  show this help message and exit\n"
-          + "  -i <path>   specify input file\n"
-          + "  -o <path>   specify output directory\n";
+          + "  -h, --help     show this help message and exit\n"
+          + "  -v, --version  show version and exit\n"
+          + "  -i <path>      specify input file\n"
+          + "  -o <path>      specify output directory\n";
 
   @Test
   void test1() throws IOException, ParseException {
