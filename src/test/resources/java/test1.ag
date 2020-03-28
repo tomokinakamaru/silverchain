@@ -1,4 +1,5 @@
 foo.Foo<T, S; U>:
 
-foo(T t) bar(S s) bar.Bar<T, S>;
+# this is sample
+foo(T t) bar(S s) bar.Bar<T, S>; # this is sample
 baz(U u) bar.Bar<U, U>;
