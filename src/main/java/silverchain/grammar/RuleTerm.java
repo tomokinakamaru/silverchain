@@ -12,10 +12,4 @@ public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
   public String toString() {
     return stream().map(RuleFactor::toString).collect(Collectors.joining(" "));
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

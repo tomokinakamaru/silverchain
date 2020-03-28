@@ -20,10 +20,4 @@ public final class TypeArgument extends ASTNode1<TypeReference> {
   public String toString() {
     return reference().toString();
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

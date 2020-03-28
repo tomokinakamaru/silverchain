@@ -26,10 +26,4 @@ public final class Method extends ASTNode2<String, MethodParameters> {
     String s = parameters() == null ? "" : parameters().toString();
     return name() + "(" + s + ")";
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

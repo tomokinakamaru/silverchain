@@ -20,10 +20,4 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
     String t = privateList() == null ? "" : ";" + privateList().toString();
     return s + t;
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

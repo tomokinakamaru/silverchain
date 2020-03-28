@@ -19,10 +19,4 @@ public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
     String s = type() == null ? "" : " " + type().toString();
     return expression().toString() + s + ";";
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

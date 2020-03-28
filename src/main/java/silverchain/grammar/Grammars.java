@@ -12,10 +12,4 @@ public final class Grammars extends ASTNodeN<Grammar, Grammars> {
   public String toString() {
     return stream().map(Grammar::toString).collect(Collectors.joining(" "));
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

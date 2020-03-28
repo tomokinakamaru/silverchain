@@ -12,10 +12,4 @@ public final class Rules extends ASTNodeN<Rule, Rules> {
   public String toString() {
     return stream().map(Rule::toString).collect(Collectors.joining(" "));
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

@@ -13,9 +13,10 @@ public abstract class ASTNode1<T> extends ASTNode {
   }
 
   @Override
-  public void accept(Visitor visitor) {
+  public final void accept(Visitor visitor) {
     if (object instanceof ASTNode) {
       ((ASTNode) object).accept(visitor);
     }
+    super.accept(visitor);
   }
 }

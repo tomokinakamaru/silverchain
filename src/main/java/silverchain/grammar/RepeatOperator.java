@@ -35,10 +35,4 @@ public final class RepeatOperator extends ASTNode2<Integer, Integer> {
     }
     return "{" + min() + "," + max() + "}";
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }

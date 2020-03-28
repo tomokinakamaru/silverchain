@@ -19,10 +19,4 @@ public final class Grammar extends ASTNode2<Type, Rules> {
     String s = rules() == null ? "" : " " + rules().toString();
     return type().toString() + ":" + s;
   }
-
-  @Override
-  public void accept(Visitor visitor) {
-    super.accept(visitor);
-    visitor.visit(this);
-  }
 }
