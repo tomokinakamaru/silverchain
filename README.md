@@ -26,11 +26,11 @@ docker run --rm -it tomokinakamaru/silverchain:latest
 ## Usage
 
 ```
-usage: silverchain [-h] [-v] [-i <path>] [-o <path>]
+usage: silverchain [options]
 
-optional arguments:
-  -h, --help     show this help message and exit
-  -v, --version  show version and exit
-  -i <path>      specify input file
-  -o <path>      specify output directory
+options:
+  -h, --help           show this message and exit
+  -v, --version        show version and exit
+  -i, --input <path>   input grammar file
+  -o, --output <path>  output directory
 ```
