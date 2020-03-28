@@ -16,21 +16,16 @@ public final class RepeatOperator extends ASTNode2<Integer, Integer> {
 
   @Override
   public String toString() {
-    if (min() == null || min() == 0) {
-      if (max() == null) {
+    int min = min() == null ? 0 : min();
+    if (max() == null) {
+      if (min == 0) {
         return "*";
       }
-      if (max() == 1) {
-        return "?";
+      if (min == 1) {
+        return "+";
       }
-      return "{" + min() + "," + max() + "}";
-    }
-    if (min() == 1 && max() == null) {
-      return "+";
-    }
-    if (max() == null) {
       return "{" + min() + "}";
     }
-    return "{" + min() + "," + max() + "}";
+    return (min == 0 && max() == 1) ? "?" : "{" + min() + "," + max() + "}";
   }
 }
