@@ -75,27 +75,18 @@ public final class Graph {
       GraphNode src = traverser.next();
       for (GraphEdge edge : edges.from(src)) {
         GraphNode dst = edge.destination;
-        GraphTags tags = new GraphTags(src.tags);
-        for (Object obj : option.getTags(edge.label)) {
-          GraphTag tag = new GraphTag(obj);
-          if (tags.stream().noneMatch(t -> option.equals(t, tag))) {
-            tags.add(tag);
-          }
-        }
+        GraphTags tags = new GraphTags(src.tags, option.getTags(edge.label)).distinct(option);
 
         if (dst.tags == null) {
           dst.tags = tags;
           traverser.enqueue(dst);
-          continue;
+        } else if (!dst.tags.equals(tags)) {
+          GraphNode node = cloneDestination(edge);
+          node.tags = tags;
+          edges.remove(edge);
+          edges.add(new GraphEdge(edge.source, node, edge.label));
+          traverser.enqueue(node);
         }
-        if (dst.tags.equals(tags)) {
-          continue;
-        }
-        GraphNode node = cloneDestination(edge);
-        node.tags = tags;
-        edges.remove(edge);
-        edges.add(new GraphEdge(edge.source, node, edge.label));
-        traverser.enqueue(node);
       }
     }
   }
@@ -131,16 +122,10 @@ public final class Graph {
         .collect(Collectors.toCollection(GraphNodes::new));
   }
 
-  private List<GraphLabel> labelsFrom(GraphNodes nodes) {
-    List<GraphLabel> labels = new ArrayList<>();
-    for (GraphEdge edge : edges) {
-      if (edge.label != null && nodes.contains(edge.source)) {
-        if (labels.stream().noneMatch(l -> option.nullableEquals(l, edge.label))) {
-          labels.add(edge.label);
-        }
-      }
-    }
-    return labels;
+  private GraphLabels labelsFrom(GraphNodes nodes) {
+    GraphLabels labels = new GraphLabels();
+    edges.stream().filter(e -> nodes.contains(e.source)).forEach(e -> labels.add(e.label));
+    return labels.distinct(option);
   }
 
   private List<GraphEdge> sortedEdges(GraphNode node) {
