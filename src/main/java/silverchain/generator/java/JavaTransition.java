@@ -19,18 +19,25 @@ final class JavaTransition extends Transition<JavaDiagram, JavaState, JavaTransi
     return encode(parameters()) + " " + decl;
   }
 
-  String actionMethodDeclaration() {
+  String actionMethodDeclaration(boolean withPrefix) {
     String type = destination().isNumbered() ? "void" : destination().reference();
-    return type + " state" + source().number() + "$" + encodeAsDeclaration(method());
+    String prefix = withPrefix ? ("state" + source().number() + "$") : "";
+    return type + " " + prefix + encodeAsDeclaration(method());
   }
 
-  String actionMethodInvocation() {
-    return ".state" + source().number() + "$" + encodeAsInvocation(method()) + ";";
+  String actionMethodInvocation(boolean withPrefix) {
+    String prefix = withPrefix ? ("state" + source().number() + "$") : "";
+    return prefix + encodeAsInvocation(method()) + ";";
+  }
+
+  String actionMethodDefaultBody() {
+    String prefix = destination().typeReference().map(r -> "return ").orElse("");
+    return prefix + actionMethodInvocation(false);
   }
 
   String stateMethodBodyListenerInvocation() {
     String type = destination().typeReference().map(r -> "return ").orElse("");
-    return "    " + type + "this.action" + actionMethodInvocation() + "\n";
+    return "    " + type + "this.action." + actionMethodInvocation(true) + "\n";
   }
 
   String stateMethodBodyReturnState() {

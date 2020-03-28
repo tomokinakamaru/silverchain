@@ -2,9 +2,21 @@ package foo;
 
 interface IFooAction<T, S, U> {
 
-  bar.Bar<U, U> state0$baz(U u);
+  default bar.Bar<U, U> state0$baz(U u) {
+    return baz(u);
+  }
 
-  void state0$foo(T t);
+  default void state0$foo(T t) {
+    foo(t);
+  }
 
-  bar.Bar<T, S> state1$bar(S s);
+  default bar.Bar<T, S> state1$bar(S s) {
+    return bar(s);
+  }
+
+  bar.Bar<U, U> baz(U u);
+
+  void foo(T t);
+
+  bar.Bar<T, S> bar(S s);
 }

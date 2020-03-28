@@ -1,6 +1,14 @@
 interface IFooAction<T> {
 
-  void state0$foo(String s, T t);
+  default void state0$foo(String s, T t) {
+    foo(s, t);
+  }
 
-  void state1$bar();
+  default void state1$bar() {
+    bar();
+  }
+
+  void foo(String s, T t);
+
+  void bar();
 }

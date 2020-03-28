@@ -4,8 +4,11 @@ import static silverchain.generator.java.GrammarEncoder.encode;
 import static silverchain.generator.java.Utility.filePath;
 import static silverchain.generator.java.Utility.packageDeclaration;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import silverchain.generator.Generator;
+import silverchain.grammar.Method;
 import silverchain.graph.GraphNode;
 
 public final class JavaGenerator extends Generator {
@@ -85,9 +88,24 @@ public final class JavaGenerator extends Generator {
 
     for (JavaState state : diagram.numberedStates()) {
       for (JavaTransition transition : state.transitions()) {
-        write("\n  ");
-        write(transition.actionMethodDeclaration());
-        write(";\n");
+        write("\n  default ");
+        write(transition.actionMethodDeclaration(true));
+        write(" {\n    ");
+        write(transition.actionMethodDefaultBody());
+        write("\n  }");
+        write("\n");
+      }
+    }
+
+    Set<Method> encodedMethods = new HashSet<>();
+    for (JavaState state : diagram.numberedStates()) {
+      for (JavaTransition transition : state.transitions()) {
+        if (!encodedMethods.contains(transition.method())) {
+          write("\n  ");
+          write(transition.actionMethodDeclaration(false));
+          write(";\n");
+          encodedMethods.add(transition.method());
+        }
       }
     }
 
