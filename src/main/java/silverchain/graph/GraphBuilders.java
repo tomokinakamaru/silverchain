@@ -2,9 +2,9 @@ package silverchain.graph;
 
 import static java.util.stream.Stream.generate;
 
-public final class GraphBuilder {
+public final class GraphBuilders {
 
-  private GraphBuilder() {}
+  private GraphBuilders() {}
 
   public static Graph atom(Object label) {
     GraphEdge e = new GraphEdge(new GraphLabel(label));
@@ -22,7 +22,7 @@ public final class GraphBuilder {
 
   public static Graph repeat(Graph graph, Integer min, Integer max) {
     min = min == null ? 0 : min;
-    Graph first = generate(() -> graph).limit(min).reduce(GraphBuilder::join).orElse(atom());
+    Graph first = generate(() -> graph).limit(min).reduce(GraphBuilders::join).orElse(atom());
 
     if (max == null) {
       Graph second = copy(graph);
@@ -32,7 +32,7 @@ public final class GraphBuilder {
     } else {
       Graph g = copy(graph);
       g.edges.fuse(g.startNodes, g.endNodes);
-      Graph second = generate(() -> g).limit(max - min).reduce(GraphBuilder::join).orElse(atom());
+      Graph second = generate(() -> g).limit(max - min).reduce(GraphBuilders::join).orElse(atom());
       return join(first, second);
     }
   }

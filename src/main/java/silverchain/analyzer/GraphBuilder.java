@@ -1,11 +1,11 @@
 package silverchain.analyzer;
 
-import static silverchain.graph.GraphBuilder.atom;
-import static silverchain.graph.GraphBuilder.join;
-import static silverchain.graph.GraphBuilder.merge;
-import static silverchain.graph.GraphBuilder.repeat;
+import static silverchain.graph.GraphBuilders.atom;
+import static silverchain.graph.GraphBuilders.join;
+import static silverchain.graph.GraphBuilders.repeat;
 
 import java.util.Stack;
+import java.util.function.BiFunction;
 import silverchain.grammar.Grammar;
 import silverchain.grammar.Method;
 import silverchain.grammar.RepeatOperator;
@@ -16,6 +16,7 @@ import silverchain.grammar.Rules;
 import silverchain.grammar.Type;
 import silverchain.grammar.Visitor;
 import silverchain.graph.Graph;
+import silverchain.graph.GraphBuilders;
 
 final class GraphBuilder extends Visitor {
 
@@ -29,18 +30,14 @@ final class GraphBuilder extends Visitor {
   @Override
   protected void visit(Grammar node) {
     if (node.rules() != null) {
-      Graph rules = stack.pop();
-      Graph type = stack.pop();
-      stack.push(join(type, rules));
+      operate2(GraphBuilders::join);
     }
   }
 
   @Override
   protected void visit(Rules node) {
     if (node.tail() != null) {
-      Graph rules = stack.pop();
-      Graph rule = stack.pop();
-      stack.push(merge(rule, rules));
+      operate2(GraphBuilders::merge);
     }
   }
 
@@ -61,18 +58,14 @@ final class GraphBuilder extends Visitor {
   @Override
   protected void visit(RuleExpression node) {
     if (node.tail() != null) {
-      Graph expr = stack.pop();
-      Graph term = stack.pop();
-      stack.push(merge(term, expr));
+      operate2(GraphBuilders::merge);
     }
   }
 
   @Override
   protected void visit(RuleTerm node) {
     if (node.tail() != null) {
-      Graph term = stack.pop();
-      Graph fact = stack.pop();
-      stack.push(join(fact, term));
+      operate2(GraphBuilders::join);
     }
   }
 
@@ -84,5 +77,11 @@ final class GraphBuilder extends Visitor {
   @Override
   protected void visit(RepeatOperator node) {
     stack.push(repeat(stack.pop(), node.min(), node.max()));
+  }
+
+  private void operate2(BiFunction<Graph, Graph, Graph> function) {
+    Graph right = stack.pop();
+    Graph left = stack.pop();
+    stack.push(function.apply(left, right));
   }
 }

@@ -1,9 +1,9 @@
 package graph;
 
-import static silverchain.graph.GraphBuilder.atom;
-import static silverchain.graph.GraphBuilder.join;
-import static silverchain.graph.GraphBuilder.merge;
-import static silverchain.graph.GraphBuilder.repeat;
+import static silverchain.graph.GraphBuilders.atom;
+import static silverchain.graph.GraphBuilders.join;
+import static silverchain.graph.GraphBuilders.merge;
+import static silverchain.graph.GraphBuilders.repeat;
 
 import java.util.List;
 import org.junit.jupiter.api.Test;

@@ -23,7 +23,7 @@ public final class Graph {
   }
 
   public List<GraphNode> compile(GraphCompileOption option) {
-    Graph graph = GraphBuilder.copy(this);
+    Graph graph = GraphBuilders.copy(this);
     graph.option = option;
     graph.reverse();
     graph.determinize();
