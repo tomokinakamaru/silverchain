@@ -25,6 +25,10 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
     this.referent = referent;
   }
 
+  public TypeParameter referent() {
+    return referent;
+  }
+
   public List<TypeParameter> referents() {
     Set<TypeParameter> parameters = new LinkedHashSet<>();
     if (referent != null) {

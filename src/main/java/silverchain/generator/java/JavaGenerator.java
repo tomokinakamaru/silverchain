@@ -19,6 +19,8 @@ public final class JavaGenerator extends Generator {
 
   protected void generate(List<GraphNode> nodes) {
     JavaDiagram diagram = new JavaDiagramBuilder().build(nodes);
+    diagram.validate();
+
     List<JavaState> states = diagram.numberedStates();
     states.forEach(this::generateStateInterface);
     states.forEach(s -> generateStateClass(diagram, s));

@@ -18,4 +18,8 @@ final class JavaDiagram extends Diagram<JavaDiagram, JavaState, JavaTransition> 
   String actionInterfaceQualifiedName() {
     return qualifiedName(actionInterfacePackageName(), actionInterfaceName());
   }
+
+  void validate() {
+    states().forEach(JavaState::validate);
+  }
 }

@@ -1,6 +1,7 @@
 package silverchain.generator.java;
 
 import static silverchain.generator.java.GrammarEncoder.encode;
+import static silverchain.generator.java.Utility.countUniqueSignatures;
 import static silverchain.generator.java.Utility.qualifiedName;
 
 import java.util.Collections;
@@ -50,6 +51,18 @@ final class JavaState extends State<JavaDiagram, JavaState, JavaTransition> {
 
   Optional<TypeReference> typeReference() {
     return typeReferences().stream().findFirst();
+  }
+
+  void validate() {
+    if (!isNumbered() && !transitions().isEmpty()) {
+      throw new RuntimeException("End state has transition");
+    }
+    if (1 < typeReferences().size()) {
+      throw new RuntimeException("Multiple type references in a state");
+    }
+    if (transitions().size() != countUniqueSignatures(transitions())) {
+      throw new RuntimeException("Method signature conflict");
+    }
   }
 
   @Override
