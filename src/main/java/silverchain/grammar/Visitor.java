@@ -2,6 +2,8 @@ package silverchain.grammar;
 
 public abstract class Visitor {
 
+  protected void visit(Grammars node) {}
+
   protected void visit(Grammar node) {}
 
   protected void visit(Method node) {}

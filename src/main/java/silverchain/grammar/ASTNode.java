@@ -5,7 +5,9 @@ import java.util.Objects;
 public abstract class ASTNode implements Comparable<ASTNode> {
 
   public void accept(Visitor visitor) {
-    if (this instanceof Grammar) {
+    if (this instanceof Grammars) {
+      visitor.visit((Grammars) this);
+    } else if (this instanceof Grammar) {
       visitor.visit((Grammar) this);
     } else if (this instanceof Method) {
       visitor.visit((Method) this);
