@@ -1,6 +1,6 @@
 package silverchain.generator.java;
 
-import silverchain.diagram.DiagramBuilder;
+import silverchain.generator.diagram.DiagramBuilder;
 
 final class JavaDiagramBuilder extends DiagramBuilder<JavaDiagram, JavaState, JavaTransition> {
 

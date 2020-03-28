@@ -6,7 +6,7 @@ import static silverchain.generator.java.Utility.qualifiedName;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import silverchain.diagram.State;
+import silverchain.generator.diagram.State;
 import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeReference;
 

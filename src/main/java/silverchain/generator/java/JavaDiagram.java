@@ -3,7 +3,7 @@ package silverchain.generator.java;
 import static silverchain.generator.java.GrammarEncoder.encode;
 import static silverchain.generator.java.Utility.qualifiedName;
 
-import silverchain.diagram.Diagram;
+import silverchain.generator.diagram.Diagram;
 
 final class JavaDiagram extends Diagram<JavaDiagram, JavaState, JavaTransition> {
 

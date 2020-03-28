@@ -1,4 +1,4 @@
-package silverchain.diagram;
+package silverchain.generator.diagram;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package silverchain.diagram;
+package silverchain.generator.diagram;
 
 import silverchain.grammar.Method;
 
