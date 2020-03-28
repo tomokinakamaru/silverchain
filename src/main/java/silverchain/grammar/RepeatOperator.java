@@ -25,10 +25,8 @@ public final class RepeatOperator extends ASTNode2<Integer, Integer> {
       }
       return "{" + min() + "," + max() + "}";
     }
-    if (min() == 1) {
-      if (max() == null) {
-        return "+";
-      }
+    if (min() == 1 && max() == null) {
+      return "+";
     }
     if (max() == null) {
       return "{" + min() + "}";
