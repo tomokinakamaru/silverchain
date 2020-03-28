@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,8 @@ import silverchain.EntryPoint;
 import silverchain.parser.ParseException;
 
 public class EntryPointTest {
+
+  private static final Path buildGradle = Paths.get("build.gradle");
 
   private static final Path resources = Paths.get("src").resolve("test").resolve("resources");
 
@@ -70,6 +73,23 @@ public class EntryPointTest {
         resources.resolve("java").resolve("test1.ag").toString(),
         "-o",
         outputDirectory.toString());
+  }
+
+  @Test
+  void test6() throws IOException, ParseException {
+    String version =
+        Files.readAllLines(buildGradle)
+            .stream()
+            .filter(s -> s.startsWith("version "))
+            .map(s -> s.split(" ")[1].replaceAll("'", "").trim())
+            .findFirst()
+            .orElse(null);
+
+    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    PrintStream printStream = new PrintStream(outputStream);
+    System.setOut(printStream);
+    EntryPoint.run("-v");
+    assert outputStream.toString().equals(version + "\n");
   }
 
   @BeforeEach

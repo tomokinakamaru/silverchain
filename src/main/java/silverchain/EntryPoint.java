@@ -17,6 +17,7 @@ public final class EntryPoint {
 
   public static void main(String[] args) throws ParseException, IOException {
     boolean printHelp = false;
+    boolean printVersion = false;
     InputStream inputStream = System.in;
     Path outputDirectory = Paths.get(".");
 
@@ -26,6 +27,11 @@ public final class EntryPoint {
         case "-h":
         case "--help":
           printHelp = true;
+          break;
+
+        case "-v":
+        case "--version":
+          printVersion = true;
           break;
 
         case "-i":
@@ -45,6 +51,8 @@ public final class EntryPoint {
 
     if (printHelp) {
       printHelp();
+    } else if (printVersion) {
+      printVersion();
     } else {
       Silverchain silverchain = new Silverchain();
       silverchain.outputDirectory(outputDirectory);
@@ -59,5 +67,9 @@ public final class EntryPoint {
     System.out.println("  -h, --help  show this help message and exit");
     System.out.println("  -i <path>   specify input file");
     System.out.println("  -o <path>   specify output directory");
+  }
+
+  private static void printVersion() {
+    System.out.println("0.1.0");
   }
 }
