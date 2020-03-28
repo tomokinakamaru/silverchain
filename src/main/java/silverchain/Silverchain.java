@@ -14,7 +14,7 @@ import silverchain.parser.Parser;
 
 public final class Silverchain {
 
-  private Path outputDirectory = Paths.get("");
+  private Path outputDirectory = Paths.get(".");
 
   public void outputDirectory(Path path) {
     outputDirectory = path;
