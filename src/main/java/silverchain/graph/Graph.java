@@ -7,6 +7,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import silverchain.grammar.Method;
 import silverchain.grammar.Type;
+import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeParameters;
 
 public final class Graph {
@@ -134,14 +135,14 @@ public final class Graph {
     return edges.from(node).stream().sorted().collect(Collectors.toCollection(ArrayList::new));
   }
 
-  private List<Object> getTags(GraphLabel label) {
+  private Iterable<TypeParameter> getTags(GraphLabel label) {
     if (label.is(Method.class)) {
       return new ArrayList<>(label.as(Method.class).referents());
     }
     if (label.is(Type.class)) {
       TypeParameters parameters = label.as(Type.class).parameters();
       if (parameters != null && parameters.publicList() != null) {
-        return new ArrayList<>(parameters.publicList().list());
+        return parameters.publicList();
       }
     }
     return Collections.emptyList();

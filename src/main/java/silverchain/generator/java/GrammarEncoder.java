@@ -1,10 +1,8 @@
 package silverchain.generator.java;
 
-import static java.util.stream.Collectors.joining;
-
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Stream;
 import silverchain.grammar.Method;
 import silverchain.grammar.MethodParameter;
 import silverchain.grammar.MethodParameters;
@@ -53,7 +51,7 @@ final class GrammarEncoder {
   }
 
   private static String encode(MethodParameters parameters, boolean includeType) {
-    return parameters == null ? "" : csv(parameters.stream(), p -> encode(p, includeType));
+    return parameters == null ? "" : csv(parameters, p -> encode(p, includeType));
   }
 
   private static String encode(MethodParameter parameter, boolean includeType) {
@@ -66,7 +64,7 @@ final class GrammarEncoder {
   }
 
   private static String encode(TypeArguments arguments) {
-    return arguments == null ? "" : "<" + csv(arguments.stream(), GrammarEncoder::encode) + ">";
+    return arguments == null ? "" : "<" + csv(arguments, GrammarEncoder::encode) + ">";
   }
 
   private static String encode(TypeArgument argument) {
@@ -79,11 +77,9 @@ final class GrammarEncoder {
   }
 
   /* Misc --------------------------------------------------------------------------------------- */
-  private static <T> String csv(List<T> list, Function<T, String> function) {
-    return csv(list.stream(), function);
-  }
-
-  private static <T> String csv(Stream<T> stream, Function<T, String> function) {
-    return stream.map(function).collect(joining(", "));
+  private static <T> String csv(Iterable<T> iterable, Function<T, String> function) {
+    List<String> list = new ArrayList<>();
+    iterable.forEach(item -> list.add(function.apply(item)));
+    return String.join(", ", list);
   }
 }

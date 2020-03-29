@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public final class MethodParameters extends ASTNodeN<MethodParameter, MethodParameters> {
 
@@ -13,16 +14,11 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
   }
 
   public List<TypeParameter> referents() {
-    return stream()
+    return StreamSupport.stream(spliterator(), false)
         .map(MethodParameter::referents)
         .flatMap(Collection::stream)
         .distinct()
         .collect(Collectors.toCollection(ArrayList::new));
-  }
-
-  @Override
-  public String toString() {
-    return stream().map(MethodParameter::toString).collect(Collectors.joining(","));
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
@@ -32,5 +28,10 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
     if (tail() != null) {
       tail().resolveReferences(parameters);
     }
+  }
+
+  @Override
+  String separator() {
+    return ",";
   }
 }

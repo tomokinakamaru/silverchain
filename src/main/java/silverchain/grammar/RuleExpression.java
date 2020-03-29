@@ -3,18 +3,12 @@ package silverchain.grammar;
 import static silverchain.graph.GraphBuilders.merge;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 import silverchain.graph.Graph;
 
 public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
 
   public RuleExpression(RuleTerm head, RuleExpression tail) {
     super(head, tail);
-  }
-
-  @Override
-  public String toString() {
-    return stream().map(RuleTerm::toString).collect(Collectors.joining("|"));
   }
 
   public Graph graph() {
@@ -29,5 +23,10 @@ public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
     if (tail() != null) {
       tail().resolveReferences(parameters);
     }
+  }
+
+  @Override
+  String separator() {
+    return "|";
   }
 }

@@ -106,7 +106,7 @@ final class Tests {
   private GraphTester test(String text) throws ParseException {
     Grammars grammars = new Parser(new ByteArrayInputStream(text.getBytes())).grammars();
     List<List<GraphNode>> list = new ArrayList<>();
-    for (Grammar grammar : grammars.list()) {
+    for (Grammar grammar : grammars) {
       grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
       list.add(grammar.graph().compile());
     }

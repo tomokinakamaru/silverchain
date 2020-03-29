@@ -28,10 +28,10 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
   List<TypeParameter> list() {
     List<TypeParameter> parameters = new ArrayList<>();
     if (publicList() != null) {
-      parameters.addAll(publicList().list());
+      publicList().forEach(parameters::add);
     }
     if (privateList() != null) {
-      parameters.addAll(privateList().list());
+      privateList().forEach(parameters::add);
     }
     return parameters;
   }

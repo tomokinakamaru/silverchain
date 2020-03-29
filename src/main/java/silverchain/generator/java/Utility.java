@@ -36,7 +36,7 @@ final class Utility {
   private static String signature(Method method) {
     List<String> types = new ArrayList<>();
     if (method.parameters() != null) {
-      for (MethodParameter parameter : method.parameters().list()) {
+      for (MethodParameter parameter : method.parameters()) {
         if (parameter.type().referent() == null) {
           types.add(encode(parameter.type().name()));
         } else {

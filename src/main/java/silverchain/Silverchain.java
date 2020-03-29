@@ -26,7 +26,7 @@ public final class Silverchain {
     Parser parser = new Parser(stream);
 
     List<List<GraphNode>> list = new ArrayList<>();
-    for (Grammar grammar : parser.grammars().list()) {
+    for (Grammar grammar : parser.grammars()) {
       grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
       list.add(grammar.graph().compile());
     }

@@ -16,7 +16,7 @@ public abstract class ASTNode implements Comparable<ASTNode> {
   }
 
   @Override
-  public int hashCode() {
+  public final int hashCode() {
     return Objects.hash(toString());
   }
 

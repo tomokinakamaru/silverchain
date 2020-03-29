@@ -42,7 +42,7 @@ public final class JavaTests {
     Grammars grammars = new Parser(stream).grammars();
 
     List<List<GraphNode>> list = new ArrayList<>();
-    for (Grammar grammar : grammars.list()) {
+    for (Grammar grammar : grammars) {
       grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
       list.add(grammar.graph().compile());
     }

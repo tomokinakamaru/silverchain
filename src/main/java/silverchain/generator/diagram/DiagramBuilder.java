@@ -10,7 +10,6 @@ import silverchain.grammar.Method;
 import silverchain.grammar.QualifiedName;
 import silverchain.grammar.Type;
 import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeParameters;
 import silverchain.grammar.TypeReference;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
@@ -52,17 +51,7 @@ public abstract class DiagramBuilder<
   }
 
   private List<TypeParameter> parameters(GraphNode node) {
-    List<TypeParameter> list = new ArrayList<>();
-    TypeParameters parameters = type(node).parameters();
-    if (parameters != null) {
-      if (parameters.publicList() != null) {
-        list.addAll(parameters.publicList().list());
-      }
-      if (parameters.privateList() != null) {
-        list.addAll(parameters.privateList().list());
-      }
-    }
-    return list;
+    return type(node).typeParameters();
   }
 
   private Type type(GraphNode node) {
