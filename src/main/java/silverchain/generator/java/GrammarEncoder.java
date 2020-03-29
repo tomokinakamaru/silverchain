@@ -27,7 +27,8 @@ final class GrammarEncoder {
   }
 
   private static String encode(TypeParameter parameter, boolean includeBound) {
-    return parameter.name() + (includeBound ? encode(parameter.bound()) : "");
+    return parameter.name()
+        + (includeBound ? parameter.bound().map(GrammarEncoder::encode).orElse("") : "");
   }
 
   private static String encode(TypeParameterBound bound) {
@@ -47,7 +48,10 @@ final class GrammarEncoder {
   }
 
   private static String encode(Method method, boolean includeType) {
-    return method.name() + "(" + encode(method.parameters(), includeType) + ")";
+    return method.name()
+        + "("
+        + method.parameters().map(p -> encode(p, includeType)).orElse("")
+        + ")";
   }
 
   private static String encode(MethodParameters parameters, boolean includeType) {
@@ -60,7 +64,7 @@ final class GrammarEncoder {
 
   /* Type reference ----------------------------------------------------------------------------- */
   static String encode(TypeReference reference) {
-    return encode(reference.name()) + encode(reference.arguments());
+    return encode(reference.name()) + reference.arguments().map(GrammarEncoder::encode).orElse("");
   }
 
   private static String encode(TypeArguments arguments) {

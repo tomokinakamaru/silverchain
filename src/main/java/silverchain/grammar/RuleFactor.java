@@ -31,8 +31,6 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (element() != null) {
-      element().resolveReferences(parameters);
-    }
+    element().resolveReferences(parameters);
   }
 }

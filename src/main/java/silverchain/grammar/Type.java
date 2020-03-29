@@ -4,6 +4,7 @@ import static silverchain.graph.GraphBuilders.atom;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
 
@@ -17,14 +18,13 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
     return left();
   }
 
-  public TypeParameters parameters() {
-    return right();
+  public Optional<TypeParameters> parameters() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    String s = parameters() == null ? "" : "[" + parameters().toString() + "]";
-    return name().toString() + s;
+    return name().toString() + parameters().map(p -> "[" + p.toString() + "]").orElse("");
   }
 
   public Graph graph() {
@@ -32,12 +32,10 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
   }
 
   public List<TypeParameter> typeParameters() {
-    return parameters() == null ? Collections.emptyList() : parameters().list();
+    return parameters().map(TypeParameters::list).orElse(Collections.emptyList());
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (parameters() != null) {
-      parameters().resolveReferences(parameters);
-    }
+    parameters().ifPresent(p -> p.resolveReferences(parameters));
   }
 }

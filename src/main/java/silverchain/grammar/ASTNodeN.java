@@ -3,6 +3,7 @@ package silverchain.grammar;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 
 abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> implements Iterable<T> {
 
@@ -16,8 +17,8 @@ abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> impl
     return left();
   }
 
-  public final S tail() {
-    return right();
+  public final Optional<S> tail() {
+    return Optional.ofNullable(right());
   }
 
   @Override
@@ -26,7 +27,7 @@ abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> impl
     ASTNodeN<T, S> node = this;
     while (node != null) {
       list.add(node.head());
-      node = node.tail();
+      node = node.tail().orElse(null);
     }
     return list.iterator();
   }

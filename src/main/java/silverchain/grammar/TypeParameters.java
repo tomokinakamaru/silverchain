@@ -2,6 +2,7 @@ package silverchain.grammar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParameterList> {
@@ -10,38 +11,29 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
     super(publicList, privateList);
   }
 
-  public TypeParameterList publicList() {
-    return left();
+  public Optional<TypeParameterList> publicList() {
+    return Optional.ofNullable(left());
   }
 
-  public TypeParameterList privateList() {
-    return right();
+  public Optional<TypeParameterList> privateList() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    String s = publicList() == null ? "" : publicList().toString();
-    String t = privateList() == null ? "" : ";" + privateList().toString();
-    return s + t;
+    return publicList().map(ASTNodeN::toString).orElse("")
+        + privateList().map(p -> ";" + p.toString()).orElse("");
   }
 
   List<TypeParameter> list() {
     List<TypeParameter> parameters = new ArrayList<>();
-    if (publicList() != null) {
-      publicList().forEach(parameters::add);
-    }
-    if (privateList() != null) {
-      privateList().forEach(parameters::add);
-    }
+    publicList().ifPresent(p -> p.forEach(parameters::add));
+    privateList().ifPresent(p -> p.forEach(parameters::add));
     return parameters;
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (publicList() != null) {
-      publicList().resolveReferences(parameters);
-    }
-    if (privateList() != null) {
-      privateList().resolveReferences(parameters);
-    }
+    publicList().ifPresent(p -> p.resolveReferences(parameters));
+    privateList().ifPresent(p -> p.resolveReferences(parameters));
   }
 }

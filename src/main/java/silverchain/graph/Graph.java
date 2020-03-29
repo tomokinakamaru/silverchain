@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import silverchain.grammar.Method;
 import silverchain.grammar.Type;
@@ -140,9 +141,9 @@ public final class Graph {
       return new ArrayList<>(label.as(Method.class).referents());
     }
     if (label.is(Type.class)) {
-      TypeParameters parameters = label.as(Type.class).parameters();
-      if (parameters != null && parameters.publicList() != null) {
-        return parameters.publicList();
+      Optional<TypeParameters> parameters = label.as(Type.class).parameters();
+      if (parameters.isPresent() && parameters.get().publicList().isPresent()) {
+        return parameters.get().publicList().get();
       }
     }
     return Collections.emptyList();

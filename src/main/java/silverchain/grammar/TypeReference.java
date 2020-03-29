@@ -5,6 +5,7 @@ import static silverchain.graph.GraphBuilders.atom;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
 
@@ -20,8 +21,8 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
     return left();
   }
 
-  public TypeArguments arguments() {
-    return right();
+  public Optional<TypeArguments> arguments() {
+    return Optional.ofNullable(right());
   }
 
   public void referent(TypeParameter referent) {
@@ -37,16 +38,13 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
     if (referent != null) {
       parameters.add(referent);
     }
-    if (arguments() != null) {
-      parameters.addAll(arguments().referents());
-    }
+    arguments().ifPresent(a -> parameters.addAll(a.referents()));
     return new ArrayList<>(parameters);
   }
 
   @Override
   public String toString() {
-    String s = arguments() == null ? "" : "[" + arguments().toString() + "]";
-    return name().toString() + s;
+    return name().toString() + arguments().map(a -> "[" + a.toString() + "]").orElse("");
   }
 
   public Graph graph() {
@@ -54,12 +52,10 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (name().qualifier() == null) {
+    if (!name().qualifier().isPresent()) {
       String name = name().name();
       referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);
     }
-    if (arguments() != null) {
-      arguments().resolveReferences(parameters);
-    }
+    arguments().ifPresent(a -> a.resolveReferences(parameters));
   }
 }

@@ -1,6 +1,5 @@
 package silverchain.generator.java;
 
-import static silverchain.generator.java.GrammarEncoder.encode;
 import static silverchain.generator.java.GrammarEncoder.encodeAsArgument;
 import static silverchain.generator.java.Utility.countUniqueSignatures;
 import static silverchain.generator.java.Utility.qualifiedName;
@@ -23,12 +22,12 @@ final class JavaState extends State<JavaDiagram, JavaState, JavaTransition> {
   }
 
   String interfacePackageName() {
-    String qualifier = encode(diagram().name().qualifier());
+    String qualifier = diagram().name().qualifier().map(GrammarEncoder::encode).orElse("");
     return number() == 0 ? qualifier : qualifiedName(qualifier, "state" + number());
   }
 
   String implementationPackageName() {
-    return encode(diagram().name().qualifier());
+    return diagram().name().qualifier().map(GrammarEncoder::encode).orElse("");
   }
 
   String interfaceName() {

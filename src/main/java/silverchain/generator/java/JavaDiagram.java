@@ -1,6 +1,5 @@
 package silverchain.generator.java;
 
-import static silverchain.generator.java.GrammarEncoder.encode;
 import static silverchain.generator.java.Utility.qualifiedName;
 
 import silverchain.generator.diagram.Diagram;
@@ -12,7 +11,7 @@ final class JavaDiagram extends Diagram<JavaDiagram, JavaState, JavaTransition> 
   }
 
   String actionInterfacePackageName() {
-    return encode(name().qualifier());
+    return name().qualifier().map(GrammarEncoder::encode).orElse("");
   }
 
   String actionInterfaceQualifiedName() {

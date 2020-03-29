@@ -13,16 +13,12 @@ public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
 
   public Graph graph() {
     Graph g = head().graph();
-    return tail() == null ? g : join(g, tail().graph());
+    return tail().map(t -> join(g, t.graph())).orElse(g);
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (head() != null) {
-      head().resolveReferences(parameters);
-    }
-    if (tail() != null) {
-      tail().resolveReferences(parameters);
-    }
+    head().resolveReferences(parameters);
+    tail().ifPresent(t -> t.resolveReferences(parameters));
   }
 
   @Override

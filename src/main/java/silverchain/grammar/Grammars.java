@@ -12,19 +12,13 @@ public final class Grammars extends ASTNodeN<Grammar, Grammars> {
 
   public List<TypeParameter> typeParameters() {
     List<TypeParameter> list = new ArrayList<>(head().typeParameters());
-    if (tail() != null) {
-      list.addAll(tail().typeParameters());
-    }
+    tail().ifPresent(t -> list.addAll(t.typeParameters()));
     return list;
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (head() != null) {
-      head().resolveReferences(parameters);
-    }
-    if (tail() != null) {
-      tail().resolveReferences(parameters);
-    }
+    head().resolveReferences(parameters);
+    tail().ifPresent(t -> t.resolveReferences(parameters));
   }
 
   @Override

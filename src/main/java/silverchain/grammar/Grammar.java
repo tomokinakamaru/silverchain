@@ -3,6 +3,7 @@ package silverchain.grammar;
 import static silverchain.graph.GraphBuilders.join;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
 
@@ -16,19 +17,18 @@ public final class Grammar extends ASTNode2<Type, Rules> {
     return left();
   }
 
-  public Rules rules() {
-    return right();
+  public Optional<Rules> rules() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    String s = rules() == null ? "" : " " + rules().toString();
-    return type().toString() + ":" + s;
+    return type().toString() + ":" + rules().map(r -> " " + r.toString()).orElse("");
   }
 
   public Graph graph() {
     Graph g = type().graph();
-    return rules() == null ? g : join(g, rules().graph());
+    return rules().map(r -> join(g, r.graph())).orElse(g);
   }
 
   public List<TypeParameter> typeParameters() {
@@ -36,11 +36,7 @@ public final class Grammar extends ASTNode2<Type, Rules> {
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (type() != null) {
-      type().resolveReferences(parameters);
-    }
-    if (rules() != null) {
-      rules().resolveReferences(parameters);
-    }
+    type().resolveReferences(parameters);
+    rules().ifPresent(r -> r.resolveReferences(parameters));
   }
 }

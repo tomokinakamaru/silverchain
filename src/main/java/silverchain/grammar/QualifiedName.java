@@ -2,6 +2,7 @@ package silverchain.grammar;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class QualifiedName extends ASTNode2<QualifiedName, String> {
 
@@ -9,8 +10,8 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
     super(qualifier, name);
   }
 
-  public QualifiedName qualifier() {
-    return left();
+  public Optional<QualifiedName> qualifier() {
+    return Optional.ofNullable(left());
   }
 
   public String name() {
@@ -22,14 +23,13 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
     QualifiedName name = this;
     while (name != null) {
       list.add(0, name.name());
-      name = name.qualifier();
+      name = name.qualifier().orElse(null);
     }
     return list;
   }
 
   @Override
   public String toString() {
-    String s = qualifier() == null ? "" : qualifier().toString() + ".";
-    return s + name();
+    return qualifier().map(q -> q.toString() + ".").orElse("") + name();
   }
 }

@@ -1,5 +1,6 @@
 package silverchain.grammar;
 
+import java.util.Optional;
 import java.util.Set;
 
 public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
@@ -12,18 +13,16 @@ public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
     return left();
   }
 
-  public TypeParameterBound bound() {
-    return right();
+  public Optional<TypeParameterBound> bound() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    return name() + (bound() == null ? "" : bound().toString());
+    return name() + bound().map(TypeParameterBound::toString).orElse("");
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (bound() != null) {
-      bound().resolveReferences(parameters);
-    }
+    bound().ifPresent(b -> b.resolveReferences(parameters));
   }
 }
