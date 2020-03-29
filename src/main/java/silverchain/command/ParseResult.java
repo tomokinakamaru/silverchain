@@ -7,16 +7,16 @@ final class ParseResult {
 
   private final String unknownOption;
 
-  private final Map<String, String> map;
+  private final Map<String, String> values;
 
   ParseResult(String unknownOption) {
     this.unknownOption = unknownOption;
-    this.map = new HashMap<>();
+    this.values = new HashMap<>();
   }
 
-  ParseResult(Map<String, String> map) {
+  ParseResult(Map<String, String> values) {
     this.unknownOption = null;
-    this.map = map;
+    this.values = values;
   }
 
   boolean success() {
@@ -28,6 +28,10 @@ final class ParseResult {
   }
 
   String get(String name) {
-    return map.get(name);
+    return values.get(name);
+  }
+
+  boolean getFlag(String name) {
+    return Boolean.parseBoolean(values.get(name));
   }
 }

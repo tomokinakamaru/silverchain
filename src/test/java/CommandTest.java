@@ -11,10 +11,10 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import silverchain.command.EntryPoint;
+import silverchain.command.Command;
 import silverchain.parser.ParseException;
 
-public class EntryPointTest {
+public class CommandTest {
 
   private static final Path buildGradle = Paths.get("build.gradle");
 
@@ -35,14 +35,14 @@ public class EntryPointTest {
   void test1() throws IOException, ParseException {
     InputStream stream = new ByteArrayInputStream("Foo: foo() Foo;".getBytes());
     System.setIn(stream);
-    EntryPoint.run("--output", outputDirectory.toString());
+    Command.run("--output", outputDirectory.toString());
   }
 
   @Test
   void test2() throws IOException, ParseException {
     InputStream stream = new ByteArrayInputStream("Foo: foo() Foo;".getBytes());
     System.setIn(stream);
-    EntryPoint.run();
+    Command.run();
 
     File[] files = Paths.get(".").toFile().listFiles((file, name) -> name.endsWith(".java"));
     if (files != null) {
@@ -57,7 +57,7 @@ public class EntryPointTest {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
     System.setErr(printStream);
-    assert EntryPoint.run("-foo") == 1;
+    assert Command.run("-foo") == 1;
     assert outputStream.toString().equals("error: unknown option -foo\n" + helpMessage);
   }
 
@@ -66,13 +66,13 @@ public class EntryPointTest {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
     System.setOut(printStream);
-    EntryPoint.run("-h");
+    Command.run("-h");
     assert outputStream.toString().equals(helpMessage);
   }
 
   @Test
   void test5() throws IOException, ParseException {
-    EntryPoint.run(
+    Command.run(
         "-i",
         resources.resolve("java").resolve("test1.ag").toString(),
         "-o",
@@ -92,7 +92,7 @@ public class EntryPointTest {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
     System.setOut(printStream);
-    EntryPoint.run("-v");
+    Command.run("-v");
     assert outputStream.toString().equals(version + "\n");
   }
 

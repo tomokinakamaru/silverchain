@@ -4,7 +4,14 @@ import java.util.Map;
 
 final class ArgumentParser {
 
-  private final Options options = new Options();
+  private final String name;
+
+  private final Options options;
+
+  ArgumentParser(String name) {
+    this.name = name;
+    this.options = new Options();
+  }
 
   void add(Option option) {
     options.add(option);
@@ -24,13 +31,6 @@ final class ArgumentParser {
   }
 
   String help() {
-    String format = "%1$-" + options.helpHeadWidth() + "s";
-    StringBuilder builder = new StringBuilder("usage: silverchain [options]\n\noptions:");
-    for (Option option : options) {
-      String head = String.format(format, option.helpHead());
-      String body = option.helpBody();
-      builder.append("\n").append(head).append("  ").append(body);
-    }
-    return builder.toString();
+    return "usage: " + name + " [options]\n\noptions:" + options.help();
   }
 }

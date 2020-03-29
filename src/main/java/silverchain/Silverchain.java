@@ -18,7 +18,7 @@ public final class Silverchain {
 
   private Path outputDirectory = Paths.get(".");
 
-  public void outputDirectory(Path path) {
+  public void output(Path path) {
     outputDirectory = path;
   }
 
