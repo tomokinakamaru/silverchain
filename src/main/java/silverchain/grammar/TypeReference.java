@@ -25,10 +25,6 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
     return Optional.ofNullable(right());
   }
 
-  public void referent(TypeParameter referent) {
-    this.referent = referent;
-  }
-
   public TypeParameter referent() {
     return referent;
   }
