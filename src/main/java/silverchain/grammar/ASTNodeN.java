@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
-public abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> {
+abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> {
 
   ASTNodeN(T head, S tail) {
     super(head, tail);

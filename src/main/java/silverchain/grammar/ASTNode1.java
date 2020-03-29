@@ -1,6 +1,6 @@
 package silverchain.grammar;
 
-public abstract class ASTNode1<T> extends ASTNode {
+abstract class ASTNode1<T> extends ASTNode {
 
   private final T object;
 
