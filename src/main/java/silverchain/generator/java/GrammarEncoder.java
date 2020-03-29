@@ -7,11 +7,10 @@ import silverchain.grammar.Method;
 import silverchain.grammar.MethodParameter;
 import silverchain.grammar.MethodParameters;
 import silverchain.grammar.QualifiedName;
-import silverchain.grammar.TypeArgument;
-import silverchain.grammar.TypeArguments;
 import silverchain.grammar.TypeParameter;
 import silverchain.grammar.TypeParameterBound;
 import silverchain.grammar.TypeReference;
+import silverchain.grammar.TypeReferences;
 
 final class GrammarEncoder {
 
@@ -67,12 +66,8 @@ final class GrammarEncoder {
     return encode(reference.name()) + reference.arguments().map(GrammarEncoder::encode).orElse("");
   }
 
-  private static String encode(TypeArguments arguments) {
+  private static String encode(TypeReferences arguments) {
     return arguments == null ? "" : "<" + csv(arguments, GrammarEncoder::encode) + ">";
-  }
-
-  private static String encode(TypeArgument argument) {
-    return encode(argument.reference());
   }
 
   /* Qualified name ----------------------------------------------------------------------------- */

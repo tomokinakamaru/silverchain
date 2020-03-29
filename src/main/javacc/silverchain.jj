@@ -66,20 +66,14 @@ Type type(): { QualifiedName q; TypeParameters ts = null; } {
   }
 }
 
-TypeArgument typeArgument(): { TypeReference t; } {
-  t = typeReference() {
-    return new TypeArgument(t);
+TypeReferences typeReferences(): { TypeReference t; TypeReferences ts = null; } {
+  t = typeReference() ("," ts = typeReferences())? {
+    return new TypeReferences(t, ts);
   }
 }
 
-TypeArguments typeArguments(): { TypeArgument t; TypeArguments ts = null; } {
-  t = typeArgument() ("," ts = typeArguments())? {
-    return new TypeArguments(t, ts);
-  }
-}
-
-TypeReference typeReference(): { QualifiedName q; TypeArguments ts = null; } {
-  q = qualifiedName() ("[" ts = typeArguments() "]") ? {
+TypeReference typeReference(): { QualifiedName q; TypeReferences ts = null; } {
+  q = qualifiedName() ("[" ts = typeReferences() "]") ? {
     return new TypeReference(q, ts);
   }
 }

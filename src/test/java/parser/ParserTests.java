@@ -43,14 +43,9 @@ final class ParserTests {
   }
 
   @Test
-  void testTypeArgument() {
-    test(Parser::typeArgument, "T");
-  }
-
-  @Test
-  void testTypeArguments() {
-    test(Parser::typeArguments, "T");
-    test(Parser::typeArguments, "T,S");
+  void testTypeReferences() {
+    test(Parser::typeReferences, "T");
+    test(Parser::typeReferences, "T,S");
   }
 
   @Test
