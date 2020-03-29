@@ -36,7 +36,7 @@ public final class EntryPoint {
     ParseResult result = parse();
 
     if (!result.success()) {
-      System.err.println("error: unknown option " + result.unknownArgument());
+      System.err.println("error: unknown option " + result.unknownOption());
       System.err.println(parser.help());
       return 1;
     }

@@ -23,7 +23,7 @@ final class ParseResult {
     return unknownOption == null;
   }
 
-  String unknownArgument() {
+  String unknownOption() {
     return unknownOption;
   }
 
