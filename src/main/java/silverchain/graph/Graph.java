@@ -1,8 +1,13 @@
 package silverchain.graph;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import silverchain.grammar.Method;
+import silverchain.grammar.Type;
+import silverchain.grammar.TypeParameters;
 
 public final class Graph {
 
@@ -12,8 +17,6 @@ public final class Graph {
 
   GraphEdges edges;
 
-  GraphCompileOption option;
-
   Graph() {}
 
   Graph(GraphNodes startNodes, GraphNodes endNodes, GraphEdges edges) {
@@ -22,9 +25,8 @@ public final class Graph {
     this.edges = edges;
   }
 
-  public List<GraphNode> compile(GraphCompileOption option) {
+  public List<GraphNode> compile() {
     Graph graph = GraphBuilders.copy(this);
-    graph.option = option;
     graph.reverse();
     graph.determinize();
     graph.reverse();
@@ -75,7 +77,7 @@ public final class Graph {
       GraphNode src = traverser.next();
       for (GraphEdge edge : edges.from(src)) {
         GraphNode dst = edge.destination;
-        GraphTags tags = new GraphTags(src.tags, option.getTags(edge.label)).distinct(option);
+        GraphTags tags = new GraphTags(src.tags, getTags(edge.label));
 
         if (dst.tags == null) {
           dst.tags = tags;
@@ -117,7 +119,7 @@ public final class Graph {
     return edges
         .stream()
         .filter(e -> sources.contains(e.source))
-        .filter(e -> option.nullableEquals(e.label, label))
+        .filter(e -> Objects.equals(e.label, label))
         .map(e -> e.destination)
         .collect(Collectors.toCollection(GraphNodes::new));
   }
@@ -125,14 +127,23 @@ public final class Graph {
   private GraphLabels labelsFrom(GraphNodes nodes) {
     GraphLabels labels = new GraphLabels();
     edges.stream().filter(e -> nodes.contains(e.source)).forEach(e -> labels.add(e.label));
-    return labels.distinct(option);
+    return labels;
   }
 
   private List<GraphEdge> sortedEdges(GraphNode node) {
-    return edges
-        .from(node)
-        .stream()
-        .sorted((e1, e2) -> option.compareTo(e1.label, e2.label))
-        .collect(Collectors.toCollection(ArrayList::new));
+    return edges.from(node).stream().sorted().collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  private List<Object> getTags(GraphLabel label) {
+    if (label.is(Method.class)) {
+      return new ArrayList<>(label.as(Method.class).referents());
+    }
+    if (label.is(Type.class)) {
+      TypeParameters parameters = label.as(Type.class).parameters();
+      if (parameters != null && parameters.publicList() != null) {
+        return new ArrayList<>(parameters.publicList().list());
+      }
+    }
+    return Collections.emptyList();
   }
 }

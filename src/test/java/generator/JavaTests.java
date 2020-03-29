@@ -6,11 +6,12 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import silverchain.analyzer.Analyzer;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.java.JavaGenerator;
+import silverchain.grammar.Grammar;
 import silverchain.grammar.Grammars;
 import silverchain.graph.GraphNode;
 import silverchain.parser.ParseException;
@@ -39,10 +40,15 @@ public final class JavaTests {
     Path path = resources.resolve("java").resolve(name + ".ag");
     InputStream stream = new FileInputStream(path.toString());
     Grammars grammars = new Parser(stream).grammars();
-    Analyzer analyzer = new Analyzer(grammars);
+
+    List<List<GraphNode>> list = new ArrayList<>();
+    for (Grammar grammar : grammars.list()) {
+      grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
+      list.add(grammar.graph().compile());
+    }
 
     List<GeneratedFile> files = new ArrayList<>();
-    for (List<GraphNode> nodes : analyzer.analyze()) {
+    for (List<GraphNode> nodes : list) {
       JavaGenerator generator = new JavaGenerator(nodes);
       files.addAll(generator.generate());
     }

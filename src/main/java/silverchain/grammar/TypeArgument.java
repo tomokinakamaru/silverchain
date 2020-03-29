@@ -1,6 +1,7 @@
 package silverchain.grammar;
 
 import java.util.List;
+import java.util.Set;
 
 public final class TypeArgument extends ASTNode1<TypeReference> {
 
@@ -19,5 +20,11 @@ public final class TypeArgument extends ASTNode1<TypeReference> {
   @Override
   public String toString() {
     return reference().toString();
+  }
+
+  public void resolveReferences(Set<TypeParameter> parameters) {
+    if (reference() != null) {
+      reference().resolveReferences(parameters);
+    }
   }
 }

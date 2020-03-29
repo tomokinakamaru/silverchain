@@ -11,14 +11,4 @@ final class GraphTags extends LinkedHashSet<GraphTag> {
     addAll(tags1);
     tags2.stream().map(GraphTag::new).forEach(this::add);
   }
-
-  GraphTags distinct(GraphCompileOption option) {
-    GraphTags tags = new GraphTags();
-    for (GraphTag tag : this) {
-      if (tags.stream().noneMatch(t -> option.equals(t, tag))) {
-        tags.add(tag);
-      }
-    }
-    return tags;
-  }
 }

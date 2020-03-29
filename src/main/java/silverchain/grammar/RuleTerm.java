@@ -1,6 +1,10 @@
 package silverchain.grammar;
 
+import static silverchain.graph.GraphBuilders.join;
+
+import java.util.Set;
 import java.util.stream.Collectors;
+import silverchain.graph.Graph;
 
 public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
 
@@ -11,5 +15,19 @@ public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
   @Override
   public String toString() {
     return stream().map(RuleFactor::toString).collect(Collectors.joining(" "));
+  }
+
+  public Graph graph() {
+    Graph g = head().graph();
+    return tail() == null ? g : join(g, tail().graph());
+  }
+
+  public void resolveReferences(Set<TypeParameter> parameters) {
+    if (head() != null) {
+      head().resolveReferences(parameters);
+    }
+    if (tail() != null) {
+      tail().resolveReferences(parameters);
+    }
   }
 }

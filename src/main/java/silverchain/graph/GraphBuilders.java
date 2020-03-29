@@ -2,11 +2,13 @@ package silverchain.graph;
 
 import static java.util.stream.Stream.generate;
 
+import silverchain.grammar.ASTNode;
+
 public final class GraphBuilders {
 
   private GraphBuilders() {}
 
-  public static Graph atom(Object label) {
+  public static Graph atom(ASTNode label) {
     GraphEdge e = new GraphEdge(new GraphLabel(label));
     return new Graph(new GraphNodes(e.source), new GraphNodes(e.destination), new GraphEdges(e));
   }

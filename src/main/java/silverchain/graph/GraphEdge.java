@@ -1,6 +1,6 @@
 package silverchain.graph;
 
-public final class GraphEdge {
+public final class GraphEdge implements Comparable<GraphEdge> {
 
   GraphNode source;
 
@@ -38,5 +38,10 @@ public final class GraphEdge {
     GraphNode node = source;
     source = destination;
     destination = node;
+  }
+
+  @Override
+  public int compareTo(GraphEdge o) {
+    return label.compareTo(o.label);
   }
 }

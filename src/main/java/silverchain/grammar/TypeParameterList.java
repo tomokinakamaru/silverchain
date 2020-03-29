@@ -1,5 +1,6 @@
 package silverchain.grammar;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class TypeParameterList extends ASTNodeN<TypeParameter, TypeParameterList> {
@@ -11,5 +12,14 @@ public final class TypeParameterList extends ASTNodeN<TypeParameter, TypeParamet
   @Override
   public String toString() {
     return stream().map(TypeParameter::toString).collect(Collectors.joining(","));
+  }
+
+  public void resolveReferences(Set<TypeParameter> parameters) {
+    if (head() != null) {
+      head().resolveReferences(parameters);
+    }
+    if (tail() != null) {
+      tail().resolveReferences(parameters);
+    }
   }
 }

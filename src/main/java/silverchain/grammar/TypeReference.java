@@ -1,9 +1,12 @@
 package silverchain.grammar;
 
+import static silverchain.graph.GraphBuilders.atom;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import silverchain.graph.Graph;
 
 public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> {
 
@@ -44,5 +47,19 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
   public String toString() {
     String s = arguments() == null ? "" : "[" + arguments().toString() + "]";
     return name().toString() + s;
+  }
+
+  public Graph graph() {
+    return atom(this);
+  }
+
+  public void resolveReferences(Set<TypeParameter> parameters) {
+    if (name().qualifier() == null) {
+      String name = name().name();
+      referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);
+    }
+    if (arguments() != null) {
+      arguments().resolveReferences(parameters);
+    }
   }
 }
