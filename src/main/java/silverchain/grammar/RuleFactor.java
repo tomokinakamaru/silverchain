@@ -2,6 +2,7 @@ package silverchain.grammar;
 
 import static silverchain.graph.GraphBuilders.repeat;
 
+import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
 
@@ -15,19 +16,18 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
     return left();
   }
 
-  public RepeatOperator operator() {
-    return right();
+  public Optional<RepeatOperator> operator() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    String s = operator() == null ? "" : operator().toString();
-    return element().toString() + s;
+    return element().toString() + operator().map(RepeatOperator::toString).orElse("");
   }
 
   public Graph graph() {
     Graph g = element().graph();
-    return operator() == null ? g : repeat(g, operator().min(), operator().max());
+    return operator().map(o -> repeat(g, o.min(), o.max())).orElse(g);
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
