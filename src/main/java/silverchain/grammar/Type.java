@@ -2,10 +2,7 @@ package silverchain.grammar;
 
 import static silverchain.graph.GraphBuilders.atom;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import silverchain.graph.Graph;
 
 public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
@@ -29,13 +26,5 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
   public Graph graph() {
     return atom(this);
-  }
-
-  public List<TypeParameter> typeParameters() {
-    return parameters().map(TypeParameters::list).orElse(Collections.emptyList());
-  }
-
-  public void resolveReferences(Set<TypeParameter> parameters) {
-    parameters().ifPresent(p -> p.resolveReferences(parameters));
   }
 }

@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.java.JavaGenerator;
@@ -27,7 +26,7 @@ public final class Silverchain {
 
     List<List<GraphNode>> list = new ArrayList<>();
     for (Grammar grammar : parser.grammars()) {
-      grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
+      grammar.resolveReferences(grammar.typeParameters());
       list.add(grammar.graph().compile());
     }
 

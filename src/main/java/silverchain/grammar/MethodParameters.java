@@ -3,7 +3,6 @@ package silverchain.grammar;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -19,10 +18,6 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
         .flatMap(Collection::stream)
         .distinct()
         .collect(Collectors.toCollection(ArrayList::new));
-  }
-
-  public void resolveReferences(Set<TypeParameter> parameters) {
-    forEach(t -> t.resolveReferences(parameters));
   }
 
   @Override

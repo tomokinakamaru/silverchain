@@ -3,7 +3,6 @@ package silverchain.grammar;
 import static silverchain.graph.GraphBuilders.join;
 
 import java.util.Optional;
-import java.util.Set;
 import silverchain.graph.Graph;
 
 public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
@@ -25,13 +24,8 @@ public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
     return expression() + type().map(t -> " " + t).orElse("") + ";";
   }
 
-  public Graph graph() {
-    Graph g = expression().graph();
-    return type().map(t -> join(g, t.graph())).orElse(g);
-  }
-
-  public void resolveReferences(Set<TypeParameter> parameters) {
-    expression().resolveReferences(parameters);
-    type().ifPresent(t -> t.resolveReferences(parameters));
+  @Override
+  Graph reduce(Graph graph1, Graph graph2) {
+    return join(graph1, graph2);
   }
 }

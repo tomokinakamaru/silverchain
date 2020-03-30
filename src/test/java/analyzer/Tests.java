@@ -2,7 +2,6 @@ package analyzer;
 
 import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import silverchain.grammar.Grammar;
@@ -107,7 +106,7 @@ final class Tests {
     Grammars grammars = new Parser(new ByteArrayInputStream(text.getBytes())).grammars();
     List<List<GraphNode>> list = new ArrayList<>();
     for (Grammar grammar : grammars) {
-      grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
+      grammar.resolveReferences(grammar.typeParameters());
       list.add(grammar.graph().compile());
     }
     return new GraphTester(list.get(0));

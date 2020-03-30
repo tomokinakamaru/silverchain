@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import silverchain.generator.GeneratedFile;
@@ -43,7 +42,7 @@ public final class JavaTests {
 
     List<List<GraphNode>> list = new ArrayList<>();
     for (Grammar grammar : grammars) {
-      grammar.resolveReferences(new HashSet<>(grammar.typeParameters()));
+      grammar.resolveReferences(grammar.typeParameters());
       list.add(grammar.graph().compile());
     }
 

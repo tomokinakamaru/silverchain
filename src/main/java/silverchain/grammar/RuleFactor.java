@@ -3,7 +3,6 @@ package silverchain.grammar;
 import static silverchain.graph.GraphBuilders.repeat;
 
 import java.util.Optional;
-import java.util.Set;
 import silverchain.graph.Graph;
 
 public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
@@ -28,9 +27,5 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
   public Graph graph() {
     Graph g = element().graph();
     return operator().map(o -> repeat(g, o.min(), o.max().orElse(null))).orElse(g);
-  }
-
-  public void resolveReferences(Set<TypeParameter> parameters) {
-    element().resolveReferences(parameters);
   }
 }

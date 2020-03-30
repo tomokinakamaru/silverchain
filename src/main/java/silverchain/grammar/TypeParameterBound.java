@@ -1,7 +1,5 @@
 package silverchain.grammar;
 
-import java.util.Set;
-
 public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
 
   public TypeParameterBound(boolean isUpper, TypeReference reference) {
@@ -19,9 +17,5 @@ public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
   @Override
   public String toString() {
     return (isUpper() ? "<:" : ":>") + " " + reference();
-  }
-
-  public void resolveReferences(Set<TypeParameter> parameters) {
-    reference().resolveReferences(parameters);
   }
 }
