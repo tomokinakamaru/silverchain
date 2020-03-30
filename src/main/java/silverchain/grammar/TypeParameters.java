@@ -22,7 +22,7 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
   @Override
   public String toString() {
     return publicList().map(ASTNodeN::toString).orElse("")
-        + privateList().map(p -> ";" + p.toString()).orElse("");
+        + privateList().map(p -> ";" + p).orElse("");
   }
 
   List<TypeParameter> list() {

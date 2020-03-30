@@ -22,7 +22,7 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
   @Override
   public String toString() {
-    return element().toString() + operator().map(RepeatOperator::toString).orElse("");
+    return element() + operator().map(RepeatOperator::toString).orElse("");
   }
 
   public Graph graph() {

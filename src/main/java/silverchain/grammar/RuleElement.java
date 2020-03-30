@@ -20,7 +20,7 @@ public final class RuleElement extends ASTNode2<Method, RuleExpression> {
   @Override
   public String toString() {
     if (method() == null) {
-      return "(" + expression().toString() + ")";
+      return "(" + expression() + ")";
     }
     return method().toString();
   }

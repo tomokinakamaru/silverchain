@@ -23,7 +23,7 @@ public final class MethodParameter extends ASTNode2<TypeReference, String> {
 
   @Override
   public String toString() {
-    return type().toString() + " " + name();
+    return type() + " " + name();
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {

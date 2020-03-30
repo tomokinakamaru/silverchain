@@ -18,7 +18,7 @@ public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
 
   @Override
   public String toString() {
-    return (isUpper() ? "<:" : ":>") + " " + reference().toString();
+    return (isUpper() ? "<:" : ":>") + " " + reference();
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {

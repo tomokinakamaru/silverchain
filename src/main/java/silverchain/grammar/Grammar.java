@@ -23,7 +23,7 @@ public final class Grammar extends ASTNode2<Type, Rules> {
 
   @Override
   public String toString() {
-    return type().toString() + ":" + rules().map(r -> " " + r.toString()).orElse("");
+    return type() + ":" + rules().map(r -> " " + r).orElse("");
   }
 
   public Graph graph() {

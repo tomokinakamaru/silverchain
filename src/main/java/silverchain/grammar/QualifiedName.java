@@ -30,6 +30,6 @@ public final class QualifiedName extends ASTNode2<QualifiedName, String> {
 
   @Override
   public String toString() {
-    return qualifier().map(q -> q.toString() + ".").orElse("") + name();
+    return qualifier().map(q -> q + ".").orElse("") + name();
   }
 }
