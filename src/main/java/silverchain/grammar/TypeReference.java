@@ -2,9 +2,7 @@ package silverchain.grammar;
 
 import static silverchain.graph.GraphBuilders.atom;
 
-import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
@@ -29,13 +27,13 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
     return referent;
   }
 
-  public List<TypeParameter> referents() {
+  public Set<TypeParameter> referents() {
     Set<TypeParameter> parameters = new LinkedHashSet<>();
     if (referent != null) {
       parameters.add(referent);
     }
-    arguments().ifPresent(a -> parameters.addAll(a.referents()));
-    return new ArrayList<>(parameters);
+    parameters.addAll(super.referents());
+    return parameters;
   }
 
   @Override
@@ -48,7 +46,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  public void resolveReferences(List<TypeParameter> parameters) {
+  public void resolveReferences(Set<TypeParameter> parameters) {
     if (!name().qualifier().isPresent()) {
       String name = name().name();
       referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);

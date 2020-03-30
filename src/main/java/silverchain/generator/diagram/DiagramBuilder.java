@@ -51,7 +51,7 @@ public abstract class DiagramBuilder<
   }
 
   private List<TypeParameter> parameters(GraphNode node) {
-    return type(node).typeParameters();
+    return new ArrayList<>(type(node).typeParameters());
   }
 
   private Type type(GraphNode node) {

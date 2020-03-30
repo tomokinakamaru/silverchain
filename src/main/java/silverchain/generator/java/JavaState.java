@@ -4,6 +4,7 @@ import static silverchain.generator.java.GrammarEncoder.encodeAsArgument;
 import static silverchain.generator.java.Utility.countUniqueSignatures;
 import static silverchain.generator.java.Utility.qualifiedName;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -70,6 +71,7 @@ final class JavaState extends State<JavaDiagram, JavaState, JavaTransition> {
     if (isNumbered()) {
       return super.parameters();
     }
-    return typeReference().map(TypeReference::referents).orElse(Collections.emptyList());
+    return new ArrayList<>(
+        typeReference().map(TypeReference::referents).orElse(Collections.emptySet()));
   }
 }

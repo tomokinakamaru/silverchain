@@ -1,8 +1,8 @@
 package silverchain.grammar;
 
 import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
 
@@ -19,8 +19,8 @@ public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
   }
 
   @Override
-  public List<TypeParameter> typeParameters() {
-    return Collections.singletonList(this);
+  public Set<TypeParameter> typeParameters() {
+    return Collections.singleton(this);
   }
 
   @Override

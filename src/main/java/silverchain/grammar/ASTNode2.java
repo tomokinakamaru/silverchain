@@ -1,7 +1,8 @@
 package silverchain.grammar;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import silverchain.graph.Graph;
@@ -30,17 +31,17 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   @Override
-  public List<TypeParameter> typeParameters() {
+  public Set<TypeParameter> typeParameters() {
     return Stream.of(left, right)
         .filter(o -> o instanceof ASTNode)
         .map(o -> (ASTNode) o)
         .map(ASTNode::typeParameters)
         .flatMap(Collection::stream)
-        .collect(Collectors.toList());
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   @Override
-  public void resolveReferences(List<TypeParameter> typeParameters) {
+  public void resolveReferences(Set<TypeParameter> typeParameters) {
     Stream.of(left, right)
         .filter(o -> o instanceof ASTNode)
         .map(o -> (ASTNode) o)
@@ -55,5 +56,15 @@ abstract class ASTNode2<T, S> extends ASTNode {
       return graph1;
     }
     return reduce(graph1, graph2);
+  }
+
+  @Override
+  public Set<TypeParameter> referents() {
+    return Stream.of(left, right)
+        .filter(o -> o instanceof ASTNode)
+        .map(o -> (ASTNode) o)
+        .map(ASTNode::referents)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toCollection(LinkedHashSet::new));
   }
 }

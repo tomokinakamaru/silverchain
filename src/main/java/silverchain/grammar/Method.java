@@ -2,8 +2,6 @@ package silverchain.grammar;
 
 import static silverchain.graph.GraphBuilders.atom;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Optional;
 import silverchain.graph.Graph;
 
@@ -19,10 +17,6 @@ public final class Method extends ASTNode2<String, MethodParameters> {
 
   public Optional<MethodParameters> parameters() {
     return Optional.ofNullable(right());
-  }
-
-  public List<TypeParameter> referents() {
-    return parameters().map(MethodParameters::referents).orElse(Collections.emptyList());
   }
 
   @Override

@@ -1,16 +1,18 @@
 package silverchain.grammar;
 
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import silverchain.graph.Graph;
 
 public abstract class ASTNode implements Comparable<ASTNode> {
 
-  public abstract List<TypeParameter> typeParameters();
+  public abstract Set<TypeParameter> typeParameters();
 
-  public abstract void resolveReferences(List<TypeParameter> typeParameters);
+  public abstract void resolveReferences(Set<TypeParameter> typeParameters);
 
   public abstract Graph graph();
+
+  public abstract Set<TypeParameter> referents();
 
   @Override
   public final boolean equals(Object obj) {
