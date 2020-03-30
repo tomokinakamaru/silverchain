@@ -19,12 +19,12 @@ public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
   }
 
   @Override
-  public Set<TypeParameter> typeParameters() {
-    return Collections.singleton(this);
+  public String toString() {
+    return name() + bound().map(TypeParameterBound::toString).orElse("");
   }
 
   @Override
-  public String toString() {
-    return name() + bound().map(TypeParameterBound::toString).orElse("");
+  public Set<TypeParameter> typeParameters() {
+    return Collections.singleton(this);
   }
 }

@@ -24,6 +24,7 @@ public final class Method extends ASTNode2<String, MethodParameters> {
     return name() + "(" + parameters().map(ASTNodeN::toString).orElse("") + ")";
   }
 
+  @Override
   public Graph graph() {
     return atom(this);
   }

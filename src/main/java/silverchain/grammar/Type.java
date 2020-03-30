@@ -24,6 +24,7 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
     return name() + parameters().map(p -> "[" + p + "]").orElse("");
   }
 
+  @Override
   public Graph graph() {
     return atom(this);
   }

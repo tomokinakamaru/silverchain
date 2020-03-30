@@ -27,6 +27,12 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
     return referent;
   }
 
+  @Override
+  public String toString() {
+    return name() + arguments().map(a -> "[" + a + "]").orElse("");
+  }
+
+  @Override
   public Set<TypeParameter> referents() {
     Set<TypeParameter> parameters = new LinkedHashSet<>();
     if (referent != null) {
@@ -37,20 +43,16 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  public String toString() {
-    return name() + arguments().map(a -> "[" + a + "]").orElse("");
-  }
-
-  public Graph graph() {
-    return atom(this);
-  }
-
-  @Override
   public void resolveReferences(Set<TypeParameter> parameters) {
     if (!name().qualifier().isPresent()) {
       String name = name().name();
       referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);
     }
-    arguments().ifPresent(a -> a.resolveReferences(parameters));
+    super.resolveReferences(parameters);
+  }
+
+  @Override
+  public Graph graph() {
+    return atom(this);
   }
 }

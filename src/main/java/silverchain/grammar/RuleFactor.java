@@ -24,6 +24,7 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
     return element() + operator().map(RepeatOperator::toString).orElse("");
   }
 
+  @Override
   public Graph graph() {
     Graph g = element().graph();
     return operator().map(o -> repeat(g, o.min(), o.max().orElse(null))).orElse(g);
