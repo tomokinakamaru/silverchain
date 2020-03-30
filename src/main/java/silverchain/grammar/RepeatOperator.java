@@ -1,5 +1,7 @@
 package silverchain.grammar;
 
+import java.util.Optional;
+
 public final class RepeatOperator extends ASTNode2<Integer, Integer> {
 
   public RepeatOperator(Integer min, Integer max) {
@@ -10,12 +12,12 @@ public final class RepeatOperator extends ASTNode2<Integer, Integer> {
     return left() == null ? 0 : left();
   }
 
-  public Integer max() {
-    return right();
+  public Optional<Integer> max() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    return max() == null ? "{" + min() + "}" : "{" + min() + "," + max() + "}";
+    return "{" + min() + max().map(i -> "," + i).orElse("") + "}";
   }
 }

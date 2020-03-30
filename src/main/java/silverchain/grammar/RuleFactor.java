@@ -27,7 +27,7 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
   public Graph graph() {
     Graph g = element().graph();
-    return operator().map(o -> repeat(g, o.min(), o.max())).orElse(g);
+    return operator().map(o -> repeat(g, o.min(), o.max().orElse(null))).orElse(g);
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
