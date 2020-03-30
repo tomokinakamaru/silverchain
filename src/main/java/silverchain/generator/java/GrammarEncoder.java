@@ -72,7 +72,7 @@ final class GrammarEncoder {
 
   /* Qualified name ----------------------------------------------------------------------------- */
   static String encode(QualifiedName name) {
-    return name == null ? "" : String.join(".", name.list());
+    return name == null ? "" : String.join(".", name);
   }
 
   /* Misc --------------------------------------------------------------------------------------- */
