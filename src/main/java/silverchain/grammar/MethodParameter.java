@@ -27,8 +27,6 @@ public final class MethodParameter extends ASTNode2<TypeReference, String> {
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (type() != null) {
-      type().resolveReferences(parameters);
-    }
+    type().resolveReferences(parameters);
   }
 }

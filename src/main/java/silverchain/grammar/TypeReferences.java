@@ -22,8 +22,7 @@ public final class TypeReferences extends ASTNodeN<TypeReference, TypeReferences
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    head().resolveReferences(parameters);
-    tail().ifPresent(t -> t.resolveReferences(parameters));
+    forEach(t -> t.resolveReferences(parameters));
   }
 
   @Override

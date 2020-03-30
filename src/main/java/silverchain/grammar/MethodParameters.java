@@ -22,8 +22,7 @@ public final class MethodParameters extends ASTNodeN<MethodParameter, MethodPara
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    head().resolveReferences(parameters);
-    tail().ifPresent(t -> t.resolveReferences(parameters));
+    forEach(t -> t.resolveReferences(parameters));
   }
 
   @Override

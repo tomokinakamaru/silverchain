@@ -9,8 +9,7 @@ public final class TypeParameterList extends ASTNodeN<TypeParameter, TypeParamet
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    head().resolveReferences(parameters);
-    tail().ifPresent(t -> t.resolveReferences(parameters));
+    forEach(t -> t.resolveReferences(parameters));
   }
 
   @Override

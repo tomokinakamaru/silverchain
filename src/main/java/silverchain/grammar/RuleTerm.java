@@ -17,8 +17,7 @@ public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    head().resolveReferences(parameters);
-    tail().ifPresent(t -> t.resolveReferences(parameters));
+    forEach(r -> r.resolveReferences(parameters));
   }
 
   @Override

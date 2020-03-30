@@ -4,7 +4,7 @@ import java.util.Set;
 
 public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
 
-  public TypeParameterBound(Boolean isUpper, TypeReference reference) {
+  public TypeParameterBound(boolean isUpper, TypeReference reference) {
     super(isUpper, reference);
   }
 
@@ -22,8 +22,6 @@ public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (reference() != null) {
-      reference().resolveReferences(parameters);
-    }
+    reference().resolveReferences(parameters);
   }
 }
