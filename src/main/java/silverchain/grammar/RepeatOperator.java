@@ -4,12 +4,12 @@ import java.util.Optional;
 
 public final class RepeatOperator extends ASTNode2<Integer, Integer> {
 
-  public RepeatOperator(Integer min, Integer max) {
+  public RepeatOperator(int min, Integer max) {
     super(min, max);
   }
 
   public int min() {
-    return left() == null ? 0 : left();
+    return left();
   }
 
   public Optional<Integer> max() {

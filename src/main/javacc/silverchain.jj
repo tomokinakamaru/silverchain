@@ -107,7 +107,7 @@ RuleElement ruleElement(): { Method m = null; RuleExpression e = null; } {
 
 RepeatOperator repeatOperator(): { Token t1; Token t2 = null; } {
   "*" {
-    return new RepeatOperator(null, null);
+    return new RepeatOperator(0, null);
   } |
   "+" {
     return new RepeatOperator(1, null);
