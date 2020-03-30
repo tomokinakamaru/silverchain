@@ -1,5 +1,6 @@
 package silverchain.grammar;
 
+import java.util.Optional;
 import java.util.Set;
 import silverchain.graph.Graph;
 
@@ -9,32 +10,26 @@ public final class RuleElement extends ASTNode2<Method, RuleExpression> {
     super(method, expression);
   }
 
-  public Method method() {
-    return left();
+  public Optional<Method> method() {
+    return Optional.ofNullable(left());
   }
 
-  public RuleExpression expression() {
-    return right();
+  public Optional<RuleExpression> expression() {
+    return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    if (method() == null) {
-      return "(" + expression() + ")";
-    }
-    return method().toString();
+    return method().map(Method::toString).orElse("")
+        + expression().map(e -> "(" + e + ")").orElse("");
   }
 
   public Graph graph() {
-    return method() == null ? expression().graph() : method().graph();
+    return method().map(Method::graph).orElse(expression().map(RuleExpression::graph).orElse(null));
   }
 
   public void resolveReferences(Set<TypeParameter> parameters) {
-    if (method() != null) {
-      method().resolveReferences(parameters);
-    }
-    if (expression() != null) {
-      expression().resolveReferences(parameters);
-    }
+    method().ifPresent(m -> m.resolveReferences(parameters));
+    expression().ifPresent(e -> e.resolveReferences(parameters));
   }
 }
