@@ -22,10 +22,6 @@ public final class GraphEdge implements Comparable<GraphEdge> {
     this.label = label;
   }
 
-  public GraphNode source() {
-    return source;
-  }
-
   public GraphNode destination() {
     return destination;
   }
