@@ -3,6 +3,8 @@ package silverchain.grammar;
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import silverchain.graph.Graph;
@@ -32,39 +34,37 @@ abstract class ASTNode2<T, S> extends ASTNode {
 
   @Override
   public Set<TypeParameter> typeParameters() {
-    return Stream.of(left, right)
-        .filter(o -> o instanceof ASTNode)
-        .map(o -> (ASTNode) o)
-        .map(ASTNode::typeParameters)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+    return flatMap(ASTNode::typeParameters).collect(Collectors.toCollection(LinkedHashSet::new));
   }
 
   @Override
   public void resolveReferences(Set<TypeParameter> typeParameters) {
-    Stream.of(left, right)
-        .filter(o -> o instanceof ASTNode)
-        .map(o -> (ASTNode) o)
-        .forEach(n -> n.resolveReferences(typeParameters));
+    each(n -> n.resolveReferences(typeParameters));
   }
 
   @Override
   public Graph graph() {
-    Graph graph1 = left instanceof ASTNode ? ((ASTNode) left).graph() : null;
-    Graph graph2 = right instanceof ASTNode ? ((ASTNode) right).graph() : null;
-    if (graph2 == null) {
-      return graph1;
-    }
-    return reduce(graph1, graph2);
+    return map(ASTNode::graph).reduce(this::reduce).orElse(null);
   }
 
   @Override
   public Set<TypeParameter> referents() {
-    return Stream.of(left, right)
-        .filter(o -> o instanceof ASTNode)
-        .map(o -> (ASTNode) o)
-        .map(ASTNode::referents)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toCollection(LinkedHashSet::new));
+    return flatMap(ASTNode::referents).collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  private <U> Stream<U> flatMap(Function<ASTNode, Collection<U>> function) {
+    return childNodes().flatMap(n -> function.apply(n).stream());
+  }
+
+  private <U> Stream<U> map(Function<ASTNode, U> function) {
+    return childNodes().map(function);
+  }
+
+  private void each(Consumer<ASTNode> consumer) {
+    childNodes().forEach(consumer);
+  }
+
+  private Stream<ASTNode> childNodes() {
+    return Stream.of(left, right).filter(o -> o instanceof ASTNode).map(o -> (ASTNode) o);
   }
 }
