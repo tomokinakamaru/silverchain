@@ -8,8 +8,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import silverchain.generator.Generator;
-import silverchain.grammar.Method;
 import silverchain.graph.GraphNode;
+import silverchain.parser.Method;
 
 public final class JavaGenerator extends Generator {
 

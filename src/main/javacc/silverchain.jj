@@ -10,7 +10,6 @@ package silverchain.parser;
 
 import java.util.ArrayList;
 import java.util.List;
-import silverchain.grammar.*;
 
 public final class Parser {
 

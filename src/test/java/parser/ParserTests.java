@@ -3,7 +3,7 @@ package parser;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import org.junit.jupiter.api.Test;
-import silverchain.grammar.ASTNode;
+import silverchain.parser.ASTNode;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 

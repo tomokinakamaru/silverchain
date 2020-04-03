@@ -1,7 +1,7 @@
 package silverchain.graph;
 
 import java.util.Objects;
-import silverchain.grammar.ASTNode;
+import silverchain.parser.ASTNode;
 
 public final class GraphLabel implements Comparable<GraphLabel> {
 

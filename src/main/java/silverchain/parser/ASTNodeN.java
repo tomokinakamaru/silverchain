@@ -1,4 +1,4 @@
-package silverchain.grammar;
+package silverchain.parser;
 
 import java.util.ArrayList;
 import java.util.Iterator;

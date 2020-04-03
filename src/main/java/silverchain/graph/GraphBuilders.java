@@ -2,7 +2,7 @@ package silverchain.graph;
 
 import static java.util.stream.Stream.generate;
 
-import silverchain.grammar.ASTNode;
+import silverchain.parser.ASTNode;
 
 public final class GraphBuilders {
 

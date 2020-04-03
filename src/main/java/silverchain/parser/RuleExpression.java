@@ -1,4 +1,4 @@
-package silverchain.grammar;
+package silverchain.parser;
 
 import static silverchain.graph.GraphBuilders.merge;
 

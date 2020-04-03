@@ -1,4 +1,4 @@
-package silverchain.grammar;
+package silverchain.parser;
 
 import java.util.Collections;
 import java.util.Optional;

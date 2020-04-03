@@ -1,27 +1,27 @@
-package silverchain.grammar;
+package silverchain.parser;
 
 import static silverchain.graph.GraphBuilders.atom;
 
 import java.util.Optional;
 import silverchain.graph.Graph;
 
-public final class Method extends ASTNode2<String, MethodParameters> {
+public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
-  public Method(Range range, String name, MethodParameters parameters) {
+  public Type(Range range, QualifiedName name, TypeParameters parameters) {
     super(range, name, parameters);
   }
 
-  public String name() {
+  public QualifiedName name() {
     return left();
   }
 
-  public Optional<MethodParameters> parameters() {
+  public Optional<TypeParameters> parameters() {
     return Optional.ofNullable(right());
   }
 
   @Override
   public String toString() {
-    return name() + "(" + parameters().map(ASTNodeN::toString).orElse("") + ")";
+    return name() + parameters().map(p -> "[" + p + "]").orElse("");
   }
 
   @Override

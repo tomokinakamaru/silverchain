@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import silverchain.generator.diagram.State;
-import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeReference;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeReference;
 
 final class JavaState extends State<JavaDiagram, JavaState, JavaTransition> {
 

@@ -6,13 +6,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
-import silverchain.grammar.Method;
-import silverchain.grammar.QualifiedName;
-import silverchain.grammar.Type;
-import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeReference;
 import silverchain.graph.GraphEdge;
 import silverchain.graph.GraphNode;
+import silverchain.parser.Method;
+import silverchain.parser.QualifiedName;
+import silverchain.parser.Type;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeReference;
 
 public abstract class DiagramBuilder<
     D extends Diagram<D, S, T>, S extends State<D, S, T>, T extends Transition<D, S, T>> {

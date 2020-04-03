@@ -1,7 +1,7 @@
 package silverchain.graph;
 
 import java.util.LinkedHashSet;
-import silverchain.grammar.TypeParameter;
+import silverchain.parser.TypeParameter;
 
 final class GraphTags extends LinkedHashSet<GraphTag> {
 

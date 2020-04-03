@@ -10,9 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.java.JavaGenerator;
-import silverchain.grammar.Grammar;
-import silverchain.grammar.Grammars;
 import silverchain.graph.GraphNode;
+import silverchain.parser.Grammar;
+import silverchain.parser.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 

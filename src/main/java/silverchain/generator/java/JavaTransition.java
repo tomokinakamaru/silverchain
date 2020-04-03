@@ -6,7 +6,7 @@ import static silverchain.generator.java.GrammarEncoder.encodeAsInvocation;
 import java.util.ArrayList;
 import java.util.List;
 import silverchain.generator.diagram.Transition;
-import silverchain.grammar.TypeParameter;
+import silverchain.parser.TypeParameter;
 
 final class JavaTransition extends Transition<JavaDiagram, JavaState, JavaTransition> {
 

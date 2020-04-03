@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import silverchain.grammar.Method;
-import silverchain.grammar.Type;
-import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeParameters;
+import silverchain.parser.Method;
+import silverchain.parser.Type;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeParameters;
 
 public final class Graph {
 

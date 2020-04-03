@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.java.JavaGenerator;
-import silverchain.grammar.Grammar;
 import silverchain.graph.GraphNode;
+import silverchain.parser.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 

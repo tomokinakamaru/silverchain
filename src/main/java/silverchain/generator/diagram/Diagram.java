@@ -3,8 +3,8 @@ package silverchain.generator.diagram;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import silverchain.grammar.QualifiedName;
-import silverchain.grammar.TypeParameter;
+import silverchain.parser.QualifiedName;
+import silverchain.parser.TypeParameter;
 
 public abstract class Diagram<
     D extends Diagram<D, S, T>, S extends State<D, S, T>, T extends Transition<D, S, T>> {

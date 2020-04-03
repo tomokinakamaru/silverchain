@@ -3,14 +3,14 @@ package silverchain.generator.java;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import silverchain.grammar.Method;
-import silverchain.grammar.MethodParameter;
-import silverchain.grammar.MethodParameters;
-import silverchain.grammar.QualifiedName;
-import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeParameterBound;
-import silverchain.grammar.TypeReference;
-import silverchain.grammar.TypeReferences;
+import silverchain.parser.Method;
+import silverchain.parser.MethodParameter;
+import silverchain.parser.MethodParameters;
+import silverchain.parser.QualifiedName;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeParameterBound;
+import silverchain.parser.TypeReference;
+import silverchain.parser.TypeReferences;
 
 final class GrammarEncoder {
 

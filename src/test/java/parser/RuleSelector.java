@@ -1,6 +1,6 @@
 package parser;
 
-import silverchain.grammar.ASTNode;
+import silverchain.parser.ASTNode;
 import silverchain.parser.ParseException;
 
 @FunctionalInterface

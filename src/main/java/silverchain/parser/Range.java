@@ -1,4 +1,4 @@
-package silverchain.grammar;
+package silverchain.parser;
 
 public final class Range {
 

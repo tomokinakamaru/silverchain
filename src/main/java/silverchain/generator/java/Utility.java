@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import silverchain.grammar.Method;
-import silverchain.grammar.MethodParameter;
+import silverchain.parser.Method;
+import silverchain.parser.MethodParameter;
 
 final class Utility {
 

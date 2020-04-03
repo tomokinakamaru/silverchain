@@ -2,8 +2,8 @@ package silverchain.generator.diagram;
 
 import java.util.ArrayList;
 import java.util.List;
-import silverchain.grammar.TypeParameter;
-import silverchain.grammar.TypeReference;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeReference;
 
 public abstract class State<
     D extends Diagram<D, S, T>, S extends State<D, S, T>, T extends Transition<D, S, T>> {
