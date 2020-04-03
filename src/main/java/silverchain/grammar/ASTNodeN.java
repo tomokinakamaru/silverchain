@@ -8,8 +8,8 @@ abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> impl
 
   abstract String separator();
 
-  ASTNodeN(T head, S tail) {
-    super(head, tail);
+  ASTNodeN(Range range, T head, S tail) {
+    super(range, head, tail);
   }
 
   @Override

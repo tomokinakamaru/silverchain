@@ -15,7 +15,8 @@ abstract class ASTNode2<T, S> extends ASTNode {
 
   private final S right;
 
-  ASTNode2(T left, S right) {
+  ASTNode2(Range range, T left, S right) {
+    super(range);
     this.left = left;
     this.right = right;
   }

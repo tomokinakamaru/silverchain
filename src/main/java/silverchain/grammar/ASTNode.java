@@ -6,6 +6,8 @@ import silverchain.graph.Graph;
 
 public abstract class ASTNode implements Comparable<ASTNode> {
 
+  private final Range range;
+
   public abstract Set<TypeParameter> typeParameters();
 
   public abstract void resolveReferences(Set<TypeParameter> typeParameters);
@@ -13,6 +15,14 @@ public abstract class ASTNode implements Comparable<ASTNode> {
   public abstract Graph graph();
 
   public abstract Set<TypeParameter> referents();
+
+  ASTNode(Range range) {
+    this.range = range;
+  }
+
+  public final Range range() {
+    return range;
+  }
 
   @Override
   public final boolean equals(Object obj) {
