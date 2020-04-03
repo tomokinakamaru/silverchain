@@ -6,8 +6,8 @@ import java.util.Set;
 
 public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
 
-  public TypeParameter(String name, TypeParameterBound bound) {
-    super(name, bound);
+  public TypeParameter(Range range, String name, TypeParameterBound bound) {
+    super(range, name, bound);
   }
 
   public String name() {

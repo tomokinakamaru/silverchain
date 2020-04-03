@@ -12,7 +12,48 @@ import java.util.ArrayList;
 import java.util.List;
 import silverchain.grammar.*;
 
-public final class Parser {}
+public final class Parser {
+
+  private static Range range(ASTNode left, ASTNode right) {
+    right = right == null ? left : right;
+    return new Range(left.range().begin(), right.range().end());
+  }
+
+  private static Range range(ASTNode left, Token token, ASTNode right) {
+    if (right == null) {
+      return new Range(left.range().begin(), range(token).end());
+    }
+    return range(left, right);
+  }
+
+  private static Range range(ASTNode node, Token token) {
+    if (token == null) {
+      return node.range();
+    }
+    if (node == null) {
+      return range(token);
+    }
+    return new Range(node.range().begin(), range(token).end());
+  }
+
+  private static Range range(Token token, ASTNode node) {
+    if (node == null) {
+      return range(token);
+    }
+    return new Range(range(token).begin(), node.range().end());
+  }
+
+  private static Range range(Token token1, Token token2) {
+    return new Range(range(token1).begin(), range(token2).end());
+  }
+
+  private static Range range(Token token) {
+    return new Range(
+      new Location(token.beginLine, token.beginColumn),
+      new Location(token.endLine, token.endColumn)
+    );
+  }
+}
 
 PARSER_END(Parser)
 
@@ -25,25 +66,27 @@ Grammars grammars(): {
   Grammars grammars = null;
 } {
   grammar = grammar() (grammars = grammars())? <EOF> {
-    return new Grammars(grammar, grammars);
+    return new Grammars(range(grammar, grammars), grammar, grammars);
   }
 }
 
 Grammar grammar(): {
   Type type;
+  Token colon;
   Rules rules = null;
 } {
-  type = type() ":" (rules = rules())? {
-    return new Grammar(type, rules);
+  type = type() ":" { colon = jj_lastpos; } (rules = rules())? {
+    return new Grammar(range(type, colon, rules), type, rules);
   }
 }
 
 Type type(): {
   QualifiedName qualifiedName;
   TypeParameters typeParameters = null;
+  Token leftBracket = null;
 } {
-  qualifiedName = qualifiedName() ("[" typeParameters = typeParameters() "]")? {
-    return new Type(qualifiedName, typeParameters);
+  qualifiedName = qualifiedName() ("[" typeParameters = typeParameters() "]" { leftBracket = jj_lastpos; })? {
+    return new Type(range(qualifiedName, leftBracket), qualifiedName, typeParameters);
   }
 }
 
@@ -52,7 +95,7 @@ Rules rules(): {
   Rules rules = null;
 } {
   rule = rule() (rules = rules())? {
-    return new Rules(rule, rules);
+    return new Rules(range(rule, rules), rule, rules);
   }
 }
 
@@ -61,7 +104,7 @@ Rule rule(): {
   TypeReference typeReference = null;
 } {
   ruleExpression = ruleExpression() (typeReference = typeReference())? ";" {
-    return new Rule(ruleExpression, typeReference);
+    return new Rule(range(ruleExpression, jj_lastpos), ruleExpression, typeReference);
   }
 }
 
@@ -70,7 +113,7 @@ RuleExpression ruleExpression(): {
   RuleExpression ruleExpression = null;
 } {
   ruleTerm = ruleTerm() ("|" ruleExpression = ruleExpression())? {
-    return new RuleExpression(ruleTerm, ruleExpression);
+    return new RuleExpression(range(ruleTerm, ruleExpression), ruleTerm, ruleExpression);
   }
 }
 
@@ -79,7 +122,7 @@ RuleTerm ruleTerm(): {
   RuleTerm ruleTerm = null;
 } {
   ruleFactor = ruleFactor() (ruleTerm = ruleTerm())? {
-    return new RuleTerm(ruleFactor, ruleTerm);
+    return new RuleTerm(range(ruleFactor, ruleTerm), ruleFactor, ruleTerm);
   }
 }
 
@@ -88,39 +131,41 @@ RuleFactor ruleFactor(): {
   RepeatOperator repeatOperator = null;
 } {
   ruleElement = ruleElement() (repeatOperator = repeatOperator())? {
-    return new RuleFactor(ruleElement, repeatOperator);
+    return new RuleFactor(range(ruleElement, repeatOperator), ruleElement, repeatOperator);
   }
 }
 
 RuleElement ruleElement(): {
   Method method;
   RuleExpression ruleExpression;
+  Token leftParenthesis;
 } {
   method = method() {
-    return new RuleElement(method, null);
+    return new RuleElement(method.range(), method, null);
   } |
-  "(" ruleExpression = ruleExpression() ")" {
-    return new RuleElement(null, ruleExpression);
+  "(" { leftParenthesis = token; } ruleExpression = ruleExpression() ")" {
+    return new RuleElement(range(leftParenthesis, token), null, ruleExpression);
   }
 }
 
 RepeatOperator repeatOperator(): {
   Token min;
   Token max = null;
+  Token leftBracket;
 } {
   "*" {
-    return new RepeatOperator(0, null);
+    return new RepeatOperator(range(jj_lastpos), 0, null);
   } |
   "+" {
-    return new RepeatOperator(1, null);
+    return new RepeatOperator(range(jj_lastpos), 1, null);
   } |
   "?" {
-    return new RepeatOperator(0, 1);
+    return new RepeatOperator(range(jj_lastpos), 0, 1);
   } |
-  "{" min = <NUMBER> ("," max = <NUMBER>)? "}" {
+  "{" { leftBracket = token; } min = <NUMBER> ("," max = <NUMBER>)? "}" {
     int i = Integer.parseInt(min.image);
     Integer j = max == null ? null : Integer.parseInt(max.image);
-    return new RepeatOperator(i, j);
+    return new RepeatOperator(range(leftBracket, token), i, j);
   }
 }
 
@@ -129,7 +174,7 @@ Method method(): {
   MethodParameters methodParameters = null;
 } {
   name = <NAME> "(" (methodParameters = methodParameters())? ")" {
-    return new Method(name.image, methodParameters);
+    return new Method(range(name, jj_lastpos), name.image, methodParameters);
   }
 }
 
@@ -138,7 +183,7 @@ MethodParameters methodParameters(): {
   MethodParameters methodParameters = null;
 } {
   methodParameter = methodParameter() ("," methodParameters = methodParameters())? {
-    return new MethodParameters(methodParameter, methodParameters);
+    return new MethodParameters(range(methodParameter, methodParameters), methodParameter, methodParameters);
   }
 }
 
@@ -147,7 +192,7 @@ MethodParameter methodParameter(): {
   Token name;
 } {
   typeReference = typeReference() name = <NAME> {
-    return new MethodParameter(typeReference, name.image);
+    return new MethodParameter(range(typeReference, name), typeReference, name.image);
   }
 }
 
@@ -156,7 +201,7 @@ TypeReference typeReference(): {
   TypeReferences typeReferences = null;
 } {
   qualifiedName = qualifiedName() ("[" typeReferences = typeReferences() "]") ? {
-    return new TypeReference(qualifiedName, typeReferences);
+    return new TypeReference(range(qualifiedName, jj_lastpos), qualifiedName, typeReferences);
   }
 }
 
@@ -165,27 +210,20 @@ TypeReferences typeReferences(): {
   TypeReferences typeReferences = null;
 } {
   typeReference = typeReference() ("," typeReferences = typeReferences())? {
-    return new TypeReferences(typeReference, typeReferences);
+    return new TypeReferences(range(typeReference, typeReferences), typeReference, typeReferences);
   }
 }
 
-TypeParameter typeParameter(): {
-  Token name;
-  TypeParameterBound typeParameterBound = null;
+TypeParameters typeParameters(): {
+  TypeParameterList publicTypeParameterList;
+  TypeParameterList privateTypeParameterList = null;
+  Token semicolon;
 } {
-  name = <NAME> (typeParameterBound = typeParameterBound())?{
-    return new TypeParameter(name.image, typeParameterBound);
-  }
-}
-
-TypeParameterBound typeParameterBound(): {
-  TypeReference typeReference;
-} {
-  "<:" typeReference = typeReference() {
-    return new TypeParameterBound(true, typeReference);
+  publicTypeParameterList = typeParameterList() (";" privateTypeParameterList = typeParameterList())? {
+    return new TypeParameters(range(publicTypeParameterList, privateTypeParameterList), publicTypeParameterList, privateTypeParameterList);
   } |
-  ":>" typeReference = typeReference() {
-    return new TypeParameterBound(false, typeReference);
+  ";" { semicolon = token; } privateTypeParameterList = typeParameterList() {
+    return new TypeParameters(range(semicolon, privateTypeParameterList), null, privateTypeParameterList);
   }
 }
 
@@ -194,30 +232,36 @@ TypeParameterList typeParameterList(): {
   TypeParameterList typeParameterList = null;
 } {
   typeParameter = typeParameter() ("," typeParameterList = typeParameterList())? {
-    return new TypeParameterList(typeParameter, typeParameterList);
+    return new TypeParameterList(range(typeParameter, typeParameterList), typeParameter, typeParameterList);
   }
 }
 
-TypeParameters typeParameters(): {
-  TypeParameterList publicTypeParameterList;
-  TypeParameterList privateTypeParameterList = null;
+TypeParameter typeParameter(): {
+  Token name;
+  TypeParameterBound typeParameterBound = null;
 } {
-  publicTypeParameterList = typeParameterList() (";" privateTypeParameterList = typeParameterList())? {
-    return new TypeParameters(publicTypeParameterList, privateTypeParameterList);
-  } |
-  ";" privateTypeParameterList = typeParameterList() {
-    return new TypeParameters(null, privateTypeParameterList);
+  name = <NAME> (typeParameterBound = typeParameterBound())?{
+    return new TypeParameter(range(name, typeParameterBound), name.image, typeParameterBound);
+  }
+}
+
+TypeParameterBound typeParameterBound(): {
+  Token destination = null;
+  TypeReference typeReference;
+} {
+  ("<:" | ":>") { destination = jj_lastpos; } typeReference = typeReference() {
+    return new TypeParameterBound(range(destination, typeReference), destination.image.equals("<:"), typeReference);
   }
 }
 
 QualifiedName qualifiedName(): {
   Token name;
-  List<String> list = new ArrayList<>();
+  List<Token> names = new ArrayList<>();
 } {
-  name = <NAME> { list.add(name.image); } ("." name = <NAME> { list.add(name.image); })* {
+  name = <NAME> { names.add(name); } ("." name = <NAME> { names.add(name); })* {
     QualifiedName q = null;
-    for (String s : list) {
-      q = new QualifiedName(q, s);
+    for (Token t : names) {
+      q = new QualifiedName(range(q, t), q, t.image);
     }
     return q;
   }

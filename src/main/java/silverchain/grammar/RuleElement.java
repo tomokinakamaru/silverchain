@@ -4,8 +4,8 @@ import java.util.Optional;
 
 public final class RuleElement extends ASTNode2<Method, RuleExpression> {
 
-  public RuleElement(Method method, RuleExpression expression) {
-    super(method, expression);
+  public RuleElement(Range range, Method method, RuleExpression expression) {
+    super(range, method, expression);
   }
 
   public Optional<Method> method() {

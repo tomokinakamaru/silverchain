@@ -7,8 +7,8 @@ import silverchain.graph.Graph;
 
 public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
 
-  public Rule(RuleExpression expression, TypeReference type) {
-    super(expression, type);
+  public Rule(Range range, RuleExpression expression, TypeReference type) {
+    super(range, expression, type);
   }
 
   public RuleExpression expression() {

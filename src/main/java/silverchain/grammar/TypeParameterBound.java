@@ -2,8 +2,8 @@ package silverchain.grammar;
 
 public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
 
-  public TypeParameterBound(boolean isUpper, TypeReference reference) {
-    super(isUpper, reference);
+  public TypeParameterBound(Range range, boolean isUpper, TypeReference reference) {
+    super(range, isUpper, reference);
   }
 
   public boolean isUpper() {

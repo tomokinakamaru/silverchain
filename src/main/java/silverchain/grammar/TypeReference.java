@@ -11,8 +11,8 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
 
   private TypeParameter referent;
 
-  public TypeReference(QualifiedName name, TypeReferences arguments) {
-    super(name, arguments);
+  public TypeReference(Range range, QualifiedName name, TypeReferences arguments) {
+    super(range, name, arguments);
   }
 
   public QualifiedName name() {

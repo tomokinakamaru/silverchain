@@ -7,8 +7,8 @@ import silverchain.graph.Graph;
 
 public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
-  public RuleFactor(RuleElement element, RepeatOperator operator) {
-    super(element, operator);
+  public RuleFactor(Range range, RuleElement element, RepeatOperator operator) {
+    super(range, element, operator);
   }
 
   public RuleElement element() {

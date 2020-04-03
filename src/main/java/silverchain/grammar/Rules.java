@@ -6,8 +6,8 @@ import silverchain.graph.Graph;
 
 public final class Rules extends ASTNodeN<Rule, Rules> {
 
-  public Rules(Rule head, Rules tail) {
-    super(head, tail);
+  public Rules(Range range, Rule head, Rules tail) {
+    super(range, head, tail);
   }
 
   @Override

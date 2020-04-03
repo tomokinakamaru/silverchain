@@ -7,8 +7,8 @@ import silverchain.graph.Graph;
 
 public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
-  public Type(QualifiedName name, TypeParameters parameters) {
-    super(name, parameters);
+  public Type(Range range, QualifiedName name, TypeParameters parameters) {
+    super(range, name, parameters);
   }
 
   public QualifiedName name() {

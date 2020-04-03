@@ -7,8 +7,8 @@ import silverchain.graph.Graph;
 
 public final class Grammar extends ASTNode2<Type, Rules> {
 
-  public Grammar(Type type, Rules rules) {
-    super(type, rules);
+  public Grammar(Range range, Type type, Rules rules) {
+    super(range, type, rules);
   }
 
   public Type type() {

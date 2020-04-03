@@ -2,8 +2,8 @@ package silverchain.grammar;
 
 public final class MethodParameters extends ASTNodeN<MethodParameter, MethodParameters> {
 
-  public MethodParameters(MethodParameter head, MethodParameters tail) {
-    super(head, tail);
+  public MethodParameters(Range range, MethodParameter head, MethodParameters tail) {
+    super(range, head, tail);
   }
 
   @Override

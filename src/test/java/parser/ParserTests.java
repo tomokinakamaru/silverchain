@@ -3,6 +3,7 @@ package parser;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import org.junit.jupiter.api.Test;
+import silverchain.grammar.ASTNode;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -18,6 +19,12 @@ final class ParserTests {
   @Test
   void testTypeParameter() {
     test(Parser::typeParameter, "T");
+  }
+
+  @Test
+  void testTypeParameterBound() {
+    test(Parser::typeParameterBound, "<: Foo");
+    test(Parser::typeParameterBound, ":> Foo");
   }
 
   @Test
@@ -139,10 +146,10 @@ final class ParserTests {
     InputStream stream = new ByteArrayInputStream(text.getBytes());
     Parser parser = new Parser(stream);
     try {
-      Object result = selector.apply(parser);
-      Object token = parser.getNextToken();
+      ASTNode result = selector.apply(parser);
       assert result.toString().equals(expected);
-      assert token.toString().isEmpty();
+      assert result.range().begin().line() == result.range().end().line();
+      assert result.range().end().column() - result.range().begin().column() + 1 == text.length();
     } catch (ParseException e) {
       throw new RuntimeException(e);
     }

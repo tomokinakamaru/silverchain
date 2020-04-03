@@ -2,8 +2,8 @@ package silverchain.grammar;
 
 public final class MethodParameter extends ASTNode2<TypeReference, String> {
 
-  public MethodParameter(TypeReference typeReference, String name) {
-    super(typeReference, name);
+  public MethodParameter(Range range, TypeReference typeReference, String name) {
+    super(range, typeReference, name);
   }
 
   public TypeReference type() {
