@@ -20,13 +20,107 @@ SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
 
 TOKEN: { < NAME: (["a"-"z","A"-"Z"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
 
-QualifiedName qualifiedName(): { Token t; List<String> ls = new ArrayList<>(); } {
-  t = <NAME> { ls.add(t.image); } ("." t = <NAME> { ls.add(t.image); })* {
-    QualifiedName q = null;
-    for (int i = 0; i < ls.size(); i++) {
-      q = new QualifiedName(q, ls.get(i));
-    }
-    return q;
+Grammars grammars(): { Grammar g; Grammars gs = null; } {
+  g = grammar() (gs = grammars())? <EOF> {
+    return new Grammars(g, gs);
+  }
+}
+
+Grammar grammar(): { Type t; Rules rs = null; } {
+  t = type() ":" (rs = rules())? {
+    return new Grammar(t, rs);
+  }
+}
+
+Type type(): { QualifiedName q; TypeParameters ts = null; } {
+  q = qualifiedName() ("[" ts = typeParameters() "]")? {
+    return new Type(q, ts);
+  }
+}
+
+Rules rules(): { Rule r; Rules rs = null; } {
+  r = rule() (rs = rules())? {
+    return new Rules(r, rs);
+  }
+}
+
+Rule rule(): { RuleExpression e; TypeReference t = null; } {
+  e = ruleExpression() (t = typeReference())? ";" {
+    return new Rule(e, t);
+  }
+}
+
+RuleExpression ruleExpression(): { RuleTerm t; RuleExpression e = null; } {
+  t = ruleTerm() ("|" e = ruleExpression())? {
+    return new RuleExpression(t, e);
+  }
+}
+
+RuleTerm ruleTerm(): { RuleFactor f; RuleTerm t = null; } {
+  f = ruleFactor() (t = ruleTerm())? {
+    return new RuleTerm(f, t);
+  }
+}
+
+RuleFactor ruleFactor(): { RuleElement e; RepeatOperator o = null; } {
+  e = ruleElement() (o = repeatOperator())? {
+    return new RuleFactor(e, o);
+  }
+}
+
+RuleElement ruleElement(): { Method m = null; RuleExpression e = null; } {
+  m = method() {
+    return new RuleElement(m, e);
+  } |
+  "(" e = ruleExpression() ")" {
+    return new RuleElement(m, e);
+  }
+}
+
+RepeatOperator repeatOperator(): { Token t1; Token t2 = null; } {
+  "*" {
+    return new RepeatOperator(0, null);
+  } |
+  "+" {
+    return new RepeatOperator(1, null);
+  } |
+  "?" {
+    return new RepeatOperator(0, 1);
+  } |
+  "{" t1 = <NUMBER> ("," t2 = <NUMBER>)? "}" {
+    Integer i = Integer.parseInt(t1.image);
+    Integer j = t2 == null ? null : Integer.parseInt(t2.image);
+    return new RepeatOperator(i, j);
+  }
+}
+
+Method method(): { Token t; MethodParameters ms = null; } {
+  t = <NAME> "(" (ms = methodParameters())? ")" {
+    return new Method(t.image, ms);
+  }
+}
+
+MethodParameters methodParameters(): { MethodParameter m; MethodParameters ms = null; } {
+  m = methodParameter() ("," ms = methodParameters())? {
+    return new MethodParameters(m, ms);
+  }
+}
+
+MethodParameter methodParameter(): { TypeReference r; Token t; } {
+  r = typeReference() t = <NAME> {
+    return new MethodParameter(r, t.image);
+  }
+}
+
+TypeReference typeReference(): { QualifiedName q; TypeReferences ts = null; } {
+  q = qualifiedName() ("[" ts = typeReferences() "]") ? {
+    return new TypeReference(q, ts);
+  }
+}
+
+TypeReferences typeReferences(): { TypeReference t; TypeReferences ts = null; } {
+  t = typeReference() ("," ts = typeReferences())? {
+    return new TypeReferences(t, ts);
   }
 }
 
@@ -60,106 +154,12 @@ TypeParameters typeParameters(): { TypeParameterList ts1; TypeParameterList ts2 
   }
 }
 
-Type type(): { QualifiedName q; TypeParameters ts = null; } {
-  q = qualifiedName() ("[" ts = typeParameters() "]")? {
-    return new Type(q, ts);
-  }
-}
-
-TypeReferences typeReferences(): { TypeReference t; TypeReferences ts = null; } {
-  t = typeReference() ("," ts = typeReferences())? {
-    return new TypeReferences(t, ts);
-  }
-}
-
-TypeReference typeReference(): { QualifiedName q; TypeReferences ts = null; } {
-  q = qualifiedName() ("[" ts = typeReferences() "]") ? {
-    return new TypeReference(q, ts);
-  }
-}
-
-MethodParameter methodParameter(): { TypeReference r; Token t; } {
-  r = typeReference() t = <NAME> {
-    return new MethodParameter(r, t.image);
-  }
-}
-
-MethodParameters methodParameters(): { MethodParameter m; MethodParameters ms = null; } {
-  m = methodParameter() ("," ms = methodParameters())? {
-    return new MethodParameters(m, ms);
-  }
-}
-
-Method method(): { Token t; MethodParameters ms = null; } {
-  t = <NAME> "(" (ms = methodParameters())? ")" {
-    return new Method(t.image, ms);
-  }
-}
-
-RuleElement ruleElement(): { Method m = null; RuleExpression e = null; } {
-  m = method() {
-    return new RuleElement(m, e);
-  } |
-  "(" e = ruleExpression() ")" {
-    return new RuleElement(m, e);
-  }
-}
-
-RepeatOperator repeatOperator(): { Token t1; Token t2 = null; } {
-  "*" {
-    return new RepeatOperator(0, null);
-  } |
-  "+" {
-    return new RepeatOperator(1, null);
-  } |
-  "?" {
-    return new RepeatOperator(0, 1);
-  } |
-  "{" t1 = <NUMBER> ("," t2 = <NUMBER>)? "}" {
-    Integer i = Integer.parseInt(t1.image);
-    Integer j = t2 == null ? null : Integer.parseInt(t2.image);
-    return new RepeatOperator(i, j);
-  }
-}
-
-RuleFactor ruleFactor(): { RuleElement e; RepeatOperator o = null; } {
-  e = ruleElement() (o = repeatOperator())? {
-    return new RuleFactor(e, o);
-  }
-}
-
-RuleTerm ruleTerm(): { RuleFactor f; RuleTerm t = null; } {
-  f = ruleFactor() (t = ruleTerm())? {
-    return new RuleTerm(f, t);
-  }
-}
-
-RuleExpression ruleExpression(): { RuleTerm t; RuleExpression e = null; } {
-  t = ruleTerm() ("|" e = ruleExpression())? {
-    return new RuleExpression(t, e);
-  }
-}
-
-Rule rule(): { RuleExpression e; TypeReference t = null; } {
-  e = ruleExpression() (t = typeReference())? ";" {
-    return new Rule(e, t);
-  }
-}
-
-Rules rules(): { Rule r; Rules rs = null; } {
-  r = rule() (rs = rules())? {
-    return new Rules(r, rs);
-  }
-}
-
-Grammar grammar(): { Type t; Rules rs = null; } {
-  t = type() ":" (rs = rules())? {
-    return new Grammar(t, rs);
-  }
-}
-
-Grammars grammars(): { Grammar g; Grammars gs = null; } {
-  g = grammar() (gs = grammars())? <EOF> {
-    return new Grammars(g, gs);
+QualifiedName qualifiedName(): { Token t; List<String> ls = new ArrayList<>(); } {
+  t = <NAME> { ls.add(t.image); } ("." t = <NAME> { ls.add(t.image); })* {
+    QualifiedName q = null;
+    for (int i = 0; i < ls.size(); i++) {
+      q = new QualifiedName(q, ls.get(i));
+    }
+    return q;
   }
 }
