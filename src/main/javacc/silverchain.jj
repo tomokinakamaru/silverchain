@@ -20,64 +20,94 @@ SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
 
 TOKEN: { < NAME: (["a"-"z","A"-"Z"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
 
-Grammars grammars(): { Grammar g; Grammars gs = null; } {
-  g = grammar() (gs = grammars())? <EOF> {
-    return new Grammars(g, gs);
+Grammars grammars(): {
+  Grammar grammar;
+  Grammars grammars = null;
+} {
+  grammar = grammar() (grammars = grammars())? <EOF> {
+    return new Grammars(grammar, grammars);
   }
 }
 
-Grammar grammar(): { Type t; Rules rs = null; } {
-  t = type() ":" (rs = rules())? {
-    return new Grammar(t, rs);
+Grammar grammar(): {
+  Type type;
+  Rules rules = null;
+} {
+  type = type() ":" (rules = rules())? {
+    return new Grammar(type, rules);
   }
 }
 
-Type type(): { QualifiedName q; TypeParameters ts = null; } {
-  q = qualifiedName() ("[" ts = typeParameters() "]")? {
-    return new Type(q, ts);
+Type type(): {
+  QualifiedName qualifiedName;
+  TypeParameters typeParameters = null;
+} {
+  qualifiedName = qualifiedName() ("[" typeParameters = typeParameters() "]")? {
+    return new Type(qualifiedName, typeParameters);
   }
 }
 
-Rules rules(): { Rule r; Rules rs = null; } {
-  r = rule() (rs = rules())? {
-    return new Rules(r, rs);
+Rules rules(): {
+  Rule rule;
+  Rules rules = null;
+} {
+  rule = rule() (rules = rules())? {
+    return new Rules(rule, rules);
   }
 }
 
-Rule rule(): { RuleExpression e; TypeReference t = null; } {
-  e = ruleExpression() (t = typeReference())? ";" {
-    return new Rule(e, t);
+Rule rule(): {
+  RuleExpression ruleExpression;
+  TypeReference typeReference = null;
+} {
+  ruleExpression = ruleExpression() (typeReference = typeReference())? ";" {
+    return new Rule(ruleExpression, typeReference);
   }
 }
 
-RuleExpression ruleExpression(): { RuleTerm t; RuleExpression e = null; } {
-  t = ruleTerm() ("|" e = ruleExpression())? {
-    return new RuleExpression(t, e);
+RuleExpression ruleExpression(): {
+  RuleTerm ruleTerm;
+  RuleExpression ruleExpression = null;
+} {
+  ruleTerm = ruleTerm() ("|" ruleExpression = ruleExpression())? {
+    return new RuleExpression(ruleTerm, ruleExpression);
   }
 }
 
-RuleTerm ruleTerm(): { RuleFactor f; RuleTerm t = null; } {
-  f = ruleFactor() (t = ruleTerm())? {
-    return new RuleTerm(f, t);
+RuleTerm ruleTerm(): {
+  RuleFactor ruleFactor;
+  RuleTerm ruleTerm = null;
+} {
+  ruleFactor = ruleFactor() (ruleTerm = ruleTerm())? {
+    return new RuleTerm(ruleFactor, ruleTerm);
   }
 }
 
-RuleFactor ruleFactor(): { RuleElement e; RepeatOperator o = null; } {
-  e = ruleElement() (o = repeatOperator())? {
-    return new RuleFactor(e, o);
+RuleFactor ruleFactor(): {
+  RuleElement ruleElement;
+  RepeatOperator repeatOperator = null;
+} {
+  ruleElement = ruleElement() (repeatOperator = repeatOperator())? {
+    return new RuleFactor(ruleElement, repeatOperator);
   }
 }
 
-RuleElement ruleElement(): { Method m = null; RuleExpression e = null; } {
-  m = method() {
-    return new RuleElement(m, e);
+RuleElement ruleElement(): {
+  Method method;
+  RuleExpression ruleExpression;
+} {
+  method = method() {
+    return new RuleElement(method, null);
   } |
-  "(" e = ruleExpression() ")" {
-    return new RuleElement(m, e);
+  "(" ruleExpression = ruleExpression() ")" {
+    return new RuleElement(null, ruleExpression);
   }
 }
 
-RepeatOperator repeatOperator(): { Token t1; Token t2 = null; } {
+RepeatOperator repeatOperator(): {
+  Token min;
+  Token max = null;
+} {
   "*" {
     return new RepeatOperator(0, null);
   } |
@@ -87,78 +117,107 @@ RepeatOperator repeatOperator(): { Token t1; Token t2 = null; } {
   "?" {
     return new RepeatOperator(0, 1);
   } |
-  "{" t1 = <NUMBER> ("," t2 = <NUMBER>)? "}" {
-    Integer i = Integer.parseInt(t1.image);
-    Integer j = t2 == null ? null : Integer.parseInt(t2.image);
+  "{" min = <NUMBER> ("," max = <NUMBER>)? "}" {
+    int i = Integer.parseInt(min.image);
+    Integer j = max == null ? null : Integer.parseInt(max.image);
     return new RepeatOperator(i, j);
   }
 }
 
-Method method(): { Token t; MethodParameters ms = null; } {
-  t = <NAME> "(" (ms = methodParameters())? ")" {
-    return new Method(t.image, ms);
+Method method(): {
+  Token name;
+  MethodParameters methodParameters = null;
+} {
+  name = <NAME> "(" (methodParameters = methodParameters())? ")" {
+    return new Method(name.image, methodParameters);
   }
 }
 
-MethodParameters methodParameters(): { MethodParameter m; MethodParameters ms = null; } {
-  m = methodParameter() ("," ms = methodParameters())? {
-    return new MethodParameters(m, ms);
+MethodParameters methodParameters(): {
+  MethodParameter methodParameter;
+  MethodParameters methodParameters = null;
+} {
+  methodParameter = methodParameter() ("," methodParameters = methodParameters())? {
+    return new MethodParameters(methodParameter, methodParameters);
   }
 }
 
-MethodParameter methodParameter(): { TypeReference r; Token t; } {
-  r = typeReference() t = <NAME> {
-    return new MethodParameter(r, t.image);
+MethodParameter methodParameter(): {
+  TypeReference typeReference;
+  Token name;
+} {
+  typeReference = typeReference() name = <NAME> {
+    return new MethodParameter(typeReference, name.image);
   }
 }
 
-TypeReference typeReference(): { QualifiedName q; TypeReferences ts = null; } {
-  q = qualifiedName() ("[" ts = typeReferences() "]") ? {
-    return new TypeReference(q, ts);
+TypeReference typeReference(): {
+  QualifiedName qualifiedName;
+  TypeReferences typeReferences = null;
+} {
+  qualifiedName = qualifiedName() ("[" typeReferences = typeReferences() "]") ? {
+    return new TypeReference(qualifiedName, typeReferences);
   }
 }
 
-TypeReferences typeReferences(): { TypeReference t; TypeReferences ts = null; } {
-  t = typeReference() ("," ts = typeReferences())? {
-    return new TypeReferences(t, ts);
+TypeReferences typeReferences(): {
+  TypeReference typeReference;
+  TypeReferences typeReferences = null;
+} {
+  typeReference = typeReference() ("," typeReferences = typeReferences())? {
+    return new TypeReferences(typeReference, typeReferences);
   }
 }
 
-TypeParameter typeParameter(): { Token t; TypeParameterBound b = null; } {
-  t = <NAME> (b = typeParameterBound())?{
-    return new TypeParameter(t.image, b);
+TypeParameter typeParameter(): {
+  Token name;
+  TypeParameterBound typeParameterBound = null;
+} {
+  name = <NAME> (typeParameterBound = typeParameterBound())?{
+    return new TypeParameter(name.image, typeParameterBound);
   }
 }
 
-TypeParameterBound typeParameterBound(): { TypeReference r; } {
-  "<:" r = typeReference() {
-    return new TypeParameterBound(true, r);
+TypeParameterBound typeParameterBound(): {
+  TypeReference typeReference;
+} {
+  "<:" typeReference = typeReference() {
+    return new TypeParameterBound(true, typeReference);
   } |
-  ":>" r = typeReference() {
-    return new TypeParameterBound(false, r);
+  ":>" typeReference = typeReference() {
+    return new TypeParameterBound(false, typeReference);
   }
 }
 
-TypeParameterList typeParameterList(): { TypeParameter t; TypeParameterList ts = null; } {
-  t = typeParameter() ("," ts = typeParameterList())? {
-    return new TypeParameterList(t, ts);
+TypeParameterList typeParameterList(): {
+  TypeParameter typeParameter;
+  TypeParameterList typeParameterList = null;
+} {
+  typeParameter = typeParameter() ("," typeParameterList = typeParameterList())? {
+    return new TypeParameterList(typeParameter, typeParameterList);
   }
 }
 
-TypeParameters typeParameters(): { TypeParameterList ts1; TypeParameterList ts2 = null; } {
-  ts1 = typeParameterList() (";" ts2 = typeParameterList())? {
-    return new TypeParameters(ts1, ts2);
+TypeParameters typeParameters(): {
+  TypeParameterList publicTypeParameterList;
+  TypeParameterList privateTypeParameterList = null;
+} {
+  publicTypeParameterList = typeParameterList() (";" privateTypeParameterList = typeParameterList())? {
+    return new TypeParameters(publicTypeParameterList, privateTypeParameterList);
   } |
-  ";" ts2 = typeParameterList() {
-    return new TypeParameters(null, ts2);
+  ";" privateTypeParameterList = typeParameterList() {
+    return new TypeParameters(null, privateTypeParameterList);
   }
 }
 
-QualifiedName qualifiedName(): { Token t; List<String> ls = new ArrayList<>(); } {
-  t = <NAME> { ls.add(t.image); } ("." t = <NAME> { ls.add(t.image); })* {
+QualifiedName qualifiedName(): {
+  Token name;
+  List<String> list = new ArrayList<>();
+} {
+  name = <NAME> { list.add(name.image); } ("." name = <NAME> { list.add(name.image); })* {
     QualifiedName q = null;
-    for (int i = 0; i < ls.size(); i++) {
-      q = new QualifiedName(q, ls.get(i));
+    for (String s : list) {
+      q = new QualifiedName(q, s);
     }
     return q;
   }
