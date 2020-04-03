@@ -35,14 +35,14 @@ public class CommandTest {
   void test1() throws IOException, ParseException {
     InputStream stream = new ByteArrayInputStream("Foo: foo() Foo;".getBytes());
     System.setIn(stream);
-    Command.run(System.out, System.err, "--output", outputDirectory.toString());
+    Command.run("--output", outputDirectory.toString());
   }
 
   @Test
   void test2() throws IOException, ParseException {
     InputStream stream = new ByteArrayInputStream("Foo: foo() Foo;".getBytes());
     System.setIn(stream);
-    Command.run(System.out, System.err);
+    Command.run();
 
     File[] files = Paths.get(".").toFile().listFiles((file, name) -> name.endsWith(".java"));
     if (files != null) {
@@ -56,7 +56,8 @@ public class CommandTest {
   void test3() throws IOException, ParseException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
-    assert Command.run(System.out, printStream, "-foo") == 1;
+    System.setErr(printStream);
+    assert Command.run("-foo") == 1;
     assert outputStream.toString().equals("error: unknown option -foo\n" + helpMessage);
   }
 
@@ -64,15 +65,14 @@ public class CommandTest {
   void test4() throws IOException, ParseException {
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
-    Command.run(printStream, System.err, "-h");
+    System.setOut(printStream);
+    Command.run("-h");
     assert outputStream.toString().equals(helpMessage);
   }
 
   @Test
   void test5() throws IOException, ParseException {
     Command.run(
-        System.out,
-        System.err,
         "-i",
         resources.resolve("java").resolve("test1.ag").toString(),
         "-o",
@@ -91,7 +91,8 @@ public class CommandTest {
 
     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
     PrintStream printStream = new PrintStream(outputStream);
-    Command.run(printStream, System.err, "-v");
+    System.setOut(printStream);
+    Command.run("-v");
     assert outputStream.toString().equals(version + "\n");
   }
 

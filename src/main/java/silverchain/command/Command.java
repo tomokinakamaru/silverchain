@@ -4,7 +4,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintStream;
 import java.nio.file.Paths;
 import silverchain.Silverchain;
 import silverchain.parser.ParseException;
@@ -12,10 +11,6 @@ import silverchain.parser.ParseException;
 public final class Command {
 
   private static final ArgumentParser parser = new ArgumentParser("silverchain");
-
-  private final PrintStream stdOut;
-
-  private final PrintStream stdErr;
 
   private final Arguments arguments;
 
@@ -26,15 +21,12 @@ public final class Command {
     parser.add(new Option("o", "output", "<path>", "output directory", "."));
   }
 
-  private Command(PrintStream stdOut, PrintStream stdErr, String[] args) {
-    this.stdOut = stdOut;
-    this.stdErr = stdErr;
+  private Command(String[] args) {
     this.arguments = new Arguments(args);
   }
 
-  public static int run(PrintStream stdOut, PrintStream stdErr, String... args)
-      throws IOException, ParseException {
-    return new Command(stdOut, stdErr, args).run();
+  public static int run(String... args) throws IOException, ParseException {
+    return new Command(args).run();
   }
 
   private int run() throws IOException, ParseException {
@@ -68,18 +60,26 @@ public final class Command {
   }
 
   private int printError(String unknownOption) {
-    stdErr.println("error: unknown option " + unknownOption);
-    stdErr.println(parser.help());
+    writeError("error: unknown option " + unknownOption);
+    writeError(parser.help());
     return 1;
   }
 
   private int printHelp() {
-    stdOut.println(parser.help());
+    write(parser.help());
     return 0;
   }
 
   private int printVersion() {
-    stdOut.println("0.1.0");
+    write("0.1.0");
     return 0;
+  }
+
+  private void write(String s) {
+    System.out.println(s);
+  }
+
+  private void writeError(String s) {
+    System.err.println(s);
   }
 }
