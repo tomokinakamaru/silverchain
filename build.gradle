@@ -70,7 +70,13 @@ jacocoTestReport {
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
             fileTree(dir: it, exclude: [
-                    'silverchain/parser/**',
+                    'silverchain/parser/ParseException.class',
+                    'silverchain/parser/Parser.class',
+                    'silverchain/parser/ParserConstants.class',
+                    'silverchain/parser/ParserTokenManager.class',
+                    'silverchain/parser/SimpleCharStream.class',
+                    'silverchain/parser/Token.class',
+                    'silverchain/parser/TokenMgrError.class',
                     'silverchain/command/EntryPoint.class'
             ])
         })
