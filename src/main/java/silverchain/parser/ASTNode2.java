@@ -1,5 +1,7 @@
 package silverchain.parser;
 
+import static silverchain.graph.GraphBuilders.join;
+
 import java.util.Collection;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -30,17 +32,12 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   Graph reduce(Graph graph1, Graph graph2) {
-    return null;
+    return join(graph1, graph2);
   }
 
   @Override
   public Set<TypeParameter> typeParameters() {
     return flatMap(ASTNode::typeParameters).collect(Collectors.toCollection(LinkedHashSet::new));
-  }
-
-  @Override
-  void resolveReferences(Set<TypeParameter> typeParameters) {
-    each(n -> n.resolveReferences(typeParameters));
   }
 
   @Override
@@ -51,6 +48,11 @@ abstract class ASTNode2<T, S> extends ASTNode {
   @Override
   public Set<TypeParameter> referents() {
     return flatMap(ASTNode::referents).collect(Collectors.toCollection(LinkedHashSet::new));
+  }
+
+  @Override
+  void resolveReferences(Set<TypeParameter> typeParameters) {
+    each(n -> n.resolveReferences(typeParameters));
   }
 
   private <U> Stream<U> flatMap(Function<ASTNode, Collection<U>> function) {

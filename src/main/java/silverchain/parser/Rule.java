@@ -1,9 +1,6 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.join;
-
 import java.util.Optional;
-import silverchain.graph.Graph;
 
 public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
 
@@ -22,10 +19,5 @@ public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
   @Override
   public String toString() {
     return expression() + type().map(t -> " " + t).orElse("") + ";";
-  }
-
-  @Override
-  Graph reduce(Graph graph1, Graph graph2) {
-    return join(graph1, graph2);
   }
 }

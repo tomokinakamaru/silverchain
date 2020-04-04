@@ -1,7 +1,5 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.join;
-
 import java.util.Optional;
 import silverchain.graph.Graph;
 
@@ -28,10 +26,5 @@ public final class Grammar extends ASTNode2<Type, Rules> {
   public Graph graph() {
     resolveReferences(typeParameters());
     return super.graph();
-  }
-
-  @Override
-  Graph reduce(Graph graph1, Graph graph2) {
-    return join(graph1, graph2);
   }
 }
