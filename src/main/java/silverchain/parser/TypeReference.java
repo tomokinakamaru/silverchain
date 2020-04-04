@@ -34,23 +34,13 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
 
   @Override
   public Set<TypeParameter> referents() {
-    Set<TypeParameter> parameters = new LinkedHashSet<>();
-    if (referent != null) {
-      parameters.add(referent);
-    }
-    parameters.addAll(super.referents());
-    return parameters;
+    return referent == null ? super.referents() : union(referent, super.referents());
   }
 
   @Override
   void resolveReferences(Set<TypeParameter> typeParameters) {
     if (!name().qualifier().isPresent()) {
-      for (TypeParameter p : typeParameters) {
-        if (p.name().equals(name().name())) {
-          referent = p;
-          break;
-        }
-      }
+      referent = find(name(), typeParameters);
     }
     super.resolveReferences(typeParameters);
   }
@@ -58,5 +48,16 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   @Override
   public Graph graph() {
     return atom(this);
+  }
+
+  private static Set<TypeParameter> union(TypeParameter parameter, Set<TypeParameter> parameters) {
+    Set<TypeParameter> set = new LinkedHashSet<>();
+    set.add(parameter);
+    set.addAll(parameters);
+    return set;
+  }
+
+  private static TypeParameter find(QualifiedName needle, Set<TypeParameter> haystack) {
+    return haystack.stream().filter(p -> p.name().equals(needle.name())).findFirst().orElse(null);
   }
 }
