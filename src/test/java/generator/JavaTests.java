@@ -42,7 +42,6 @@ public final class JavaTests {
 
     List<List<GraphNode>> list = new ArrayList<>();
     for (Grammar grammar : grammars) {
-      grammar.resolveReferences(grammar.typeParameters());
       list.add(grammar.graph().compile());
     }
 

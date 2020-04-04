@@ -39,7 +39,7 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   @Override
-  public void resolveReferences(Set<TypeParameter> typeParameters) {
+  void resolveReferences(Set<TypeParameter> typeParameters) {
     each(n -> n.resolveReferences(typeParameters));
   }
 

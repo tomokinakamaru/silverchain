@@ -10,11 +10,11 @@ public abstract class ASTNode implements Comparable<ASTNode> {
 
   public abstract Set<TypeParameter> typeParameters();
 
-  public abstract void resolveReferences(Set<TypeParameter> typeParameters);
-
   public abstract Graph graph();
 
   public abstract Set<TypeParameter> referents();
+
+  abstract void resolveReferences(Set<TypeParameter> typeParameters);
 
   ASTNode(Range range) {
     this.range = range;

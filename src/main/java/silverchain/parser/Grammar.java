@@ -25,6 +25,12 @@ public final class Grammar extends ASTNode2<Type, Rules> {
   }
 
   @Override
+  public Graph graph() {
+    resolveReferences(typeParameters());
+    return super.graph();
+  }
+
+  @Override
   Graph reduce(Graph graph1, Graph graph2) {
     return join(graph1, graph2);
   }

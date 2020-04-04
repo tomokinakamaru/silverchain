@@ -106,7 +106,6 @@ final class Tests {
     Grammars grammars = new Parser(new ByteArrayInputStream(text.getBytes())).grammars();
     List<List<GraphNode>> list = new ArrayList<>();
     for (Grammar grammar : grammars) {
-      grammar.resolveReferences(grammar.typeParameters());
       list.add(grammar.graph().compile());
     }
     return new GraphTester(list.get(0));

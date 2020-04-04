@@ -43,7 +43,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  public void resolveReferences(Set<TypeParameter> parameters) {
+  void resolveReferences(Set<TypeParameter> parameters) {
     if (!name().qualifier().isPresent()) {
       String name = name().name();
       referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);
