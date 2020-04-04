@@ -6,10 +6,12 @@ import java.util.List;
 
 abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> implements Iterable<T> {
 
-  abstract String separator();
-
   ASTNodeN(Range range, T head, S tail) {
     super(range, head, tail);
+  }
+
+  String separator() {
+    return ",";
   }
 
   @Override
