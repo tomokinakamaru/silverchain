@@ -11,7 +11,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
 
   private TypeParameter referent;
 
-  public TypeReference(Range range, QualifiedName name, TypeReferences arguments) {
+  TypeReference(Range range, QualifiedName name, TypeReferences arguments) {
     super(range, name, arguments);
   }
 
@@ -43,12 +43,16 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  void resolveReferences(Set<TypeParameter> parameters) {
+  void resolveReferences(Set<TypeParameter> typeParameters) {
     if (!name().qualifier().isPresent()) {
-      String name = name().name();
-      referent = parameters.stream().filter(p -> p.name().equals(name)).findFirst().orElse(null);
+      for (TypeParameter p : typeParameters) {
+        if (p.name().equals(name().name())) {
+          referent = p;
+          break;
+        }
+      }
     }
-    super.resolveReferences(parameters);
+    super.resolveReferences(typeParameters);
   }
 
   @Override

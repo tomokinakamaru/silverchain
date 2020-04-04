@@ -6,7 +6,7 @@ public final class Location {
 
   private final int column;
 
-  public Location(int line, int column) {
+  Location(int line, int column) {
     this.line = line;
     this.column = column;
   }

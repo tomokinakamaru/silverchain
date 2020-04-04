@@ -2,7 +2,7 @@ package silverchain.parser;
 
 public final class MethodParameter extends ASTNode2<TypeReference, String> {
 
-  public MethodParameter(Range range, TypeReference typeReference, String name) {
+  MethodParameter(Range range, TypeReference typeReference, String name) {
     super(range, typeReference, name);
   }
 

@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParameterList> {
 
-  public TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
+  TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
     super(range, publicList, privateList);
   }
 

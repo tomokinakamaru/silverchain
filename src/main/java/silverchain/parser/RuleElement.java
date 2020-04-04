@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class RuleElement extends ASTNode2<Method, RuleExpression> {
 
-  public RuleElement(Range range, Method method, RuleExpression expression) {
+  RuleElement(Range range, Method method, RuleExpression expression) {
     super(range, method, expression);
   }
 
@@ -18,7 +18,6 @@ public final class RuleElement extends ASTNode2<Method, RuleExpression> {
 
   @Override
   public String toString() {
-    return method().map(Method::toString).orElse("")
-        + expression().map(e -> "(" + e + ")").orElse("");
+    return method().map(Method::toString).orElse(expression().map(e -> "(" + e + ")").orElse(""));
   }
 }

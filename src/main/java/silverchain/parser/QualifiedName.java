@@ -8,7 +8,7 @@ import java.util.Optional;
 public final class QualifiedName extends ASTNode2<QualifiedName, String>
     implements Iterable<String> {
 
-  public QualifiedName(Range range, QualifiedName qualifier, String name) {
+  QualifiedName(Range range, QualifiedName qualifier, String name) {
     super(range, qualifier, name);
   }
 

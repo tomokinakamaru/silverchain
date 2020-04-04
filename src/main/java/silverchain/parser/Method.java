@@ -7,7 +7,7 @@ import silverchain.graph.Graph;
 
 public final class Method extends ASTNode2<String, MethodParameters> {
 
-  public Method(Range range, String name, MethodParameters parameters) {
+  Method(Range range, String name, MethodParameters parameters) {
     super(range, name, parameters);
   }
 
