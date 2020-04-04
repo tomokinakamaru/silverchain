@@ -26,11 +26,11 @@ public final class Parser {
   }
 
   private static Range range(ASTNode node, Token token) {
-    if (token == null) {
-      return node.range();
-    }
     if (node == null) {
       return range(token);
+    }
+    if (token == null) {
+      return node.range();
     }
     return new Range(node.range().begin(), range(token).end());
   }
@@ -48,9 +48,8 @@ public final class Parser {
 
   private static Range range(Token token) {
     return new Range(
-      new Location(token.beginLine, token.beginColumn),
-      new Location(token.endLine, token.endColumn)
-    );
+        new Location(token.beginLine, token.beginColumn),
+        new Location(token.endLine, token.endColumn));
   }
 }
 
@@ -61,205 +60,206 @@ SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
 TOKEN: { < NAME: (["a"-"z","A"-"Z"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
 
 Grammars grammars(): {
-  Grammar grammar;
-  Grammars grammars = null;
+  Grammar g;
+  Grammars gs = null;
 } {
-  grammar = grammar() (grammars = grammars())? <EOF> {
-    return new Grammars(range(grammar, grammars), grammar, grammars);
+  g = grammar() (gs = grammars())? <EOF> {
+    return new Grammars(range(g, gs), g, gs);
   }
 }
 
 Grammar grammar(): {
-  Type type;
-  Token colon;
-  Rules rules = null;
+  Type t;
+  Token c;
+  Rules rs = null;
 } {
-  type = type() ":" { colon = jj_lastpos; } (rules = rules())? {
-    return new Grammar(range(type, colon, rules), type, rules);
+  t = type() ":" { c = token; } (rs = rules())? {
+    return new Grammar(range(t, c, rs), t, rs);
   }
 }
 
 Type type(): {
-  QualifiedName qualifiedName;
-  TypeParameters typeParameters = null;
-  Token leftBracket = null;
+  QualifiedName n;
+  TypeParameters ps = null;
+  Token b = null;
 } {
-  qualifiedName = qualifiedName() ("[" typeParameters = typeParameters() "]" { leftBracket = jj_lastpos; })? {
-    return new Type(range(qualifiedName, leftBracket), qualifiedName, typeParameters);
+  n = qualifiedName() ("[" ps = typeParameters() "]" { b = token; })? {
+    return new Type(range(n, b), n, ps);
   }
 }
 
 Rules rules(): {
-  Rule rule;
-  Rules rules = null;
+  Rule r;
+  Rules rs = null;
 } {
-  rule = rule() (rules = rules())? {
-    return new Rules(range(rule, rules), rule, rules);
+  r = rule() (rs = rules())? {
+    return new Rules(range(r, rs), r, rs);
   }
 }
 
 Rule rule(): {
-  RuleExpression ruleExpression;
-  TypeReference typeReference = null;
+  RuleExpression e;
+  TypeReference r = null;
 } {
-  ruleExpression = ruleExpression() (typeReference = typeReference())? ";" {
-    return new Rule(range(ruleExpression, jj_lastpos), ruleExpression, typeReference);
+  e = ruleExpression() (r = typeReference())? ";" {
+    return new Rule(range(e, token), e, r);
   }
 }
 
 RuleExpression ruleExpression(): {
-  RuleTerm ruleTerm;
-  RuleExpression ruleExpression = null;
+  RuleTerm t;
+  RuleExpression e = null;
 } {
-  ruleTerm = ruleTerm() ("|" ruleExpression = ruleExpression())? {
-    return new RuleExpression(range(ruleTerm, ruleExpression), ruleTerm, ruleExpression);
+  t = ruleTerm() ("|" e = ruleExpression())? {
+    return new RuleExpression(range(t, e), t, e);
   }
 }
 
 RuleTerm ruleTerm(): {
-  RuleFactor ruleFactor;
-  RuleTerm ruleTerm = null;
+  RuleFactor f;
+  RuleTerm t = null;
 } {
-  ruleFactor = ruleFactor() (ruleTerm = ruleTerm())? {
-    return new RuleTerm(range(ruleFactor, ruleTerm), ruleFactor, ruleTerm);
+  f = ruleFactor() (t = ruleTerm())? {
+    return new RuleTerm(range(f, t), f, t);
   }
 }
 
 RuleFactor ruleFactor(): {
-  RuleElement ruleElement;
-  RepeatOperator repeatOperator = null;
+  RuleElement e;
+  RepeatOperator o = null;
 } {
-  ruleElement = ruleElement() (repeatOperator = repeatOperator())? {
-    return new RuleFactor(range(ruleElement, repeatOperator), ruleElement, repeatOperator);
+  e = ruleElement() (o = repeatOperator())? {
+    return new RuleFactor(range(e, o), e, o);
   }
 }
 
 RuleElement ruleElement(): {
-  Method method;
-  RuleExpression ruleExpression;
-  Token leftParenthesis;
+  Method m;
+  RuleExpression e;
+  Token p;
 } {
-  method = method() {
-    return new RuleElement(method.range(), method, null);
+  m = method() {
+    return new RuleElement(m.range(), m, null);
   } |
-  "(" { leftParenthesis = token; } ruleExpression = ruleExpression() ")" {
-    return new RuleElement(range(leftParenthesis, token), null, ruleExpression);
+  "(" { p = token; } e = ruleExpression() ")" {
+    return new RuleElement(range(p, token), null, e);
   }
 }
 
 RepeatOperator repeatOperator(): {
-  Token min;
-  Token max = null;
-  Token leftBracket;
+  Token l;
+  Token u = null;
+  Token b;
 } {
   "*" {
-    return new RepeatOperator(range(jj_lastpos), 0, null);
+    return new RepeatOperator(range(token), 0, null);
   } |
   "+" {
-    return new RepeatOperator(range(jj_lastpos), 1, null);
+    return new RepeatOperator(range(token), 1, null);
   } |
   "?" {
-    return new RepeatOperator(range(jj_lastpos), 0, 1);
+    return new RepeatOperator(range(token), 0, 1);
   } |
-  "{" { leftBracket = token; } min = <NUMBER> ("," max = <NUMBER>)? "}" {
-    int i = Integer.parseInt(min.image);
-    Integer j = max == null ? null : Integer.parseInt(max.image);
-    return new RepeatOperator(range(leftBracket, token), i, j);
+  "{" { b = token; } l = <NUMBER> ("," u = <NUMBER>)? "}" {
+    int i = Integer.parseInt(l.image);
+    Integer j = u == null ? null : Integer.parseInt(u.image);
+    return new RepeatOperator(range(b, token), i, j);
   }
 }
 
 Method method(): {
-  Token name;
-  MethodParameters methodParameters = null;
+  Token n;
+  MethodParameters ps = null;
 } {
-  name = <NAME> "(" (methodParameters = methodParameters())? ")" {
-    return new Method(range(name, jj_lastpos), name.image, methodParameters);
+  n = <NAME> "(" (ps = methodParameters())? ")" {
+    return new Method(range(n, token), n.image, ps);
   }
 }
 
 MethodParameters methodParameters(): {
-  MethodParameter methodParameter;
-  MethodParameters methodParameters = null;
+  MethodParameter p;
+  MethodParameters ps = null;
 } {
-  methodParameter = methodParameter() ("," methodParameters = methodParameters())? {
-    return new MethodParameters(range(methodParameter, methodParameters), methodParameter, methodParameters);
+  p = methodParameter() ("," ps = methodParameters())? {
+    return new MethodParameters(range(p, ps), p, ps);
   }
 }
 
 MethodParameter methodParameter(): {
-  TypeReference typeReference;
-  Token name;
+  TypeReference r;
+  Token n;
 } {
-  typeReference = typeReference() name = <NAME> {
-    return new MethodParameter(range(typeReference, name), typeReference, name.image);
+  r = typeReference() n = <NAME> {
+    return new MethodParameter(range(r, n), r, n.image);
   }
 }
 
 TypeReference typeReference(): {
-  QualifiedName qualifiedName;
-  TypeReferences typeReferences = null;
+  QualifiedName n;
+  TypeReferences r = null;
 } {
-  qualifiedName = qualifiedName() ("[" typeReferences = typeReferences() "]") ? {
-    return new TypeReference(range(qualifiedName, jj_lastpos), qualifiedName, typeReferences);
+  n = qualifiedName() ("[" r = typeReferences() "]") ? {
+    return new TypeReference(range(n, token), n, r);
   }
 }
 
 TypeReferences typeReferences(): {
-  TypeReference typeReference;
-  TypeReferences typeReferences = null;
+  TypeReference r;
+  TypeReferences rs = null;
 } {
-  typeReference = typeReference() ("," typeReferences = typeReferences())? {
-    return new TypeReferences(range(typeReference, typeReferences), typeReference, typeReferences);
+  r = typeReference() ("," rs = typeReferences())? {
+    return new TypeReferences(range(r, rs), r, rs);
   }
 }
 
 TypeParameters typeParameters(): {
-  TypeParameterList publicTypeParameterList;
-  TypeParameterList privateTypeParameterList = null;
-  Token semicolon;
+  TypeParameterList ps1;
+  TypeParameterList ps2 = null;
+  Token s;
 } {
-  publicTypeParameterList = typeParameterList() (";" privateTypeParameterList = typeParameterList())? {
-    return new TypeParameters(range(publicTypeParameterList, privateTypeParameterList), publicTypeParameterList, privateTypeParameterList);
+  ps1 = typeParameterList() (";" ps2 = typeParameterList())? {
+    return new TypeParameters(range(ps1, ps2), ps1, ps2);
   } |
-  ";" { semicolon = token; } privateTypeParameterList = typeParameterList() {
-    return new TypeParameters(range(semicolon, privateTypeParameterList), null, privateTypeParameterList);
+  ";" { s = token; } ps2 = typeParameterList() {
+    return new TypeParameters(range(s, ps2), null, ps2);
   }
 }
 
 TypeParameterList typeParameterList(): {
-  TypeParameter typeParameter;
-  TypeParameterList typeParameterList = null;
+  TypeParameter p;
+  TypeParameterList ps = null;
 } {
-  typeParameter = typeParameter() ("," typeParameterList = typeParameterList())? {
-    return new TypeParameterList(range(typeParameter, typeParameterList), typeParameter, typeParameterList);
+  p = typeParameter() ("," ps = typeParameterList())? {
+    return new TypeParameterList(range(p, ps), p, ps);
   }
 }
 
 TypeParameter typeParameter(): {
-  Token name;
-  TypeParameterBound typeParameterBound = null;
+  Token n;
+  TypeParameterBound b = null;
 } {
-  name = <NAME> (typeParameterBound = typeParameterBound())?{
-    return new TypeParameter(range(name, typeParameterBound), name.image, typeParameterBound);
+  n = <NAME> (b = typeParameterBound())?{
+    return new TypeParameter(range(n, b), n.image, b);
   }
 }
 
 TypeParameterBound typeParameterBound(): {
-  Token destination = null;
-  TypeReference typeReference;
+  Token d = null;
+  TypeReference r;
 } {
-  ("<:" | ":>") { destination = jj_lastpos; } typeReference = typeReference() {
-    return new TypeParameterBound(range(destination, typeReference), destination.image.equals("<:"), typeReference);
+  ("<:" | ":>") { d = token; } r = typeReference() {
+    boolean u = d.image.equals("<:");
+    return new TypeParameterBound(range(d, r), u, r);
   }
 }
 
 QualifiedName qualifiedName(): {
-  Token name;
-  List<Token> names = new ArrayList<>();
+  Token n;
+  List<Token> ns = new ArrayList<>();
 } {
-  name = <NAME> { names.add(name); } ("." name = <NAME> { names.add(name); })* {
+  n = <NAME> { ns.add(n); } ("." n = <NAME> { ns.add(n); })* {
     QualifiedName q = null;
-    for (Token t : names) {
+    for (Token t : ns) {
       q = new QualifiedName(range(q, t), q, t.image);
     }
     return q;
