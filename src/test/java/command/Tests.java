@@ -57,7 +57,7 @@ public class Tests {
   @Test
   void testInputError2() {
     System.setIn(new BrokenInputStream("Foo:"));
-    test("-o", workspace.toString()).status(103).stdout("");
+    test("-o", workspace.toString()).status(103).stdout("").stderr("Error on closing input: -\n");
   }
 
   @Test
