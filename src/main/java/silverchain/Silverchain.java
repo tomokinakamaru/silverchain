@@ -21,7 +21,7 @@ public final class Silverchain {
 
   private Function<List<Diagram>, Generator> generatorProvider = JavaGenerator::new;
 
-  public void output(Path path) {
+  public void outputDirectory(Path path) {
     outputDirectory = path;
   }
 

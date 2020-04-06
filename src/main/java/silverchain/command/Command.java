@@ -84,7 +84,7 @@ public final class Command {
 
   private void run(ParseResult result) throws ParseException {
     Silverchain silverchain = new Silverchain();
-    silverchain.output(Paths.get(result.get("output")));
+    silverchain.outputDirectory(Paths.get(result.get("output")));
     silverchain.generatorProvider(generatorProvider(result.get("language")));
     try (InputStream stream = open(result.get("input"))) {
       silverchain.run(stream);
