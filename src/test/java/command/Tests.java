@@ -21,7 +21,7 @@ public class Tests {
     String help =
         "Usage: silverchain [options]\n"
             + "\n"
-            + "options:\n"
+            + "Options:\n"
             + "  -h, --help             Show this message and exit\n"
             + "  -v, --version          Show version and exit\n"
             + "  -i, --input <path>     Input grammar file\n"
