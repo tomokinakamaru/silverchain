@@ -9,3 +9,4 @@ plugins:
 exclude_patterns:
   - "sample/"
   - "src/test"
+  - "src/main/java/silverchain/command/Command.java"
