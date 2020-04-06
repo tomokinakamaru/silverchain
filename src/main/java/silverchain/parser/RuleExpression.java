@@ -1,8 +1,8 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.merge;
+import static silverchain.diagram.Builders.merge;
 
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
 
@@ -11,8 +11,8 @@ public final class RuleExpression extends ASTNodeN<RuleTerm, RuleExpression> {
   }
 
   @Override
-  Graph reduce(Graph graph1, Graph graph2) {
-    return merge(graph1, graph2);
+  Diagram reduce(Diagram diagram1, Diagram diagram2) {
+    return merge(diagram1, diagram2);
   }
 
   @Override

@@ -1,6 +1,8 @@
 package silverchain.parser;
 
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 
 public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParameterList> {
 
@@ -20,5 +22,17 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
   public String toString() {
     return publicList().map(ASTNodeN::toString).orElse("")
         + privateList().map(p -> ";" + p).orElse("");
+  }
+
+  @Override
+  public void validate() {
+    Set<String> defined = new HashSet<>();
+    for (TypeParameter p : typeParameters()) {
+      if (defined.contains(p.name())) {
+        throw new DuplicateDeclaration(p);
+      }
+      defined.add(p.name());
+    }
+    super.validate();
   }
 }

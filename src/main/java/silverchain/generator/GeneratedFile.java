@@ -23,9 +23,13 @@ public final class GeneratedFile {
     return content;
   }
 
-  public void save(Path path) throws IOException {
+  public void save(Path path) {
     Path p = path.resolve(this.path);
-    Files.createDirectories(p.getParent());
-    Files.write(p, content.getBytes());
+    try {
+      Files.createDirectories(p.getParent());
+      Files.write(p, content.getBytes());
+    } catch (IOException e) {
+      throw new SaveError(p);
+    }
   }
 }

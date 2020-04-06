@@ -1,2 +1,0 @@
-Foo[;T]:
-foo(String s, T t) bar();

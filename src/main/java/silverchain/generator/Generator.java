@@ -4,11 +4,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import silverchain.graph.GraphNode;
+import silverchain.diagram.Diagram;
 
 public abstract class Generator {
 
-  private final List<GraphNode> nodes;
+  private final List<Diagram> diagrams;
 
   private final List<GeneratedFile> files;
 
@@ -16,15 +16,15 @@ public abstract class Generator {
 
   private StringBuilder stringBuilder;
 
-  protected abstract void generate(List<GraphNode> nodes);
+  protected abstract void generate(List<Diagram> diagrams);
 
-  protected Generator(List<GraphNode> nodes) {
-    this.nodes = nodes;
+  protected Generator(List<Diagram> diagrams) {
+    this.diagrams = diagrams;
     this.files = new ArrayList<>();
   }
 
   public final List<GeneratedFile> generate() {
-    generate(new ArrayList<>(nodes));
+    generate(new ArrayList<>(diagrams));
     return files;
   }
 

@@ -1,9 +1,9 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.atom;
+import static silverchain.diagram.Builders.atom;
 
 import java.util.Optional;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
@@ -25,7 +25,7 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
   }
 
   @Override
-  public Graph graph() {
+  public Diagram diagram() {
     return atom(this);
   }
 }

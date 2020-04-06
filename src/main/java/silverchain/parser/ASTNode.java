@@ -1,20 +1,22 @@
 package silverchain.parser;
 
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public abstract class ASTNode implements Comparable<ASTNode> {
 
   private final Range range;
 
-  public abstract Set<TypeParameter> typeParameters();
+  public abstract List<TypeParameter> typeParameters();
 
-  public abstract Graph graph();
+  public abstract Diagram diagram();
 
-  public abstract Set<TypeParameter> referents();
+  public abstract List<TypeParameter> referents();
 
-  abstract void resolveReferences(Set<TypeParameter> typeParameters);
+  public abstract void validate();
+
+  abstract void resolveReferences(List<TypeParameter> typeParameters);
 
   ASTNode(Range range) {
     this.range = range;

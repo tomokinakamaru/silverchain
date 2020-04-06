@@ -1,15 +1,15 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.join;
+import static silverchain.diagram.Builders.join;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 abstract class ASTNode2<T, S> extends ASTNode {
 
@@ -31,27 +31,32 @@ abstract class ASTNode2<T, S> extends ASTNode {
     return right;
   }
 
-  Graph reduce(Graph graph1, Graph graph2) {
-    return join(graph1, graph2);
+  Diagram reduce(Diagram diagram1, Diagram diagram2) {
+    return join(diagram1, diagram2);
   }
 
   @Override
-  public Set<TypeParameter> typeParameters() {
-    return flatMap(ASTNode::typeParameters).collect(Collectors.toCollection(LinkedHashSet::new));
+  public List<TypeParameter> typeParameters() {
+    return flatMap(ASTNode::typeParameters).collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
-  public Graph graph() {
-    return map(ASTNode::graph).reduce(this::reduce).orElse(null);
+  public Diagram diagram() {
+    return map(ASTNode::diagram).reduce(this::reduce).orElse(null);
   }
 
   @Override
-  public Set<TypeParameter> referents() {
-    return flatMap(ASTNode::referents).collect(Collectors.toCollection(LinkedHashSet::new));
+  public List<TypeParameter> referents() {
+    return flatMap(ASTNode::referents).distinct().collect(Collectors.toCollection(ArrayList::new));
   }
 
   @Override
-  void resolveReferences(Set<TypeParameter> typeParameters) {
+  public void validate() {
+    each(ASTNode::validate);
+  }
+
+  @Override
+  void resolveReferences(List<TypeParameter> typeParameters) {
     each(n -> n.resolveReferences(typeParameters));
   }
 

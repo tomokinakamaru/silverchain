@@ -1,0 +1,3 @@
+alertdialog.AlertDialog:
+
+setTitle(String title) setMessage(String message) show();

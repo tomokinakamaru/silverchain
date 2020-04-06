@@ -1,7 +1,7 @@
 package silverchain.parser;
 
 import java.util.Optional;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public final class Grammar extends ASTNode2<Type, Rules> {
 
@@ -23,8 +23,8 @@ public final class Grammar extends ASTNode2<Type, Rules> {
   }
 
   @Override
-  public Graph graph() {
+  public Diagram diagram() {
     resolveReferences(typeParameters());
-    return super.graph();
+    return super.diagram();
   }
 }

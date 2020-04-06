@@ -1,9 +1,9 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.repeat;
+import static silverchain.diagram.Builders.repeat;
 
 import java.util.Optional;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
@@ -25,8 +25,8 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
   }
 
   @Override
-  public Graph graph() {
-    Graph g = element().graph();
-    return operator().map(o -> repeat(g, o.min(), o.max().orElse(null))).orElse(g);
+  public Diagram diagram() {
+    Diagram d = element().diagram();
+    return operator().map(o -> repeat(d, o.min(), o.max().orElse(null))).orElse(d);
   }
 }

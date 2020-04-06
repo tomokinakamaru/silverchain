@@ -1,6 +1,8 @@
 package silverchain.parser;
 
-public final class Range {
+import java.util.Objects;
+
+public final class Range implements Comparable<Range> {
 
   private final Location begin;
 
@@ -17,5 +19,33 @@ public final class Range {
 
   public Location end() {
     return end;
+  }
+
+  @Override
+  public String toString() {
+    return begin.toString() + "-" + end.toString();
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Range range = (Range) object;
+    return begin.equals(range.begin) && end.equals(range.end);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(begin, end);
+  }
+
+  @Override
+  public int compareTo(Range range) {
+    int c = begin.compareTo(range.begin);
+    return c == 0 ? end.compareTo(range.end) : c;
   }
 }

@@ -82,3 +82,14 @@ jacocoTestReport {
         })
     }
 }
+
+task testSampleJava(type: Exec) {
+    dependsOn 'test'
+    group 'sample'
+    workingDir 'sample/java'
+    commandLine './gradlew', 'check', '--no-daemon'
+}
+
+check {
+    dependsOn testSampleJava
+}

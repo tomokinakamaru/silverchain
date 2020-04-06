@@ -4,12 +4,9 @@ import java.util.Map;
 
 final class ArgumentParser {
 
-  private final String name;
-
   private final Options options;
 
-  ArgumentParser(String name) {
-    this.name = name;
+  ArgumentParser() {
     this.options = new Options();
   }
 
@@ -31,6 +28,6 @@ final class ArgumentParser {
   }
 
   String help() {
-    return "usage: " + name + " [options]\n\noptions:" + options.help();
+    return "Usage: silverchain [options]\n\noptions:" + options.help();
   }
 }

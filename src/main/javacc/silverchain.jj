@@ -1,7 +1,6 @@
 options {
   JDK_VERSION = "1.8";
   STATIC = false;
-  SUPPORT_CLASS_VISIBILITY_PUBLIC = false;
   LOOKAHEAD = 2;
 }
 
@@ -57,7 +56,7 @@ PARSER_END(Parser)
 
 SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
 
-TOKEN: { < NAME: (["a"-"z","A"-"Z"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
+TOKEN: { < NAME: (["a"-"z","A"-"Z","_"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
 
 Grammars grammars(): {
   Grammar g;

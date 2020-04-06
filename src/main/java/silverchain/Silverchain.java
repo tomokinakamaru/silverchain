@@ -1,14 +1,15 @@
 package silverchain;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import silverchain.diagram.Diagram;
 import silverchain.generator.GeneratedFile;
+import silverchain.generator.Generator;
 import silverchain.generator.java.JavaGenerator;
-import silverchain.graph.GraphNode;
 import silverchain.parser.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
@@ -17,23 +18,30 @@ public final class Silverchain {
 
   private Path outputDirectory = Paths.get(".");
 
+  private Function<List<Diagram>, Generator> generatorProvider = JavaGenerator::new;
+
   public void output(Path path) {
     outputDirectory = path;
   }
 
-  public void run(InputStream stream) throws ParseException, IOException {
+  public void generatorProvider(Function<List<Diagram>, Generator> function) {
+    generatorProvider = function;
+  }
+
+  public void run(InputStream stream) throws ParseException {
     Parser parser = new Parser(stream);
 
-    List<List<GraphNode>> list = new ArrayList<>();
+    List<Diagram> diagrams = new ArrayList<>();
     for (Grammar grammar : parser.grammars()) {
-      list.add(grammar.graph().compile());
+      grammar.validate();
+      Diagram diagram = grammar.diagram();
+      diagram.compile();
+      diagrams.add(diagram);
     }
 
-    for (List<GraphNode> nodes : list) {
-      JavaGenerator generator = new JavaGenerator(nodes);
-      for (GeneratedFile file : generator.generate()) {
-        file.save(outputDirectory);
-      }
+    Generator generator = generatorProvider.apply(diagrams);
+    for (GeneratedFile file : generator.generate()) {
+      file.save(outputDirectory);
     }
   }
 }

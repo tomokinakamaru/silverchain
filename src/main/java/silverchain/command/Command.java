@@ -5,81 +5,117 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 import silverchain.Silverchain;
+import silverchain.diagram.Diagram;
+import silverchain.generator.EncodeError;
+import silverchain.generator.Generator;
+import silverchain.generator.SaveError;
+import silverchain.generator.java.JavaGenerator;
+import silverchain.parser.DuplicateDeclaration;
 import silverchain.parser.ParseException;
+import silverchain.parser.TokenMgrError;
 
 public final class Command {
 
-  private static final ArgumentParser parser = new ArgumentParser("silverchain");
+  private static final ArgumentParser parser = new ArgumentParser();
+
+  private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
+
+  private static final String version = "0.1.0";
 
   private final Arguments arguments;
 
   static {
-    parser.add(new Option("h", "help", "show this message and exit"));
-    parser.add(new Option("v", "version", "show version and exit"));
-    parser.add(new Option("i", "input", "<path>", "input grammar file", "-"));
-    parser.add(new Option("o", "output", "<path>", "output directory", "."));
+    parser.add(new Option("h", "help", "Show this message and exit"));
+    parser.add(new Option("v", "version", "Show version and exit"));
+    parser.add(new Option("i", "input", "<path>", "Input grammar file", "-"));
+    parser.add(new Option("o", "output", "<path>", "Output directory", "."));
+    parser.add(new Option("l", "language", "<lang>", "Output language", "java"));
+  }
+
+  static {
+    errorCodes.put(UnknownOption.class, 101);
+    errorCodes.put(UnsupportedLanguage.class, 102);
+    errorCodes.put(InputError.class, 103);
+    errorCodes.put(TokenMgrError.class, 104);
+    errorCodes.put(ParseException.class, 105);
+    errorCodes.put(DuplicateDeclaration.class, 106);
+    errorCodes.put(EncodeError.class, 107);
+    errorCodes.put(SaveError.class, 108);
   }
 
   private Command(String[] args) {
     this.arguments = new Arguments(args);
   }
 
-  public static int run(String... args) throws IOException, ParseException {
-    return new Command(args).run();
-  }
-
-  private int run() throws IOException, ParseException {
-    ParseResult result = parser.parse(arguments);
-    if (!result.success()) {
-      return printError(result.unknownOption());
-    }
-    if (result.getFlag("help")) {
-      return printHelp();
-    }
-    if (result.getFlag("version")) {
-      return printVersion();
-    }
-    return run(result);
-  }
-
-  private int run(ParseResult result) throws IOException, ParseException {
-    Silverchain silverchain = new Silverchain();
-    silverchain.output(Paths.get(result.get("output")));
-    try (InputStream stream = open(result.get("input"))) {
-      silverchain.run(stream);
+  public static int run(String... args) {
+    try {
+      new Command(args).run();
+    } catch (UnknownOption
+        | UnsupportedLanguage
+        | InputError
+        | TokenMgrError
+        | ParseException
+        | DuplicateDeclaration
+        | EncodeError
+        | SaveError e) {
+      writeError(e.getMessage());
+      return errorCodes.get(e.getClass());
     }
     return 0;
   }
 
-  private InputStream open(String name) throws FileNotFoundException {
+  private void run() throws ParseException {
+    ParseResult result = parser.parse(arguments);
+    if (!result.success()) {
+      throw new UnknownOption(result.unknownOption());
+    } else if (result.getFlag("help")) {
+      write(parser.help());
+    } else if (result.getFlag("version")) {
+      write(version);
+    } else {
+      run(result);
+    }
+  }
+
+  private void run(ParseResult result) throws ParseException {
+    Silverchain silverchain = new Silverchain();
+    silverchain.output(Paths.get(result.get("output")));
+    silverchain.generatorProvider(generatorProvider(result.get("language")));
+    try (InputStream stream = open(result.get("input"))) {
+      silverchain.run(stream);
+    } catch (IOException e) {
+      throw new InputError(e);
+    }
+  }
+
+  private Function<List<Diagram>, Generator> generatorProvider(String language) {
+    if (language.equals("java")) {
+      return JavaGenerator::new;
+    }
+    throw new UnsupportedLanguage(language);
+  }
+
+  private InputStream open(String name) {
     if (name.equals("-")) {
       return System.in;
     }
-    return new FileInputStream(name);
+    try {
+      return new FileInputStream(name);
+    } catch (FileNotFoundException e) {
+      throw new InputError(name);
+    }
   }
 
-  private int printError(String unknownOption) {
-    writeError("error: unknown option " + unknownOption);
-    writeError(parser.help());
-    return 1;
-  }
-
-  private int printHelp() {
-    write(parser.help());
-    return 0;
-  }
-
-  private int printVersion() {
-    write("0.1.0");
-    return 0;
-  }
-
-  private void write(String s) {
+  private static void write(String s) {
     System.out.println(s);
   }
 
-  private void writeError(String s) {
+  private static void writeError(String s) {
     System.err.println(s);
   }
 }

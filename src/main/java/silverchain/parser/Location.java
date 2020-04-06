@@ -1,6 +1,8 @@
 package silverchain.parser;
 
-public final class Location {
+import java.util.Objects;
+
+public final class Location implements Comparable<Location> {
 
   private final int line;
 
@@ -17,5 +19,38 @@ public final class Location {
 
   public int column() {
     return column;
+  }
+
+  @Override
+  public String toString() {
+    return "L" + line + "C" + column;
+  }
+
+  @Override
+  public boolean equals(Object object) {
+    if (this == object) {
+      return true;
+    }
+    if (object == null || getClass() != object.getClass()) {
+      return false;
+    }
+    Location location = (Location) object;
+    return line == location.line && column == location.column;
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(line, column);
+  }
+
+  @Override
+  public int compareTo(Location location) {
+    if (line == location.line) {
+      if (column == location.column) {
+        return 0;
+      }
+      return column < location.column ? -1 : 1;
+    }
+    return line < location.line ? -1 : 1;
   }
 }

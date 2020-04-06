@@ -1,11 +1,13 @@
 package silverchain.parser;
 
-import static silverchain.graph.GraphBuilders.atom;
+import static silverchain.diagram.Builders.atom;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import silverchain.graph.Graph;
+import silverchain.diagram.Diagram;
 
 public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences> {
 
@@ -33,12 +35,12 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  public Set<TypeParameter> referents() {
-    return referent == null ? super.referents() : union(referent, super.referents());
+  public List<TypeParameter> referents() {
+    return referent() == null ? super.referents() : make(referent(), super.referents());
   }
 
   @Override
-  void resolveReferences(Set<TypeParameter> typeParameters) {
+  void resolveReferences(List<TypeParameter> typeParameters) {
     if (!name().qualifier().isPresent()) {
       referent = find(name(), typeParameters);
     }
@@ -46,18 +48,18 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
   }
 
   @Override
-  public Graph graph() {
+  public Diagram diagram() {
     return atom(this);
   }
 
-  private static Set<TypeParameter> union(TypeParameter parameter, Set<TypeParameter> parameters) {
+  private static List<TypeParameter> make(TypeParameter parameter, List<TypeParameter> list) {
     Set<TypeParameter> set = new LinkedHashSet<>();
     set.add(parameter);
-    set.addAll(parameters);
-    return set;
+    set.addAll(list);
+    return new ArrayList<>(set);
   }
 
-  private static TypeParameter find(QualifiedName needle, Set<TypeParameter> haystack) {
+  private static TypeParameter find(QualifiedName needle, List<TypeParameter> haystack) {
     return haystack.stream().filter(p -> p.name().equals(needle.name())).findFirst().orElse(null);
   }
 }

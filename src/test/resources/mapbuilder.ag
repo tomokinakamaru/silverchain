@@ -1,0 +1,5 @@
+mapbuilder.MapBuilder[;K, V]:
+
+put(K key, V value)* print();
+
+put(K key, V value)* build() java.util.Map[K, V];
