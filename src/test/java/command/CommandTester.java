@@ -14,9 +14,7 @@ final class CommandTester {
   private final int status;
 
   CommandTester(String... args) {
-    System.setOut(new PrintStream(stdout));
-    System.setErr(new PrintStream(stderr));
-    status = Command.run(args);
+    status = Command.run(new PrintStream(stdout), new PrintStream(stderr), args);
   }
 
   CommandTester status(int i) {

@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +28,10 @@ public final class Command {
 
   private static final String VERSION = "0.1.0";
 
+  private final PrintStream stdout;
+
+  private final PrintStream stderr;
+
   private final Arguments arguments;
 
   static {
@@ -48,13 +53,15 @@ public final class Command {
     errorCodes.put(SaveError.class, 108);
   }
 
-  private Command(String[] args) {
+  private Command(PrintStream stdout, PrintStream stderr, String[] args) {
+    this.stdout = stdout;
+    this.stderr = stderr;
     this.arguments = new Arguments(args);
   }
 
-  public static int run(String... args) {
+  public static int run(PrintStream stdout, PrintStream stderr, String... args) {
     try {
-      new Command(args).run();
+      new Command(stdout, stderr, args).run();
     } catch (UnknownOption
         | UnsupportedLanguage
         | InputError
@@ -63,7 +70,7 @@ public final class Command {
         | DuplicateDeclaration
         | EncodeError
         | SaveError e) {
-      writeError(e.getMessage());
+      stderr.println(e.getMessage());
       return errorCodes.get(e.getClass());
     }
     return 0;
@@ -74,9 +81,9 @@ public final class Command {
     if (!result.success()) {
       throw new UnknownOption(result.unknownOption());
     } else if (result.getFlag("help")) {
-      write(parser.help());
+      stdout.println(parser.help());
     } else if (result.getFlag("version")) {
-      write(VERSION);
+      stdout.println(VERSION);
     } else {
       run(result);
     }
@@ -109,13 +116,5 @@ public final class Command {
     } catch (FileNotFoundException e) {
       throw new InputError(name);
     }
-  }
-
-  private static void write(String s) {
-    System.out.println(s);
-  }
-
-  private static void writeError(String s) {
-    System.err.println(s);
   }
 }
