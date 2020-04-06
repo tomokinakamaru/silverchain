@@ -28,6 +28,6 @@ final class ArgumentParser {
   }
 
   String help() {
-    return "Usage: silverchain [options]\n\noptions:" + options.help();
+    return "Usage: silverchain [options]\n\nOptions:" + options.help();
   }
 }
