@@ -11,11 +11,11 @@ import silverchain.parser.Range;
 public final class JavaEncodeError extends EncodeError {
 
   JavaEncodeError(List<Label> labels) {
-    super("Conflict: " + encode(labels));
+    super("Conflict: %s", encode(labels));
   }
 
   JavaEncodeError(Label label, List<Label> labels) {
-    super("Conflict: " + encode(label, labels));
+    super("Conflict: %s", encode(label, labels));
   }
 
   private static String encode(Label label, List<Label> labels) {

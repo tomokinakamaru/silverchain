@@ -1,13 +1,10 @@
 package silverchain.parser;
 
-public final class DuplicateDeclaration extends RuntimeException {
+import silverchain.SilverchainException;
+
+public final class DuplicateDeclaration extends SilverchainException {
 
   DuplicateDeclaration(TypeParameter parameter) {
-    super(
-        String.format(
-            "%s is already defined (L%dC%d)",
-            parameter.name(),
-            parameter.range().begin().line(),
-            parameter.range().begin().column()));
+    super("%s is already defined (%s)", parameter.name(), parameter.range().begin());
   }
 }

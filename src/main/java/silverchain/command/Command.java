@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import silverchain.Silverchain;
+import silverchain.SilverchainException;
 import silverchain.diagram.Diagram;
 import silverchain.generator.EncodeError;
 import silverchain.generator.Generator;
@@ -62,14 +63,7 @@ public final class Command {
   public static int run(PrintStream stdout, PrintStream stderr, String... args) {
     try {
       new Command(stdout, stderr, args).run();
-    } catch (UnknownOption
-        | UnsupportedLanguage
-        | InputError
-        | TokenMgrError
-        | ParseException
-        | DuplicateDeclaration
-        | EncodeError
-        | SaveError e) {
+    } catch (SilverchainException | TokenMgrError | ParseException e) {
       stderr.println(e.getMessage());
       return errorCodes.get(e.getClass());
     }

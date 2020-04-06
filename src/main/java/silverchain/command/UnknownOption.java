@@ -1,8 +1,10 @@
 package silverchain.command;
 
-public final class UnknownOption extends RuntimeException {
+import silverchain.SilverchainException;
+
+public final class UnknownOption extends SilverchainException {
 
   UnknownOption(String name) {
-    super("Unknown option: " + name);
+    super("Unknown option: %s", name);
   }
 }

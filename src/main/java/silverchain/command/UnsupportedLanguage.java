@@ -1,8 +1,10 @@
 package silverchain.command;
 
-public final class UnsupportedLanguage extends RuntimeException {
+import silverchain.SilverchainException;
+
+public final class UnsupportedLanguage extends SilverchainException {
 
   UnsupportedLanguage(String language) {
-    super("Unsupported language: " + language);
+    super("Unsupported language: %s", language);
   }
 }

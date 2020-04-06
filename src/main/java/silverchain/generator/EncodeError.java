@@ -1,8 +1,10 @@
 package silverchain.generator;
 
-public abstract class EncodeError extends RuntimeException {
+import silverchain.SilverchainException;
 
-  protected EncodeError(String message) {
-    super(message);
+public abstract class EncodeError extends SilverchainException {
+
+  protected EncodeError(String format, Object... args) {
+    super(format, args);
   }
 }

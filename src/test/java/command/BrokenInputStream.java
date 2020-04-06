@@ -11,6 +11,6 @@ final class BrokenInputStream extends ByteArrayInputStream {
 
   @Override
   public void close() throws IOException {
-    throw new IOException();
+    throw new IOException("-");
   }
 }
