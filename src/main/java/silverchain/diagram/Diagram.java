@@ -28,7 +28,7 @@ public class Diagram {
     this.transitions = transitions;
   }
 
-  public void compile() {
+  public Diagram compile() {
     reverse();
     determinize();
     reverse();
@@ -55,6 +55,7 @@ public class Diagram {
 
     sortedStates = traverser.queued();
     sortedStates.remove(startState);
+    return this;
   }
 
   public QualifiedName name() {

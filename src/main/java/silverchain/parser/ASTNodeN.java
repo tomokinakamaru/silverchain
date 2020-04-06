@@ -3,6 +3,8 @@ package silverchain.parser;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> implements Iterable<T> {
 
@@ -12,6 +14,10 @@ abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> impl
 
   String separator() {
     return ",";
+  }
+
+  public final Stream<T> stream() {
+    return StreamSupport.stream(spliterator(), false);
   }
 
   @Override
