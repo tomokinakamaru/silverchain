@@ -25,7 +25,7 @@ public final class Command {
 
   private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
 
-  private static final String version = "0.1.0";
+  private static final String VERSION = "0.1.0";
 
   private final Arguments arguments;
 
@@ -76,7 +76,7 @@ public final class Command {
     } else if (result.getFlag("help")) {
       write(parser.help());
     } else if (result.getFlag("version")) {
-      write(version);
+      write(VERSION);
     } else {
       run(result);
     }
