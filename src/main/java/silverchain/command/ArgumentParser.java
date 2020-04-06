@@ -7,7 +7,7 @@ final class ArgumentParser {
   private final Options options;
 
   ArgumentParser() {
-    this.options = new Options();
+    options = new Options();
   }
 
   void add(Option option) {
