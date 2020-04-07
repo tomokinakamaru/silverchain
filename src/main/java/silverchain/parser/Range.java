@@ -28,10 +28,7 @@ public final class Range implements Comparable<Range> {
 
   @Override
   public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (object == null || getClass() != object.getClass()) {
+    if (!(object instanceof Range)) {
       return false;
     }
     Range range = (Range) object;
