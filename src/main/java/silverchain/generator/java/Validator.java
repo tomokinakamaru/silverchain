@@ -69,9 +69,7 @@ final class Validator {
   }
 
   private String getSignature(MethodParameters parameters) {
-    List<String> list = new ArrayList<>();
-    parameters.forEach(p -> list.add(getSignature(p)));
-    return String.join(" ", list);
+    return parameters.stream().map(this::getSignature).collect(Collectors.joining(" "));
   }
 
   private String getSignature(MethodParameter parameter) {
