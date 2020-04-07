@@ -3,6 +3,7 @@ package silverchain.parser;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -33,8 +34,6 @@ abstract class ASTNodeN<T, S extends ASTNodeN<T, S>> extends ASTNode2<T, S> impl
 
   @Override
   public final String toString() {
-    List<String> list = new ArrayList<>();
-    forEach(node -> list.add(node.toString()));
-    return String.join(separator(), list);
+    return stream().map(Object::toString).collect(Collectors.joining(separator()));
   }
 }
