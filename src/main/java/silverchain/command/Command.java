@@ -65,7 +65,7 @@ public final class Command {
       new Command(stdout, stderr, args).run();
     } catch (SilverchainException | TokenMgrError | ParseException e) {
       stderr.println(e.getMessage());
-      return errorCodes.get(e.getClass());
+      return errorCode(e.getClass());
     }
     return 0;
   }
@@ -110,5 +110,14 @@ public final class Command {
     } catch (FileNotFoundException e) {
       throw new InputError(name);
     }
+  }
+
+  private static int errorCode(Class<? extends Throwable> clazz) {
+    for (Class<? extends Throwable> c : errorCodes.keySet()) {
+      if (c.isAssignableFrom(clazz)) {
+        return errorCodes.get(c);
+      }
+    }
+    return 1;
   }
 }
