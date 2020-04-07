@@ -42,12 +42,6 @@ public final class Location implements Comparable<Location> {
 
   @Override
   public int compareTo(Location location) {
-    if (line == location.line) {
-      if (column == location.column) {
-        return 0;
-      }
-      return column < location.column ? -1 : 1;
-    }
-    return line < location.line ? -1 : 1;
+    return line == location.line ? column - location.column : line - location.line;
   }
 }
