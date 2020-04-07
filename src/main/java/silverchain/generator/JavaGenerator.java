@@ -1,6 +1,10 @@
 package silverchain.generator;
 
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -8,7 +12,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
@@ -33,24 +36,20 @@ public final class JavaGenerator extends Generator {
   }
 
   @Override
-  protected void generate(List<Diagram> diagrams) {
+  void generate(List<Diagram> diagrams) {
     diagrams.forEach(this::generate);
   }
 
   private void generate(Diagram diagram) {
     validate(diagram);
     assignNumbers(diagram);
-    diagram
-        .states()
-        .stream()
-        .filter(s -> numbers.containsKey(s))
-        .forEach(this::generateStateInterface);
-    diagram
-        .states()
-        .stream()
-        .filter(s -> numbers.containsKey(s))
-        .forEach(this::generateStateImplementation);
-    generateActionInterface(diagram);
+    generateInterface(diagram);
+    for (State state : diagram.states()) {
+      if (numbers.containsKey(state)) {
+        generateInterface(state);
+        generateImplementation(state);
+      }
+    }
   }
 
   private void assignNumbers(Diagram diagram) {
@@ -63,7 +62,7 @@ public final class JavaGenerator extends Generator {
     }
   }
 
-  private void generateStateInterface(State state) {
+  private void generateInterface(State state) {
     beginFile(filePath(interfaceQualifiedName(state)));
     write(packageDeclaration(interfacePackageName(state)));
 
@@ -83,7 +82,7 @@ public final class JavaGenerator extends Generator {
     endFile();
   }
 
-  private void generateStateImplementation(State state) {
+  private void generateImplementation(State state) {
     beginFile(filePath(implementationQualifiedName(state)));
     write(packageDeclaration(implementationPackageName(state)));
 
@@ -115,7 +114,7 @@ public final class JavaGenerator extends Generator {
     endFile();
   }
 
-  private void generateActionInterface(Diagram diagram) {
+  private void generateInterface(Diagram diagram) {
     beginFile(filePath(interfaceQualifiedName(diagram)));
     write(packageDeclaration(interfacePackageName(diagram)));
 
@@ -258,12 +257,12 @@ public final class JavaGenerator extends Generator {
     return "";
   }
 
-  static String encodeAsDeclaration(List<TypeParameter> parameters) {
-    return parameters.isEmpty() ? "" : "<" + csv(parameters, p -> encode(p, true)) + ">";
+  private static String encodeAsDeclaration(List<TypeParameter> parameters) {
+    return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, true)) + ">";
   }
 
-  static String encodeAsArgument(List<TypeParameter> parameters) {
-    return parameters.isEmpty() ? "" : "<" + csv(parameters, p -> encode(p, false)) + ">";
+  private static String encodeAsArgument(List<TypeParameter> parameters) {
+    return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, false)) + ">";
   }
 
   private static String encode(TypeParameter parameter, boolean includeBound) {
@@ -275,11 +274,11 @@ public final class JavaGenerator extends Generator {
     return " extends " + encode(bound.reference());
   }
 
-  static String encodeAsDeclaration(Method method) {
+  private static String encodeAsDeclaration(Method method) {
     return encode(method, true);
   }
 
-  static String encodeAsInvocation(Method method) {
+  private static String encodeAsInvocation(Method method) {
     return encode(method, false);
   }
 
@@ -291,63 +290,59 @@ public final class JavaGenerator extends Generator {
   }
 
   private static String encode(MethodParameters parameters, boolean includeType) {
-    return csv(parameters, p -> encode(p, includeType));
+    return csv(parameters.stream(), p -> encode(p, includeType));
   }
 
   private static String encode(MethodParameter parameter, boolean includeType) {
     return includeType ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
   }
 
-  static String encode(TypeReference reference) {
+  private static String encode(TypeReference reference) {
     return encode(reference.name()) + reference.arguments().map(JavaGenerator::encode).orElse("");
   }
 
   private static String encode(TypeReferences arguments) {
-    return "<" + csv(arguments, JavaGenerator::encode) + ">";
+    return "<" + csv(arguments.stream(), JavaGenerator::encode) + ">";
   }
 
-  static String encode(QualifiedName name) {
+  private static String encode(QualifiedName name) {
     return String.join(".", name);
   }
 
-  private static <T> String csv(Iterable<T> iterable, Function<T, String> function) {
-    List<String> list = new ArrayList<>();
-    iterable.forEach(item -> list.add(function.apply(item)));
-    return String.join(", ", list);
+  private static <T> String csv(Stream<T> stream, Function<T, String> function) {
+    return stream.map(function).collect(joining(", "));
   }
 
+  // Validation ------------------------------------------------------------------------------------
   private static void validate(Diagram diagram) {
-    for (State state : diagram.states()) {
-      checkTypeReferenceConflict(state);
-      checkTypeReferenceMethodConflict(state);
-      checkMethodConflict(state);
-    }
+    diagram.states().forEach(JavaGenerator::validate);
+  }
+
+  private static void validate(State state) {
+    checkTypeReferenceConflict(state);
+    checkTypeReferenceMethodConflict(state);
+    checkMethodConflict(state);
   }
 
   private static void checkTypeReferenceConflict(State state) {
     if (1 < state.typeReferences().size()) {
-      throw error(state.typeReferences());
+      throwError(state.typeReferences());
     }
   }
 
   private static void checkTypeReferenceMethodConflict(State state) {
     if (0 < state.typeReferences().size() && 0 < state.transitions().size()) {
-      throw error(
-          state.typeReferences().get(0),
-          state.transitions().stream().map(Transition::label).collect(Collectors.toList()));
+      Label label = state.typeReferences().get(0);
+      List<Label> labels = state.transitions().stream().map(Transition::label).collect(toList());
+      throwError(label, labels);
     }
   }
 
   private static void checkMethodConflict(State state) {
-    Map<String, List<Label>> map = getSignatures(state);
-    for (List<Label> list : map.values()) {
-      if (1 < list.size()) {
-        throw error(list);
-      }
-    }
+    getSignatures(state).stream().filter(ls -> 1 < ls.size()).forEach(JavaGenerator::throwError);
   }
 
-  private static Map<String, List<Label>> getSignatures(State state) {
+  private static Collection<List<Label>> getSignatures(State state) {
     Map<String, List<Label>> signatures = new HashMap<>();
     for (Transition transition : state.transitions()) {
       Label label = transition.label();
@@ -355,15 +350,15 @@ public final class JavaGenerator extends Generator {
       signatures.putIfAbsent(signature, new ArrayList<>());
       signatures.get(signature).add(label);
     }
-    return signatures;
+    return signatures.values();
   }
 
   private static String getSignature(Method method) {
-    return method.name() + " " + method.parameters().map(JavaGenerator::getSignature).orElse("");
+    return method.name() + ":" + method.parameters().map(JavaGenerator::getSignature).orElse("");
   }
 
   private static String getSignature(MethodParameters parameters) {
-    return parameters.stream().map(JavaGenerator::getSignature).collect(Collectors.joining(" "));
+    return parameters.stream().map(JavaGenerator::getSignature).collect(joining(" "));
   }
 
   private static String getSignature(MethodParameter parameter) {
@@ -374,28 +369,33 @@ public final class JavaGenerator extends Generator {
     return reference.referent() == null ? String.join(".", reference.name()) : "*";
   }
 
-  private static EncodeError error(List<Label> labels) {
-    return new EncodeError("Conflict: %s", encode(labels));
+  private static void throwError(List<Label> labels) {
+    throw new EncodeError("Conflict: %s", encode(labels));
   }
 
-  private static EncodeError error(Label label, List<Label> labels) {
-    return new EncodeError("Conflict: %s", encode(label, labels));
+  private static void throwError(Label label, List<Label> labels) {
+    throw new EncodeError("Conflict: %s", encode(construct(label, labels)));
   }
 
-  private static String encode(Label label, List<Label> labels) {
-    List<Label> list = new ArrayList<>();
-    list.add(label);
-    list.addAll(labels);
-    return encode(list);
-  }
-
-  private static String encode(List<Label> labels) {
-    return labels.stream().map(JavaGenerator::encode).collect(Collectors.joining(", "));
+  private static String encode(Collection<Label> labels) {
+    return labels.stream().map(JavaGenerator::encode).collect(joining(", "));
   }
 
   private static String encode(Label label) {
-    Stream<Range> ranges = label.ranges().stream();
-    String s = ranges.map(r -> r.begin().toString()).collect(Collectors.joining(", "));
-    return label.node().toString() + "#" + s;
+    return label.node().toString() + "#" + encode(label.ranges());
+  }
+
+  private static String encode(List<Range> ranges) {
+    return ranges.stream().map(JavaGenerator::encode).collect(joining(","));
+  }
+
+  private static String encode(Range range) {
+    return range.begin().toString();
+  }
+
+  private static List<Label> construct(Label label, List<Label> labels) {
+    List<Label> list = new ArrayList<>(labels);
+    list.add(0, label);
+    return list;
   }
 }
