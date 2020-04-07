@@ -28,10 +28,7 @@ public final class Location implements Comparable<Location> {
 
   @Override
   public boolean equals(Object object) {
-    if (this == object) {
-      return true;
-    }
-    if (object == null || getClass() != object.getClass()) {
+    if (!(object instanceof Location)) {
       return false;
     }
     Location location = (Location) object;
