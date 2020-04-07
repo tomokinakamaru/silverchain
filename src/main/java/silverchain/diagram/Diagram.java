@@ -35,26 +35,22 @@ public class Diagram {
     determinize();
     propagateTags();
 
-    State startState = startStates.iterator().next();
-    Transition firstTransition = transitions.from(startState).iterator().next();
-    type = firstTransition.label.type();
-
-    Traverser<State> traverser = new Traverser<>(startState);
+    Traverser<State> traverser = new Traverser<>(startStates);
     while (traverser.hasNext()) {
       State s = traverser.next();
       s.diagram = this;
       s.transitions = transitions.fromSorted(s);
-      s.isStart = firstTransition.destination == s;
+      s.isStart = secondState() == s;
       s.isEnd = endStates.contains(s);
-      for (Transition t : s.transitions) {
-        if (t.label.isMethod() || t.label.isType()) {
-          traverser.enqueue(t.destination);
-        }
-      }
+      s.transitions
+          .stream()
+          .filter(t -> t.label.isMethod() || t.label.isType())
+          .forEach(t -> traverser.enqueue(t.destination));
     }
-
     sortedStates = traverser.queued();
-    sortedStates.remove(startState);
+    sortedStates.removeAll(startStates);
+
+    type = firstTransition().label.type();
     return this;
   }
 
@@ -142,5 +138,17 @@ public class Diagram {
       traverser.enqueue(transitions.destinations(new States(state), null));
     }
     return traverser.queued().stream().collect(States.collector());
+  }
+
+  private State firstState() {
+    return startStates.iterator().next();
+  }
+
+  private State secondState() {
+    return firstTransition().destination;
+  }
+
+  private Transition firstTransition() {
+    return transitions.from(firstState()).iterator().next();
   }
 }
