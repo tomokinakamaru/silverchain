@@ -1,0 +1,10 @@
+melody.CanonMelody:
+(d()      | fSharp() | a()     ){4,4}
+(a()      | cSharp() | e()     ){4,4}
+(b()      | d()      | fSharp()){4,4}
+(fSharp() | a()      | cSharp()){4,4}
+(g()      | b()      | d()     ){4,4}
+(d()      | fSharp() | a()     ){4,4}
+(g()      | b()      | d()     ){4,4}
+(a()      | cSharp() | e()     ){4,4}
+play(int n);

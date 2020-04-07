@@ -30,6 +30,11 @@ final class Tests {
     test("matrix");
   }
 
+  @Test
+  void testMelody() {
+    test("melody");
+  }
+
   private void test(String name) {
     Path path = resources.resolve(name + ".ag");
     List<GeneratedFile> generated = generateJava(Utility.read(path));
