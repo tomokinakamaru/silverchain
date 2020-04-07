@@ -58,12 +58,12 @@ SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
 
 TOKEN: { < NAME: (["a"-"z","A"-"Z","_"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
 
-Grammars grammars(): {
+List<Grammar> start(): {
   Grammar g;
-  Grammars gs = null;
+  List<Grammar> gs = new ArrayList<>();
 } {
-  g = grammar() (gs = grammars())? <EOF> {
-    return new Grammars(range(g, gs), g, gs);
+  (g = grammar() { gs.add(g); })+ <EOF> {
+    return gs;
   }
 }
 

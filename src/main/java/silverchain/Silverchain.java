@@ -11,7 +11,6 @@ import silverchain.generator.GeneratedFile;
 import silverchain.generator.Generator;
 import silverchain.generator.java.JavaGenerator;
 import silverchain.parser.Grammar;
-import silverchain.parser.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -30,21 +29,21 @@ public final class Silverchain {
   }
 
   public void run(InputStream stream) throws ParseException {
-    Grammars grammars = parse(stream);
+    List<Grammar> grammars = parse(stream);
     List<Diagram> diagrams = analyze(grammars);
     generate(diagrams).forEach(f -> f.save(outputDirectory));
   }
 
-  private Grammars parse(InputStream stream) throws ParseException {
-    return new Parser(stream).grammars();
+  private List<Grammar> parse(InputStream stream) throws ParseException {
+    return new Parser(stream).start();
   }
 
-  private List<Diagram> analyze(Grammars grammars) {
-    grammars.validate();
+  private List<Diagram> analyze(List<Grammar> grammars) {
     return grammars.stream().map(this::analyze).collect(Collectors.toList());
   }
 
   private Diagram analyze(Grammar grammar) {
+    grammar.validate();
     return grammar.diagram().compile();
   }
 

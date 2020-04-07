@@ -147,12 +147,6 @@ final class Tests {
   }
 
   @Test
-  void testGrammars() {
-    test(Parser::grammars, "Foo:");
-    test(Parser::grammars, "Foo: Bar:");
-  }
-
-  @Test
   void testRange() {
     ASTNode node1 = parse(Parser::grammar, "Foo:");
     ASTNode node2 = parse(Parser::grammar, "Bar:");
