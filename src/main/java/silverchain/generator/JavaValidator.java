@@ -34,7 +34,7 @@ final class JavaValidator {
 
   private static void checkTypeReferenceConflict(State state) {
     if (1 < state.typeReferences().size()) {
-      throwError(state.typeReferences());
+      throw newError(state.typeReferences());
     }
   }
 
@@ -42,25 +42,25 @@ final class JavaValidator {
     if (0 < state.typeReferences().size() && 0 < state.transitions().size()) {
       Label label = state.typeReferences().get(0);
       List<Label> labels = state.transitions().stream().map(Transition::label).collect(toList());
-      throwError(label, labels);
+      throw newError(label, labels);
     }
   }
 
   private static void checkMethodConflict(State state) {
     for (List<Label> labels : getSignatures(state)) {
       if (1 < labels.size()) {
-        throwError(labels);
+        throw newError(labels);
       }
     }
   }
 
-  private static void throwError(Label label, List<Label> labels) {
+  private static EncodeError newError(Label label, List<Label> labels) {
     labels.add(0, label);
-    throwError(labels);
+    return newError(labels);
   }
 
-  private static void throwError(List<Label> labels) {
-    throw new EncodeError("Conflict: %s", encode(labels));
+  private static EncodeError newError(List<Label> labels) {
+    return new EncodeError("Conflict: %s", encode(labels));
   }
 
   private static String encode(Collection<Label> labels) {

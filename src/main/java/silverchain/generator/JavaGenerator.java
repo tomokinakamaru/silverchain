@@ -1,26 +1,21 @@
 package silverchain.generator;
 
+import static silverchain.generator.JavaEncoder.encode;
+import static silverchain.generator.JavaEncoder.encodeAsArgument;
+import static silverchain.generator.JavaEncoder.encodeAsDeclaration;
+import static silverchain.generator.JavaEncoder.encodeAsInvocation;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
 import silverchain.parser.Method;
-import silverchain.parser.MethodParameter;
-import silverchain.parser.MethodParameters;
-import silverchain.parser.QualifiedName;
-import silverchain.parser.TypeParameter;
-import silverchain.parser.TypeParameterBound;
-import silverchain.parser.TypeReference;
-import silverchain.parser.TypeReferences;
 
 public final class JavaGenerator extends Generator {
 
@@ -159,7 +154,7 @@ public final class JavaGenerator extends Generator {
 
   private String interfacePackageName(State state) {
     int number = numbers.get(state);
-    String qualifier = state.diagram().name().qualifier().map(JavaGenerator::encode).orElse("");
+    String qualifier = state.diagram().name().qualifier().map(JavaEncoder::encode).orElse("");
     return number == 0 ? qualifier : qualifiedName(qualifier, "state" + number);
   }
 
@@ -201,7 +196,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private String implementationPackageName(State state) {
-    return state.diagram().name().qualifier().map(JavaGenerator::encode).orElse("");
+    return state.diagram().name().qualifier().map(JavaEncoder::encode).orElse("");
   }
 
   private String implementationName(State state) {
@@ -213,7 +208,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private String interfacePackageName(Diagram diagram) {
-    return diagram.name().qualifier().map(JavaGenerator::encode).orElse("");
+    return diagram.name().qualifier().map(JavaEncoder::encode).orElse("");
   }
 
   private String interfaceQualifiedName(Diagram diagram) {
@@ -250,61 +245,5 @@ public final class JavaGenerator extends Generator {
       return "    return new " + name + "(this.action);\n";
     }
     return "";
-  }
-
-  private static String encodeAsDeclaration(List<TypeParameter> parameters) {
-    return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, true)) + ">";
-  }
-
-  private static String encodeAsArgument(List<TypeParameter> parameters) {
-    return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, false)) + ">";
-  }
-
-  private static String encode(TypeParameter parameter, boolean includeBound) {
-    return parameter.name()
-        + (includeBound ? parameter.bound().map(JavaGenerator::encode).orElse("") : "");
-  }
-
-  private static String encode(TypeParameterBound bound) {
-    return " extends " + encode(bound.reference());
-  }
-
-  private static String encodeAsDeclaration(Method method) {
-    return encode(method, true);
-  }
-
-  private static String encodeAsInvocation(Method method) {
-    return encode(method, false);
-  }
-
-  private static String encode(Method method, boolean includeType) {
-    return method.name()
-        + "("
-        + method.parameters().map(p -> encode(p, includeType)).orElse("")
-        + ")";
-  }
-
-  private static String encode(MethodParameters parameters, boolean includeType) {
-    return csv(parameters.stream(), p -> encode(p, includeType));
-  }
-
-  private static String encode(MethodParameter parameter, boolean includeType) {
-    return includeType ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
-  }
-
-  private static String encode(TypeReference reference) {
-    return encode(reference.name()) + reference.arguments().map(JavaGenerator::encode).orElse("");
-  }
-
-  private static String encode(TypeReferences arguments) {
-    return "<" + csv(arguments.stream(), JavaGenerator::encode) + ">";
-  }
-
-  private static String encode(QualifiedName name) {
-    return String.join(".", name);
-  }
-
-  private static <T> String csv(Stream<T> stream, Function<T, String> function) {
-    return stream.map(function).collect(Collectors.joining(", "));
   }
 }
