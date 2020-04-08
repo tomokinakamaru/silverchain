@@ -16,9 +16,11 @@ import static silverchain.generator.JavaDiagramEncoder.stateMethodBodyReturnStat
 import static silverchain.generator.JavaDiagramEncoder.stateMethodDeclaration;
 import static silverchain.generator.JavaValidator.validate;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
@@ -104,37 +106,37 @@ public final class JavaGenerator extends Generator {
     write(interfaceName(diagram));
     write(encodeAsDeclaration(diagram.typeParameters()));
     write(" {\n");
-    interfaceDefaultMethods(diagram);
-    interfaceMethods(diagram);
+
+    for (Transition transition : transitions(diagram)) {
+      write("\n  default ");
+      write(actionMethodDeclaration(transition, true));
+      write(" {\n    ");
+      write(actionMethodDefaultBody(transition));
+      write("\n  }");
+      write("\n");
+    }
+
+    Set<Method> encodedMethods = new HashSet<>();
+    for (Transition transition : transitions(diagram)) {
+      if (!encodedMethods.contains(transition.label().method())) {
+        write("\n  ");
+        write(actionMethodDeclaration(transition, false));
+        write(";\n");
+        encodedMethods.add(transition.label().method());
+      }
+    }
+
     write("}\n");
     endFile();
   }
 
-  private void interfaceDefaultMethods(Diagram diagram) {
-    for (State state : diagram.numberedStates()) {
-      for (Transition transition : state.transitions()) {
-        write("\n  default ");
-        write(actionMethodDeclaration(transition, true));
-        write(" {\n    ");
-        write(actionMethodDefaultBody(transition));
-        write("\n  }");
-        write("\n");
-      }
-    }
-  }
-
-  private void interfaceMethods(Diagram diagram) {
-    Set<Method> encodedMethods = new HashSet<>();
-    for (State state : diagram.numberedStates()) {
-      for (Transition transition : state.transitions()) {
-        if (!encodedMethods.contains(transition.label().method())) {
-          write("\n  ");
-          write(actionMethodDeclaration(transition, false));
-          write(";\n");
-          encodedMethods.add(transition.label().method());
-        }
-      }
-    }
+  private List<Transition> transitions(Diagram diagram) {
+    return diagram
+        .numberedStates()
+        .stream()
+        .map(State::transitions)
+        .flatMap(Collection::stream)
+        .collect(Collectors.toList());
   }
 
   private String filePath(String name) {
