@@ -13,6 +13,8 @@ import silverchain.diagram.Transition;
 
 final class JavaDiagramEncoder {
 
+  private JavaDiagramEncoder() {}
+
   static String interfaceModifier(State state) {
     return state.number() == 0 ? "" : "public ";
   }
