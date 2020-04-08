@@ -1,5 +1,11 @@
 version: "2"
 
+plugins:
+  pmd:
+    enabled: true
+  sonar-java:
+    enabled: true
+
 exclude_patterns:
   - "sample/"
   - "src/test/"
