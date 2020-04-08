@@ -8,4 +8,4 @@ plugins:
 
 exclude_patterns:
   - "sample/"
-  - "src/test/"
+  - "src/test/resources/java"
