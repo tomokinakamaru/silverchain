@@ -13,9 +13,9 @@ import silverchain.parser.TypeParameterBound;
 import silverchain.parser.TypeReference;
 import silverchain.parser.TypeReferences;
 
-final class JavaEncoder {
+final class JavaASTEncoder {
 
-  private JavaEncoder() {}
+  private JavaASTEncoder() {}
 
   static String encodeAsDeclaration(List<TypeParameter> parameters) {
     return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, true)) + ">";
@@ -26,7 +26,7 @@ final class JavaEncoder {
   }
 
   private static String encode(TypeParameter parameter, boolean includeBound) {
-    String s = includeBound ? parameter.bound().map(JavaEncoder::encode).orElse("") : "";
+    String s = includeBound ? parameter.bound().map(JavaASTEncoder::encode).orElse("") : "";
     return parameter.name() + s;
   }
 
@@ -56,11 +56,11 @@ final class JavaEncoder {
   }
 
   static String encode(TypeReference reference) {
-    return encode(reference.name()) + reference.arguments().map(JavaEncoder::encode).orElse("");
+    return encode(reference.name()) + reference.arguments().map(JavaASTEncoder::encode).orElse("");
   }
 
   private static String encode(TypeReferences arguments) {
-    return "<" + csv(arguments.stream(), JavaEncoder::encode) + ">";
+    return "<" + csv(arguments.stream(), JavaASTEncoder::encode) + ">";
   }
 
   static String encode(QualifiedName name) {

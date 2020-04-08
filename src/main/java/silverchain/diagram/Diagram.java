@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import silverchain.parser.QualifiedName;
 import silverchain.parser.Type;
 import silverchain.parser.TypeParameter;
@@ -52,6 +53,16 @@ public class Diagram {
 
     type = firstTransition().label.type();
     return this;
+  }
+
+  public void assignStateNumbers(Predicate<State> predicate) {
+    int n = 0;
+    for (State state : states()) {
+      if (predicate.test(state)) {
+        state.number = n;
+        n++;
+      }
+    }
   }
 
   public QualifiedName name() {

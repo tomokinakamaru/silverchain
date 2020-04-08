@@ -1,25 +1,30 @@
 package silverchain.generator;
 
-import static silverchain.generator.JavaEncoder.encode;
-import static silverchain.generator.JavaEncoder.encodeAsArgument;
-import static silverchain.generator.JavaEncoder.encodeAsDeclaration;
-import static silverchain.generator.JavaEncoder.encodeAsInvocation;
+import static silverchain.generator.JavaASTEncoder.encodeAsDeclaration;
+import static silverchain.generator.JavaDiagramEncoder.actionMethodDeclaration;
+import static silverchain.generator.JavaDiagramEncoder.actionMethodDefaultBody;
+import static silverchain.generator.JavaDiagramEncoder.implementationName;
+import static silverchain.generator.JavaDiagramEncoder.implementationPackageName;
+import static silverchain.generator.JavaDiagramEncoder.implementationQualifiedName;
+import static silverchain.generator.JavaDiagramEncoder.interfaceModifier;
+import static silverchain.generator.JavaDiagramEncoder.interfaceName;
+import static silverchain.generator.JavaDiagramEncoder.interfacePackageName;
+import static silverchain.generator.JavaDiagramEncoder.interfaceQualifiedName;
+import static silverchain.generator.JavaDiagramEncoder.interfaceReference;
+import static silverchain.generator.JavaDiagramEncoder.stateMethodBodyListenerInvocation;
+import static silverchain.generator.JavaDiagramEncoder.stateMethodBodyReturnState;
+import static silverchain.generator.JavaDiagramEncoder.stateMethodDeclaration;
+import static silverchain.generator.JavaValidator.validate;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import silverchain.diagram.Diagram;
-import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
 import silverchain.parser.Method;
 
 public final class JavaGenerator extends Generator {
-
-  private Map<State, Integer> numbers = new HashMap<>();
 
   public JavaGenerator(List<Diagram> diagrams) {
     super(diagrams);
@@ -31,23 +36,13 @@ public final class JavaGenerator extends Generator {
   }
 
   private void generate(Diagram diagram) {
-    JavaValidator.validate(diagram);
-    assignNumbers(diagram);
+    diagram.assignStateNumbers(s -> !s.isEnd());
+    validate(diagram);
     generateInterface(diagram);
     for (State state : diagram.states()) {
-      if (numbers.containsKey(state)) {
+      if (state.isNumbered()) {
         generateInterface(state);
         generateImplementation(state);
-      }
-    }
-  }
-
-  private void assignNumbers(Diagram diagram) {
-    int n = 0;
-    for (State state : diagram.states()) {
-      if (!state.isEnd()) {
-        numbers.put(state, n);
-        n++;
       }
     }
   }
@@ -80,7 +75,7 @@ public final class JavaGenerator extends Generator {
     write(implementationName(state));
     write(encodeAsDeclaration(state.typeParameters()));
     write(" implements ");
-    write(reference(state));
+    write(interfaceReference(state));
     write(" {\n\n  ");
 
     write(interfaceQualifiedName(state.diagram()));
@@ -107,14 +102,19 @@ public final class JavaGenerator extends Generator {
   private void generateInterface(Diagram diagram) {
     beginFile(filePath(interfaceQualifiedName(diagram)));
     write(packageDeclaration(interfacePackageName(diagram)));
-
     write("interface ");
     write(interfaceName(diagram));
     write(encodeAsDeclaration(diagram.typeParameters()));
     write(" {\n");
+    interfaceDefaultMethods(diagram);
+    interfaceMethods(diagram);
+    write("}\n");
+    endFile();
+  }
 
+  private void interfaceDefaultMethods(Diagram diagram) {
     for (State state : diagram.states()) {
-      if (numbers.containsKey(state)) {
+      if (state.isNumbered()) {
         for (Transition transition : state.transitions()) {
           write("\n  default ");
           write(actionMethodDeclaration(transition, true));
@@ -125,10 +125,12 @@ public final class JavaGenerator extends Generator {
         }
       }
     }
+  }
 
+  private void interfaceMethods(Diagram diagram) {
     Set<Method> encodedMethods = new HashSet<>();
     for (State state : diagram.states()) {
-      if (numbers.containsKey(state)) {
+      if (state.isNumbered()) {
         for (Transition transition : state.transitions()) {
           if (!encodedMethods.contains(transition.label().method())) {
             write("\n  ");
@@ -139,111 +141,13 @@ public final class JavaGenerator extends Generator {
         }
       }
     }
-
-    write("}\n");
-    endFile();
   }
 
   private String filePath(String name) {
     return name.replaceAll("\\.", "/") + ".java";
   }
 
-  private String interfaceQualifiedName(State state) {
-    return qualifiedName(interfacePackageName(state), interfaceName(state));
-  }
-
-  private String interfacePackageName(State state) {
-    int number = numbers.get(state);
-    String qualifier = state.diagram().name().qualifier().map(JavaEncoder::encode).orElse("");
-    return number == 0 ? qualifier : qualifiedName(qualifier, "state" + number);
-  }
-
-  private String interfaceName(State state) {
-    return (numbers.get(state) == 0 ? "I" : "") + state.diagram().name().name();
-  }
-
-  private String qualifiedName(String qualifier, String name) {
-    return qualifier.isEmpty() ? name : qualifier + "." + name;
-  }
-
   private String packageDeclaration(String name) {
     return name.isEmpty() ? "" : "package " + name + ";\n\n";
-  }
-
-  private String interfaceModifier(State state) {
-    return numbers.get(state) == 0 ? "" : "public ";
-  }
-
-  private String stateMethodDeclaration(Transition transition) {
-    String decl = reference(transition.destination());
-    decl += " " + encodeAsDeclaration(transition.label().method());
-    if (transition.typeParameters().isEmpty()) {
-      return decl;
-    }
-    return encodeAsDeclaration(transition.typeParameters()) + " " + decl;
-  }
-
-  private String reference(State state) {
-    if (numbers.containsKey(state)) {
-      return interfaceQualifiedName(state) + encodeAsArgument(state.typeParameters());
-    }
-    Optional<Label> label = state.typeReferences().stream().findFirst();
-    return label.map(l -> encode(l.typeReference())).orElse("void");
-  }
-
-  private String implementationQualifiedName(State state) {
-    return qualifiedName(implementationPackageName(state), implementationName(state));
-  }
-
-  private String implementationPackageName(State state) {
-    return state.diagram().name().qualifier().map(JavaEncoder::encode).orElse("");
-  }
-
-  private String implementationName(State state) {
-    return state.diagram().name().name() + numbers.get(state);
-  }
-
-  private String interfaceName(Diagram diagram) {
-    return "I" + diagram.name().name() + "Action";
-  }
-
-  private String interfacePackageName(Diagram diagram) {
-    return diagram.name().qualifier().map(JavaEncoder::encode).orElse("");
-  }
-
-  private String interfaceQualifiedName(Diagram diagram) {
-    return qualifiedName(interfacePackageName(diagram), interfaceName(diagram));
-  }
-
-  private String actionMethodDeclaration(Transition transition, boolean withPrefix) {
-    State dst = transition.destination();
-    String type = numbers.containsKey(dst) ? "void" : reference(dst);
-    String prefix = withPrefix ? ("state" + numbers.get(transition.source()) + "$") : "";
-    return type + " " + prefix + encodeAsDeclaration(transition.label().method());
-  }
-
-  private String actionMethodInvocation(Transition transition, boolean withPrefix) {
-    String prefix = withPrefix ? ("state" + numbers.get(transition.source()) + "$") : "";
-    return prefix + encodeAsInvocation(transition.label().method()) + ";";
-  }
-
-  private String actionMethodDefaultBody(Transition transition) {
-    Optional<Label> label = transition.destination().typeReferences().stream().findFirst();
-    String prefix = label.map(r -> "return ").orElse("");
-    return prefix + actionMethodInvocation(transition, false);
-  }
-
-  private String stateMethodBodyListenerInvocation(Transition transition) {
-    Optional<Label> label = transition.destination().typeReferences().stream().findFirst();
-    String type = label.map(r -> "return ").orElse("");
-    return "    " + type + "this.action." + actionMethodInvocation(transition, true) + "\n";
-  }
-
-  private String stateMethodBodyReturnState(Transition transition) {
-    if (numbers.containsKey(transition.destination())) {
-      String name = implementationQualifiedName(transition.destination());
-      return "    return new " + name + "(this.action);\n";
-    }
-    return "";
   }
 }

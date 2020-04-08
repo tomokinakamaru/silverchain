@@ -10,6 +10,8 @@ import silverchain.parser.TypeParameter;
 
 public final class State {
 
+  private static final int UNASSIGNED = -1;
+
   Set<TypeParameter> typeParameters;
 
   Diagram diagram;
@@ -19,6 +21,8 @@ public final class State {
   boolean isEnd;
 
   List<Transition> transitions;
+
+  int number = UNASSIGNED;
 
   State() {}
 
@@ -52,5 +56,13 @@ public final class State {
 
   public List<Transition> transitions() {
     return transitions.stream().filter(t -> t.label.isMethod()).collect(toArrayList());
+  }
+
+  public boolean isNumbered() {
+    return number != UNASSIGNED;
+  }
+
+  public int number() {
+    return number;
   }
 }
