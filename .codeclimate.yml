@@ -9,3 +9,4 @@ plugins:
 exclude_patterns:
   - "sample/"
   - "src/test/resources/java"
+  - "src/main/java/silverchain/command/EntryPoint.java"
