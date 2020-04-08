@@ -98,14 +98,6 @@ final class JavaDiagramEncoder {
     return state.typeReferences().stream().findFirst();
   }
 
-  private static String filePath(String name) {
-    return name.replaceAll("\\.", "/") + ".java";
-  }
-
-  private static String packageDeclaration(String name) {
-    return name.isEmpty() ? "" : "package " + name + ";\n\n";
-  }
-
   private static String qualifiedName(String qualifier, String name) {
     return qualifier.isEmpty() ? name : qualifier + "." + name;
   }
