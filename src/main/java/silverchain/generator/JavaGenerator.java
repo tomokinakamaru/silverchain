@@ -39,11 +39,9 @@ public final class JavaGenerator extends Generator {
     diagram.assignStateNumbers(s -> !s.isEnd());
     validate(diagram);
     generateInterface(diagram);
-    for (State state : diagram.states()) {
-      if (state.isNumbered()) {
-        generateInterface(state);
-        generateImplementation(state);
-      }
+    for (State state : diagram.numberedStates()) {
+      generateInterface(state);
+      generateImplementation(state);
     }
   }
 
@@ -113,31 +111,27 @@ public final class JavaGenerator extends Generator {
   }
 
   private void interfaceDefaultMethods(Diagram diagram) {
-    for (State state : diagram.states()) {
-      if (state.isNumbered()) {
-        for (Transition transition : state.transitions()) {
-          write("\n  default ");
-          write(actionMethodDeclaration(transition, true));
-          write(" {\n    ");
-          write(actionMethodDefaultBody(transition));
-          write("\n  }");
-          write("\n");
-        }
+    for (State state : diagram.numberedStates()) {
+      for (Transition transition : state.transitions()) {
+        write("\n  default ");
+        write(actionMethodDeclaration(transition, true));
+        write(" {\n    ");
+        write(actionMethodDefaultBody(transition));
+        write("\n  }");
+        write("\n");
       }
     }
   }
 
   private void interfaceMethods(Diagram diagram) {
     Set<Method> encodedMethods = new HashSet<>();
-    for (State state : diagram.states()) {
-      if (state.isNumbered()) {
-        for (Transition transition : state.transitions()) {
-          if (!encodedMethods.contains(transition.label().method())) {
-            write("\n  ");
-            write(actionMethodDeclaration(transition, false));
-            write(";\n");
-            encodedMethods.add(transition.label().method());
-          }
+    for (State state : diagram.numberedStates()) {
+      for (Transition transition : state.transitions()) {
+        if (!encodedMethods.contains(transition.label().method())) {
+          write("\n  ");
+          write(actionMethodDeclaration(transition, false));
+          write(";\n");
+          encodedMethods.add(transition.label().method());
         }
       }
     }

@@ -5,6 +5,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import silverchain.parser.QualifiedName;
 import silverchain.parser.Type;
 import silverchain.parser.TypeParameter;
@@ -75,6 +76,13 @@ public class Diagram {
 
   public List<State> states() {
     return new ArrayList<>(sortedStates);
+  }
+
+  public List<State> numberedStates() {
+    return sortedStates
+        .stream()
+        .filter(State::isNumbered)
+        .collect(Collectors.toCollection(ArrayList::new));
   }
 
   private void reverse() {
