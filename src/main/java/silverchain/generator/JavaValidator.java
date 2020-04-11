@@ -106,6 +106,6 @@ final class JavaValidator {
   }
 
   private static String getSignature(TypeReference reference) {
-    return reference.referent() == null ? String.join(".", reference.name()) : "*";
+    return reference.referent() == null ? String.join(".", reference.name()) : "Object";
   }
 }
