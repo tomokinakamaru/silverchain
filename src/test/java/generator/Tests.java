@@ -50,7 +50,7 @@ final class Tests {
   }
 
   private List<GeneratedFile> expectedJavaFiles(String name) {
-    Path base = resources.resolve("java");
+    Path base = resources.resolve("java").resolve("src").resolve("main").resolve("gen");
     try {
       return Files.walk(base.resolve(name))
           .filter(p -> p.toString().endsWith(".java"))

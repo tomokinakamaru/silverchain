@@ -81,13 +81,12 @@ jacocoTestReport {
     }
 }
 
-task testSampleJava(type: Exec) {
+task testGeneratedJava(type: Exec) {
     dependsOn 'test'
-    group 'sample'
-    workingDir 'sample/java'
+    workingDir 'src/test/resources/java'
     commandLine './gradlew', 'check', '--no-daemon'
 }
 
 check {
-    dependsOn testSampleJava
+    dependsOn testGeneratedJava
 }
