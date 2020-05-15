@@ -1,4 +1,4 @@
-# Silverchain
+# Silverchain: Fluent API generator
 
 [![CircleCI](https://circleci.com/gh/tomokinakamaru/silverchain.svg?style=shield)](https://circleci.com/gh/tomokinakamaru/silverchain)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/4d1d4a6e304a8c3bc707/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
