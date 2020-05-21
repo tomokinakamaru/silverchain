@@ -5,7 +5,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '5.2.0'
     id 'com.github.sherter.google-java-format' version '0.8'
     id 'com.intershop.gradle.javacc' version '4.0.0'
-    id 'com.palantir.graal' version '0.6.0-114-gfe95739'
+    id 'com.palantir.graal' version '0.7.0'
 }
 
 group 'silverchain'
