@@ -61,7 +61,7 @@ The problem is that, this *safe* implementation increases the development cost o
 Silverchain is a tool that solves the problem! It generates class/method definitions from the code that defines correct chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
-sql.Builder:
+SQL:
 select() from() where()? execute() Results;
 ```
 
