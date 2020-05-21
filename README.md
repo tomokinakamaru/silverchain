@@ -8,7 +8,7 @@
 ## Run with Docker
 
 ```sh
-docker run --rm -it tomokinakamaru/silverchain:latest
+docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 ```
 
 ## Build jar
