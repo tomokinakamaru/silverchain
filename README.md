@@ -32,13 +32,13 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-However, this simple implementation allows its users to write invalid SQL statements as follows:
+However, this simple implementation allows its users to write invalid SQL statements, for example:
 
 ```java
 new SQL().select("name").where("id = 1").execute(); // Missing `from(...)`
 ```
 
-Such invalid statements can be prevented by setting the return type of each method based on what the users can chain next. In the example case, an invalid statement comes to cause a compile-time error by defining the classes/methods as follows:
+Such invalid statements can be prevented *by setting the return type of each method based on what the users can chain next*. In the example case, an invalid statement comes to cause a compile-time error by defining the classes/methods as follows:
 
 ```java
 class SQL {
