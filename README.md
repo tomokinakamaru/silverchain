@@ -11,7 +11,7 @@ Suppose you are creating a library for writing SQL statements in the method-chai
 
 ```java
 // SELECT name FROM users WHERE id = 1
-new SQL().select("name").from("users").where("id = 1").execute();
+Result r = new SQL().select("name").from("users").where("id = 1").execute();
 ```
 
 The simplest implementation of that library is as follows:
@@ -25,11 +25,11 @@ class SQL {
   Result execute() { ... }
 }
 
-new SQL()
+Result r = new SQL()
   .select("name")   // Returns `SQL`
   .from("users")    // Returns `SQL`
   .where("id = 1")  // Returns `SQL`
-  .execute();
+  .execute();       // Returns `Result`
 ```
 
 However, this simple implementation allows its users to write invalid SQL statements as follows:
@@ -60,6 +60,13 @@ class SQL3 {
 new SQL()
   .select("name")  // Returns `SQL1`
   .where("id = 1") // `SQL1` does not have `where(...)` → Type error!
+
+// Valid statement causes no error
+Result r = new SQL()
+  .select("name")   // Returns `SQL1`
+  .from("users")    // Returns `SQL2`
+  .where("id = 1")  // Returns `SQL3`
+  .execute();       // Returns `Result`
 ```
 
 **The problem is that, this *safe* implementation increases the development cost of a library.** You need to define many classes and carefully put methods in each class.
