@@ -69,7 +69,7 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-**The problem is that, this *safe* implementation increases the development cost of a library.** You need to define many classes and carefully put methods in each class.
+**The problem is that, this *safe* implementation increases the development cost of a library.** You need to define many classes and carefully put methods in each class. Since the example library is small, the development cost is not that large. However, imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up the safe implementation.
 
 **Silverchain is a tool that solves the problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
