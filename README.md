@@ -7,14 +7,14 @@
 
 ## What is Silverchain for?
 
-Suppose you are creating a library for writing SQL statements in the method-chaining style as follows:
+Suppose you are creating a library for writing SQL statements in the method-chaining style:
 
 ```java
 // SELECT name FROM users WHERE id = 1
 new SQL().select("name").from("users").where("id = 1").execute();
 ```
 
-The simplest implementation is to define a class and put all the methods in that class:
+The simplest implementation of that library is as follows:
 
 ```java
 class SQL {
@@ -24,15 +24,21 @@ class SQL {
   SQL where(String expression) { ... ; return this; }
   Result execute() { ... }
 }
+
+new SQL()
+  .select("name")   // Returns `SQL`
+  .from("users")    // Returns `SQL`
+  .where("id = 1")  // Returns `SQL`
+  .execute();
 ```
 
-However, this simple implementation allows its users to write incorrect SQL statements as follows:
+However, this simple implementation allows its users to write invalid SQL statements as follows:
 
 ```java
 new SQL().select("name").where("id = 1").execute(); // Missing `from(...)`
 ```
 
-Such incorrect statements can be prevented by setting the return type of each method based on what the users can chain next. In the example case, an incorrect statement comes to cause a compile-time error by defining the classes/methods as follows:
+Such invalid statements can be prevented by setting the return type of each method based on what the users can chain next. In the example case, an invalid statement comes to cause a compile-time error by defining the classes/methods as follows:
 
 ```java
 class SQL {
@@ -50,19 +56,18 @@ class SQL3 {
   Result execute() { ... }
 }
 
-// Incorrect statement causes compile-time error
+// Invalid statement causes compile-time error
 new SQL()
   .select("name")  // Returns `SQL1`
   .where("id = 1") // `SQL1` does not have `where(...)` → Type error!
 ```
 
-The problem is that, this *safe* implementation increases the development cost of a library. You need to define many classes and carefully put methods in each class.
+**The problem is that, this *safe* implementation increases the development cost of a library.** You need to define many classes and carefully put methods in each class.
 
-Silverchain is a tool that solves the problem! It generates class/method definitions from the code that defines correct chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
+**Silverchain is a tool that solves the problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
-SQL:
-select() from() where()? execute() Results;
+SQL: select() from() where()? execute() Results;
 ```
 
 ## Run with Docker
