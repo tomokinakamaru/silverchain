@@ -69,7 +69,7 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-Now, the library users must be happy because they will never accidentally write invalid SQL statements. But, how about the library developers? Isn't it tedious to define many classes and carefully put methods in each class? Imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up the user-friendly implementation described above.
+Now, the library users must be happy because they will never accidentally write invalid SQL statements. But, how about the library developers? Isn't it tedious to define many classes and carefully put methods in each class? Imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up *the user-friendly implementation*.
 
 **Silverchain is a tool that solves this problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
@@ -83,11 +83,11 @@ A Silverchain-generated library (i.e. library implemented in the user-friendly w
 
 ![./doc/completion.gif](./doc/completion.gif)
 
-When a library is implemented in the user-friendly way, the completion system shows only methods that library users can chain next as shown on the left of the GIF animation above. On the other hand, the completion system shows all the methods including the ones that cannot be chained when a library is implemented in the simplest way.
+When a library is implemented in the user-friendly way, the completion system shows only methods that library users can chain next (see the left of the GIF animation). On the other hand, the completion system shows all the methods including the ones that cannot be chained when a library is implemented in the simplest way (see the right of the animation).
 
 ## Tutorial
 
-Comming soom...
+Comming soon...
 
 ## Run with Docker
 
