@@ -7,14 +7,14 @@
 
 ## What is Silverchain for?
 
-Suppose you are creating a library for writing SQL statements in the method-chaining style:
+Consider creating a library for writing SQL statements in the following style:
 
 ```java
 // SELECT name FROM users WHERE id = 1
 Result r = new SQL().select("name").from("users").where("id = 1").execute();
 ```
 
-The simplest implementation of that library is as follows:
+The simplest way to create such a library is to define a class and put all the methods in that class:
 
 ```java
 class SQL {
@@ -32,13 +32,13 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-However, this simple implementation allows its users to write invalid SQL statements, for example:
+This simple implementation certainly lets the users write SQL statements as expected. However, it also allows its users to write invalid SQL statements, for example:
 
 ```java
 new SQL().select("name").where("id = 1").execute(); // Missing `from(...)`
 ```
 
-Such invalid statements can be prevented *by setting the return type of each method based on what the users can chain next*. In the example case, an invalid statement comes to cause a compile-time error by defining the classes/methods as follows:
+Can we prevent the users from writing such an invalid statement? Yes, we can! If the return type of each method is chosen appropriately based on what the users can invoke next, an invalid chaining of method invocations causes a compile error. In our case, an invalid SQL statement comes to cause an error by defining classes/methods as follows:
 
 ```java
 class SQL {
@@ -56,7 +56,7 @@ class SQL3 {
   Result execute() { ... }
 }
 
-// Invalid statement causes compile-time error
+// Invalid statement causes compile error
 new SQL()
   .select("name")  // Returns `SQL1`
   .where("id = 1") // `SQL1` does not have `where(...)` → Type error!
@@ -69,21 +69,25 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-**The problem is that, this *safe* implementation increases the development cost of a library.** You need to define many classes and carefully put methods in each class. Since the example library is small, the development cost is not that large. However, imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up the safe implementation.
+Now, the library users must be happy because they will never accidentally write invalid SQL statements. But, how about the library developers? Isn't it tedious to define many classes and carefully put methods in each class? Imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up the user-friendly implementation described above.
 
-**Silverchain is a tool that solves the problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
+**Silverchain is a tool that solves this problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
 SQL: select(String columns) from(String table) where(String expression)? execute() Result;
 ```
 
-## Not only safety!
+## Not only preventing invalid chains!
 
-A Silverchain-generated library (i.e. a library using the safe implementation) cooperates well with the method completion system in an IDE:
+A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the users write code faster.
 
 ![./doc/completion.gif](./doc/completion.gif)
 
-Since the return type of each method provides the methods the library users can invoke next, the completion system will show only the valid methods (the left of the gif animation), and lead the users to the correct usage! If a library uses the simple implementation, the completion system will show all the methods including the ones that cannnot be invoked (the right of the gif animation).
+When a library is implemented in the user-friendly way, the completion system shows only methods that library users can chain next as shown on the left of the GIF animation above. On the other hand, the completion system shows all the methods including the ones that cannot be chained when a library is implemented in the simplest way.
+
+## Tutorial
+
+Comming soom...
 
 ## Run with Docker
 
