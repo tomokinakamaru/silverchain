@@ -77,7 +77,7 @@ Result r = new SQL()
 SQL: select(String columns) from(String table) where(String expression)? execute() Results;
 ```
 
-![doc/method-completion.gif](doc/method-completion.gif)
+![./doc/completion.gif](./doc/completion.gif)
 
 ## Run with Docker
 
