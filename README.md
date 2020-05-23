@@ -83,7 +83,7 @@ A Silverchain-generated library (i.e. a library using the safe implementation) c
 
 ![./doc/completion.gif](./doc/completion.gif)
 
-Since the return type of each method provides the methods the library users can invoke next, the completion system will show only the valid methods, and leads the users to the correct usages!
+Since the return type of each method provides the methods the library users can invoke next, the completion system will show only the valid methods (the left of the gif animation), and lead the users to the correct usage! If a library uses the simple implementation, the completion system will show all the methods including the ones that cannnot be invoked (the right of the gif animation).
 
 ## Run with Docker
 
