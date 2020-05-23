@@ -74,7 +74,7 @@ Result r = new SQL()
 **Silverchain is a tool that solves the problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
-SQL: select(String columns) from(String table) where(String expression)? execute() Results;
+SQL: select(String columns) from(String table) where(String expression)? execute() Result;
 ```
 
 ## Not only safety!
