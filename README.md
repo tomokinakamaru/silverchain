@@ -77,7 +77,13 @@ Result r = new SQL()
 SQL: select(String columns) from(String table) where(String expression)? execute() Results;
 ```
 
+## Not only safety!
+
+A Silverchain-generated library (i.e. a library using the safe implementation) cooperates well with the method completion system in an IDE:
+
 ![./doc/completion.gif](./doc/completion.gif)
+
+Since the return type of each method provides the methods the library users can invoke next, the completion system will show only the valid methods, and leads the users to the correct usages!
 
 ## Run with Docker
 
