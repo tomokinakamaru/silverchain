@@ -79,7 +79,7 @@ SQL: select(String columns) from(String table) where(String expression)? execute
 
 ## Not only preventing invalid chains!
 
-A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the users write code faster.
+A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the library users write code faster.
 
 ![./doc/completion.gif](./doc/completion.gif)
 
