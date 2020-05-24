@@ -38,7 +38,7 @@ This simple implementation certainly lets the users write SQL statements as expe
 new SQL().select("name").where("id = 1").execute(); // Missing `from(...)`
 ```
 
-Can we prevent the users from writing such an invalid statement? Yes, we can! If the return type of each method is chosen appropriately based on what the users can invoke next, an invalid chaining of method invocations causes a compile error. In our case, an invalid SQL statement comes to cause an error by defining classes/methods as follows:
+Can we prevent the users from writing such an invalid statement? Yes! If the return type of each method is chosen appropriately based on what the users can invoke next, an invalid chaining of method invocations causes a compile error. In our case, an invalid SQL statement comes to cause an error by defining classes/methods as follows:
 
 ```java
 class SQL {
@@ -69,9 +69,9 @@ Result r = new SQL()
   .execute();       // Returns `Result`
 ```
 
-Now, the library users must be happy because they will never accidentally write invalid SQL statements. But, how about the library developers? Isn't it tedious to define many classes and carefully put methods in each class? Imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up *the user-friendly implementation*.
+Now, the library users must be happy because they will never accidentally write invalid SQL statements. *This implementation is user-friendly, but how about from the developers' viewpoint?* It must be tedious to define many classes and carefully put methods in each class. Imagine that you create a library that also supports insert/update/delete statements. The development of such a library is too tedious and you would give up the user-friendly implementation.
 
-**Silverchain is a tool that solves this problem!** It generates class/method definitions from the code that defines valid chains. For example, Silverchain generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
+**Silverchain is a tool that significantly reduces the cost of the user-friendly implementation!** Silverchain generates class/method definitions from the code that defines valid chains. For example, it generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
 SQL: select(String columns) from(String table) where(String expression)? execute() Result;
