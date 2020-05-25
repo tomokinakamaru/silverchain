@@ -87,7 +87,7 @@ When a library is implemented in the user-friendly way, the completion system sh
 
 ## Tutorial
 
-Comming soon...
+See [here](./doc/tutorial.md).
 
 ## Run with Docker
 
