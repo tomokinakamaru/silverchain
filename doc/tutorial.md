@@ -154,13 +154,10 @@ public class MelodyAction implements IMelodyAction {
   @Override
   public void play() {
     try {
-      Sequencer sequencer = MidiSystem.getSequencer();
-      sequencer.open();
-
       Sequence sequence = new Sequence(Sequence.PPQ, 1);
       Track track = sequence.createTrack();
 
-      long offset = 1;
+      long offset = 4;
       for (int note : notes) {
         ShortMessage on = new ShortMessage();
         on.setMessage(ShortMessage.NOTE_ON, note, 127);
@@ -169,18 +166,18 @@ public class MelodyAction implements IMelodyAction {
         off.setMessage(ShortMessage.NOTE_OFF, note, 0);
 
         track.add(new MidiEvent(on, offset));
-        track.add(new MidiEvent(off, offset + 1));
+        track.add(new MidiEvent(off, offset + 2));
 
         offset += 1;
       }
 
+      Sequencer sequencer = MidiSystem.getSequencer(true);
+      sequencer.open();
       sequencer.setSequence(sequence);
       sequencer.start();
-      Thread.sleep(18000);
-
+      Thread.sleep(20000);
       sequencer.stop();
       sequencer.close();
-
     } catch (MidiUnavailableException | InvalidMidiDataException | InterruptedException e) {
       throw new RuntimeException(e);
     }
