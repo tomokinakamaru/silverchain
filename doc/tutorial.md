@@ -82,7 +82,7 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest \
 
 ### No Docker?
 
-If you can't use Docker in your environment, please build a jar or native image from the source and run the build artifact with the options `-i melodychain.ag` and `-o src/main/java`. See [README.md](../README.md) to learn how to build Silverchain from the source.
+If you can't use Docker in your environment, please build a jar or native image from the source and run the build artifact with the options `--input src/main/silverchain/melodychain.ag` and `--output src/main/java`. See [README.md](../README.md) to learn how to build Silverchain from the source.
 
 ## Implement actions
 
