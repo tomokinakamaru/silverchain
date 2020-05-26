@@ -191,4 +191,6 @@ The second class `MelodyAction` defines the action of the generated methods. For
 
 ## Compose melodies
 
-Now, we can compose a melody with our library! To see if our library works as expected, let's create a test class and compose a melody by method chaining there.
+Now, we can compose a melody with our library! To see if our library works as expected, let's create a test class and compose a melody by method chaining. 
+
+[![Demo](http://i3.ytimg.com/vi/68qLtcvt-iw/maxresdefault.jpg)](https://www.youtube.com/watch?v=68qLtcvt-iw)
