@@ -51,7 +51,7 @@ See https://gradle.org if you don't know Gradle. See https://gradle.org/install/
 
 ## Create AG file
 
-An AG file is a file that defines valid method chains. Silverchain compiles it into class definitions for a library.
+An AG file is a file that defines valid method chains for a library. Silverchain compiles it into class definitions for that library.
 
 Let's create the AG file for our library in `src/main/silverchain/melodychain.ag` with the following content:
 
@@ -68,7 +68,7 @@ melodychain.Melody:
   play();
 ```
 
-The lines above define that the users can chain `D`, `FSharp`, or `A` four times, `A`, `CSharp`, or `E` four times, and so on. For more example ag files, please check [src/test/resources](../src/test/resources).
+The lines above define that the users can chain `D`, `FSharp`, or `A` four times, `A`, `CSharp`, or `E` four times, and so on. For more example AG files, please check [src/test/resources](../src/test/resources).
 
 ## Run Silverchain
 
