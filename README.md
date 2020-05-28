@@ -116,3 +116,7 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 -o, --output <path>    Output directory
 -l, --language <lang>  Output language
 ```
+
+## Contributing
+
+Bug reports, feature requests, and pull requests are welcome on GitHub at https://github.com/tomokinakamaru/silverchain.
