@@ -1,8 +1,8 @@
 # Silverchain: Fluent API generator
 
 [![CircleCI](https://circleci.com/gh/tomokinakamaru/silverchain.svg?style=shield)](https://circleci.com/gh/tomokinakamaru/silverchain)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/4d1d4a6e304a8c3bc707/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
-[![Maintainability](https://api.codeclimate.com/v1/badges/4d1d4a6e304a8c3bc707/maintainability)](https://codeclimate.com/github/tomokinakamaru/silverchain/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/maintainability)](https://codeclimate.com/github/tomokinakamaru/silverchain/maintainability)
 [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/tomokinakamaru/silverchain)
 
 ## What is Silverchain for?
