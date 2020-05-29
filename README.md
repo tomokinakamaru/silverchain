@@ -119,4 +119,4 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 
 ## Contributing
 
-Bug reports, feature requests, and pull requests are welcome on GitHub at https://github.com/csg-tokyo/silverchain.
+Bug reports, feature requests, and pull requests are welcome on GitHub at https://github.com/tomokinakamaru/silverchain.
