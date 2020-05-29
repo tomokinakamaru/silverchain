@@ -81,13 +81,13 @@ SQL: select(String columns) from(String table) where(String expression)? execute
 
 A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the library users write code faster.
 
-![./doc/completion.gif](./doc/completion.gif)
+![completion](https://github.com/tomokinakamaru/silverchain/raw/master/doc/completion.gif)
 
 When a library is implemented in the user-friendly way, the completion system shows only methods that library users can chain next (see the left of the GIF animation). On the other hand, the completion system shows all the methods including the ones that cannot be chained when a library is implemented in the simplest way (see the right of the animation).
 
 ## Tutorial
 
-See [here](./doc/tutorial.md).
+See [here](https://github.com/tomokinakamaru/silverchain/blob/master/doc/tutorial.md).
 
 ## Run with Docker
 
