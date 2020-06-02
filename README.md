@@ -87,7 +87,7 @@ When a library is implemented in the user-friendly way, the completion system sh
 
 ## Tutorial
 
-See [here](https://github.com/tomokinakamaru/silverchain/blob/master/doc/tutorial.md).
+See [here](https://github.com/tomokinakamaru/silverchain/blob/master/doc/tutorial.md). We show how to create a library for melody composition that can be used as demonstrated in [this YouTube video](https://youtu.be/3fOn8cbhFZU).
 
 ## Run with Docker
 
