@@ -44,8 +44,7 @@ public class Diagram {
       s.transitions = transitions.fromSorted(s);
       s.isStart = secondState() == s;
       s.isEnd = endStates.contains(s);
-      s.transitions
-          .stream()
+      s.transitions.stream()
           .filter(t -> t.label.isMethod() || t.label.isType())
           .forEach(t -> traverser.enqueue(t.destination));
     }
@@ -79,8 +78,7 @@ public class Diagram {
   }
 
   public List<State> numberedStates() {
-    return sortedStates
-        .stream()
+    return sortedStates.stream()
         .filter(State::isNumbered)
         .collect(Collectors.toCollection(ArrayList::new));
   }
