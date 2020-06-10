@@ -47,8 +47,7 @@ public final class State {
   }
 
   public List<Label> typeReferences() {
-    return transitions
-        .stream()
+    return transitions.stream()
         .filter(t -> t.label.isTypeReference())
         .map(t -> t.label)
         .collect(toArrayList());

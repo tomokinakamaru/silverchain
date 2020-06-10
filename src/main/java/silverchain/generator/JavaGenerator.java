@@ -131,9 +131,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private List<Transition> transitions(Diagram diagram) {
-    return diagram
-        .numberedStates()
-        .stream()
+    return diagram.numberedStates().stream()
         .map(State::transitions)
         .flatMap(Collection::stream)
         .collect(Collectors.toList());

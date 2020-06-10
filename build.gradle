@@ -3,7 +3,7 @@ plugins {
     id 'jacoco'
     id 'com.github.ben-manes.versions' version '0.28.0'
     id 'com.github.johnrengelman.shadow' version '5.2.0'
-    id 'com.github.sherter.google-java-format' version '0.8'
+    id 'com.github.sherter.google-java-format' version '0.9'
     id 'com.intershop.gradle.javacc' version '4.0.0'
     id 'com.palantir.graal' version '0.7.1'
 }
@@ -12,9 +12,9 @@ group 'silverchain'
 
 version '0.1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
-targetCompatibility = 1.8
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
