@@ -12,9 +12,9 @@ group 'silverchain'
 
 version '0.1.0'
 
-sourceCompatibility = 1.8
+sourceCompatibility = 11
 
-targetCompatibility = 1.8
+targetCompatibility = 11
 
 repositories {
     mavenCentral()
