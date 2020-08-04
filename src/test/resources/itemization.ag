@@ -1,0 +1,13 @@
+itemization.Itemization:
+  begin() EmptySubItemization[End];
+
+itemization.EmptySubItemization[INNER; ITEM]:
+  item(ITEM item) itemization.SubItemization[INNER, ITEM];
+
+itemization.SubItemization[INNER, ITEM]:
+  item(ITEM item) itemization.SubItemization[INNER, ITEM];
+  begin() itemization.EmptySubItemization[itemization.SubItemization[INNER, ITEM]];
+  end() INNER;
+
+itemization.End:
+  toTeX() String;

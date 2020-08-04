@@ -35,6 +35,11 @@ final class Tests {
     test("melody");
   }
 
+  @Test
+  void testItemization() {
+    test("itemization");
+  }
+
   private void test(String name) {
     Path path = resources.resolve(name + ".ag");
     List<GeneratedFile> generated = generateJava(Utility.read(path));
