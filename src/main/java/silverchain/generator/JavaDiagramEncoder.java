@@ -69,8 +69,10 @@ final class JavaDiagramEncoder {
   }
 
   static String stateMethodBodyListenerInvocation(Transition t) {
-    String prefix = typeReference(t.destination()).map(r -> "return ").orElse("");
-    return "    " + prefix + "this.action." + actionMethodInvocation(t, true) + "\n";
+    Optional<Label> r = typeReference(t.destination());
+    String s1 = r.map(l -> "return ").orElse("");
+    String s2 = r.map(l -> l.typeReference().referent()).map(l -> "(" + l.name() + ") ").orElse("");
+    return "    " + s1 + s2 + "this.action." + actionMethodInvocation(t, true) + "\n";
   }
 
   static String stateMethodBodyReturnState(Transition t) {
