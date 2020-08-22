@@ -57,14 +57,14 @@ Let's create the AG file for our library in `src/main/silverchain/melodychain.ag
 
 ```
 melodychain.Melody:
-  ( D()      | FSharp() | A()      ){4, 4}
-  ( A()      | CSharp() | E()      ){4, 4}
-  ( B()      | D()      | FSharp() ){4, 4}
-  ( FSharp() | A()      | CSharp() ){4, 4}
-  ( G()      | B()      | D()      ){4, 4}
-  ( D()      | FSharp() | A()      ){4, 4}
-  ( G()      | B()      | D()      ){4, 4}
-  ( A()      | CSharp() | E()      ){4, 4}
+  ( D()      | FSharp() | A()      ){4}
+  ( A()      | CSharp() | E()      ){4}
+  ( B()      | D()      | FSharp() ){4}
+  ( FSharp() | A()      | CSharp() ){4}
+  ( G()      | B()      | D()      ){4}
+  ( D()      | FSharp() | A()      ){4}
+  ( G()      | B()      | D()      ){4}
+  ( A()      | CSharp() | E()      ){4}
   play();
 ```
 

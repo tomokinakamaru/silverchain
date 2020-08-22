@@ -94,12 +94,13 @@ final class Tests {
 
   @Test
   void testRepeatOperator() {
-    test(Parser::repeatOperator, "*", "{0}");
-    test(Parser::repeatOperator, "+", "{1}");
+    test(Parser::repeatOperator, "*", "{0,}");
+    test(Parser::repeatOperator, "+", "{1,}");
     test(Parser::repeatOperator, "?", "{0,1}");
-    test(Parser::repeatOperator, "{1}");
+    test(Parser::repeatOperator, "{1}", "{1,1}");
+    test(Parser::repeatOperator, "{2}", "{2,2}");
+    test(Parser::repeatOperator, "{1,}", "{1,}");
     test(Parser::repeatOperator, "{0,1}");
-    test(Parser::repeatOperator, "{2}");
     test(Parser::repeatOperator, "{0,2}");
     test(Parser::repeatOperator, "{1,2}");
     test(Parser::repeatOperator, "{2,3}");
@@ -108,7 +109,7 @@ final class Tests {
   @Test
   void testRuleFactor() {
     test(Parser::ruleFactor, "foo()");
-    test(Parser::ruleFactor, "foo()*", "foo(){0}");
+    test(Parser::ruleFactor, "foo()*", "foo(){0,}");
   }
 
   @Test

@@ -149,6 +149,7 @@ RepeatOperator repeatOperator(): {
   Token l;
   Token u = null;
   Token b;
+  Token c = null;
 } {
   "*" {
     return new RepeatOperator(range(token), 0, null);
@@ -159,10 +160,18 @@ RepeatOperator repeatOperator(): {
   "?" {
     return new RepeatOperator(range(token), 0, 1);
   } |
-  "{" { b = token; } l = <NUMBER> ("," u = <NUMBER>)? "}" {
+  "{" { b = token; } l = <NUMBER> ("," { c = token; } (u = <NUMBER>)?)? "}" {
     int i = Integer.parseInt(l.image);
-    Integer j = u == null ? null : Integer.parseInt(u.image);
-    return new RepeatOperator(range(b, token), i, j);
+    if (c == null) {
+        return new RepeatOperator(range(b, token), i, i);
+    } else {
+      if (u == null) {
+        return new RepeatOperator(range(b, token), i, null);
+      } else {
+        Integer j = Integer.parseInt(u.image);
+        return new RepeatOperator(range(b, token), i, j);
+      }
+    }
   }
 }
 
