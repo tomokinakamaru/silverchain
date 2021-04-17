@@ -4,7 +4,7 @@ plugins {
     id 'com.github.ben-manes.versions' version '0.38.0'
     id 'com.github.johnrengelman.shadow' version '6.1.0'
     id 'com.github.sherter.google-java-format' version '0.9'
-    id 'com.intershop.gradle.javacc' version '4.0.0'
+    id 'com.intershop.gradle.javacc' version '4.0.1'
     id 'com.palantir.graal' version '0.7.2'
 }
 
