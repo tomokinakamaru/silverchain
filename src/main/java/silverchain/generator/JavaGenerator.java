@@ -1,6 +1,7 @@
 package silverchain.generator;
 
 import static java.lang.String.join;
+import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import java.util.Collection;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
@@ -31,15 +31,9 @@ public final class JavaGenerator extends Generator {
   }
 
   @Override
-  void generate(List<Diagram> diagrams) {
+  protected void generate(List<Diagram> diagrams) {
     diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
     diagrams.forEach(this::generate);
-  }
-
-  @Override
-  void beginFile(String name) {
-    name = name.replaceAll("\\.", "/") + ".java";
-    super.beginFile(name);
   }
 
   private void generate(Diagram diagram) {
@@ -53,7 +47,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private void generateIState(State state) {
-    beginFile(getIStateQualifiedName(state));
+    beginFile(getFilePath(getIStateQualifiedName(state)));
     writePackageDeclaration(getIStatePackageName(state));
 
     // Interface declaration
@@ -75,7 +69,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private void generateState(State state) {
-    beginFile(getStateQualifiedName(state));
+    beginFile(getFilePath(getStateQualifiedName(state)));
     writePackageDeclaration(getStatePackageName(state));
 
     // Class declaration
@@ -128,7 +122,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private void generateIAction(Diagram diagram) {
-    beginFile(getIActionQualifiedName(diagram));
+    beginFile(getFilePath(getIActionQualifiedName(diagram)));
     writePackageDeclaration(getIActionPackageName(diagram));
 
     // Interface declaration
@@ -221,6 +215,10 @@ public final class JavaGenerator extends Generator {
 
   private void writeStateMethodDeclaration(Transition transition) {
     write(getStateMethodHead(transition));
+  }
+
+  private String getFilePath(String name) {
+    return name.replaceAll("\\.", "/") + ".java";
   }
 
   /*
@@ -361,6 +359,6 @@ public final class JavaGenerator extends Generator {
   }
 
   private <T> String csv(Stream<T> stream, Function<T, String> function) {
-    return stream.map(function).collect(Collectors.joining(", "));
+    return stream.map(function).collect(joining(", "));
   }
 }

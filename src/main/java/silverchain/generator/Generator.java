@@ -16,9 +16,9 @@ public abstract class Generator {
 
   private StringBuilder stringBuilder;
 
-  abstract void generate(List<Diagram> diagrams);
+  protected abstract void generate(List<Diagram> diagrams);
 
-  Generator(List<Diagram> diagrams) {
+  protected Generator(List<Diagram> diagrams) {
     this.diagrams = diagrams;
     this.files = new ArrayList<>();
   }
@@ -28,16 +28,16 @@ public abstract class Generator {
     return files;
   }
 
-  void beginFile(String name) {
+  protected final void beginFile(String name) {
     path = Paths.get(name);
     stringBuilder = new StringBuilder();
   }
 
-  final void write(String s) {
+  protected final void write(String s) {
     stringBuilder.append(s);
   }
 
-  final void endFile() {
+  protected final void endFile() {
     files.add(new GeneratedFile(path, stringBuilder.toString()));
   }
 }
