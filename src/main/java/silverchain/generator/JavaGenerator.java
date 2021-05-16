@@ -1,30 +1,32 @@
 package silverchain.generator;
 
-import static silverchain.generator.JavaASTEncoder.encodeAsDeclaration;
-import static silverchain.generator.JavaDiagramEncoder.actionMethodDeclaration;
-import static silverchain.generator.JavaDiagramEncoder.actionMethodDefaultBody;
-import static silverchain.generator.JavaDiagramEncoder.implementationName;
-import static silverchain.generator.JavaDiagramEncoder.implementationPackageName;
-import static silverchain.generator.JavaDiagramEncoder.implementationQualifiedName;
-import static silverchain.generator.JavaDiagramEncoder.interfaceModifier;
-import static silverchain.generator.JavaDiagramEncoder.interfaceName;
-import static silverchain.generator.JavaDiagramEncoder.interfacePackageName;
-import static silverchain.generator.JavaDiagramEncoder.interfaceQualifiedName;
-import static silverchain.generator.JavaDiagramEncoder.interfaceReference;
-import static silverchain.generator.JavaDiagramEncoder.stateMethodBodyListenerInvocation;
-import static silverchain.generator.JavaDiagramEncoder.stateMethodBodyReturnState;
-import static silverchain.generator.JavaDiagramEncoder.stateMethodDeclaration;
-import static silverchain.generator.JavaValidator.validate;
+import static java.lang.String.join;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.joining;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Stream.concat;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
+import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
 import silverchain.parser.Method;
+import silverchain.parser.MethodParameter;
+import silverchain.parser.MethodParameters;
+import silverchain.parser.QualifiedName;
+import silverchain.parser.Range;
+import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeParameterBound;
+import silverchain.parser.TypeReference;
+import silverchain.parser.TypeReferences;
 
 public final class JavaGenerator extends Generator {
 
@@ -34,114 +36,421 @@ public final class JavaGenerator extends Generator {
 
   @Override
   void generate(List<Diagram> diagrams) {
+    diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
+    diagrams.forEach(this::validate);
     diagrams.forEach(this::generate);
   }
 
+  @Override
+  void beginFile(String name) {
+    name = name.replaceAll("\\.", "/") + ".java";
+    super.beginFile(name);
+  }
+
   private void generate(Diagram diagram) {
-    diagram.assignStateNumbers(s -> !s.isEnd());
-    validate(diagram);
-    generateInterface(diagram);
-    for (State state : diagram.numberedStates()) {
-      generateInterface(state);
-      generateImplementation(state);
-    }
+    generateIAction(diagram);
+    diagram.numberedStates().forEach(this::generate);
   }
 
-  private void generateInterface(State state) {
-    beginFile(filePath(interfaceQualifiedName(state)));
-    write(packageDeclaration(interfacePackageName(state)));
+  private void generate(State state) {
+    generateIState(state);
+    generateState(state);
+  }
 
-    write(interfaceModifier(state));
-    write("interface ");
-    write(interfaceName(state));
-    write(encodeAsDeclaration(state.typeParameters()));
-    write(" {\n");
+  private void generateIState(State state) {
+    beginFile(getIStateQualifiedName(state));
+    writePackageDeclaration(getIStatePackageName(state));
 
+    // Interface declaration
+    write(getIStateModifier(state));
+    writeInterfaceDeclaration(getIStateName(state));
+    writeTypeParameterDeclaration(state.typeParameters());
+    writeLeftBracket();
+
+    // Method declaration
     for (Transition transition : state.transitions()) {
-      write("\n  ");
-      write(stateMethodDeclaration(transition));
-      write(";\n");
+      writeLineBreak();
+      writeIndentation();
+      writeStateMethodDeclaration(transition);
+      writeSemicolon();
     }
 
-    write("}\n");
+    writeRightBracket();
     endFile();
   }
 
-  private void generateImplementation(State state) {
-    beginFile(filePath(implementationQualifiedName(state)));
-    write(packageDeclaration(implementationPackageName(state)));
+  private void generateState(State state) {
+    beginFile(getStateQualifiedName(state));
+    writePackageDeclaration(getStatePackageName(state));
 
-    write("@SuppressWarnings({\"rawtypes\", \"unchecked\"})\nclass ");
-    write(implementationName(state));
-    write(encodeAsDeclaration(state.typeParameters()));
-    write(" implements ");
-    write(interfaceReference(state));
-    write(" {\n\n  ");
+    // Class declaration
+    write("@SuppressWarnings({\"rawtypes\", \"unchecked\"})");
+    writeLineBreak();
+    writeClassDeclarationHead(getStateName(state));
+    writeTypeParameterDeclaration(state.typeParameters());
+    writeSuperClass(getIStateReference(state));
+    writeLeftBracket();
+    writeLineBreak();
 
-    write(interfaceQualifiedName(state.diagram()));
-    write(" action;\n\n  ");
+    // Field declaration
+    writeIndentation();
+    writeActionDeclaration(state.diagram());
+    writeSemicolon();
+    writeLineBreak();
 
-    write(implementationName(state));
+    // Constructor
+    writeIndentation();
+    write(getStateName(state));
     write("(");
-    write(interfaceQualifiedName(state.diagram()));
-    write(" action) {\n    this.action = action;\n  }\n");
+    writeActionDeclaration(state.diagram());
+    write(")");
+    writeLeftBracket();
+    writeIndentation();
+    writeIndentation();
+    write("this.action = action");
+    writeSemicolon();
+    writeIndentation();
+    writeRightBracket();
 
+    // Method declaration
     for (Transition transition : state.transitions()) {
-      write("\n  @Override\n  public ");
-      write(stateMethodDeclaration(transition));
-      write(" {\n");
-      write(stateMethodBodyListenerInvocation(transition));
-      write(stateMethodBodyReturnState(transition));
-      write("  }\n");
+      writeLineBreak();
+      writeIndentation();
+      write("@Override");
+      writeLineBreak();
+      writeIndentation();
+      write("public ");
+      write(getStateMethodHead(transition));
+      writeLeftBracket();
+      write(getStateMethodBodyListenerInvocation(transition));
+      write(getStateMethodBodyReturnNextState(transition));
+      writeIndentation();
+      writeRightBracket();
     }
 
-    write("}\n");
+    writeRightBracket();
     endFile();
   }
 
-  private void generateInterface(Diagram diagram) {
-    beginFile(filePath(interfaceQualifiedName(diagram)));
-    write(packageDeclaration(interfacePackageName(diagram)));
-    write("interface ");
-    write(interfaceName(diagram));
-    write(encodeAsDeclaration(diagram.typeParameters()));
-    write(" {\n");
+  private void generateIAction(Diagram diagram) {
+    beginFile(getIActionQualifiedName(diagram));
+    writePackageDeclaration(getIActionPackageName(diagram));
 
-    for (Transition transition : transitions(diagram)) {
-      write("\n  default ");
-      write(actionMethodDeclaration(transition, true));
-      write(" {\n    ");
-      write(actionMethodDefaultBody(transition));
-      write("\n  }");
-      write("\n");
+    // Interface declaration
+    writeInterfaceDeclaration(getIActionName(diagram));
+    writeTypeParameterDeclaration(diagram.typeParameters());
+    writeLeftBracket();
+
+    List<Transition> transitions =
+        diagram.numberedStates().stream()
+            .map(State::transitions)
+            .flatMap(Collection::stream)
+            .collect(toList());
+
+    for (Transition transition : transitions) {
+      writeLineBreak();
+      writeIndentation();
+      write("default ");
+      write(getIActionMethodHead(transition, true));
+      writeLeftBracket();
+      writeIndentation();
+      writeIndentation();
+      write(getIActionMethodBody(transition));
+      writeLineBreak();
+      writeIndentation();
+      writeRightBracket();
     }
 
     Set<Method> encodedMethods = new HashSet<>();
-    for (Transition transition : transitions(diagram)) {
+    for (Transition transition : transitions) {
       if (!encodedMethods.contains(transition.label().method())) {
-        write("\n  ");
-        write(actionMethodDeclaration(transition, false));
-        write(";\n");
+        writeLineBreak();
+        writeIndentation();
+        write(getIActionMethodHead(transition, false));
+        writeSemicolon();
         encodedMethods.add(transition.label().method());
       }
     }
 
-    write("}\n");
+    writeRightBracket();
     endFile();
   }
 
-  private List<Transition> transitions(Diagram diagram) {
-    return diagram.numberedStates().stream()
-        .map(State::transitions)
-        .flatMap(Collection::stream)
-        .collect(Collectors.toList());
+  private void writePackageDeclaration(String name) {
+    write(name.isEmpty() ? "" : "package " + name + ";\n\n");
   }
 
-  private String filePath(String name) {
-    return name.replaceAll("\\.", "/") + ".java";
+  private void writeClassDeclarationHead(String name) {
+    write("class ");
+    write(name);
   }
 
-  private String packageDeclaration(String name) {
-    return name.isEmpty() ? "" : "package " + name + ";\n\n";
+  private void writeInterfaceDeclaration(String name) {
+    write("interface ");
+    write(name);
+  }
+
+  private void writeTypeParameterDeclaration(List<TypeParameter> parameters) {
+    write(encode(parameters, true));
+  }
+
+  private void writeSuperClass(String name) {
+    write(" implements ");
+    write(name);
+  }
+
+  private void writeActionDeclaration(Diagram diagram) {
+    write(getIActionQualifiedName(diagram));
+    write(" action");
+  }
+
+  private void writeLeftBracket() {
+    write(" {\n");
+  }
+
+  private void writeRightBracket() {
+    write("}\n");
+  }
+
+  private void writeSemicolon() {
+    write(";\n");
+  }
+
+  private void writeLineBreak() {
+    write("\n");
+  }
+
+  private void writeIndentation() {
+    write("  ");
+  }
+
+  private void writeStateMethodDeclaration(Transition transition) {
+    write(getStateMethodHead(transition));
+  }
+
+  /*
+   * For diagram encoding
+   */
+  private String getStateMethodHead(Transition transition) {
+    List<TypeParameter> p = transition.typeParameters();
+    State d = transition.destination();
+    Label l = transition.label();
+    String s1 = p.isEmpty() ? "" : encode(p, true) + " ";
+    String s2 = getIStateReference(d) + " " + encode(l.method(), true);
+    return s1 + s2;
+  }
+
+  private String getStateMethodBodyListenerInvocation(Transition transition) {
+    Optional<Label> r = transition.destination().typeReference();
+    String s1 = r.map(l -> "return ").orElse("");
+    String s2 = r.map(l -> l.typeReference().referent()).map(l -> "(" + l.name() + ") ").orElse("");
+    return "    " + s1 + s2 + "this.action." + getIActionMethodInvocation(transition, true) + ";\n";
+  }
+
+  private String getStateMethodBodyReturnNextState(Transition transition) {
+    State d = transition.destination();
+    return d.isNumbered() ? "    return new " + getStateQualifiedName(d) + "(this.action);\n" : "";
+  }
+
+  private String getIActionMethodHead(Transition transition, boolean full) {
+    State d = transition.destination();
+    String s = d.isNumbered() ? "void" : getIStateReference(d);
+    return s + " " + getIActionMethodSignature(transition, true, full);
+  }
+
+  private String getIActionMethodBody(Transition transition) {
+    String s = transition.destination().typeReference().map(r -> "return ").orElse("");
+    return s + getIActionMethodInvocation(transition, false) + ";";
+  }
+
+  private String getIActionMethodInvocation(Transition transition, boolean full) {
+    return getIActionMethodSignature(transition, false, full);
+  }
+
+  private String getIActionMethodSignature(Transition transition, boolean decl, boolean full) {
+    String prefix = full ? ("state" + transition.source().number() + "$") : "";
+    return prefix + encode(transition.label().method(), decl);
+  }
+
+  private String getIStateModifier(State state) {
+    return state.number() == 0 ? "" : "public ";
+  }
+
+  private String getIStateQualifiedName(State state) {
+    return qualifyName(getIStatePackageName(state), getIStateName(state));
+  }
+
+  private String getIStatePackageName(State state) {
+    String qualifier = state.diagram().name().qualifier().map(this::encode).orElse("");
+    return state.number() == 0 ? qualifier : qualifyName(qualifier, "state" + state.number());
+  }
+
+  private String getIStateName(State state) {
+    return (state.number() == 0 ? "I" : "") + state.diagram().name().name();
+  }
+
+  private String getIStateReference(State state) {
+    if (state.isNumbered()) {
+      return getIStateQualifiedName(state) + encode(state.typeParameters(), false);
+    }
+    return state.typeReference().map(l -> encode(l.typeReference())).orElse("void");
+  }
+
+  private String getStateQualifiedName(State state) {
+    return qualifyName(getStatePackageName(state), getStateName(state));
+  }
+
+  private String getStatePackageName(State state) {
+    return state.diagram().name().qualifier().map(this::encode).orElse("");
+  }
+
+  private String getStateName(State state) {
+    return state.diagram().name().name() + state.number();
+  }
+
+  private String getIActionQualifiedName(Diagram diagram) {
+    return qualifyName(getIActionPackageName(diagram), getIActionName(diagram));
+  }
+
+  private String getIActionPackageName(Diagram diagram) {
+    return diagram.name().qualifier().map(this::encode).orElse("");
+  }
+
+  private String getIActionName(Diagram diagram) {
+    return "I" + diagram.name().name() + "Action";
+  }
+
+  private String qualifyName(String qualifier, String name) {
+    return qualifier.isEmpty() ? name : qualifier + "." + name;
+  }
+
+  /*
+   * For AST node encoding
+   */
+  private String encode(List<TypeParameter> parameters, boolean decl) {
+    return parameters.isEmpty() ? "" : "<" + csv(parameters.stream(), p -> encode(p, decl)) + ">";
+  }
+
+  private String encode(TypeParameter parameter, boolean decl) {
+    String bound = decl ? parameter.bound().map(this::encode).orElse("") : "";
+    return parameter.name() + bound;
+  }
+
+  private String encode(TypeParameterBound bound) {
+    return " extends " + encode(bound.reference());
+  }
+
+  private String encode(Method method, boolean decl) {
+    String parameters = method.parameters().map(p -> encode(p, decl)).orElse("");
+    return method.name() + "(" + parameters + ")";
+  }
+
+  private String encode(MethodParameters parameters, boolean decl) {
+    return csv(parameters.stream(), p -> encode(p, decl));
+  }
+
+  private String encode(MethodParameter parameter, boolean decl) {
+    return decl ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
+  }
+
+  private String encode(TypeReference reference) {
+    return encode(reference.name()) + reference.arguments().map(this::encode).orElse("");
+  }
+
+  private String encode(TypeReferences arguments) {
+    return "<" + csv(arguments.stream(), this::encode) + ">";
+  }
+
+  private String encode(QualifiedName name) {
+    return join(".", name);
+  }
+
+  private <T> String csv(Stream<T> stream, Function<T, String> function) {
+    return stream.map(function).collect(Collectors.joining(", "));
+  }
+
+  /*
+   * For diagram validation
+   */
+  private void validate(Diagram diagram) {
+    diagram.states().forEach(this::validate);
+  }
+
+  private void validate(State state) {
+    checkTypeReferenceConflict(state);
+    checkTypeReferenceMethodConflict(state);
+    checkMethodConflict(state);
+  }
+
+  private void checkTypeReferenceConflict(State state) {
+    List<Label> labels = state.typeReferences();
+    if (1 < labels.size()) {
+      throwError(labels);
+    }
+  }
+
+  private void checkTypeReferenceMethodConflict(State state) {
+    List<Label> labels = state.typeReferences();
+    List<Transition> transitions = state.transitions();
+    if (0 < labels.size() && 0 < transitions.size()) {
+      Stream<Label> s1 = labels.stream();
+      Stream<Label> s2 = transitions.stream().map(Transition::label);
+      throwError(concat(s1, s2).collect(toList()));
+    }
+  }
+
+  private void checkMethodConflict(State state) {
+    for (List<Label> labels : getLabelGroups(state)) {
+      if (1 < labels.size()) {
+        throwError(labels);
+      }
+    }
+  }
+
+  private void throwError(List<Label> labels) {
+    throw new EncodeError("Conflict: %s", stringify(labels));
+  }
+
+  private String stringify(Collection<Label> labels) {
+    return labels.stream().map(this::stringify).collect(joining(", "));
+  }
+
+  private String stringify(Label label) {
+    return label.node().toString() + "#" + stringify(label.ranges());
+  }
+
+  private String stringify(List<Range> ranges) {
+    return ranges.stream().map(this::stringify).collect(joining(","));
+  }
+
+  private String stringify(Range range) {
+    return range.begin().toString();
+  }
+
+  private Collection<List<Label>> getLabelGroups(State state) {
+    return state.transitions().stream()
+        .map(Transition::label)
+        .collect(groupingBy(this::getSignature))
+        .values();
+  }
+
+  private String getSignature(Label label) {
+    return getSignature(label.method());
+  }
+
+  private String getSignature(Method method) {
+    return method.name() + ":" + method.parameters().map(this::getSignature).orElse("");
+  }
+
+  private String getSignature(MethodParameters parameters) {
+    return parameters.stream().map(this::getSignature).collect(joining(" "));
+  }
+
+  private String getSignature(MethodParameter parameter) {
+    return getSignature(parameter.type());
+  }
+
+  private String getSignature(TypeReference reference) {
+    return reference.referent() == null ? join(".", reference.name()) : "Object";
   }
 }

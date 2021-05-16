@@ -5,6 +5,7 @@ import static silverchain.diagram.Utility.toArrayList;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.parser.TypeParameter;
 
@@ -51,6 +52,10 @@ public final class State {
         .filter(t -> t.label.isTypeReference())
         .map(t -> t.label)
         .collect(toArrayList());
+  }
+
+  public Optional<Label> typeReference() {
+    return typeReferences().stream().findFirst();
   }
 
   public List<Transition> transitions() {

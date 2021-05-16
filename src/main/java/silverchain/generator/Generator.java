@@ -28,7 +28,7 @@ public abstract class Generator {
     return files;
   }
 
-  final void beginFile(String name) {
+  void beginFile(String name) {
     path = Paths.get(name);
     stringBuilder = new StringBuilder();
   }
