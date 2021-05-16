@@ -1,14 +1,12 @@
-package generator;
+package validator;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.util.List;
-import java.util.function.Function;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
-import silverchain.generator.EncodeError;
-import silverchain.generator.GeneratedFile;
+import silverchain.validator.ValidationError;
 
-final class ErrorTests {
+final class Tests {
 
   @Test
   void testJavaTypeReferenceConflict() {
@@ -26,14 +24,14 @@ final class ErrorTests {
   }
 
   private void testJava(String text, String message) {
-    test(Utility::generateJava, text, message);
+    test(Utility::validateJava, text, message);
   }
 
-  private void test(Function<InputStream, List<GeneratedFile>> f, String text, String message) {
+  private void test(Consumer<InputStream> f, String text, String message) {
     try {
-      f.apply(new ByteArrayInputStream(text.getBytes()));
+      f.accept(new ByteArrayInputStream(text.getBytes()));
       assert false;
-    } catch (EncodeError e) {
+    } catch (ValidationError e) {
       assert e.getMessage().equals(message);
     }
   }

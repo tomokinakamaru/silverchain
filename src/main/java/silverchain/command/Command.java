@@ -13,13 +13,15 @@ import java.util.function.Function;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
 import silverchain.diagram.Diagram;
-import silverchain.generator.EncodeError;
 import silverchain.generator.Generator;
 import silverchain.generator.JavaGenerator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
 import silverchain.parser.ParseException;
 import silverchain.parser.TokenMgrError;
+import silverchain.validator.JavaValidator;
+import silverchain.validator.ValidationError;
+import silverchain.validator.Validator;
 
 public final class Command {
 
@@ -50,7 +52,7 @@ public final class Command {
     errorCodes.put(TokenMgrError.class, 104);
     errorCodes.put(ParseException.class, 105);
     errorCodes.put(DuplicateDeclaration.class, 106);
-    errorCodes.put(EncodeError.class, 107);
+    errorCodes.put(ValidationError.class, 107);
     errorCodes.put(SaveError.class, 108);
   }
 
@@ -87,6 +89,7 @@ public final class Command {
     Silverchain silverchain = new Silverchain();
     silverchain.outputDirectory(Paths.get(result.get("output")));
     silverchain.generatorProvider(generatorProvider(result.get("language")));
+    silverchain.validatorProvider(validatorProvider(result.get("language")));
     try (InputStream stream = open(result.get("input"))) {
       silverchain.run(stream);
     } catch (IOException e) {
@@ -97,6 +100,13 @@ public final class Command {
   private Function<List<Diagram>, Generator> generatorProvider(String language) {
     if (language.equals("java")) {
       return JavaGenerator::new;
+    }
+    throw new UnsupportedLanguage(language);
+  }
+
+  private Function<List<Diagram>, Validator> validatorProvider(String language) {
+    if (language.equals("java")) {
+      return JavaValidator::new;
     }
     throw new UnsupportedLanguage(language);
   }
