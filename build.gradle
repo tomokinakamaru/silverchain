@@ -26,7 +26,7 @@ dependencies {
 }
 
 javacc {
-    javaCCVersion = '7.0.5'
+    javaCCVersion = '7.0.9'
     configs {
         parser {
             inputFile = file('src/main/javacc/silverchain.jj')
@@ -58,7 +58,7 @@ check {
 }
 
 jacoco {
-    toolVersion = '0.8.5'
+    toolVersion = '0.8.7'
 }
 
 jacocoTestReport {
