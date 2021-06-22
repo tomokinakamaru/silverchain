@@ -1,5 +1,5 @@
 itemization.Itemization:
-  begin() EmptySubItemization[End];
+  begin() itemization.EmptySubItemization[End];
 
 itemization.EmptySubItemization[INNER; ITEM]:
   item(ITEM item) itemization.SubItemization[INNER, ITEM];
