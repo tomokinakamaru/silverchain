@@ -10,7 +10,7 @@ class Itemization0 implements itemization.IItemization {
   }
 
   @Override
-  public EmptySubItemization<End> begin() {
+  public itemization.EmptySubItemization<End> begin() {
     return this.action.state0$begin();
   }
 }
