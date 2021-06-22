@@ -330,7 +330,8 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(TypeParameterBound bound) {
-    return " extends " + encode(bound.reference());
+    String s = bound.isUpper() ? "extends" : "super";
+    return " " + s + " " + encode(bound.reference());
   }
 
   private String encode(Method method, boolean decl) {
