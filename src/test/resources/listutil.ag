@@ -1,0 +1,3 @@
+listutil.ListUtil[;T]:
+
+copy() from(java.util.List[T] src) to(java.util.List[? :> T] dst);

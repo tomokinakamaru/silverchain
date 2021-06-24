@@ -21,6 +21,11 @@ final class Tests {
   }
 
   @Test
+  void testListUtil() {
+    test("listutil");
+  }
+
+  @Test
   void testMapBuilder() {
     test("mapbuilder");
   }
