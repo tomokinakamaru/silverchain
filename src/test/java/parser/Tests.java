@@ -89,6 +89,12 @@ final class Tests {
   }
 
   @Test
+  void testMethodParameters() {
+    test(Parser::methodParameters, "()");
+    test(Parser::methodParameters, "[T]()");
+  }
+
+  @Test
   void testMethod() {
     test(Parser::method, "foo()");
     test(Parser::method, "foo(Bar bar)");

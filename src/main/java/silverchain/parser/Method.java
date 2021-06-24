@@ -2,12 +2,11 @@ package silverchain.parser;
 
 import static silverchain.diagram.Builders.atom;
 
-import java.util.Optional;
 import silverchain.diagram.Diagram;
 
-public final class Method extends ASTNode2<String, FormalParameters> {
+public final class Method extends ASTNode2<String, MethodParameters> {
 
-  Method(Range range, String name, FormalParameters parameters) {
+  Method(Range range, String name, MethodParameters parameters) {
     super(range, name, parameters);
   }
 
@@ -15,13 +14,13 @@ public final class Method extends ASTNode2<String, FormalParameters> {
     return left();
   }
 
-  public Optional<FormalParameters> parameters() {
-    return Optional.ofNullable(right());
+  public MethodParameters parameters() {
+    return right();
   }
 
   @Override
   public String toString() {
-    return name() + "(" + parameters().map(ASTNodeN::toString).orElse("") + ")";
+    return name() + parameters();
   }
 
   @Override

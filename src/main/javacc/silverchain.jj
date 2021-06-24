@@ -118,7 +118,7 @@ RuleTerm ruleTerm(): {
   RuleFactor f;
   RuleTerm t = null;
 } {
-  f = ruleFactor() (t = ruleTerm())? {
+  f = ruleFactor() (LOOKAHEAD(ruleTerm()) t = ruleTerm())? {
     return new RuleTerm(range(f, t), f, t);
   }
 }
@@ -177,10 +177,22 @@ RepeatOperator repeatOperator(): {
 
 Method method(): {
   Token n;
-  FormalParameters ps = null;
+  MethodParameters p;
 } {
-  n = <NAME> "(" (ps = formalParameters())? ")" {
-    return new Method(range(n, token), n.image, ps);
+  n = <NAME> p = methodParameters() {
+    return new Method(range(n, p), n.image, p);
+  }
+}
+
+MethodParameters methodParameters(): {
+  Token s = null;
+  Token p;
+  TypeParameterList ts = null;
+  FormalParameters fs = null;
+} {
+  ("[" { s = token; } ts = typeParameterList() "]")?
+  "(" { p = token; } (fs = formalParameters())? ")" {
+    return new MethodParameters(range(s == null ? p : s, token), ts, fs);
   }
 }
 

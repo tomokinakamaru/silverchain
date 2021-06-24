@@ -336,8 +336,8 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(Method method, boolean decl) {
-    String parameters = method.parameters().map(p -> encode(p, decl)).orElse("");
-    return method.name() + "(" + parameters + ")";
+    String fs = method.parameters().formalParameters().map(p -> encode(p, decl)).orElse("");
+    return method.name() + "(" + fs + ")";
   }
 
   private String encode(FormalParameters parameters, boolean decl) {

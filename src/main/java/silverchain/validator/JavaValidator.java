@@ -97,7 +97,8 @@ public class JavaValidator extends Validator {
   }
 
   private String getSignature(Method method) {
-    return method.name() + ":" + method.parameters().map(this::getSignature).orElse("");
+    String s = method.parameters().formalParameters().map(this::getSignature).orElse("");
+    return method.name() + ":" + s;
   }
 
   private String getSignature(FormalParameters parameters) {
