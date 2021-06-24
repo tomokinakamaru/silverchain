@@ -13,9 +13,9 @@ import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
+import silverchain.parser.FormalParameter;
+import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
-import silverchain.parser.MethodParameter;
-import silverchain.parser.MethodParameters;
 import silverchain.parser.Range;
 import silverchain.parser.TypeReference;
 
@@ -100,11 +100,11 @@ public class JavaValidator extends Validator {
     return method.name() + ":" + method.parameters().map(this::getSignature).orElse("");
   }
 
-  private String getSignature(MethodParameters parameters) {
+  private String getSignature(FormalParameters parameters) {
     return parameters.stream().map(this::getSignature).collect(joining(" "));
   }
 
-  private String getSignature(MethodParameter parameter) {
+  private String getSignature(FormalParameter parameter) {
     return getSignature(parameter.type());
   }
 

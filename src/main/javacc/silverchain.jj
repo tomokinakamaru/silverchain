@@ -177,28 +177,28 @@ RepeatOperator repeatOperator(): {
 
 Method method(): {
   Token n;
-  MethodParameters ps = null;
+  FormalParameters ps = null;
 } {
-  n = <NAME> "(" (ps = methodParameters())? ")" {
+  n = <NAME> "(" (ps = formalParameters())? ")" {
     return new Method(range(n, token), n.image, ps);
   }
 }
 
-MethodParameters methodParameters(): {
-  MethodParameter p;
-  MethodParameters ps = null;
+FormalParameters formalParameters(): {
+  FormalParameter p;
+  FormalParameters ps = null;
 } {
-  p = methodParameter() ("," ps = methodParameters())? {
-    return new MethodParameters(range(p, ps), p, ps);
+  p = formalParameter() ("," ps = formalParameters())? {
+    return new FormalParameters(range(p, ps), p, ps);
   }
 }
 
-MethodParameter methodParameter(): {
+FormalParameter formalParameter(): {
   TypeReference r;
   Token n;
 } {
   r = typeReference() n = <NAME> {
-    return new MethodParameter(range(r, n), r, n.image);
+    return new FormalParameter(range(r, n), r, n.image);
   }
 }
 

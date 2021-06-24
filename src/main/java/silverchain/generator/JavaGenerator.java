@@ -15,9 +15,9 @@ import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
+import silverchain.parser.FormalParameter;
+import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
-import silverchain.parser.MethodParameter;
-import silverchain.parser.MethodParameters;
 import silverchain.parser.QualifiedName;
 import silverchain.parser.TypeArgument;
 import silverchain.parser.TypeArguments;
@@ -340,11 +340,11 @@ public final class JavaGenerator extends Generator {
     return method.name() + "(" + parameters + ")";
   }
 
-  private String encode(MethodParameters parameters, boolean decl) {
+  private String encode(FormalParameters parameters, boolean decl) {
     return csv(parameters.stream(), p -> encode(p, decl));
   }
 
-  private String encode(MethodParameter parameter, boolean decl) {
+  private String encode(FormalParameter parameter, boolean decl) {
     return decl ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
   }
 

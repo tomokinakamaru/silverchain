@@ -5,9 +5,9 @@ import static silverchain.diagram.Builders.atom;
 import java.util.Optional;
 import silverchain.diagram.Diagram;
 
-public final class Method extends ASTNode2<String, MethodParameters> {
+public final class Method extends ASTNode2<String, FormalParameters> {
 
-  Method(Range range, String name, MethodParameters parameters) {
+  Method(Range range, String name, FormalParameters parameters) {
     super(range, name, parameters);
   }
 
@@ -15,7 +15,7 @@ public final class Method extends ASTNode2<String, MethodParameters> {
     return left();
   }
 
-  public Optional<MethodParameters> parameters() {
+  public Optional<FormalParameters> parameters() {
     return Optional.ofNullable(right());
   }
 

@@ -78,14 +78,14 @@ final class Tests {
   }
 
   @Test
-  void testMethodParameter() {
-    test(Parser::methodParameter, "Foo foo");
+  void testFormalParameter() {
+    test(Parser::formalParameter, "Foo foo");
   }
 
   @Test
-  void testMethodParameters() {
-    test(Parser::methodParameters, "Foo foo");
-    test(Parser::methodParameters, "Foo foo,Bar bar");
+  void testFormalParameters() {
+    test(Parser::formalParameters, "Foo foo");
+    test(Parser::formalParameters, "Foo foo,Bar bar");
   }
 
   @Test
