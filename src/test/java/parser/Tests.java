@@ -58,9 +58,17 @@ final class Tests {
   }
 
   @Test
-  void testTypeReferences() {
-    test(Parser::typeReferences, "T");
-    test(Parser::typeReferences, "T,S");
+  void testTypeArgument() {
+    test(Parser::typeArgument, "T");
+    test(Parser::typeArgument, "?");
+    test(Parser::typeArgument, "? <: T");
+    test(Parser::typeArgument, "? :> T");
+  }
+
+  @Test
+  void testTypeArguments() {
+    test(Parser::typeArguments, "T");
+    test(Parser::typeArguments, "T,S");
   }
 
   @Test

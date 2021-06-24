@@ -19,10 +19,11 @@ import silverchain.parser.Method;
 import silverchain.parser.MethodParameter;
 import silverchain.parser.MethodParameters;
 import silverchain.parser.QualifiedName;
+import silverchain.parser.TypeArgument;
+import silverchain.parser.TypeArguments;
 import silverchain.parser.TypeParameter;
 import silverchain.parser.TypeParameterBound;
 import silverchain.parser.TypeReference;
-import silverchain.parser.TypeReferences;
 
 public final class JavaGenerator extends Generator {
 
@@ -351,7 +352,14 @@ public final class JavaGenerator extends Generator {
     return encode(reference.name()) + reference.arguments().map(this::encode).orElse("");
   }
 
-  private String encode(TypeReferences arguments) {
+  private String encode(TypeArgument argument) {
+    if (argument.reference().isPresent()) {
+      return encode(argument.reference().get());
+    }
+    return "?" + argument.bound().map(this::encode).orElse("");
+  }
+
+  private String encode(TypeArguments arguments) {
     return "<" + csv(arguments.stream(), this::encode) + ">";
   }
 

@@ -204,20 +204,29 @@ MethodParameter methodParameter(): {
 
 TypeReference typeReference(): {
   QualifiedName n;
-  TypeReferences r = null;
+  TypeArguments r = null;
 } {
-  n = qualifiedName() ("[" r = typeReferences() "]") ? {
+  n = qualifiedName() ("[" r = typeArguments() "]") ? {
     return new TypeReference(range(n, token), n, r);
   }
 }
 
-TypeReferences typeReferences(): {
-  TypeReference r;
-  TypeReferences rs = null;
+TypeArguments typeArguments(): {
+  TypeArgument a;
+  TypeArguments as = null;
 } {
-  r = typeReference() ("," rs = typeReferences())? {
-    return new TypeReferences(range(r, rs), r, rs);
+  a = typeArgument() ("," as = typeArguments())? {
+    return new TypeArguments(range(a, as), a, as);
   }
+}
+
+TypeArgument typeArgument(): {
+  TypeReference r;
+  Token w;
+  TypeParameterBound b = null;
+} {
+  r = typeReference() { return new TypeArgument(r.range(), r, null); } |
+  w = "?" (b = typeParameterBound())? { return new TypeArgument(range(w, b), null, b); }
 }
 
 TypeParameters typeParameters(): {
