@@ -7,13 +7,9 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
-import silverchain.diagram.Diagram;
-import silverchain.generator.Generator;
 import silverchain.generator.JavaGenerator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
@@ -21,7 +17,6 @@ import silverchain.parser.ParseException;
 import silverchain.parser.TokenMgrError;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidationError;
-import silverchain.validator.Validator;
 
 public final class Command {
 
