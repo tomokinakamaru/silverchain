@@ -1,17 +1,17 @@
 itemization.Itemization {
-  begin() itemization.EmptySubItemization<End>;
+  itemization.EmptySubItemization<End> begin();
 }
 
 itemization.EmptySubItemization<INNER; ITEM> {
-  item(ITEM item) itemization.SubItemization<INNER, ITEM>;
+  itemization.SubItemization<INNER, ITEM> item(ITEM item);
 }
 
 itemization.SubItemization<INNER, ITEM> {
-  item(ITEM item) itemization.SubItemization<INNER, ITEM>;
-  begin() itemization.EmptySubItemization<itemization.SubItemization<INNER, ITEM>>;
-  end() INNER;
+  itemization.SubItemization<INNER, ITEM> item(ITEM item);
+  itemization.EmptySubItemization<itemization.SubItemization<INNER, ITEM>> begin();
+  INNER end();
 }
 
 itemization.End {
-  toTeX() String;
+  String toTeX();
 }

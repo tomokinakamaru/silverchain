@@ -18,6 +18,6 @@ public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
 
   @Override
   public String toString() {
-    return expression() + type().map(t -> " " + t).orElse("") + ";";
+    return type().map(TypeReference::toString).orElse("void") + " " + expression() + ";";
   }
 }

@@ -126,19 +126,19 @@ final class Tests {
 
   @Test
   void testRule() {
-    test(Parser::rule, "foo();");
-    test(Parser::rule, "foo() Foo;");
+    test(Parser::rule, "void foo();");
+    test(Parser::rule, "Foo foo();");
   }
 
   @Test
   void testRules() {
-    test(Parser::rules, "foo() Foo; bar() Bar;");
+    test(Parser::rules, "Foo foo(); Bar bar();");
   }
 
   @Test
   void testGrammar() {
     test(Parser::grammar, "Foo {}");
-    test(Parser::grammar, "Foo { foo() Foo; }");
+    test(Parser::grammar, "Foo { Foo foo(); }");
 
     ASTNode node1 = parse(Parser::grammar, "Foo<T, T> {}");
     assertThrows(DuplicateDeclaration.class, node1::validate);

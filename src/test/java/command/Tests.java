@@ -74,7 +74,7 @@ public class Tests {
 
   @Test
   void testSaveError() {
-    input("Foo { foo(); }");
+    input("Foo { void foo(); }");
     test("-o", "build.gradle")
         .status(108)
         .stdout("")
@@ -83,10 +83,10 @@ public class Tests {
 
   @Test
   void testSuccessStdin() {
-    input("Foo { foo() Bar; }");
+    input("Foo { Bar foo(); }");
     test("-o", workspace.toString()).status(0).stdout("").stderr("");
 
-    input("Foo { foo() Bar; }");
+    input("Foo { Bar foo(); }");
     test("--output", workspace.toString()).status(0).stdout("").stderr("");
   }
 

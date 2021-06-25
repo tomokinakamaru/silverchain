@@ -1,4 +1,5 @@
 melody.CanonMelody {
+  void
   (d()      | fSharp() | a()     )[4]
   (a()      | cSharp() | e()     )[4]
   (b()      | d()      | fSharp())[4]

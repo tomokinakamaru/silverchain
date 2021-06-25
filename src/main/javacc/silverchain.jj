@@ -59,6 +59,7 @@ SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"//" (~["\r", "\n"])*> }
 TOKEN: {
   < SUPER: "super" > |
   < EXTENDS: "extends" > |
+  < VOID: "void" > |
   < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
@@ -104,9 +105,10 @@ Rules rules(): {
 Rule rule(): {
   RuleExpression e;
   TypeReference r = null;
+  Token t = null;
 } {
-  e = ruleExpression() (r = typeReference())? ";" {
-    return new Rule(range(e, token), e, r);
+  (r = typeReference() | <VOID> { t = token; }) e = ruleExpression() ";" {
+    return new Rule(r == null ? range(t, token) : range(r, token), e, r);
   }
 }
 
