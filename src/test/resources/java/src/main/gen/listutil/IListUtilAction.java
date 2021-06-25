@@ -2,15 +2,11 @@ package listutil;
 
 interface IListUtilAction<T> {
 
-  default <T> void state0$copies(java.util.List<? super T> src, java.util.List<? super T> dst) {
-    copies(src, dst);
-  }
-
   default void state0$copy() {
     copy();
   }
 
-  default <S> void state0$copy(java.util.List<? super S> src, java.util.List<? super S> dst) {
+  default <S> void state0$copy(java.util.List<S> src, java.util.List<? super S> dst) {
     copy(src, dst);
   }
 
@@ -22,11 +18,9 @@ interface IListUtilAction<T> {
     to(dst);
   }
 
-  <T> void copies(java.util.List<? super T> src, java.util.List<? super T> dst);
-
   void copy();
 
-  <S> void copy(java.util.List<? super S> src, java.util.List<? super S> dst);
+  <S> void copy(java.util.List<S> src, java.util.List<? super S> dst);
 
   void from(java.util.List<T> src);
 

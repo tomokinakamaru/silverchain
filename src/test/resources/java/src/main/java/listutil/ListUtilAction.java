@@ -4,18 +4,23 @@ import java.util.List;
 
 public class ListUtilAction<T> implements IListUtilAction<T> {
 
-  @Override
-  public <T> void copies(List<? super T> src, List<? super T> dst) {}
+  private List<T> src;
 
   @Override
   public void copy() {}
 
   @Override
-  public <S> void copy(List<? super S> src, List<? super S> dst) {}
+  public <S> void copy(List<S> src, List<? super S> dst) {
+    dst.addAll(src);
+  }
 
   @Override
-  public void from(List<T> src) {}
+  public void from(List<T> src) {
+    this.src = src;
+  }
 
   @Override
-  public void to(List<? super T> dst) {}
+  public void to(List<? super T> dst) {
+    dst.addAll(src);
+  }
 }
