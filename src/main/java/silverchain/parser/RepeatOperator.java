@@ -18,6 +18,6 @@ public final class RepeatOperator extends ASTNode2<Integer, Integer> {
 
   @Override
   public String toString() {
-    return "{" + min() + max().map(i -> "," + i).orElse(",") + "}";
+    return "[" + min() + max().map(i -> "," + i).orElse(",") + "]";
   }
 }

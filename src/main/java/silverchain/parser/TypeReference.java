@@ -31,7 +31,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
 
   @Override
   public String toString() {
-    return name() + arguments().map(a -> "[" + a + "]").orElse("");
+    return name() + arguments().map(a -> "<" + a + ">").orElse("");
   }
 
   @Override

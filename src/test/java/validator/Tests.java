@@ -10,17 +10,17 @@ final class Tests {
 
   @Test
   void testJavaTypeReferenceConflict() {
-    testJava("Foo: foo() Bar; foo() Baz;", "Conflict: Bar#L1C12, Baz#L1C23");
+    testJava("Foo { foo() Bar; foo() Baz; }", "Conflict: Bar#L1C13, Baz#L1C24");
   }
 
   @Test
   void testJavaTypeReferenceMethodConflict() {
-    testJava("Foo: foo()* Bar;", "Conflict: Bar#L1C13, foo()#L1C6");
+    testJava("Foo { foo()* Bar; }", "Conflict: Bar#L1C14, foo()#L1C7");
   }
 
   @Test
   void testJavaMethodConflict() {
-    testJava("Foo[T,S]: foo(T t) | foo(S s) Bar;", "Conflict: foo(S s)#L1C22, foo(T t)#L1C11");
+    testJava("Foo<T,S> { foo(T t) | foo(S s) Bar; }", "Conflict: foo(S s)#L1C23, foo(T t)#L1C12");
   }
 
   private void testJava(String text, String message) {

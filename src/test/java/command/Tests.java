@@ -50,7 +50,7 @@ public class Tests {
 
   @Test
   void testInputError2() {
-    System.setIn(new BrokenInputStream("Foo:"));
+    System.setIn(new BrokenInputStream("Foo {}"));
     test("-o", workspace.toString()).status(103).stdout("").stderr("Error on closing input: -\n");
   }
 
@@ -62,19 +62,19 @@ public class Tests {
 
   @Test
   void testParseError() {
-    input(":");
+    input("{");
     test("-o", workspace.toString()).status(105).stdout("");
   }
 
   @Test
   void testDuplicateDeclaration() {
-    input("Foo[T,T]:");
+    input("Foo<T,T> {}");
     test("-o", workspace.toString()).status(106).stdout("").stderr("T is already defined (L1C7)\n");
   }
 
   @Test
   void testSaveError() {
-    input("Foo: foo();");
+    input("Foo { foo(); }");
     test("-o", "build.gradle")
         .status(108)
         .stdout("")
@@ -83,10 +83,10 @@ public class Tests {
 
   @Test
   void testSuccessStdin() {
-    input("Foo: foo() Bar;");
+    input("Foo { foo() Bar; }");
     test("-o", workspace.toString()).status(0).stdout("").stderr("");
 
-    input("Foo: foo() Bar;");
+    input("Foo { foo() Bar; }");
     test("--output", workspace.toString()).status(0).stdout("").stderr("");
   }
 
