@@ -3,8 +3,10 @@ package silverchain.diagram;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeParameterList;
 
 public final class Transition implements Comparable<Transition> {
 
@@ -55,7 +57,13 @@ public final class Transition implements Comparable<Transition> {
 
   public List<TypeParameter> typeParameters() {
     Set<TypeParameter> parameters = new LinkedHashSet<>(destination.typeParameters());
-    parameters.removeAll(source.typeParameters());
+    source.typeParameters().forEach(parameters::remove);
+
+    if (label.isMethod()) {
+      Optional<TypeParameterList> list = label.method().parameters().localTypeParameters();
+      list.ifPresent(typeParameters -> typeParameters.forEach(parameters::add));
+    }
+
     return new ArrayList<>(parameters);
   }
 
