@@ -22,11 +22,10 @@ public class Tests {
         "Usage: silverchain [options]\n"
             + "\n"
             + "Options:\n"
-            + "  -h, --help             Show this message and exit\n"
-            + "  -v, --version          Show version and exit\n"
-            + "  -i, --input <path>     Input grammar file\n"
-            + "  -o, --output <path>    Output directory\n"
-            + "  -l, --language <lang>  Output language\n";
+            + "  -h, --help           Show this message and exit\n"
+            + "  -v, --version        Show version and exit\n"
+            + "  -i, --input <path>   Input grammar file\n"
+            + "  -o, --output <path>  Output directory\n";
     test("-h").status(0).stdout(help).stderr("");
     test("--help").status(0).stdout(help).stderr("");
   }
@@ -41,11 +40,6 @@ public class Tests {
   @Test
   void testUnknownOption() {
     test("-foo").status(101).stdout("").stderr("Unknown option: -foo\n");
-  }
-
-  @Test
-  void testUnsupportedLanguage() {
-    test("-l", "foo").status(102).stdout("").stderr("Unsupported language: foo\n");
   }
 
   @Test
