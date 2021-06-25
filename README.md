@@ -74,7 +74,9 @@ Now, the library users must be happy because they will never accidentally write 
 **Silverchain is a tool that significantly reduces the cost of the user-friendly implementation!** Silverchain generates class/method definitions from the code that defines valid chains. For example, it generates the four classes (`SQL`, `SQL1`, `SQL2`, and `SQL3`) from the following chain definition:
 
 ```
-SQL: select(String columns) from(String table) where(String expression)? execute() Result;
+SQL {
+  Result select(String columns) from(String table) where(String expression)? execute();
+}
 ```
 
 ## Not only preventing invalid chains!
