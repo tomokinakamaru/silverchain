@@ -1,6 +1,7 @@
 package silverchain.command;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -18,7 +19,9 @@ final class Options {
   }
 
   Map<String, String> defaultValues() {
-    return list.stream().collect(Collectors.toMap(Option::name, Option::defaultValue));
+    Map<String, String> map = new HashMap<>();
+    list.forEach(o -> map.put(o.name(), o.defaultValue()));
+    return map;
   }
 
   String help() {

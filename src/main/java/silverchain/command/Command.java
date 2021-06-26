@@ -39,6 +39,7 @@ public final class Command {
     parser.add(new Option("v", "version", "Show version and exit"));
     parser.add(new Option("i", "input", "<path>", "Input grammar file", "-"));
     parser.add(new Option("o", "output", "<path>", "Output directory", "."));
+    parser.add(new Option("j", "javadoc", "<path>", "Javadoc source directory", null));
     parser.add(new Option("l", "language", "<lang>", "Output language", "java"));
   }
 

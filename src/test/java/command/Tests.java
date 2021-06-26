@@ -26,6 +26,7 @@ public class Tests {
             + "  -v, --version          Show version and exit\n"
             + "  -i, --input <path>     Input grammar file\n"
             + "  -o, --output <path>    Output directory\n"
+            + "  -j, --javadoc <path>   Javadoc source directory\n"
             + "  -l, --language <lang>  Output language\n";
     test("-h").status(0).stdout(help).stderr("");
     test("--help").status(0).stdout(help).stderr("");
