@@ -1,6 +1,7 @@
 package silverchain.generator;
 
 import static java.lang.String.join;
+import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
@@ -15,14 +16,17 @@ import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
+import silverchain.parser.FormalParameter;
+import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
-import silverchain.parser.MethodParameter;
 import silverchain.parser.MethodParameters;
 import silverchain.parser.QualifiedName;
+import silverchain.parser.TypeArgument;
+import silverchain.parser.TypeArguments;
 import silverchain.parser.TypeParameter;
 import silverchain.parser.TypeParameterBound;
+import silverchain.parser.TypeParameterList;
 import silverchain.parser.TypeReference;
-import silverchain.parser.TypeReferences;
 
 public final class JavaGenerator extends Generator {
 
@@ -246,9 +250,14 @@ public final class JavaGenerator extends Generator {
   }
 
   private String getIActionMethodHead(Transition transition, boolean full) {
+    MethodParameters mps = transition.label().method().parameters();
+    Optional<TypeParameterList> opt = mps.localTypeParameters();
+    List<TypeParameter> lst = opt.map(l -> l.stream().collect(toList())).orElse(emptyList());
+    String s1 = lst.isEmpty() ? "" : encode(lst, true) + " ";
+
     State d = transition.destination();
-    String s = d.isNumbered() ? "void" : getIStateReference(d);
-    return s + " " + getIActionMethodSignature(transition, true, full);
+    String s2 = d.isNumbered() ? "void" : getIStateReference(d);
+    return s1 + s2 + " " + getIActionMethodSignature(transition, true, full);
   }
 
   private String getIActionMethodBody(Transition transition) {
@@ -335,15 +344,15 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(Method method, boolean decl) {
-    String parameters = method.parameters().map(p -> encode(p, decl)).orElse("");
-    return method.name() + "(" + parameters + ")";
+    String fs = method.parameters().formalParameters().map(p -> encode(p, decl)).orElse("");
+    return method.name() + "(" + fs + ")";
   }
 
-  private String encode(MethodParameters parameters, boolean decl) {
+  private String encode(FormalParameters parameters, boolean decl) {
     return csv(parameters.stream(), p -> encode(p, decl));
   }
 
-  private String encode(MethodParameter parameter, boolean decl) {
+  private String encode(FormalParameter parameter, boolean decl) {
     return decl ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
   }
 
@@ -351,7 +360,14 @@ public final class JavaGenerator extends Generator {
     return encode(reference.name()) + reference.arguments().map(this::encode).orElse("");
   }
 
-  private String encode(TypeReferences arguments) {
+  private String encode(TypeArgument argument) {
+    if (argument.reference().isPresent()) {
+      return encode(argument.reference().get());
+    }
+    return "?" + argument.bound().map(this::encode).orElse("");
+  }
+
+  private String encode(TypeArguments arguments) {
     return "<" + csv(arguments.stream(), this::encode) + ">";
   }
 

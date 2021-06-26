@@ -58,9 +58,17 @@ final class Tests {
   }
 
   @Test
-  void testTypeReferences() {
-    test(Parser::typeReferences, "T");
-    test(Parser::typeReferences, "T,S");
+  void testTypeArgument() {
+    test(Parser::typeArgument, "T");
+    test(Parser::typeArgument, "?");
+    test(Parser::typeArgument, "? <: T");
+    test(Parser::typeArgument, "? :> T");
+  }
+
+  @Test
+  void testTypeArguments() {
+    test(Parser::typeArguments, "T");
+    test(Parser::typeArguments, "T,S");
   }
 
   @Test
@@ -70,14 +78,20 @@ final class Tests {
   }
 
   @Test
-  void testMethodParameter() {
-    test(Parser::methodParameter, "Foo foo");
+  void testFormalParameter() {
+    test(Parser::formalParameter, "Foo foo");
+  }
+
+  @Test
+  void testFormalParameters() {
+    test(Parser::formalParameters, "Foo foo");
+    test(Parser::formalParameters, "Foo foo,Bar bar");
   }
 
   @Test
   void testMethodParameters() {
-    test(Parser::methodParameters, "Foo foo");
-    test(Parser::methodParameters, "Foo foo,Bar bar");
+    test(Parser::methodParameters, "()");
+    test(Parser::methodParameters, "[T]()");
   }
 
   @Test

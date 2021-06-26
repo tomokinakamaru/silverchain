@@ -1,8 +1,8 @@
 package silverchain.parser;
 
-public final class MethodParameter extends ASTNode2<TypeReference, String> {
+public final class FormalParameter extends ASTNode2<TypeReference, String> {
 
-  MethodParameter(Range range, TypeReference typeReference, String name) {
+  FormalParameter(Range range, TypeReference typeReference, String name) {
     super(range, typeReference, name);
   }
 

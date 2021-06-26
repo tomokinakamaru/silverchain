@@ -1,8 +1,24 @@
 package silverchain.parser;
 
-public final class MethodParameters extends ASTNodeN<MethodParameter, MethodParameters> {
+import java.util.Optional;
 
-  MethodParameters(Range range, MethodParameter head, MethodParameters tail) {
-    super(range, head, tail);
+public final class MethodParameters extends ASTNode2<TypeParameterList, FormalParameters> {
+
+  MethodParameters(Range range, TypeParameterList left, FormalParameters right) {
+    super(range, left, right);
+  }
+
+  public Optional<TypeParameterList> localTypeParameters() {
+    return Optional.ofNullable(left());
+  }
+
+  public Optional<FormalParameters> formalParameters() {
+    return Optional.ofNullable(right());
+  }
+
+  @Override
+  public String toString() {
+    String s = "(" + formalParameters().map(ASTNodeN::toString).orElse("") + ")";
+    return localTypeParameters().map(p -> "[" + p + "]").orElse("") + s;
   }
 }
