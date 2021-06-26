@@ -1,0 +1,5 @@
+listutil.ListUtil[;T]:
+
+copy() from(java.util.List[T] src) to(java.util.List[? :> T] dst);
+
+copy[S](java.util.List[S] src, java.util.List[? :> S] dst);

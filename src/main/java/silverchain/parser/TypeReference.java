@@ -9,11 +9,11 @@ import java.util.Optional;
 import java.util.Set;
 import silverchain.diagram.Diagram;
 
-public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences> {
+public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> {
 
   private TypeParameter referent;
 
-  TypeReference(Range range, QualifiedName name, TypeReferences arguments) {
+  TypeReference(Range range, QualifiedName name, TypeArguments arguments) {
     super(range, name, arguments);
   }
 
@@ -21,7 +21,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeReferences>
     return left();
   }
 
-  public Optional<TypeReferences> arguments() {
+  public Optional<TypeArguments> arguments() {
     return Optional.ofNullable(right());
   }
 
