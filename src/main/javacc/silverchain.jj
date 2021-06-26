@@ -197,7 +197,7 @@ MethodParameters methodParameters(): {
   TypeParameterList ts = null;
   FormalParameters fs = null;
 } {
-  ("[" { s = token; } ts = typeParameterList() "]")?
+  ("<" { s = token; } ts = typeParameterList() ">")?
   "(" { p = token; } (fs = formalParameters())? ")" {
     return new MethodParameters(range(s == null ? p : s, token), ts, fs);
   }

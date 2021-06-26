@@ -61,8 +61,8 @@ final class Tests {
   void testTypeArgument() {
     test(Parser::typeArgument, "T");
     test(Parser::typeArgument, "?");
-    test(Parser::typeArgument, "? <: T");
-    test(Parser::typeArgument, "? :> T");
+    test(Parser::typeArgument, "? extends T");
+    test(Parser::typeArgument, "? super T");
   }
 
   @Test
@@ -91,7 +91,7 @@ final class Tests {
   @Test
   void testMethodParameters() {
     test(Parser::methodParameters, "()");
-    test(Parser::methodParameters, "[T]()");
+    test(Parser::methodParameters, "<T>()");
   }
 
   @Test
