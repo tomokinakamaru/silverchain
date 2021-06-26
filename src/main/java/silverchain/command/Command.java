@@ -7,13 +7,10 @@ import java.io.InputStream;
 import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
-import silverchain.diagram.Diagram;
-import silverchain.generator.Generator;
+import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
@@ -21,7 +18,7 @@ import silverchain.parser.ParseException;
 import silverchain.parser.TokenMgrError;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidationError;
-import silverchain.validator.Validator;
+import silverchain.validator.ValidatorProvider;
 
 public final class Command {
 
@@ -97,14 +94,14 @@ public final class Command {
     }
   }
 
-  private Function<List<Diagram>, Generator> generatorProvider(String language) {
+  private GeneratorProvider generatorProvider(String language) {
     if (language.equals("java")) {
       return JavaGenerator::new;
     }
     throw new UnsupportedLanguage(language);
   }
 
-  private Function<List<Diagram>, Validator> validatorProvider(String language) {
+  private ValidatorProvider validatorProvider(String language) {
     if (language.equals("java")) {
       return JavaValidator::new;
     }

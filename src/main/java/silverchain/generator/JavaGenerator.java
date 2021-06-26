@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
+import silverchain.diagram.Diagrams;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
@@ -30,12 +31,12 @@ import silverchain.parser.TypeReference;
 
 public final class JavaGenerator extends Generator {
 
-  public JavaGenerator(List<Diagram> diagrams) {
+  public JavaGenerator(Diagrams diagrams) {
     super(diagrams);
   }
 
   @Override
-  protected void generate(List<Diagram> diagrams) {
+  protected void generate(Diagrams diagrams) {
     diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
     diagrams.forEach(this::generate);
   }

@@ -1,20 +1,18 @@
 package silverchain.validator;
 
-import java.util.ArrayList;
-import java.util.List;
-import silverchain.diagram.Diagram;
+import silverchain.diagram.Diagrams;
 
 public abstract class Validator {
 
-  private final List<Diagram> diagrams;
+  private final Diagrams diagrams;
 
-  protected abstract void validate(List<Diagram> diagrams);
+  protected abstract void validate(Diagrams diagrams);
 
-  protected Validator(List<Diagram> diagrams) {
+  protected Validator(Diagrams diagrams) {
     this.diagrams = diagrams;
   }
 
   public final void validate() {
-    validate(new ArrayList<>(diagrams));
+    validate(new Diagrams(diagrams));
   }
 }
