@@ -116,7 +116,6 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 -v, --version          Show version and exit
 -i, --input <path>     Input grammar file
 -o, --output <path>    Output directory
--l, --language <lang>  Output language
 ```
 
 ## Contributing
