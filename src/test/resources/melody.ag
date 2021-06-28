@@ -1,10 +1,12 @@
-melody.CanonMelody:
-(d()      | fSharp() | a()     ){4}
-(a()      | cSharp() | e()     ){4}
-(b()      | d()      | fSharp()){4}
-(fSharp() | a()      | cSharp()){4}
-(g()      | b()      | d()     ){4}
-(d()      | fSharp() | a()     ){4}
-(g()      | b()      | d()     ){4}
-(a()      | cSharp() | e()     ){4}
-play(int n);
+melody.CanonMelody {
+  void
+  (d()      | fSharp() | a()     )[4]
+  (a()      | cSharp() | e()     )[4]
+  (b()      | d()      | fSharp())[4]
+  (fSharp() | a()      | cSharp())[4]
+  (g()      | b()      | d()     )[4]
+  (d()      | fSharp() | a()     )[4]
+  (g()      | b()      | d()     )[4]
+  (a()      | cSharp() | e()     )[4]
+  play(int n);
+}

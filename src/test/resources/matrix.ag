@@ -1,10 +1,8 @@
-matrix.MatrixBuilder[;R <: matrix.Size, C <: matrix.Size]:
+matrix.MatrixBuilder<;R extends matrix.Size, C extends matrix.Size> {
+  matrix.Matrix<R, C> random() row(R row) col(C col);
+}
 
-random() row(R row) col(C col) matrix.Matrix[R, C];
-
-
-matrix.Matrix[R <: matrix.Size, C <: matrix.Size; NEW_C <: matrix.Size]:
-
-plus(matrix.Matrix[R, C] matrix) matrix.Matrix[R, C];
-
-mult(matrix.Matrix[C, NEW_C] matrix) matrix.Matrix[R, NEW_C];
+matrix.Matrix<R extends matrix.Size, C extends matrix.Size; NEW_C extends matrix.Size> {
+  matrix.Matrix<R, C> plus(matrix.Matrix<R, C> matrix);
+  matrix.Matrix<R, NEW_C> mult(matrix.Matrix<C, NEW_C> matrix);
+}

@@ -22,11 +22,10 @@ public class Tests {
         "Usage: silverchain [options]\n"
             + "\n"
             + "Options:\n"
-            + "  -h, --help             Show this message and exit\n"
-            + "  -v, --version          Show version and exit\n"
-            + "  -i, --input <path>     Input grammar file\n"
-            + "  -o, --output <path>    Output directory\n"
-            + "  -l, --language <lang>  Output language\n";
+            + "  -h, --help           Show this message and exit\n"
+            + "  -v, --version        Show version and exit\n"
+            + "  -i, --input <path>   Input grammar file\n"
+            + "  -o, --output <path>  Output directory\n";
     test("-h").status(0).stdout(help).stderr("");
     test("--help").status(0).stdout(help).stderr("");
   }
@@ -44,11 +43,6 @@ public class Tests {
   }
 
   @Test
-  void testUnsupportedLanguage() {
-    test("-l", "foo").status(102).stdout("").stderr("Unsupported language: foo\n");
-  }
-
-  @Test
   void testInputError1() {
     test("-i", "foo.ag").status(103).stdout("").stderr("File not found: foo.ag\n");
     test("--input", "foo.ag").status(103).stdout("").stderr("File not found: foo.ag\n");
@@ -56,7 +50,7 @@ public class Tests {
 
   @Test
   void testInputError2() {
-    System.setIn(new BrokenInputStream("Foo:"));
+    System.setIn(new BrokenInputStream("Foo {}"));
     test("-o", workspace.toString()).status(103).stdout("").stderr("Error on closing input: -\n");
   }
 
@@ -68,19 +62,19 @@ public class Tests {
 
   @Test
   void testParseError() {
-    input(":");
+    input("{");
     test("-o", workspace.toString()).status(105).stdout("");
   }
 
   @Test
   void testDuplicateDeclaration() {
-    input("Foo[T,T]:");
+    input("Foo<T,T> {}");
     test("-o", workspace.toString()).status(106).stdout("").stderr("T is already defined (L1C7)\n");
   }
 
   @Test
   void testSaveError() {
-    input("Foo: foo();");
+    input("Foo { void foo(); }");
     test("-o", "build.gradle")
         .status(108)
         .stdout("")
@@ -89,10 +83,10 @@ public class Tests {
 
   @Test
   void testSuccessStdin() {
-    input("Foo: foo() Bar;");
+    input("Foo { Bar foo(); }");
     test("-o", workspace.toString()).status(0).stdout("").stderr("");
 
-    input("Foo: foo() Bar;");
+    input("Foo { Bar foo(); }");
     test("--output", workspace.toString()).status(0).stdout("").stderr("");
   }
 

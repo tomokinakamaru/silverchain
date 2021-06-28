@@ -19,6 +19,6 @@ public final class MethodParameters extends ASTNode2<TypeParameterList, FormalPa
   @Override
   public String toString() {
     String s = "(" + formalParameters().map(ASTNodeN::toString).orElse("") + ")";
-    return localTypeParameters().map(p -> "[" + p + "]").orElse("") + s;
+    return localTypeParameters().map(p -> "<" + p + ">").orElse("") + s;
   }
 }

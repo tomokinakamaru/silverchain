@@ -1,5 +1,6 @@
-listutil.ListUtil[;T]:
+listutil.ListUtil<;T> {
 
-copy() from(java.util.List[T] src) to(java.util.List[? :> T] dst);
+  void copy() from(java.util.List<T> src) to(java.util.List<? super T> dst);
 
-copy[S](java.util.List[S] src, java.util.List[? :> S] dst);
+  void copy<S>(java.util.List<S> src, java.util.List<? super S> dst);
+}

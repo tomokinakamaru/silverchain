@@ -19,7 +19,7 @@ public final class Grammar extends ASTNode2<Type, Rules> {
 
   @Override
   public String toString() {
-    return type() + ":" + rules().map(r -> " " + r).orElse("");
+    return type() + " {" + rules().map(r -> " " + r + " }").orElse("}");
   }
 
   @Override

@@ -13,7 +13,7 @@ final class Tests {
 
   @Test
   void test1() {
-    test("foo.Foo:")
+    test("foo.Foo {}")
         .name("foo.Foo")
         .typeParameterCount(0)
         .stateCount(1)
@@ -25,7 +25,7 @@ final class Tests {
 
   @Test
   void test2() {
-    test("Foo: bar(Bar bar);")
+    test("Foo { void bar(Bar bar); }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -43,7 +43,7 @@ final class Tests {
 
   @Test
   void test3() {
-    test("Foo: bar(Bar bar) baz.Baz;")
+    test("Foo { baz.Baz bar(Bar bar); }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -62,7 +62,7 @@ final class Tests {
 
   @Test
   void test4() {
-    test("Foo: bar(Bar bar) baz(Baz baz)* Baz;")
+    test("Foo { Baz bar(Bar bar) baz(Baz baz)*; }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -84,7 +84,7 @@ final class Tests {
 
   @Test
   void test6() {
-    test("Foo: bar(Bar bar) baz(Baz baz)+ Baz;")
+    test("Foo { Baz bar(Bar bar) baz(Baz baz)+; }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(3)
@@ -112,7 +112,7 @@ final class Tests {
 
   @Test
   void test7() {
-    test("Foo: bar(Bar bar) baz(Baz baz)? Baz;")
+    test("Foo { Baz bar(Bar bar) baz(Baz baz)?; }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(3)
@@ -138,7 +138,7 @@ final class Tests {
 
   @Test
   void test8() {
-    test("Foo: bar(Bar bar) | baz(Baz baz) Qux;")
+    test("Foo { Qux bar(Bar bar) | baz(Baz baz); }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -160,7 +160,7 @@ final class Tests {
 
   @Test
   void test9() {
-    test("Foo: foo() Baz; foo() Bar;")
+    test("Foo { Baz foo(); Bar foo(); }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -179,7 +179,7 @@ final class Tests {
 
   @Test
   void test10() {
-    test("Foo: bar(Bar bar) Qux; baz(Baz baz) Qux;")
+    test("Foo { Qux bar(Bar bar); Qux baz(Baz baz); }")
         .name("Foo")
         .typeParameterCount(0)
         .stateCount(2)
@@ -201,7 +201,7 @@ final class Tests {
 
   @Test
   void test11() {
-    test("Foo[T;S]: bar(T t) baz(S s) Qux[T,S];")
+    test("Foo<T;S> { Qux<T,S> bar(T t) baz(S s); }")
         .name("Foo")
         .typeParameterCount(2)
         .typeParameter(0, "T")
@@ -218,7 +218,7 @@ final class Tests {
         .stateTypeReferenceCount(0, 0)
         .stateTypeReferenceCount(1, 0)
         .stateTypeReferenceCount(2, 1)
-        .stateTypeReference(2, 0, "Qux[T,S]")
+        .stateTypeReference(2, 0, "Qux<T,S>")
         .transitionCount(0, 1)
         .transitionCount(1, 1)
         .transitionCount(2, 0)
@@ -233,7 +233,7 @@ final class Tests {
 
   @Test
   void test12() {
-    test("Foo[T;S]: bar(T t) baz(S s)* Qux;")
+    test("Foo<T;S> { Qux bar(T t) baz(S s)*; }")
         .name("Foo")
         .typeParameterCount(2)
         .typeParameter(0, "T")
@@ -270,7 +270,7 @@ final class Tests {
   @SuppressWarnings("EqualsBetweenInconvertibleTypes")
   @Test
   void testForCoverage() {
-    Diagram diagram = compile("Foo: foo();");
+    Diagram diagram = compile("Foo { void foo(); }");
     Label label = diagram.states().get(0).transitions().get(0).label();
     assert !label.equals(diagram);
   }

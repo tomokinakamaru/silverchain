@@ -56,16 +56,18 @@ An AG file is a file that defines valid method chains for a library. Silverchain
 Let's create the AG file for our library in `src/main/silverchain/melodychain.ag` with the following content:
 
 ```
-melodychain.Melody:
-  ( D()      | FSharp() | A()      ){4}
-  ( A()      | CSharp() | E()      ){4}
-  ( B()      | D()      | FSharp() ){4}
-  ( FSharp() | A()      | CSharp() ){4}
-  ( G()      | B()      | D()      ){4}
-  ( D()      | FSharp() | A()      ){4}
-  ( G()      | B()      | D()      ){4}
-  ( A()      | CSharp() | E()      ){4}
-  play();
+melodychain.Melody {
+  void
+    ( D()      | FSharp() | A()      )[4] // Repeat D, F# or A four times
+    ( A()      | CSharp() | E()      )[4]
+    ( B()      | D()      | FSharp() )[4]
+    ( FSharp() | A()      | CSharp() )[4]
+    ( G()      | B()      | D()      )[4]
+    ( D()      | FSharp() | A()      )[4]
+    ( G()      | B()      | D()      )[4]
+    ( A()      | CSharp() | E()      )[4]
+    play(); // Play melody
+}
 ```
 
 The lines above define that the users can chain `D`, `FSharp`, or `A` four times, `A`, `CSharp`, or `E` four times, and so on. For more example AG files, please check [src/test/resources](../src/test/resources).
