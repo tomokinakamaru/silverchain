@@ -47,16 +47,13 @@ final class Tests {
 
   @Test
   void testMelodyWithJavadoc() {
-    test("melody", "src/test/resources/java/src/main");
+    test("melody");
   }
 
   private void test(String name) {
-    test(name, null);
-  }
-
-  private void test(String name, String javadocPath) {
     Path path = resources.resolve(name + ".ag");
-    List<GeneratedFile> generated = generateJava(Utility.read(path), javadocPath);
+    String javadoc = "src/test/resources/java/src/main";
+    List<GeneratedFile> generated = generateJava(Utility.read(path), javadoc);
     List<GeneratedFile> expected = expectedJavaFiles(name);
     assert generated.size() == expected.size();
     for (GeneratedFile file : generated) {

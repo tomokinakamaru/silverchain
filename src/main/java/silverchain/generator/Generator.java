@@ -9,9 +9,9 @@ import silverchain.javadoc.Javadocs;
 
 public abstract class Generator {
 
-  private final Diagrams diagrams;
+  protected final Javadocs javadocs;
 
-  private final Javadocs javadocs;
+  private final Diagrams diagrams;
 
   private final List<GeneratedFile> files;
 
