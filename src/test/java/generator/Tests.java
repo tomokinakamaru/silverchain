@@ -45,11 +45,6 @@ final class Tests {
     test("itemization");
   }
 
-  @Test
-  void testMelodyWithJavadoc() {
-    test("melody");
-  }
-
   private void test(String name) {
     Path path = resources.resolve(name + ".ag");
     String javadoc = "src/test/resources/java/src/main";
