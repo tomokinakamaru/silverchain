@@ -2,7 +2,7 @@ package silverchain.javadoc;
 
 import java.util.Objects;
 
-final class JavadocKey {
+final class Key {
 
   private final String pkg;
 
@@ -10,7 +10,7 @@ final class JavadocKey {
 
   private final String method;
 
-  JavadocKey(String pkg, String cls, String method) {
+  Key(String pkg, String cls, String method) {
     this.pkg = pkg;
     this.cls = cls;
     this.method = method;
@@ -20,7 +20,7 @@ final class JavadocKey {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    JavadocKey key = (JavadocKey) o;
+    Key key = (Key) o;
     return Objects.equals(pkg, key.pkg)
         && Objects.equals(cls, key.cls)
         && Objects.equals(method, key.method);

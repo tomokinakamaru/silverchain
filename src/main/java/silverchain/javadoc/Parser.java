@@ -1,16 +1,15 @@
 package silverchain.javadoc;
 
+import static java.nio.file.Files.walk;
+import static java.nio.file.Paths.get;
+
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 final class Parser {
@@ -23,8 +22,8 @@ final class Parser {
     parser.getParserConfiguration().setSymbolResolver(symbolSolver);
   }
 
-  List<CompilationUnit> parseFiles(String path) {
-    return find(path).map(this::parseFile).filter(Objects::nonNull).collect(Collectors.toList());
+  Stream<CompilationUnit> parseFiles(String path) {
+    return findJavaFiles(path).map(this::parseFile).filter(Objects::nonNull);
   }
 
   private CompilationUnit parseFile(Path path) {
@@ -35,9 +34,9 @@ final class Parser {
     }
   }
 
-  private Stream<Path> find(String path) {
+  private Stream<Path> findJavaFiles(String path) {
     try {
-      return Files.walk(Paths.get(path)).filter(p -> p.toString().endsWith(".java"));
+      return walk(get(path)).filter(p -> p.toString().endsWith(".java"));
     } catch (IOException e) {
       return Stream.empty();
     }

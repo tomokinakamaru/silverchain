@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.comments.Comment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -42,20 +42,20 @@ public final class JavaGenerator extends Generator {
   @Override
   protected void generate(Diagrams diagrams, Javadocs javadocs) {
     diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
-    diagrams.forEach(this::generate);
+    diagrams.forEach(diagram -> generate(diagram, javadocs));
   }
 
-  private void generate(Diagram diagram) {
+  private void generate(Diagram diagram, Javadocs javadocs) {
     generateIAction(diagram);
-    diagram.numberedStates().forEach(this::generate);
+    diagram.numberedStates().forEach(state -> generate(state, javadocs));
   }
 
-  private void generate(State state) {
-    generateIState(state);
+  private void generate(State state, Javadocs javadocs) {
+    generateIState(state, javadocs);
     generateState(state);
   }
 
-  private void generateIState(State state) {
+  private void generateIState(State state, Javadocs javadocs) {
     beginFile(getFilePath(getIStateQualifiedName(state)));
     writePackageDeclaration(getIStatePackageName(state));
 
@@ -69,37 +69,38 @@ public final class JavaGenerator extends Generator {
     for (Transition transition : state.transitions()) {
       writeLineBreak();
       writeIndentation();
-
-      // Javadoc comment
-      String pkg = getIActionPackageName(state.diagram());
-      String cls = getIActionName(state.diagram());
-      Method method = transition.label().method();
-      StringBuilder mth = new StringBuilder(method.name() + "(");
-      FormalParameters ps = method.parameters().formalParameters().orElse(null);
-      if (ps != null) {
-        List<String> lst = new ArrayList<>();
-        for (FormalParameter p : ps) {
-          if (p.type().referent() == null) {
-            lst.add(p.type().name().name());
-          } else {
-            lst.add("Object");
-          }
-          mth.append(String.join(", ", lst));
-        }
-      }
-      mth.append(")");
-      JavadocComment comment = javadocs.get(pkg, cls, mth.toString());
-      if (comment != null) {
-        write(comment.getTokenRange().map(TokenRange::toString).orElse("") + "\n");
-        writeIndentation();
-      }
-
+      pasteComment(transition, javadocs);
       writeStateMethodDeclaration(transition);
       writeSemicolon();
     }
 
     writeRightBracket();
     endFile();
+  }
+
+  private void pasteComment(Transition transition, Javadocs javadocs) {
+    String pkg = getIActionPackageName(transition.source().diagram());
+    String cls = getIActionName(transition.source().diagram());
+    Method method = transition.label().method();
+    StringBuilder mth = new StringBuilder(method.name() + "(");
+    FormalParameters ps = method.parameters().formalParameters().orElse(null);
+    if (ps != null) {
+      List<String> lst = new ArrayList<>();
+      for (FormalParameter p : ps) {
+        if (p.type().referent() == null) {
+          lst.add(p.type().name().name());
+        } else {
+          lst.add("Object");
+        }
+        mth.append(String.join(", ", lst));
+      }
+    }
+    mth.append(")");
+    Comment comment = javadocs.get(pkg, cls, mth.toString());
+    if (comment != null) {
+      write(comment.getTokenRange().map(TokenRange::toString).orElse("") + "\n");
+      writeIndentation();
+    }
   }
 
   private void generateState(State state) {
