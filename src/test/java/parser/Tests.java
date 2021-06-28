@@ -31,8 +31,8 @@ final class Tests {
 
   @Test
   void testTypeParameterBound() {
-    test(Parser::typeParameterBound, "<: Foo");
-    test(Parser::typeParameterBound, ":> Foo");
+    test(Parser::typeParameterBound, "extends Foo");
+    test(Parser::typeParameterBound, "super Foo");
   }
 
   @Test
@@ -51,18 +51,18 @@ final class Tests {
   @Test
   void testType() {
     test(Parser::type, "Foo");
-    test(Parser::type, "Foo[T;S]");
-    test(Parser::type, "Foo[T,S]");
-    test(Parser::type, "Foo[T,S;U]");
-    test(Parser::type, "Foo[T;S,U]");
+    test(Parser::type, "Foo<T;S>");
+    test(Parser::type, "Foo<T,S>");
+    test(Parser::type, "Foo<T,S;U>");
+    test(Parser::type, "Foo<T;S,U>");
   }
 
   @Test
   void testTypeArgument() {
     test(Parser::typeArgument, "T");
     test(Parser::typeArgument, "?");
-    test(Parser::typeArgument, "? <: T");
-    test(Parser::typeArgument, "? :> T");
+    test(Parser::typeArgument, "? extends T");
+    test(Parser::typeArgument, "? super T");
   }
 
   @Test
@@ -74,7 +74,7 @@ final class Tests {
   @Test
   void testTypeReference() {
     test(Parser::typeReference, "Foo");
-    test(Parser::typeReference, "foo.Bar[T]");
+    test(Parser::typeReference, "foo.Bar<T>");
   }
 
   @Test
@@ -91,7 +91,7 @@ final class Tests {
   @Test
   void testMethodParameters() {
     test(Parser::methodParameters, "()");
-    test(Parser::methodParameters, "[T]()");
+    test(Parser::methodParameters, "<T>()");
   }
 
   @Test
@@ -108,22 +108,22 @@ final class Tests {
 
   @Test
   void testRepeatOperator() {
-    test(Parser::repeatOperator, "*", "{0,}");
-    test(Parser::repeatOperator, "+", "{1,}");
-    test(Parser::repeatOperator, "?", "{0,1}");
-    test(Parser::repeatOperator, "{1}", "{1,1}");
-    test(Parser::repeatOperator, "{2}", "{2,2}");
-    test(Parser::repeatOperator, "{1,}", "{1,}");
-    test(Parser::repeatOperator, "{0,1}");
-    test(Parser::repeatOperator, "{0,2}");
-    test(Parser::repeatOperator, "{1,2}");
-    test(Parser::repeatOperator, "{2,3}");
+    test(Parser::repeatOperator, "*", "[0,]");
+    test(Parser::repeatOperator, "+", "[1,]");
+    test(Parser::repeatOperator, "?", "[0,1]");
+    test(Parser::repeatOperator, "[1]", "[1,1]");
+    test(Parser::repeatOperator, "[2]", "[2,2]");
+    test(Parser::repeatOperator, "[1,]", "[1,]");
+    test(Parser::repeatOperator, "[0,1]");
+    test(Parser::repeatOperator, "[0,2]");
+    test(Parser::repeatOperator, "[1,2]");
+    test(Parser::repeatOperator, "[2,3]");
   }
 
   @Test
   void testRuleFactor() {
     test(Parser::ruleFactor, "foo()");
-    test(Parser::ruleFactor, "foo()*", "foo(){0,}");
+    test(Parser::ruleFactor, "foo()*", "foo()[0,]");
   }
 
   @Test
@@ -140,33 +140,33 @@ final class Tests {
 
   @Test
   void testRule() {
-    test(Parser::rule, "foo();");
-    test(Parser::rule, "foo() Foo;");
+    test(Parser::rule, "void foo();");
+    test(Parser::rule, "Foo foo();");
   }
 
   @Test
   void testRules() {
-    test(Parser::rules, "foo() Foo; bar() Bar;");
+    test(Parser::rules, "Foo foo(); Bar bar();");
   }
 
   @Test
   void testGrammar() {
-    test(Parser::grammar, "Foo:");
-    test(Parser::grammar, "Foo: foo() Foo;");
+    test(Parser::grammar, "Foo {}");
+    test(Parser::grammar, "Foo { Foo foo(); }");
 
-    ASTNode node1 = parse(Parser::grammar, "Foo[T, T]:");
+    ASTNode node1 = parse(Parser::grammar, "Foo<T, T> {}");
     assertThrows(DuplicateDeclaration.class, node1::validate);
 
-    ASTNode node2 = parse(Parser::grammar, "Foo[T, S]:");
+    ASTNode node2 = parse(Parser::grammar, "Foo<T, S> {}");
     assertDoesNotThrow(node2::validate);
   }
 
   @Test
   void testRange() {
-    ASTNode node1 = parse(Parser::grammar, "Foo:");
-    ASTNode node2 = parse(Parser::grammar, "Bar:");
-    ASTNode node3 = parse(Parser::grammar, "Baz[T]:");
-    ASTNode node4 = parse(Parser::grammar, "\nQux:");
+    ASTNode node1 = parse(Parser::grammar, "Foo {}");
+    ASTNode node2 = parse(Parser::grammar, "Bar {}");
+    ASTNode node3 = parse(Parser::grammar, "Baz<T> {}");
+    ASTNode node4 = parse(Parser::grammar, "\nQux {}");
 
     assert node1.range().hashCode() == node2.range().hashCode();
 
@@ -184,8 +184,8 @@ final class Tests {
   @Test
   @SuppressWarnings({"EqualsWithItself", "ConstantConditions", "EqualsBetweenInconvertibleTypes"})
   void testForCoverage() {
-    ASTNode node1 = parse(Parser::grammar, "Foo:");
-    ASTNode node2 = parse(Parser::grammar, "Bar:");
+    ASTNode node1 = parse(Parser::grammar, "Foo {}");
+    ASTNode node2 = parse(Parser::grammar, "Bar {}");
 
     assert node1.hashCode() != node2.hashCode();
     assert !node1.equals(node2);
@@ -198,7 +198,7 @@ final class Tests {
     assert node1.range().equals(node1.range());
     assert !node1.range().equals(null);
     assert !node1.range().equals(node1);
-    assert node1.range().toString().equals("L1C1-L1C4");
+    assert node1.range().toString().equals("L1C1-L1C6");
 
     assert node1.range().begin().equals(node1.range().begin());
     assert !node1.range().begin().equals(null);

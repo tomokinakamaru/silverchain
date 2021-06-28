@@ -54,9 +54,15 @@ public final class Parser {
 
 PARSER_END(Parser)
 
-SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"#" (~["\r", "\n"])*> }
+SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"//" (~["\r", "\n"])*> }
 
-TOKEN: { < NAME: (["a"-"z","A"-"Z","_"])+ > | < NUMBER: "0" | ["1"-"9"](["0"-"9"])* > }
+TOKEN: {
+  < SUPER: "super" > |
+  < EXTENDS: "extends" > |
+  < VOID: "void" > |
+  < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
+  < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
+}
 
 List<Grammar> start(): {
   Grammar g;
@@ -72,8 +78,8 @@ Grammar grammar(): {
   Token c;
   Rules rs = null;
 } {
-  t = type() ":" { c = token; } (rs = rules())? {
-    return new Grammar(range(t, c, rs), t, rs);
+  t = type() "{" (rs = rules())? "}" {
+    return new Grammar(range(t, token), t, rs);
   }
 }
 
@@ -82,7 +88,7 @@ Type type(): {
   TypeParameters ps = null;
   Token b = null;
 } {
-  n = qualifiedName() ("[" ps = typeParameters() "]" { b = token; })? {
+  n = qualifiedName() ("<" ps = typeParameters() ">" { b = token; })? {
     return new Type(range(n, b), n, ps);
   }
 }
@@ -99,9 +105,10 @@ Rules rules(): {
 Rule rule(): {
   RuleExpression e;
   TypeReference r = null;
+  Token t = null;
 } {
-  e = ruleExpression() (r = typeReference())? ";" {
-    return new Rule(range(e, token), e, r);
+  (r = typeReference() | <VOID> { t = token; }) e = ruleExpression() ";" {
+    return new Rule(r == null ? range(t, token) : range(r, token), e, r);
   }
 }
 
@@ -160,7 +167,7 @@ RepeatOperator repeatOperator(): {
   "?" {
     return new RepeatOperator(range(token), 0, 1);
   } |
-  "{" { b = token; } l = <NUMBER> ("," { c = token; } (u = <NUMBER>)?)? "}" {
+  "[" { b = token; } l = <NUMBER> ("," { c = token; } (u = <NUMBER>)?)? "]" {
     int i = Integer.parseInt(l.image);
     if (c == null) {
         return new RepeatOperator(range(b, token), i, i);
@@ -190,7 +197,7 @@ MethodParameters methodParameters(): {
   TypeParameterList ts = null;
   FormalParameters fs = null;
 } {
-  ("[" { s = token; } ts = typeParameterList() "]")?
+  ("<" { s = token; } ts = typeParameterList() ">")?
   "(" { p = token; } (fs = formalParameters())? ")" {
     return new MethodParameters(range(s == null ? p : s, token), ts, fs);
   }
@@ -218,7 +225,7 @@ TypeReference typeReference(): {
   QualifiedName n;
   TypeArguments r = null;
 } {
-  n = qualifiedName() ("[" r = typeArguments() "]") ? {
+  n = qualifiedName() ("<" r = typeArguments() ">") ? {
     return new TypeReference(range(n, token), n, r);
   }
 }
@@ -276,8 +283,8 @@ TypeParameterBound typeParameterBound(): {
   Token d = null;
   TypeReference r;
 } {
-  ("<:" | ":>") { d = token; } r = typeReference() {
-    boolean u = d.image.equals("<:");
+  (<EXTENDS> | <SUPER>) { d = token; } r = typeReference() {
+    boolean u = d.image.equals("extends");
     return new TypeParameterBound(range(d, r), u, r);
   }
 }

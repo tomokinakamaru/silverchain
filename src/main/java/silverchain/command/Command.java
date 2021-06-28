@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
-import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
@@ -18,7 +17,6 @@ import silverchain.parser.ParseException;
 import silverchain.parser.TokenMgrError;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidationError;
-import silverchain.validator.ValidatorProvider;
 
 public final class Command {
 
@@ -40,12 +38,10 @@ public final class Command {
     parser.add(new Option("i", "input", "<path>", "Input grammar file", "-"));
     parser.add(new Option("o", "output", "<path>", "Output directory", "."));
     parser.add(new Option("j", "javadoc", "<path>", "Javadoc source directory", null));
-    parser.add(new Option("l", "language", "<lang>", "Output language", "java"));
   }
 
   static {
     errorCodes.put(UnknownOption.class, 101);
-    errorCodes.put(UnsupportedLanguage.class, 102);
     errorCodes.put(InputError.class, 103);
     errorCodes.put(TokenMgrError.class, 104);
     errorCodes.put(ParseException.class, 105);
@@ -86,27 +82,13 @@ public final class Command {
   private void run(ParseResult result) throws ParseException {
     Silverchain silverchain = new Silverchain();
     silverchain.outputDirectory(Paths.get(result.get("output")));
-    silverchain.generatorProvider(generatorProvider(result.get("language")));
-    silverchain.validatorProvider(validatorProvider(result.get("language")));
+    silverchain.generatorProvider(JavaGenerator::new);
+    silverchain.validatorProvider(JavaValidator::new);
     try (InputStream stream = open(result.get("input"))) {
       silverchain.run(stream);
     } catch (IOException e) {
       throw new InputError(e);
     }
-  }
-
-  private GeneratorProvider generatorProvider(String language) {
-    if (language.equals("java")) {
-      return JavaGenerator::new;
-    }
-    throw new UnsupportedLanguage(language);
-  }
-
-  private ValidatorProvider validatorProvider(String language) {
-    if (language.equals("java")) {
-      return JavaValidator::new;
-    }
-    throw new UnsupportedLanguage(language);
   }
 
   private InputStream open(String name) {
