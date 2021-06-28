@@ -5,8 +5,8 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
+import com.github.javaparser.TokenRange;
 import com.github.javaparser.ast.comments.JavadocComment;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -90,11 +90,8 @@ public final class JavaGenerator extends Generator {
       mth.append(")");
       JavadocComment comment = javadocs.get(pkg, cls, mth.toString());
       if (comment != null) {
-        String[] lines = comment.toString().split("\n");
-        for (String line : lines) {
-          write(line + "\n");
-          writeIndentation();
-        }
+        write(comment.getTokenRange().map(TokenRange::toString).orElse("") + "\n");
+        writeIndentation();
       }
 
       writeStateMethodDeclaration(transition);
