@@ -9,14 +9,15 @@ import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.JavaGenerator;
+import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
 final class Utility {
 
-  static List<GeneratedFile> generateJava(InputStream stream) {
-    return new JavaGenerator(compile(stream)).generate();
+  static List<GeneratedFile> generateJava(InputStream stream, String javadocPath) {
+    return new JavaGenerator(compile(stream), new Javadocs(javadocPath)).generate();
   }
 
   static InputStream read(Path path) {

@@ -5,10 +5,13 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import silverchain.diagram.Diagrams;
+import silverchain.javadoc.Javadocs;
 
 public abstract class Generator {
 
   private final Diagrams diagrams;
+
+  private final Javadocs javadocs;
 
   private final List<GeneratedFile> files;
 
@@ -16,15 +19,17 @@ public abstract class Generator {
 
   private StringBuilder stringBuilder;
 
-  protected abstract void generate(Diagrams diagrams);
+  protected abstract void generate(Diagrams diagrams, Javadocs javadocs);
 
-  protected Generator(Diagrams diagrams) {
+  protected Generator(Diagrams diagrams, Javadocs javadocs) {
     this.diagrams = diagrams;
+    this.javadocs = javadocs;
     this.files = new ArrayList<>();
   }
 
   public final List<GeneratedFile> generate() {
-    generate(new Diagrams(diagrams));
+    javadocs.load();
+    generate(new Diagrams(diagrams), javadocs);
     return files;
   }
 

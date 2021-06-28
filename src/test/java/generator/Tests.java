@@ -45,9 +45,18 @@ final class Tests {
     test("itemization");
   }
 
+  @Test
+  void testMelodyWithJavadoc() {
+    test("melody", "src/test/resources/java/src/main");
+  }
+
   private void test(String name) {
+    test(name, null);
+  }
+
+  private void test(String name, String javadocPath) {
     Path path = resources.resolve(name + ".ag");
-    List<GeneratedFile> generated = generateJava(Utility.read(path));
+    List<GeneratedFile> generated = generateJava(Utility.read(path), javadocPath);
     List<GeneratedFile> expected = expectedJavaFiles(name);
     assert generated.size() == expected.size();
     for (GeneratedFile file : generated) {

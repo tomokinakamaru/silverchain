@@ -10,6 +10,7 @@ import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
+import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
@@ -36,11 +37,12 @@ public final class Silverchain {
     validatorProvider = provider;
   }
 
-  public void run(InputStream stream) throws ParseException {
+  public void run(InputStream stream, String javadocPath) throws ParseException {
     List<Grammar> grammars = parse(stream);
     Diagrams diagrams = analyze(grammars);
+    Javadocs javadocs = new Javadocs(javadocPath);
     validatorProvider.apply(diagrams).validate();
-    generatorProvider.apply(diagrams).generate().forEach(f -> f.save(outputDirectory));
+    generatorProvider.apply(diagrams, javadocs).generate().forEach(f -> f.save(outputDirectory));
   }
 
   private List<Grammar> parse(InputStream stream) throws ParseException {

@@ -17,6 +17,7 @@ import silverchain.diagram.Diagrams;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
+import silverchain.javadoc.Javadocs;
 import silverchain.parser.FormalParameter;
 import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
@@ -31,12 +32,12 @@ import silverchain.parser.TypeReference;
 
 public final class JavaGenerator extends Generator {
 
-  public JavaGenerator(Diagrams diagrams) {
-    super(diagrams);
+  public JavaGenerator(Diagrams diagrams, Javadocs javadocs) {
+    super(diagrams, javadocs);
   }
 
   @Override
-  protected void generate(Diagrams diagrams) {
+  protected void generate(Diagrams diagrams, Javadocs javadocs) {
     diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
     diagrams.forEach(this::generate);
   }

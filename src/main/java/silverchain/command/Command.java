@@ -85,7 +85,7 @@ public final class Command {
     silverchain.generatorProvider(JavaGenerator::new);
     silverchain.validatorProvider(JavaValidator::new);
     try (InputStream stream = open(result.get("input"))) {
-      silverchain.run(stream);
+      silverchain.run(stream, result.get("javadoc"));
     } catch (IOException e) {
       throw new InputError(e);
     }
