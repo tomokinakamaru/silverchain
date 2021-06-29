@@ -35,6 +35,9 @@ public final class Javadocs extends HashMap<Key, Comment> {
   public void init() {
     if (path != null) {
       load();
+      if (size() == 0) {
+        System.err.println("WARNING: No javadoc comments were found");
+      }
     }
   }
 
