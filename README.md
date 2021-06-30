@@ -43,13 +43,13 @@ Can we prevent the users from writing such an invalid statement? Yes! If the ret
 ```java
 class SQL {
   SQL() { ... }
-  SQL1 select() { ... }
+  SQL1 select(String columns) { ... }
 }
 class SQL1 {
-  SQL2 from() { ... }
+  SQL2 from(String table) { ... }
 }
 class SQL2 {
-  SQL3 where() { ... }
+  SQL3 where(String expression) { ... }
   Result execute() { ... }
 }
 class SQL3 {
