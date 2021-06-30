@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.GeneratorProvider;
@@ -16,6 +17,7 @@ import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidatorProvider;
+import silverchain.warning.WarningHandler;
 
 public final class Silverchain {
 
@@ -24,6 +26,8 @@ public final class Silverchain {
   private GeneratorProvider generatorProvider = JavaGenerator::new;
 
   private ValidatorProvider validatorProvider = JavaValidator::new;
+
+  private WarningHandler warningHandler = new WarningPrinter();
 
   public void outputDirectory(Path path) {
     outputDirectory = path;
@@ -37,10 +41,14 @@ public final class Silverchain {
     validatorProvider = provider;
   }
 
+  public void warningHandler(WarningHandler handler) {
+    warningHandler = handler;
+  }
+
   public void run(InputStream stream, String javadocPath) throws ParseException {
     List<Grammar> grammars = parse(stream);
     Diagrams diagrams = analyze(grammars);
-    Javadocs javadocs = new Javadocs(javadocPath);
+    Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
     generatorProvider.apply(diagrams, javadocs).generate().forEach(f -> f.save(outputDirectory));
   }

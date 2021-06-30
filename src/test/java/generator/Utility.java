@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.GeneratedFile;
@@ -17,7 +18,8 @@ import silverchain.parser.Parser;
 final class Utility {
 
   static List<GeneratedFile> generateJava(InputStream stream, String javadocPath) {
-    return new JavaGenerator(compile(stream), new Javadocs(javadocPath)).generate();
+    return new JavaGenerator(compile(stream), new Javadocs(javadocPath, new WarningPrinter()))
+        .generate();
   }
 
   static InputStream read(Path path) {

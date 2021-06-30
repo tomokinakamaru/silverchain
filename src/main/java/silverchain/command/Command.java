@@ -84,6 +84,7 @@ public final class Command {
     silverchain.outputDirectory(Paths.get(result.get("output")));
     silverchain.generatorProvider(JavaGenerator::new);
     silverchain.validatorProvider(JavaValidator::new);
+    silverchain.warningHandler(new WarningPrinter(stderr));
     try (InputStream stream = open(result.get("input"))) {
       silverchain.run(stream, result.get("javadoc"));
     } catch (IOException e) {

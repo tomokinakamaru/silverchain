@@ -15,6 +15,7 @@ import com.github.javaparser.resolution.UnsolvedSymbolException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import silverchain.warning.WarningHandler;
 
 public final class Javadocs extends HashMap<Key, Comment> {
 
@@ -22,21 +23,24 @@ public final class Javadocs extends HashMap<Key, Comment> {
 
   private final Parser parser = new Parser();
 
+  private final WarningHandler warningHandler;
+
   private static final Parameter dummyParameter = new Parameter();
 
   static {
     dummyParameter.setType("Object");
   }
 
-  public Javadocs(String path) {
+  public Javadocs(String path, WarningHandler warningHandler) {
     this.path = path;
+    this.warningHandler = warningHandler;
   }
 
   public void init() {
     if (path != null) {
       load();
       if (size() == 0) {
-        System.err.println("WARNING: No javadoc comments were found");
+        warningHandler.accept(new NoJavadocFound(path));
       }
     }
   }

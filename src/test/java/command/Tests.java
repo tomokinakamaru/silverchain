@@ -99,6 +99,14 @@ public class Tests {
         .stderr("");
   }
 
+  @Test
+  void testNoJavadocWarning() {
+    test("-i", resources.resolve("mapbuilder.ag").toString(), "-j", "doc")
+        .status(0)
+        .stdout("")
+        .stderr("WARNING: No javadoc comments were found in doc\n");
+  }
+
   private CommandTester test(String... args) {
     return new CommandTester(args);
   }
