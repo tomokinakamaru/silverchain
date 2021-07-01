@@ -6,7 +6,7 @@ import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
 import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -96,7 +96,7 @@ public final class JavaGenerator extends Generator {
       mth.append(String.join(", ", lst));
     }
     mth.append(")");
-    Comment comment = javadocs.get(pkg, cls, mth.toString());
+    JavadocComment comment = javadocs.get(pkg, cls, mth.toString());
     if (comment != null) {
       write(comment.getTokenRange().map(TokenRange::toString).orElse("") + "\n");
       writeIndentation();

@@ -7,7 +7,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.comments.Comment;
+import com.github.javaparser.ast.comments.JavadocComment;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import silverchain.warning.WarningHandler;
 
-public final class Javadocs extends HashMap<Key, Comment> {
+public final class Javadocs extends HashMap<Key, JavadocComment> {
 
   private final String path;
 
@@ -45,7 +45,7 @@ public final class Javadocs extends HashMap<Key, Comment> {
     }
   }
 
-  public Comment get(String pkg, String cls, String method) {
+  public JavadocComment get(String pkg, String cls, String method) {
     return get(new Key(pkg, cls, method));
   }
 
@@ -59,10 +59,10 @@ public final class Javadocs extends HashMap<Key, Comment> {
   }
 
   private void load(ClassOrInterfaceDeclaration cls, String pkg) {
-    Map<String, Comment> comments = findComments(cls);
+    Map<String, JavadocComment> comments = findComments(cls);
     List<ClassOrInterfaceType> actions = findImplementedActions(cls);
     for (ClassOrInterfaceType type : actions) {
-      for (Entry<String, Comment> entry : comments.entrySet()) {
+      for (Entry<String, JavadocComment> entry : comments.entrySet()) {
         Key key = new Key(pkg, type.getNameAsString(), entry.getKey());
         put(key, entry.getValue());
       }
@@ -75,8 +75,8 @@ public final class Javadocs extends HashMap<Key, Comment> {
         .collect(toList());
   }
 
-  private static Map<String, Comment> findComments(ClassOrInterfaceDeclaration cls) {
-    Map<String, Comment> map = new HashMap<>();
+  private static Map<String, JavadocComment> findComments(ClassOrInterfaceDeclaration cls) {
+    Map<String, JavadocComment> map = new HashMap<>();
     for (MethodDeclaration method : findPublicMethods(cls)) {
       MethodDeclaration m = method.clone();
       for (int i = 0; i < method.getParameters().size(); i++) {
@@ -84,7 +84,7 @@ public final class Javadocs extends HashMap<Key, Comment> {
           m.setParameter(i, dummyParameter);
         }
       }
-      map.put(m.getSignature().asString(), m.getComment().orElse(null));
+      map.put(m.getSignature().asString(), m.getJavadocComment().orElse(null));
     }
     return map;
   }
