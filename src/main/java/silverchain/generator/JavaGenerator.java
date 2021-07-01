@@ -92,8 +92,8 @@ public final class JavaGenerator extends Generator {
         } else {
           lst.add("Object");
         }
-        mth.append(String.join(", ", lst));
       }
+      mth.append(String.join(", ", lst));
     }
     mth.append(")");
     Comment comment = javadocs.get(pkg, cls, mth.toString());
