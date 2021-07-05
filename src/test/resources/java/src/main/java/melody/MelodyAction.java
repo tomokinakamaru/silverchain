@@ -7,7 +7,6 @@ final class MelodyAction implements ICanonMelodyAction {
 
   private final List<Integer> notes = new ArrayList<>();
 
-  /** Play the note A */
   @Override
   public void a() {}
 

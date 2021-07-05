@@ -5,9 +5,6 @@ import static java.util.Collections.emptyList;
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;
 
-import com.github.javaparser.TokenRange;
-import com.github.javaparser.ast.comments.JavadocComment;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -82,23 +79,10 @@ public final class JavaGenerator extends Generator {
     String pkg = getIActionPackageName(transition.source().diagram());
     String cls = getIActionName(transition.source().diagram());
     Method method = transition.label().method();
-    StringBuilder mth = new StringBuilder(method.name() + "(");
-    FormalParameters ps = method.parameters().formalParameters().orElse(null);
-    if (ps != null) {
-      List<String> lst = new ArrayList<>();
-      for (FormalParameter p : ps) {
-        if (p.type().referent() == null) {
-          lst.add(p.type().name().name());
-        } else {
-          lst.add("Object");
-        }
-      }
-      mth.append(String.join(", ", lst));
-    }
-    mth.append(")");
-    JavadocComment comment = javadocs.get(pkg, cls, mth.toString());
+    String comment = javadocs.get(pkg, cls, method);
     if (comment != null) {
-      write(comment.getTokenRange().map(TokenRange::toString).orElse("") + "\n");
+      write(comment);
+      writeLineBreak();
       writeIndentation();
     }
   }

@@ -1,98 +1,215 @@
 package silverchain.javadoc;
 
-import static com.github.javaparser.ast.Modifier.Keyword.PUBLIC;
-import static java.util.stream.Collectors.toList;
+import static java.util.Arrays.stream;
+import static java.util.stream.Collectors.joining;
 
+import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ast.ImportDeclaration;
+import com.github.javaparser.ast.Node;
+import com.github.javaparser.ast.NodeList;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
-import com.github.javaparser.ast.comments.JavadocComment;
+import com.github.javaparser.ast.body.TypeDeclaration;
 import com.github.javaparser.ast.nodeTypes.NodeWithName;
+import com.github.javaparser.ast.nodeTypes.NodeWithTypeArguments;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
+import com.github.javaparser.javadoc.Javadoc;
+import com.github.javaparser.javadoc.JavadocBlockTag;
+import com.github.javaparser.javadoc.description.JavadocDescription;
+import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
+import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.symbolsolver.JavaSymbolSolver;
+import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import silverchain.parser.FormalParameter;
+import silverchain.parser.FormalParameters;
+import silverchain.parser.Method;
 import silverchain.warning.WarningHandler;
 
-public final class Javadocs extends HashMap<Key, JavadocComment> {
+public final class Javadocs {
 
   private final String path;
 
-  private final Parser parser = new Parser();
+  private final WarningHandler handler;
 
-  private final WarningHandler warningHandler;
+  private final Map<String, String> comments = new HashMap<>();
 
-  private static final Parameter dummyParameter = new Parameter();
+  private final JavaParser parser = new JavaParser();
 
-  static {
-    dummyParameter.setType("Object");
-  }
+  // Map<PackageName, Set<TypeName>>
+  private final Map<String, Set<String>> parsedTypeNames = new HashMap<>();
 
-  public Javadocs(String path, WarningHandler warningHandler) {
+  // Map<CompilationUnit, Map<Name, FQName>>
+  private final Map<CompilationUnit, Map<String, String>> importedNames = new HashMap<>();
+
+  private Set<CompilationUnit> units;
+
+  public Javadocs(String path, WarningHandler handler) {
     this.path = path;
-    this.warningHandler = warningHandler;
+    this.handler = handler;
   }
 
   public void init() {
-    if (path != null) {
-      load();
-      if (size() == 0) {
-        warningHandler.accept(new NoJavadocFound(path));
-      }
+    if (path == null) {
+      return;
+    }
+
+    load();
+
+    if (comments.size() == 0) {
+      handler.accept(new NoJavadocs(path));
     }
   }
 
-  public JavadocComment get(String pkg, String cls, String method) {
-    return get(new Key(pkg, cls, method));
+  public String get(String pkg, String cls, Method method) {
+    return comments.get(getSignature(pkg, cls, method));
   }
 
   private void load() {
-    parser.parseFiles(path).forEach(this::load);
+    initParser();
+    units = parseJavaFiles();
+
+    loadParsedTypeNames();
+    loadImportedNames();
+    loadComments();
   }
 
-  private void load(CompilationUnit unit) {
-    String pkg = unit.getPackageDeclaration().map(NodeWithName::getNameAsString).orElse(null);
-    findClasses(unit).forEach(c -> load(c, pkg));
-  }
-
-  private void load(ClassOrInterfaceDeclaration cls, String pkg) {
-    Map<String, JavadocComment> comments = findComments(cls);
-    List<ClassOrInterfaceType> actions = findImplementedActions(cls);
-    for (ClassOrInterfaceType type : actions) {
-      for (Entry<String, JavadocComment> entry : comments.entrySet()) {
-        Key key = new Key(pkg, type.getNameAsString(), entry.getKey());
-        put(key, entry.getValue());
+  private void loadParsedTypeNames() {
+    for (CompilationUnit unit : units) {
+      String pkg = getPackageName(unit);
+      parsedTypeNames.putIfAbsent(pkg, new HashSet<>());
+      for (TypeDeclaration<?> decl : unit.getTypes()) {
+        parsedTypeNames.get(pkg).add(decl.getNameAsString());
       }
     }
   }
 
-  private static List<ClassOrInterfaceDeclaration> findClasses(CompilationUnit unit) {
-    return unit.findAll(ClassOrInterfaceDeclaration.class).stream()
-        .filter(d -> !d.isInterface())
-        .collect(toList());
+  private void loadImportedNames() {
+    for (CompilationUnit unit : units) {
+      importedNames.putIfAbsent(unit, new HashMap<>());
+      for (ImportDeclaration d : unit.getImports()) {
+        importedNames.get(unit).put(d.getName().getIdentifier(), d.getNameAsString());
+      }
+    }
   }
 
-  private static Map<String, JavadocComment> findComments(ClassOrInterfaceDeclaration cls) {
-    Map<String, JavadocComment> map = new HashMap<>();
-    for (MethodDeclaration method : findPublicMethods(cls)) {
-      MethodDeclaration m = method.clone();
-      for (int i = 0; i < method.getParameters().size(); i++) {
-        if (isTypeParameter(method.getParameter(i).getType())) {
-          m.setParameter(i, dummyParameter);
+  private void loadComments() {
+    units.forEach(this::loadComments);
+  }
+
+  private void loadComments(CompilationUnit unit) {
+    unit.findAll(MethodDeclaration.class).forEach(this::loadComments);
+  }
+
+  private void loadComments(MethodDeclaration declaration) {
+    String pkg = getPackageName(getCompilationUnit(declaration));
+
+    ClassOrInterfaceDeclaration decl = getClassOrInterfaceDeclaration(declaration);
+    if (decl == null) {
+      return;
+    }
+
+    for (ClassOrInterfaceType type : decl.getImplementedTypes()) {
+      if (isActionType(type)) {
+        String name = type.getNameAsString();
+        String key = getQualifiedName(pkg, name) + "." + getSignature(declaration);
+        String val = getComment(declaration);
+        if (val != null) {
+          comments.put(key, val);
         }
       }
-      map.put(m.getSignature().asString(), m.getJavadocComment().orElse(null));
     }
-    return map;
   }
 
-  private static List<MethodDeclaration> findPublicMethods(ClassOrInterfaceDeclaration decl) {
-    return decl.findAll(MethodDeclaration.class).stream()
-        .filter(d -> d.hasModifier(PUBLIC))
-        .collect(toList());
+  private String getComment(MethodDeclaration declaration) {
+    if (!declaration.hasJavaDocComment()) {
+      return null;
+    }
+
+    Javadoc src = declaration.getJavadoc().orElseThrow(RuntimeException::new);
+
+    JavadocDescription desc = new JavadocDescription();
+    for (JavadocDescriptionElement elem : src.getDescription().getElements()) {
+      if (elem instanceof JavadocInlineTag) {
+        JavadocInlineTag t1 = (JavadocInlineTag) elem;
+        String c = findFqn(t1.getContent().trim(), declaration);
+        JavadocInlineTag t2 = new JavadocInlineTag(t1.getName(), t1.getType(), " " + c);
+        desc.addElement(t2);
+      } else {
+        desc.addElement(elem);
+      }
+    }
+
+    Javadoc doc = new Javadoc(desc);
+    for (JavadocBlockTag tag : src.getBlockTags()) {
+      doc.addBlockTag(tag);
+    }
+
+    return stream(doc.toComment().toString().split("\n"))
+        .map(s -> "  " + s)
+        .collect(joining("\n"))
+        .trim();
+  }
+
+  private String getSignature(MethodDeclaration declaration) {
+    StringBuilder builder = new StringBuilder();
+    builder.append(declaration.getNameAsString());
+    builder.append("(");
+    List<String> types = new ArrayList<>();
+    for (Parameter parameter : declaration.getParameters()) {
+      Type type = parameter.getType();
+      if (isTypeParameter(type)) {
+        types.add("Object");
+      } else {
+        Type t = type.clone();
+        if (t instanceof NodeWithTypeArguments) {
+          ((NodeWithTypeArguments<?>) t).setTypeArguments((NodeList<Type>) null);
+        }
+        String name = t.asString();
+        types.add(findFqn(name, declaration));
+      }
+    }
+    builder.append(String.join(",", types));
+    builder.append(")");
+    return builder.toString();
+  }
+
+  private String findFqn(String name, Node node) {
+    CompilationUnit unit = getCompilationUnit(node);
+
+    String head = name.split("\\.")[0];
+    String tail = name.substring(head.length());
+
+    if (importedNames.containsKey(unit)) {
+      if (importedNames.get(unit).containsKey(head)) {
+        return importedNames.get(unit).get(head) + tail;
+      }
+    }
+
+    String pkg = getPackageName(unit);
+    if (parsedTypeNames.containsKey(pkg)) {
+      if (parsedTypeNames.get(pkg).contains(head)) {
+        return getQualifiedName(pkg, head) + tail;
+      }
+    }
+
+    return name;
   }
 
   private static boolean isTypeParameter(Type type) {
@@ -105,12 +222,77 @@ public final class Javadocs extends HashMap<Key, JavadocComment> {
     return false;
   }
 
-  private static List<ClassOrInterfaceType> findImplementedActions(ClassOrInterfaceDeclaration d) {
-    return d.getImplementedTypes().stream().filter(Javadocs::isActionInterface).collect(toList());
-  }
-
-  private static boolean isActionInterface(ClassOrInterfaceType type) {
+  private static boolean isActionType(ClassOrInterfaceType type) {
     String name = type.getNameAsString();
     return name.startsWith("I") && name.endsWith("Action");
+  }
+
+  private static ClassOrInterfaceDeclaration getClassOrInterfaceDeclaration(MethodDeclaration d) {
+    return d.findAncestor(ClassOrInterfaceDeclaration.class).orElse(null);
+  }
+
+  private static CompilationUnit getCompilationUnit(Node node) {
+    return node.findCompilationUnit().orElseThrow(RuntimeException::new);
+  }
+
+  private static String getPackageName(CompilationUnit unit) {
+    return unit.getPackageDeclaration().map(NodeWithName::getNameAsString).orElse(null);
+  }
+
+  private static String getSignature(String pkg, String cls, Method method) {
+    return getQualifiedName(pkg, cls) + "." + getSignature(method);
+  }
+
+  private static String getSignature(Method method) {
+    StringBuilder builder = new StringBuilder();
+    builder.append(method.name());
+    builder.append("(");
+    if (method.parameters().formalParameters().isPresent()) {
+      FormalParameters parameters = method.parameters().formalParameters().get();
+      List<String> types = new ArrayList<>();
+      for (FormalParameter p : parameters) {
+        if (p.type().referent() == null) {
+          types.add(p.type().name().toString());
+        } else {
+          types.add("Object");
+        }
+      }
+      builder.append(String.join(",", types));
+    }
+    builder.append(")");
+    return builder.toString();
+  }
+
+  private static String getQualifiedName(String name1, String name2) {
+    return name1 == null ? name2 : (name1 + "." + name2);
+  }
+
+  private void initParser() {
+    CombinedTypeSolver typeSolver = new CombinedTypeSolver();
+    JavaSymbolSolver symbolSolver = new JavaSymbolSolver(typeSolver);
+    parser.getParserConfiguration().setSymbolResolver(symbolSolver);
+  }
+
+  private Set<CompilationUnit> parseJavaFiles() {
+    return findJavaFiles()
+        .map(this::parseJavaFile)
+        .filter(Objects::nonNull)
+        .collect(Collectors.toSet());
+  }
+
+  private CompilationUnit parseJavaFile(Path path) {
+    try {
+      return parser.parse(path).getResult().orElse(null);
+    } catch (IOException e) {
+      return null;
+    }
+  }
+
+  private Stream<Path> findJavaFiles() {
+    try {
+      return Files.walk(Paths.get(path)).filter(p -> p.toString().endsWith(".java"));
+    } catch (IOException e) {
+      return Stream.empty();
+    }
   }
 }

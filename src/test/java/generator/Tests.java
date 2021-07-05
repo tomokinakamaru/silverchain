@@ -21,6 +21,11 @@ final class Tests {
   }
 
   @Test
+  void testJavadocTest() {
+    test("javadoctest");
+  }
+
+  @Test
   void testListUtil() {
     test("listutil");
   }

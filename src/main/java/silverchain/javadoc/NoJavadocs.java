@@ -2,11 +2,11 @@ package silverchain.javadoc;
 
 import silverchain.warning.Warning;
 
-public final class NoJavadocFound extends Warning {
+public final class NoJavadocs extends Warning {
 
   private final String path;
 
-  NoJavadocFound(String path) {
+  NoJavadocs(String path) {
     this.path = path;
   }
 

@@ -1,0 +1,10 @@
+javadoctest.JavadocTest {
+
+  void test1(java.util.List<String> list, java.util.Map<String, String> map);
+
+  void test2(javadoctest.Foo foo);
+
+  void test3(javadoctest.Foo.Bar bar, javadoctest.Foo.Bar fooBar);
+
+  void test4(String str);
+}
