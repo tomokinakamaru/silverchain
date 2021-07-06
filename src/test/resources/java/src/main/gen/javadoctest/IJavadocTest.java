@@ -26,9 +26,9 @@ interface IJavadocTest {
   void test3(javadoctest.Foo.Bar bar, javadoctest.Foo.Bar fooBar);
 
   /**
-   * Test inner class {@link String}.
+   * Test inner class {@link String} for state 0.
    *
    * @param str
    */
-  void test4(String str);
+  javadoctest.state1.JavadocTest test4(String str);
 }

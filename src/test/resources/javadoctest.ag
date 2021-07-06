@@ -6,5 +6,5 @@ javadoctest.JavadocTest {
 
   void test3(javadoctest.Foo.Bar bar, javadoctest.Foo.Bar fooBar);
 
-  void test4(String str);
+  void test4(String str) test4(String str);
 }

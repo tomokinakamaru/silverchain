@@ -18,6 +18,10 @@ interface IJavadocTestAction {
     test4(str);
   }
 
+  default void state1$test4(String str) {
+    test4(str);
+  }
+
   void test1(java.util.List<String> list, java.util.Map<String, String> map);
 
   void test2(javadoctest.Foo foo);

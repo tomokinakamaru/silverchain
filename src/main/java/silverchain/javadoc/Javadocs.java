@@ -77,8 +77,18 @@ public final class Javadocs {
     }
   }
 
-  public String get(String pkg, String cls, Method method) {
-    return comments.get(getSignature(pkg, cls, method));
+  public String get(String pkg, String cls, int state, Method method) {
+    String s1 = getQualifiedName(pkg, cls);
+    String s2 = "state" + state;
+    String s3 = getSignature(method);
+
+    String k1 = s1 + "." + s2 + "$" + s3;
+    if (comments.containsKey(k1)) {
+      return comments.get(k1);
+    }
+
+    String k2 = s1 + "." + s3;
+    return comments.get(k2);
   }
 
   private void load() {
@@ -237,10 +247,6 @@ public final class Javadocs {
 
   private static String getPackageName(CompilationUnit unit) {
     return unit.getPackageDeclaration().map(NodeWithName::getNameAsString).orElse(null);
-  }
-
-  private static String getSignature(String pkg, String cls, Method method) {
-    return getQualifiedName(pkg, cls) + "." + getSignature(method);
   }
 
   private static String getSignature(Method method) {

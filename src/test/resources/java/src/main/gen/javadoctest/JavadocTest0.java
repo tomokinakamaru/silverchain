@@ -25,7 +25,8 @@ class JavadocTest0 implements javadoctest.IJavadocTest {
   }
 
   @Override
-  public void test4(String str) {
+  public javadoctest.state1.JavadocTest test4(String str) {
     this.action.state0$test4(str);
+    return new javadoctest.JavadocTest1(this.action);
   }
 }

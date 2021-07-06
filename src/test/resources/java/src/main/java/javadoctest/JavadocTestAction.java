@@ -38,4 +38,14 @@ public class JavadocTestAction implements IJavadocTestAction {
    */
   @Override
   public void test4(String str) {}
+
+  /**
+   * Test inner class {@link String} for state 0.
+   *
+   * @param str
+   */
+  @Override
+  public void state0$test4(String str) {
+    IJavadocTestAction.super.state0$test4(str);
+  }
 }

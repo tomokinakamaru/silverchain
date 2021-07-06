@@ -78,8 +78,9 @@ public final class JavaGenerator extends Generator {
   private void pasteComment(Transition transition, Javadocs javadocs) {
     String pkg = getIActionPackageName(transition.source().diagram());
     String cls = getIActionName(transition.source().diagram());
+    int state = transition.source().number();
     Method method = transition.label().method();
-    String comment = javadocs.get(pkg, cls, method);
+    String comment = javadocs.get(pkg, cls, state, method);
     if (comment != null) {
       write(comment);
       writeLineBreak();
