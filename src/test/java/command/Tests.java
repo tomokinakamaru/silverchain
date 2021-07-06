@@ -100,17 +100,11 @@ public class Tests {
   }
 
   @Test
-  void testNoJavadocWarning() {
-    test(
-            "-i",
-            resources.resolve("mapbuilder.ag").toString(),
-            "-j",
-            "doc",
-            "-o",
-            workspace.toString())
+  void testNoJavadocs() {
+    test("-i", resources.resolve("mapbuilder.ag").toString(), "-j", "x", "-o", workspace.toString())
         .status(0)
         .stdout("")
-        .stderr("WARNING: No javadoc comments were found in doc\n");
+        .stderr("WARNING: No javadoc comments were found in x\n");
   }
 
   private CommandTester test(String... args) {
