@@ -43,13 +43,13 @@ Can we prevent the users from writing such an invalid statement? Yes! If the ret
 ```java
 class SQL {
   SQL() { ... }
-  SQL1 select() { ... }
+  SQL1 select(String columns) { ... }
 }
 class SQL1 {
-  SQL2 from() { ... }
+  SQL2 from(String table) { ... }
 }
 class SQL2 {
-  SQL3 where() { ... }
+  SQL3 where(String expression) { ... }
   Result execute() { ... }
 }
 class SQL3 {
@@ -101,21 +101,17 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 
 ```sh
 ./gradlew shadowJar # Creates ./build/libs/silverchain-<version>-all.jar
-```
-
-## Build native image
-
-```sh
-./gradlew nativeImage # Creates ./build/graal/silverchain
+                    # Run it with `java -jar ...`
 ```
 
 ## Command line options
 
 ```
--h, --help             Show this message and exit
--v, --version          Show version and exit
--i, --input <path>     Input grammar file
--o, --output <path>    Output directory
+-h, --help            Show this message and exit
+-v, --version         Show version and exit
+-i, --input <path>    Input grammar file
+-o, --output <path>   Output directory
+-j, --javadoc <path>  Javadoc source directory
 ```
 
 ## Contributing

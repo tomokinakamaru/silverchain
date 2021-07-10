@@ -13,9 +13,11 @@ import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
+import silverchain.diagram.Diagrams;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
+import silverchain.javadoc.Javadocs;
 import silverchain.parser.FormalParameter;
 import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
@@ -30,27 +32,27 @@ import silverchain.parser.TypeReference;
 
 public final class JavaGenerator extends Generator {
 
-  public JavaGenerator(List<Diagram> diagrams) {
-    super(diagrams);
+  public JavaGenerator(Diagrams diagrams, Javadocs javadocs) {
+    super(diagrams, javadocs);
   }
 
   @Override
-  protected void generate(List<Diagram> diagrams) {
+  protected void generate(Diagrams diagrams, Javadocs javadocs) {
     diagrams.forEach(diagram -> diagram.assignStateNumbers(s -> !s.isEnd()));
-    diagrams.forEach(this::generate);
+    diagrams.forEach(diagram -> generate(diagram, javadocs));
   }
 
-  private void generate(Diagram diagram) {
+  private void generate(Diagram diagram, Javadocs javadocs) {
     generateIAction(diagram);
-    diagram.numberedStates().forEach(this::generate);
+    diagram.numberedStates().forEach(state -> generate(state, javadocs));
   }
 
-  private void generate(State state) {
-    generateIState(state);
+  private void generate(State state, Javadocs javadocs) {
+    generateIState(state, javadocs);
     generateState(state);
   }
 
-  private void generateIState(State state) {
+  private void generateIState(State state, Javadocs javadocs) {
     beginFile(getFilePath(getIStateQualifiedName(state)));
     writePackageDeclaration(getIStatePackageName(state));
 
@@ -64,12 +66,26 @@ public final class JavaGenerator extends Generator {
     for (Transition transition : state.transitions()) {
       writeLineBreak();
       writeIndentation();
+      pasteComment(transition, javadocs);
       writeStateMethodDeclaration(transition);
       writeSemicolon();
     }
 
     writeRightBracket();
     endFile();
+  }
+
+  private void pasteComment(Transition transition, Javadocs javadocs) {
+    String pkg = getIActionPackageName(transition.source().diagram());
+    String cls = getIActionName(transition.source().diagram());
+    int state = transition.source().number();
+    Method method = transition.label().method();
+    String comment = javadocs.get(pkg, cls, state, method);
+    if (comment != null) {
+      write(comment);
+      writeLineBreak();
+      writeIndentation();
+    }
   }
 
   private void generateState(State state) {

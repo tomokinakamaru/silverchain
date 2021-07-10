@@ -22,10 +22,11 @@ public class Tests {
         "Usage: silverchain [options]\n"
             + "\n"
             + "Options:\n"
-            + "  -h, --help           Show this message and exit\n"
-            + "  -v, --version        Show version and exit\n"
-            + "  -i, --input <path>   Input grammar file\n"
-            + "  -o, --output <path>  Output directory\n";
+            + "  -h, --help            Show this message and exit\n"
+            + "  -v, --version         Show version and exit\n"
+            + "  -i, --input <path>    Input grammar file\n"
+            + "  -o, --output <path>   Output directory\n"
+            + "  -j, --javadoc <path>  Javadoc source directory\n";
     test("-h").status(0).stdout(help).stderr("");
     test("--help").status(0).stdout(help).stderr("");
   }
@@ -96,6 +97,14 @@ public class Tests {
         .status(0)
         .stdout("")
         .stderr("");
+  }
+
+  @Test
+  void testNoJavadocs() {
+    test("-i", resources.resolve("mapbuilder.ag").toString(), "-j", "x", "-o", workspace.toString())
+        .status(0)
+        .stdout("")
+        .stderr("WARNING: No javadoc comments were found in x\n");
   }
 
   private CommandTester test(String... args) {

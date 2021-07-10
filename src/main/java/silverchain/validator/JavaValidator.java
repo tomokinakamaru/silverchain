@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
 import silverchain.diagram.Diagram;
+import silverchain.diagram.Diagrams;
 import silverchain.diagram.Label;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
@@ -21,12 +22,12 @@ import silverchain.parser.TypeReference;
 
 public class JavaValidator extends Validator {
 
-  public JavaValidator(List<Diagram> diagrams) {
+  public JavaValidator(Diagrams diagrams) {
     super(diagrams);
   }
 
   @Override
-  protected void validate(List<Diagram> diagrams) {
+  protected void validate(Diagrams diagrams) {
     diagrams.forEach(this::validate);
   }
 

@@ -1,53 +1,64 @@
 package silverchain;
 
+import static java.util.stream.Collectors.toCollection;
+
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
-import silverchain.generator.Generator;
+import silverchain.diagram.Diagrams;
+import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
+import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 import silverchain.validator.JavaValidator;
-import silverchain.validator.Validator;
+import silverchain.validator.ValidatorProvider;
+import silverchain.warning.WarningHandler;
 
 public final class Silverchain {
 
   private Path outputDirectory = Paths.get(".");
 
-  private Function<List<Diagram>, Generator> generatorProvider = JavaGenerator::new;
+  private GeneratorProvider generatorProvider = JavaGenerator::new;
 
-  private Function<List<Diagram>, Validator> validatorProvider = JavaValidator::new;
+  private ValidatorProvider validatorProvider = JavaValidator::new;
+
+  private WarningHandler warningHandler = new WarningPrinter();
 
   public void outputDirectory(Path path) {
     outputDirectory = path;
   }
 
-  public void generatorProvider(Function<List<Diagram>, Generator> provider) {
+  public void generatorProvider(GeneratorProvider provider) {
     generatorProvider = provider;
   }
 
-  public void validatorProvider(Function<List<Diagram>, Validator> provider) {
+  public void validatorProvider(ValidatorProvider provider) {
     validatorProvider = provider;
   }
 
-  public void run(InputStream stream) throws ParseException {
+  public void warningHandler(WarningHandler handler) {
+    warningHandler = handler;
+  }
+
+  public void run(InputStream stream, String javadocPath) throws ParseException {
     List<Grammar> grammars = parse(stream);
-    List<Diagram> diagrams = analyze(grammars);
+    Diagrams diagrams = analyze(grammars);
+    Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
-    generatorProvider.apply(diagrams).generate().forEach(f -> f.save(outputDirectory));
+    generatorProvider.apply(diagrams, javadocs).generate().forEach(f -> f.save(outputDirectory));
   }
 
   private List<Grammar> parse(InputStream stream) throws ParseException {
     return new Parser(stream).start();
   }
 
-  private List<Diagram> analyze(List<Grammar> grammars) {
-    return grammars.stream().map(this::analyze).collect(Collectors.toList());
+  private Diagrams analyze(List<Grammar> grammars) {
+    return grammars.stream().map(this::analyze).collect(toCollection(Diagrams::new));
   }
 
   private Diagram analyze(Grammar grammar) {
