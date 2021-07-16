@@ -54,7 +54,15 @@ public final class Parser {
 
 PARSER_END(Parser)
 
-SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"//" (~["\r", "\n"])*> }
+SKIP : {
+  " " |
+  "\t" |
+  "\r" |
+  "\n" |
+  "\f" |
+  <"//" (~["\r", "\n"])*> |
+  <"/*" (~["*"] | ("*" ~["/"]))* "*/">
+}
 
 TOKEN: {
   < SUPER: "super" > |
