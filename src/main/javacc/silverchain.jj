@@ -223,9 +223,10 @@ FormalParameters formalParameters(): {
 FormalParameter formalParameter(): {
   TypeReference r;
   Token n;
+  Token e = null;
 } {
-  r = typeReference() n = <NAME> {
-    return new FormalParameter(range(r, n), r, n.image);
+  r = typeReference() (e = "...")? n = <NAME> {
+    return new FormalParameter(range(r, n), r, n.image, e != null);
   }
 }
 

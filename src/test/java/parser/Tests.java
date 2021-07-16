@@ -82,6 +82,7 @@ final class Tests {
   @Test
   void testFormalParameter() {
     test(Parser::formalParameter, "Foo foo");
+    test(Parser::formalParameter, "Foo... foo");
   }
 
   @Test

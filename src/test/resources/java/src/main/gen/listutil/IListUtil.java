@@ -8,5 +8,7 @@ interface IListUtil {
 
   String[] toArray(java.util.List<String> lst);
 
+  java.util.List<Object> toList(Object... args);
+
   java.util.List<String> toList(String[] arr);
 }

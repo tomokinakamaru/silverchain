@@ -369,7 +369,13 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(FormalParameter parameter, boolean decl) {
-    return decl ? encode(parameter.type()) + " " + parameter.name() : parameter.name();
+    if (decl) {
+      String s1 = encode(parameter.type());
+      String s2 = parameter.isVarArgs() ? "... " : " ";
+      String s3 = parameter.name();
+      return s1 + s2 + s3;
+    }
+    return parameter.name();
   }
 
   private String encode(TypeReference reference) {

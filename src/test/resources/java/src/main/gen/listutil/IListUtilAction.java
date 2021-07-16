@@ -14,6 +14,10 @@ interface IListUtilAction<T> {
     return toArray(lst);
   }
 
+  default java.util.List<Object> state0$toList(Object... args) {
+    return toList(args);
+  }
+
   default java.util.List<String> state0$toList(String[] arr) {
     return toList(arr);
   }
@@ -31,6 +35,8 @@ interface IListUtilAction<T> {
   <S> void copy(java.util.List<S> src, java.util.List<? super S> dst);
 
   String[] toArray(java.util.List<String> lst);
+
+  java.util.List<Object> toList(Object... args);
 
   java.util.List<String> toList(String[] arr);
 

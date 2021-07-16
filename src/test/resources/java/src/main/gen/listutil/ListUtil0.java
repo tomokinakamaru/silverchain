@@ -26,6 +26,11 @@ class ListUtil0 implements listutil.IListUtil {
   }
 
   @Override
+  public java.util.List<Object> toList(Object... args) {
+    return this.action.state0$toList(args);
+  }
+
+  @Override
   public java.util.List<String> toList(String[] arr) {
     return this.action.state0$toList(arr);
   }

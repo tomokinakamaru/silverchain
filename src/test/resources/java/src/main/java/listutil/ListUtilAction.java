@@ -20,6 +20,11 @@ public class ListUtilAction<T> implements IListUtilAction<T> {
   }
 
   @Override
+  public List<Object> toList(Object... args) {
+    return null;
+  }
+
+  @Override
   public List<String> toList(String[] arr) {
     return null;
   }

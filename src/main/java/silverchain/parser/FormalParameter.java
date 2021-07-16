@@ -2,8 +2,11 @@ package silverchain.parser;
 
 public final class FormalParameter extends ASTNode2<TypeReference, String> {
 
-  FormalParameter(Range range, TypeReference typeReference, String name) {
+  private boolean isVarArgs;
+
+  FormalParameter(Range range, TypeReference typeReference, String name, boolean isVarArgs) {
     super(range, typeReference, name);
+    this.isVarArgs = isVarArgs;
   }
 
   public TypeReference type() {
@@ -14,8 +17,12 @@ public final class FormalParameter extends ASTNode2<TypeReference, String> {
     return right();
   }
 
+  public boolean isVarArgs() {
+    return isVarArgs;
+  }
+
   @Override
   public String toString() {
-    return type() + " " + name();
+    return type() + (isVarArgs ? "..." : "") + " " + name();
   }
 }
