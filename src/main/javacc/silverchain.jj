@@ -232,9 +232,10 @@ FormalParameter formalParameter(): {
 TypeReference typeReference(): {
   QualifiedName n;
   TypeArguments r = null;
+  Token t = null;
 } {
-  n = qualifiedName() ("<" r = typeArguments() ">") ? {
-    return new TypeReference(range(n, token), n, r);
+  n = qualifiedName() ("<" r = typeArguments() ">")? (t = "[" "]")? {
+    return new TypeReference(range(n, token), n, r, t != null);
   }
 }
 

@@ -15,6 +15,16 @@ public class ListUtilAction<T> implements IListUtilAction<T> {
   }
 
   @Override
+  public String[] toArray(List<String> lst) {
+    return new String[0];
+  }
+
+  @Override
+  public List<String> toList(String[] arr) {
+    return null;
+  }
+
+  @Override
   public void from(List<T> src) {
     this.src = src;
   }

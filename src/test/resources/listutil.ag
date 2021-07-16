@@ -3,4 +3,8 @@ listutil.ListUtil<;T> {
   void copy() from(java.util.List<T> src) to(java.util.List<? super T> dst);
 
   void copy<S>(java.util.List<S> src, java.util.List<? super S> dst);
+
+  java.util.List<String> toList(String[] arr);
+
+  String[] toArray(java.util.List<String> lst);
 }

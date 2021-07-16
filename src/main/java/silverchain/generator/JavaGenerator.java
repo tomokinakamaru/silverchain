@@ -373,7 +373,10 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(TypeReference reference) {
-    return encode(reference.name()) + reference.arguments().map(this::encode).orElse("");
+    String s1 = encode(reference.name());
+    String s2 = reference.arguments().map(this::encode).orElse("");
+    String s3 = reference.isArray() ? "[]" : "";
+    return s1 + s2 + s3;
   }
 
   private String encode(TypeArgument argument) {

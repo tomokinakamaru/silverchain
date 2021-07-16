@@ -75,6 +75,8 @@ final class Tests {
   void testTypeReference() {
     test(Parser::typeReference, "Foo");
     test(Parser::typeReference, "foo.Bar<T>");
+    test(Parser::typeReference, "Foo[]");
+    test(Parser::typeReference, "Foo<T>[]");
   }
 
   @Test

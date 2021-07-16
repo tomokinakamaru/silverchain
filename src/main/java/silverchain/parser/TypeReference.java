@@ -13,8 +13,11 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
 
   private TypeParameter referent;
 
-  TypeReference(Range range, QualifiedName name, TypeArguments arguments) {
+  private final boolean isArray;
+
+  TypeReference(Range range, QualifiedName name, TypeArguments arguments, boolean isArray) {
     super(range, name, arguments);
+    this.isArray = isArray;
   }
 
   public QualifiedName name() {
@@ -29,9 +32,13 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
     return referent;
   }
 
+  public boolean isArray() {
+    return isArray;
+  }
+
   @Override
   public String toString() {
-    return name() + arguments().map(a -> "<" + a + ">").orElse("");
+    return name() + arguments().map(a -> "<" + a + ">").orElse("") + (isArray ? "[]" : "");
   }
 
   @Override

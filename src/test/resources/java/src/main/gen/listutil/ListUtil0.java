@@ -19,4 +19,14 @@ class ListUtil0 implements listutil.IListUtil {
   public <S> void copy(java.util.List<S> src, java.util.List<? super S> dst) {
     this.action.state0$copy(src, dst);
   }
+
+  @Override
+  public String[] toArray(java.util.List<String> lst) {
+    return this.action.state0$toArray(lst);
+  }
+
+  @Override
+  public java.util.List<String> toList(String[] arr) {
+    return this.action.state0$toList(arr);
+  }
 }
