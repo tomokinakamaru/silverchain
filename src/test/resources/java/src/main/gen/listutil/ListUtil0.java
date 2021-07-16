@@ -19,4 +19,24 @@ class ListUtil0 implements listutil.IListUtil {
   public <S> void copy(java.util.List<S> src, java.util.List<? super S> dst) {
     this.action.state0$copy(src, dst);
   }
+
+  @Override
+  public void save(java.util.List<?> list) throws java.io.IOException {
+    this.action.state0$save(list);
+  }
+
+  @Override
+  public String[] toArray(java.util.List<String> lst) {
+    return this.action.state0$toArray(lst);
+  }
+
+  @Override
+  public java.util.List<Object> toList(Object... args) {
+    return this.action.state0$toList(args);
+  }
+
+  @Override
+  public java.util.List<String> toList(String[] arr) {
+    return this.action.state0$toList(arr);
+  }
 }

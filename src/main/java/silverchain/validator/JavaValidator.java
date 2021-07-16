@@ -107,10 +107,14 @@ public class JavaValidator extends Validator {
   }
 
   private String getSignature(FormalParameter parameter) {
-    return getSignature(parameter.type());
+    String s1 = getSignature(parameter.type());
+    String s2 = parameter.isVarArgs() ? "[]" : "";
+    return s1 + s2;
   }
 
   private String getSignature(TypeReference reference) {
-    return reference.referent() == null ? join(".", reference.name()) : "Object";
+    String s1 = reference.referent() == null ? join(".", reference.name()) : "Object";
+    String s2 = reference.isArray() ? "[]" : "";
+    return s1 + s2;
   }
 }

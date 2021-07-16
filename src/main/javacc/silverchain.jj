@@ -54,12 +54,21 @@ public final class Parser {
 
 PARSER_END(Parser)
 
-SKIP : { " " | "\t" | "\r" | "\n" | "\f" | <"//" (~["\r", "\n"])*> }
+SKIP : {
+  " " |
+  "\t" |
+  "\r" |
+  "\n" |
+  "\f" |
+  <"//" (~["\r", "\n"])*> |
+  <"/*" (~["*"] | ("*" ~["/"]))* "*/">
+}
 
 TOKEN: {
   < SUPER: "super" > |
   < EXTENDS: "extends" > |
   < VOID: "void" > |
+  < THROWS: "throws" > |
   < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
@@ -185,9 +194,10 @@ RepeatOperator repeatOperator(): {
 Method method(): {
   Token n;
   MethodParameters p;
+  TypeReferences rs = null;
 } {
-  n = <NAME> p = methodParameters() {
-    return new Method(range(n, p), n.image, p);
+  n = <NAME> p = methodParameters() (<THROWS> rs = typeReferences())? {
+    return new Method(range(n, token), n.image, p, rs);
   }
 }
 
@@ -215,18 +225,29 @@ FormalParameters formalParameters(): {
 FormalParameter formalParameter(): {
   TypeReference r;
   Token n;
+  Token e = null;
 } {
-  r = typeReference() n = <NAME> {
-    return new FormalParameter(range(r, n), r, n.image);
+  r = typeReference() (e = "...")? n = <NAME> {
+    return new FormalParameter(range(r, n), r, n.image, e != null);
   }
 }
 
 TypeReference typeReference(): {
   QualifiedName n;
   TypeArguments r = null;
+  Token t = null;
 } {
-  n = qualifiedName() ("<" r = typeArguments() ">") ? {
-    return new TypeReference(range(n, token), n, r);
+  n = qualifiedName() ("<" r = typeArguments() ">")? (t = "[" "]")? {
+    return new TypeReference(range(n, token), n, r, t != null);
+  }
+}
+
+TypeReferences typeReferences(): {
+  TypeReference r;
+  TypeReferences rs = null;
+} {
+  r = typeReference() ("," rs = typeReferences())? {
+    return new TypeReferences(range(r, rs), r, rs);
   }
 }
 

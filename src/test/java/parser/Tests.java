@@ -75,11 +75,14 @@ final class Tests {
   void testTypeReference() {
     test(Parser::typeReference, "Foo");
     test(Parser::typeReference, "foo.Bar<T>");
+    test(Parser::typeReference, "Foo[]");
+    test(Parser::typeReference, "Foo<T>[]");
   }
 
   @Test
   void testFormalParameter() {
     test(Parser::formalParameter, "Foo foo");
+    test(Parser::formalParameter, "Foo... foo");
   }
 
   @Test
@@ -98,6 +101,7 @@ final class Tests {
   void testMethod() {
     test(Parser::method, "foo()");
     test(Parser::method, "foo(Bar bar)");
+    test(Parser::method, "foo() throws Foo");
   }
 
   @Test

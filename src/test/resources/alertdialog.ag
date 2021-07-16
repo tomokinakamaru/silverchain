@@ -1,3 +1,7 @@
+// Alert dialog
+/*
+ * Alert dialog
+ */
 alertdialog.AlertDialog {
   void setTitle(String title) setMessage(String message) show();
 }

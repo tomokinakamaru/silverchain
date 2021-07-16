@@ -3,4 +3,12 @@ listutil.ListUtil<;T> {
   void copy() from(java.util.List<T> src) to(java.util.List<? super T> dst);
 
   void copy<S>(java.util.List<S> src, java.util.List<? super S> dst);
+
+  java.util.List<String> toList(String[] arr);
+
+  java.util.List<Object> toList(Object... args);
+
+  String[] toArray(java.util.List<String> lst);
+
+  void save(java.util.List<?> list) throws java.io.IOException;
 }
