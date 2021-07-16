@@ -9,4 +9,6 @@ listutil.ListUtil<;T> {
   java.util.List<Object> toList(Object... args);
 
   String[] toArray(java.util.List<String> lst);
+
+  void save(java.util.List<?> list) throws java.io.IOException;
 }

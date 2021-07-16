@@ -1,5 +1,6 @@
 package listutil;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ListUtilAction<T> implements IListUtilAction<T> {
@@ -13,6 +14,9 @@ public class ListUtilAction<T> implements IListUtilAction<T> {
   public <S> void copy(List<S> src, List<? super S> dst) {
     dst.addAll(src);
   }
+
+  @Override
+  public void save(List<?> list) throws IOException {}
 
   @Override
   public String[] toArray(List<String> lst) {

@@ -29,6 +29,7 @@ import silverchain.parser.TypeParameter;
 import silverchain.parser.TypeParameterBound;
 import silverchain.parser.TypeParameterList;
 import silverchain.parser.TypeReference;
+import silverchain.parser.TypeReferences;
 
 public final class JavaGenerator extends Generator {
 
@@ -360,8 +361,12 @@ public final class JavaGenerator extends Generator {
   }
 
   private String encode(Method method, boolean decl) {
-    String fs = method.parameters().formalParameters().map(p -> encode(p, decl)).orElse("");
-    return method.name() + "(" + fs + ")";
+    String s = method.parameters().formalParameters().map(p -> encode(p, decl)).orElse("");
+    s = method.name() + "(" + s + ")";
+    if (decl) {
+      s = s + method.exceptions().map(es -> " throws " + encode(es)).orElse("");
+    }
+    return s;
   }
 
   private String encode(FormalParameters parameters, boolean decl) {
@@ -383,6 +388,10 @@ public final class JavaGenerator extends Generator {
     String s2 = reference.arguments().map(this::encode).orElse("");
     String s3 = reference.isArray() ? "[]" : "";
     return s1 + s2 + s3;
+  }
+
+  private String encode(TypeReferences references) {
+    return references.stream().map(this::encode).collect(joining(", "));
   }
 
   private String encode(TypeArgument argument) {

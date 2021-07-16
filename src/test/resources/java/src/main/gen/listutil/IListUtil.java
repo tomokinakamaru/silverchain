@@ -6,6 +6,8 @@ interface IListUtil {
 
   <S> void copy(java.util.List<S> src, java.util.List<? super S> dst);
 
+  void save(java.util.List<?> list) throws java.io.IOException;
+
   String[] toArray(java.util.List<String> lst);
 
   java.util.List<Object> toList(Object... args);

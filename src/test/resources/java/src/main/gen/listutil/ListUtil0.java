@@ -21,6 +21,11 @@ class ListUtil0 implements listutil.IListUtil {
   }
 
   @Override
+  public void save(java.util.List<?> list) throws java.io.IOException {
+    this.action.state0$save(list);
+  }
+
+  @Override
   public String[] toArray(java.util.List<String> lst) {
     return this.action.state0$toArray(lst);
   }

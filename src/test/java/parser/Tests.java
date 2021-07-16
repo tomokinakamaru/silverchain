@@ -101,6 +101,7 @@ final class Tests {
   void testMethod() {
     test(Parser::method, "foo()");
     test(Parser::method, "foo(Bar bar)");
+    test(Parser::method, "foo() throws Foo");
   }
 
   @Test

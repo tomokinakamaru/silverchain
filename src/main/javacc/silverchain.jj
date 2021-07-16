@@ -68,6 +68,7 @@ TOKEN: {
   < SUPER: "super" > |
   < EXTENDS: "extends" > |
   < VOID: "void" > |
+  < THROWS: "throws" > |
   < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
@@ -193,9 +194,10 @@ RepeatOperator repeatOperator(): {
 Method method(): {
   Token n;
   MethodParameters p;
+  TypeReferences rs = null;
 } {
-  n = <NAME> p = methodParameters() {
-    return new Method(range(n, p), n.image, p);
+  n = <NAME> p = methodParameters() (<THROWS> rs = typeReferences())? {
+    return new Method(range(n, token), n.image, p, rs);
   }
 }
 
@@ -237,6 +239,15 @@ TypeReference typeReference(): {
 } {
   n = qualifiedName() ("<" r = typeArguments() ">")? (t = "[" "]")? {
     return new TypeReference(range(n, token), n, r, t != null);
+  }
+}
+
+TypeReferences typeReferences(): {
+  TypeReference r;
+  TypeReferences rs = null;
+} {
+  r = typeReference() ("," rs = typeReferences())? {
+    return new TypeReferences(range(r, rs), r, rs);
   }
 }
 
