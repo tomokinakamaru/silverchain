@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
+import silverchain.FileCountError;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
 import silverchain.generator.JavaGenerator;
@@ -38,6 +39,7 @@ public final class Command {
     parser.add(new Option("i", "input", "<path>", "Input grammar file", "-"));
     parser.add(new Option("o", "output", "<path>", "Output directory", "."));
     parser.add(new Option("j", "javadoc", "<path>", "Javadoc source directory", null));
+    parser.add(new Option("m", "max-file-count", "<n>", "Max number of generated files", "500"));
   }
 
   static {
@@ -48,6 +50,7 @@ public final class Command {
     errorCodes.put(DuplicateDeclaration.class, 106);
     errorCodes.put(ValidationError.class, 107);
     errorCodes.put(SaveError.class, 108);
+    errorCodes.put(FileCountError.class, 109);
   }
 
   private Command(PrintStream stdout, PrintStream stderr, String[] args) {
@@ -85,6 +88,7 @@ public final class Command {
     silverchain.generatorProvider(JavaGenerator::new);
     silverchain.validatorProvider(JavaValidator::new);
     silverchain.warningHandler(new WarningPrinter(stderr));
+    silverchain.maxFileCount(Integer.parseInt(result.get("max-file-count")));
     try (InputStream stream = open(result.get("input"))) {
       silverchain.run(stream, result.get("javadoc"));
     } catch (IOException e) {

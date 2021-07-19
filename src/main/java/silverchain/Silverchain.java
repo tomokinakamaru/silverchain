@@ -9,6 +9,7 @@ import java.util.List;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
+import silverchain.generator.GeneratedFile;
 import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
@@ -29,6 +30,8 @@ public final class Silverchain {
 
   private WarningHandler warningHandler = new WarningPrinter();
 
+  private int maxFileCount = 0;
+
   public void outputDirectory(Path path) {
     outputDirectory = path;
   }
@@ -45,12 +48,22 @@ public final class Silverchain {
     warningHandler = handler;
   }
 
+  public void maxFileCount(int n) {
+    maxFileCount = n;
+  }
+
   public void run(InputStream stream, String javadocPath) throws ParseException {
     List<Grammar> grammars = parse(stream);
     Diagrams diagrams = analyze(grammars);
     Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
-    generatorProvider.apply(diagrams, javadocs).generate().forEach(f -> f.save(outputDirectory));
+
+    List<GeneratedFile> files = generatorProvider.apply(diagrams, javadocs).generate();
+    if (files.size() <= maxFileCount) {
+      files.forEach(f -> f.save(outputDirectory));
+    } else {
+      throw new FileCountError(maxFileCount, files.size());
+    }
   }
 
   private List<Grammar> parse(InputStream stream) throws ParseException {
