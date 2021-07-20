@@ -107,7 +107,10 @@ final class Tests {
   @Test
   void testRuleElement() {
     test(Parser::ruleElement, "foo()");
+    test(Parser::ruleElement, "(foo())");
     test(Parser::ruleElement, "(foo()|bar())");
+    test(Parser::ruleElement, "{foo()}", "{foo()}");
+    test(Parser::ruleElement, "{foo(),bar()}");
   }
 
   @Test

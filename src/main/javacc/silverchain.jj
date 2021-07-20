@@ -9,10 +9,12 @@ package silverchain.parser;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 public final class Parser {
 
   private static Range range(ASTNode left, ASTNode right) {
+    left = left == null ? right : left;
     right = right == null ? left : right;
     return new Range(left.range().begin(), right.range().end());
   }
@@ -152,12 +154,22 @@ RuleElement ruleElement(): {
   Method m;
   RuleExpression e;
   Token p;
+  List<RuleExpression> es = new ArrayList<>();
 } {
   m = method() {
-    return new RuleElement(m.range(), m, null);
+    return new RuleElement(m.range(), m, null, false);
   } |
-  "(" { p = token; } e = ruleExpression() ")" {
-    return new RuleElement(range(p, token), null, e);
+  "(" { p = token; } e = ruleExpression() { es.add(e); } ")" {
+    RuleExpressions r = new RuleExpressions(e.range(), e, null);
+    return new RuleElement(range(p, token), null, r, false);
+  } |
+  "{" { p = token; } e = ruleExpression() { es.add(e); } ("," e = ruleExpression() { es.add(e); })* "}" {
+    Collections.reverse(es);
+    RuleExpressions rs = null;
+    for (RuleExpression r : es) {
+      rs = new RuleExpressions(range(rs, r), r, rs);
+    }
+    return new RuleElement(range(p, token), null, rs, true);
   }
 }
 
