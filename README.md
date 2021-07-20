@@ -107,11 +107,12 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 ## Command line options
 
 ```
--h, --help            Show this message and exit
--v, --version         Show version and exit
--i, --input <path>    Input grammar file
--o, --output <path>   Output directory
--j, --javadoc <path>  Javadoc source directory
+  -h, --help                Show this message and exit
+  -v, --version             Show version and exit
+  -i, --input <path>        Input grammar file
+  -o, --output <path>       Output directory
+  -j, --javadoc <path>      Javadoc source directory
+  -m, --max-file-count <n>  Max number of generated files
 ```
 
 ## Contributing
