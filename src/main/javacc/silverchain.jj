@@ -163,7 +163,7 @@ RuleElement ruleElement(): {
     RuleExpressions r = new RuleExpressions(e.range(), e, null);
     return new RuleElement(range(p, token), null, r, false);
   } |
-  "{" { p = token; } e = ruleExpression() { es.add(e); } ("," e = ruleExpression() { es.add(e); })* "}" {
+  "{" { p = token; } e = ruleExpression() { es.add(e); } ("," e = ruleExpression() { es.add(e); })* (",")? "}" {
     Collections.reverse(es);
     RuleExpressions rs = null;
     for (RuleExpression r : es) {
