@@ -46,6 +46,11 @@ final class Tests {
   }
 
   @Test
+  void testTripletBuilder() {
+    test("tripletbuilder");
+  }
+
+  @Test
   void testItemization() {
     test("itemization");
   }
