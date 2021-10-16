@@ -6,11 +6,10 @@ plugins {
     id 'com.github.sherter.google-java-format' version '0.9'
     id 'com.intershop.gradle.javacc' version '4.0.1'
     id 'maven-publish'
+    id 'signing'
 }
 
 group 'silverchain'
-
-version '0.1.0'
 
 sourceCompatibility = 1.8
 
@@ -25,6 +24,11 @@ dependencies {
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.23.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 javacc {
@@ -85,12 +89,58 @@ check {
     dependsOn testGeneratedJava
 }
 
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.github.tomokinakamaru.silverchain'
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-            from components.java
+publishing {
+    repositories {
+        maven {
+            def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            url = isReleaseVersion ? releaseRepo : snapshotRepo
+            credentials {
+                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
+            }
         }
     }
+
+    publications {
+        def mavenGroupId = 'io.github.tomokinakamaru.silverchain'
+
+        mavenJava(MavenPublication) {
+            pom {
+                groupId = mavenGroupId
+                name = mavenGroupId + ':' + project.name
+                description = 'Fluent API generator'
+                url = 'https://github.com/tomokinakamaru/silverchain/'
+                from components.java
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Tomoki Nakamaru'
+                        email = 'tomoki.nakamaru@gmail.com'
+                        organization = 'Tomoki Nakamaru'
+                        organizationUrl = 'https://github.com/tomokinakamaru/'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
+                    developerConnection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
+                    url = 'https://github.com/tomokinakamaru/silverchain/'
+                }
+            }
+        }
+    }
+}
+
+signing {
+    sign publishing.publications.mavenJava
+}
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }
