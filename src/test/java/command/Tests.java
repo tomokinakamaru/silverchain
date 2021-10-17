@@ -117,16 +117,16 @@ public class Tests {
   }
 
   private String findVersion() {
-    return readBuildGradle()
-        .filter(s -> s.startsWith("version "))
-        .map(s -> s.split(" ")[1].replaceAll("'", "").trim())
+    return readGradleProperties()
+        .filter(s -> s.startsWith("version="))
+        .map(s -> s.split("=")[1])
         .findFirst()
         .orElse(null);
   }
 
-  private Stream<String> readBuildGradle() {
+  private Stream<String> readGradleProperties() {
     try {
-      return Files.readAllLines(Paths.get("build.gradle")).stream();
+      return Files.readAllLines(Paths.get("gradle.properties")).stream();
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
