@@ -83,13 +83,13 @@ SQL {
 
 A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the library users write code faster.
 
-![completion](https://github.com/tomokinakamaru/silverchain/raw/master/doc/completion.gif)
+![completion](https://github.com/tomokinakamaru/silverchain/raw/main/doc/completion.gif)
 
 When a library is implemented in the user-friendly way, the completion system shows only methods that library users can chain next (see the left of the GIF animation). On the other hand, the completion system shows all the methods including the ones that cannot be chained when a library is implemented in the simplest way (see the right of the animation).
 
 ## Tutorial
 
-See [here](https://github.com/tomokinakamaru/silverchain/blob/master/doc/tutorial.md). We show how to create a library for melody composition that can be used as demonstrated in [this YouTube video](https://youtu.be/3fOn8cbhFZU).
+See [here](https://github.com/tomokinakamaru/silverchain/blob/main/doc/tutorial.md). We show how to create a library for melody composition that can be used as demonstrated in [this YouTube video](https://youtu.be/3fOn8cbhFZU).
 
 ## Run with Docker
 
