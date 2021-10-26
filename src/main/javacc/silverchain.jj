@@ -76,10 +76,18 @@ TOKEN: {
 }
 
 List<Grammar> start(): {
+  List<Grammar> gs;
+} {
+  gs = grammars() <EOF> {
+    return gs;
+  }
+}
+
+List<Grammar> grammars(): {
   Grammar g;
   List<Grammar> gs = new ArrayList<>();
 } {
-  (g = grammar() { gs.add(g); })+ <EOF> {
+  (g = grammar() { gs.add(g); })+ {
     return gs;
   }
 }
