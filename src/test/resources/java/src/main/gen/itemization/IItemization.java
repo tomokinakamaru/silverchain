@@ -2,5 +2,5 @@ package itemization;
 
 interface IItemization {
 
-  itemization.EmptySubItemization<End> begin();
+  itemization.EmptySubItemization<itemization.End> begin();
 }

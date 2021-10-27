@@ -2,9 +2,9 @@ package itemization;
 
 interface IItemizationAction {
 
-  default itemization.EmptySubItemization<End> state0$begin() {
+  default itemization.EmptySubItemization<itemization.End> state0$begin() {
     return begin();
   }
 
-  itemization.EmptySubItemization<End> begin();
+  itemization.EmptySubItemization<itemization.End> begin();
 }
