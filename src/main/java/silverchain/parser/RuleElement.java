@@ -4,6 +4,7 @@ import static java.util.stream.Collectors.joining;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import org.apache.commons.collections4.iterators.PermutationIterator;
@@ -44,21 +45,21 @@ public final class RuleElement extends ASTNode2<Method, RuleExpressions> {
 
   @SuppressWarnings("OptionalGetWithoutIsPresent")
   @Override
-  public Diagram diagram() {
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
     if (method().isPresent()) {
-      return method().get().diagram();
+      return method().get().diagram(importMap);
     }
 
     List<RuleExpression> expressions = expressions().get().stream().collect(Collectors.toList());
     if (expressions.size() == 1) {
-      return expressions.get(0).diagram();
+      return expressions.get(0).diagram(importMap);
     }
 
     PermutationIterator<RuleExpression> i = new PermutationIterator<>(expressions);
     List<Diagram> diagrams = new ArrayList<>();
     while (i.hasNext()) {
       List<RuleExpression> es = i.next();
-      Diagram d = es.stream().map(ASTNode2::diagram).reduce(Builders::join).orElse(null);
+      Diagram d = es.stream().map(n -> n.diagram(importMap)).reduce(Builders::join).orElse(null);
       diagrams.add(d);
     }
     return diagrams.stream().reduce(Builders::merge).orElse(null);

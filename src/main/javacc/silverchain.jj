@@ -76,12 +76,12 @@ TOKEN: {
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
 
-Grammars start(): {
+Input start(): {
   ImportStatements is = null;
   Grammars gs;
 } {
   (is = importStatements())? gs = grammars() <EOF> {
-    return gs;
+    return new Input(range(is, gs), is, gs);
   }
 }
 

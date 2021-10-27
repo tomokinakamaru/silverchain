@@ -2,6 +2,7 @@ package silverchain.parser;
 
 import static silverchain.diagram.Builders.atom;
 
+import java.util.Map;
 import java.util.Optional;
 import silverchain.diagram.Diagram;
 
@@ -25,7 +26,12 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
   }
 
   @Override
-  public Diagram diagram() {
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
+    if (!name().qualifier().isPresent()) {
+      if (importMap.containsKey(name().name())) {
+        left = importMap.get(name().name());
+      }
+    }
     return atom(this);
   }
 }

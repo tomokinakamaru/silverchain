@@ -5,6 +5,7 @@ import static silverchain.diagram.Builders.atom;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import silverchain.diagram.Diagram;
@@ -47,15 +48,18 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
   }
 
   @Override
-  void resolveReferences(List<TypeParameter> typeParameters) {
+  void resolveReferences(List<TypeParameter> typeParameters, Map<String, QualifiedName> importMap) {
     if (!name().qualifier().isPresent()) {
       referent = find(name(), typeParameters);
+      if (importMap.containsKey(name().name())) {
+        left = importMap.get(name().name());
+      }
     }
-    super.resolveReferences(typeParameters);
+    super.resolveReferences(typeParameters, importMap);
   }
 
   @Override
-  public Diagram diagram() {
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
     return atom(this);
   }
 

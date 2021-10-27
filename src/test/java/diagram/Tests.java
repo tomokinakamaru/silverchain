@@ -2,6 +2,7 @@ package diagram;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import org.junit.jupiter.api.Test;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
@@ -281,7 +282,7 @@ final class Tests {
 
   private Diagram compile(String text) {
     Grammar grammar = parse(text);
-    Diagram diagram = grammar.diagram();
+    Diagram diagram = grammar.diagram(new HashMap<>());
     diagram.compile();
     return diagram;
   }

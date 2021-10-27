@@ -1,6 +1,7 @@
 package silverchain.parser;
 
 import java.util.List;
+import java.util.Map;
 import silverchain.diagram.Diagram;
 
 public abstract class ASTNode1<T> extends ASTNode {
@@ -12,13 +13,17 @@ public abstract class ASTNode1<T> extends ASTNode {
     this.child = child;
   }
 
+  T child() {
+    return child;
+  }
+
   @Override
   public List<TypeParameter> typeParameters() {
     return null;
   }
 
   @Override
-  public Diagram diagram() {
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
     return null;
   }
 
@@ -31,5 +36,6 @@ public abstract class ASTNode1<T> extends ASTNode {
   public void validate() {}
 
   @Override
-  void resolveReferences(List<TypeParameter> typeParameters) {}
+  void resolveReferences(
+      List<TypeParameter> typeParameters, Map<String, QualifiedName> importMap) {}
 }

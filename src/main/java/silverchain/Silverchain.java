@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
@@ -14,9 +15,10 @@ import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
-import silverchain.parser.Grammars;
+import silverchain.parser.Input;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
+import silverchain.parser.QualifiedName;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidatorProvider;
 import silverchain.warning.WarningHandler;
@@ -54,8 +56,8 @@ public final class Silverchain {
   }
 
   public void run(InputStream stream, String javadocPath) throws ParseException {
-    Grammars grammars = parse(stream);
-    Diagrams diagrams = analyze(grammars);
+    Input input = parse(stream);
+    Diagrams diagrams = analyze(input);
     Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
 
@@ -67,16 +69,19 @@ public final class Silverchain {
     }
   }
 
-  private Grammars parse(InputStream stream) throws ParseException {
+  private Input parse(InputStream stream) throws ParseException {
     return new Parser(stream).start();
   }
 
-  private Diagrams analyze(Grammars grammars) {
-    return grammars.stream().map(this::analyze).collect(toCollection(Diagrams::new));
+  private Diagrams analyze(Input input) {
+    Map<String, QualifiedName> importMap = input.importMap();
+    return input.grammars().stream()
+        .map(g -> analyze(g, importMap))
+        .collect(toCollection(Diagrams::new));
   }
 
-  private Diagram analyze(Grammar grammar) {
+  private Diagram analyze(Grammar grammar, Map<String, QualifiedName> importMap) {
     grammar.validate();
-    return grammar.diagram().compile();
+    return grammar.diagram(importMap).compile();
   }
 }

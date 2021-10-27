@@ -12,7 +12,7 @@ import silverchain.generator.GeneratedFile;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
-import silverchain.parser.Grammars;
+import silverchain.parser.Input;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -33,15 +33,16 @@ final class Utility {
 
   private static Diagrams compile(InputStream stream) {
     Diagrams diagrams = new Diagrams();
-    for (Grammar grammar : parse(stream)) {
-      Diagram diagram = grammar.diagram();
+    Input input = parse(stream);
+    for (Grammar grammar : input.grammars()) {
+      Diagram diagram = grammar.diagram(input.importMap());
       diagram.compile();
       diagrams.add(diagram);
     }
     return diagrams;
   }
 
-  private static Grammars parse(InputStream stream) {
+  private static Input parse(InputStream stream) {
     try {
       return new Parser(stream).start();
     } catch (ParseException e) {
