@@ -14,6 +14,7 @@ import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
+import silverchain.parser.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 import silverchain.validator.JavaValidator;
@@ -53,7 +54,7 @@ public final class Silverchain {
   }
 
   public void run(InputStream stream, String javadocPath) throws ParseException {
-    List<Grammar> grammars = parse(stream);
+    Grammars grammars = parse(stream);
     Diagrams diagrams = analyze(grammars);
     Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
@@ -66,11 +67,11 @@ public final class Silverchain {
     }
   }
 
-  private List<Grammar> parse(InputStream stream) throws ParseException {
+  private Grammars parse(InputStream stream) throws ParseException {
     return new Parser(stream).start();
   }
 
-  private Diagrams analyze(List<Grammar> grammars) {
+  private Diagrams analyze(Grammars grammars) {
     return grammars.stream().map(this::analyze).collect(toCollection(Diagrams::new));
   }
 

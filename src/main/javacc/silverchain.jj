@@ -76,9 +76,9 @@ TOKEN: {
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
 
-List<Grammar> start(): {
+Grammars start(): {
   ImportStatements is = null;
-  List<Grammar> gs;
+  Grammars gs;
 } {
   (is = importStatements())? gs = grammars() <EOF> {
     return gs;
@@ -103,12 +103,12 @@ ImportStatement importStatement(): {
   }
 }
 
-List<Grammar> grammars(): {
+Grammars grammars(): {
   Grammar g;
-  List<Grammar> gs = new ArrayList<>();
+  Grammars gs = null;
 } {
-  (g = grammar() { gs.add(g); })+ {
-    return gs;
+  g = grammar() (gs = grammars())* {
+    return new Grammars(range(g, gs), g, gs);
   }
 }
 

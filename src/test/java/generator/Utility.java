@@ -12,6 +12,7 @@ import silverchain.generator.GeneratedFile;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.Grammar;
+import silverchain.parser.Grammars;
 import silverchain.parser.ParseException;
 import silverchain.parser.Parser;
 
@@ -40,7 +41,7 @@ final class Utility {
     return diagrams;
   }
 
-  private static List<Grammar> parse(InputStream stream) {
+  private static Grammars parse(InputStream stream) {
     try {
       return new Parser(stream).start();
     } catch (ParseException e) {
