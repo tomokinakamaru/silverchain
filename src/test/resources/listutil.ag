@@ -1,14 +1,18 @@
-listutil.ListUtil<;T> {
+import listutil.ListUtil;
+import java.util.List;
+import java.io.IOException;
 
-  void copy() from(java.util.List<T> src) to(java.util.List<? super T> dst);
+ListUtil<;T> {
 
-  void copy<S>(java.util.List<S> src, java.util.List<? super S> dst);
+  void copy() from(List<T> src) to(List<? super T> dst);
 
-  java.util.List<String> toList(String[] arr);
+  void copy<S>(List<S> src, List<? super S> dst);
 
-  java.util.List<Object> toList(Object... args);
+  List<String> toList(String[] arr);
 
-  String[] toArray(java.util.List<String> lst);
+  List<Object> toList(Object... args);
 
-  void save(java.util.List<?> list) throws java.io.IOException;
+  String[] toArray(List<String> lst);
+
+  void save(List<?> list) throws IOException;
 }
