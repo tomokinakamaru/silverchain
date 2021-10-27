@@ -1,6 +1,9 @@
-tripletbuilder.TripletBuilder<;T> {
+import tripletbuilder.TripletBuilder;
+import java.util.List;
 
-  java.util.List<T> { setFirst(T item), setSecond(T item), setThird(T item), } build();
+TripletBuilder<;T> {
 
-  java.util.List<T> { setFirst(T item)?, setSecond(T item)?, setThird(T item)? } build();
+  List<T> { setFirst(T item), setSecond(T item), setThird(T item), } build();
+
+  List<T> { setFirst(T item)?, setSecond(T item)?, setThird(T item)? } build();
 }
