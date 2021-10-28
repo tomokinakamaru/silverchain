@@ -5,6 +5,7 @@ import static silverchain.diagram.Builders.join;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -13,9 +14,9 @@ import silverchain.diagram.Diagram;
 
 abstract class ASTNode2<T, S> extends ASTNode {
 
-  private final T left;
+  protected T left;
 
-  private final S right;
+  protected S right;
 
   ASTNode2(Range range, T left, S right) {
     super(range);
@@ -41,8 +42,8 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   @Override
-  public Diagram diagram() {
-    return map(ASTNode::diagram).reduce(this::reduce).orElse(null);
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
+    return map(n -> n.diagram(importMap)).reduce(this::reduce).orElse(null);
   }
 
   @Override
@@ -56,8 +57,8 @@ abstract class ASTNode2<T, S> extends ASTNode {
   }
 
   @Override
-  void resolveReferences(List<TypeParameter> typeParameters) {
-    each(n -> n.resolveReferences(typeParameters));
+  void resolveReferences(List<TypeParameter> typeParameters, Map<String, QualifiedName> importMap) {
+    each(n -> n.resolveReferences(typeParameters, importMap));
   }
 
   private <U> Stream<U> flatMap(Function<ASTNode, Collection<U>> function) {

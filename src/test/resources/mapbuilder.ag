@@ -1,5 +1,7 @@
-mapbuilder.MapBuilder<;K, V> {
-  void put(K key, V value)* print();
-  java.util.Map<K, V> put(K key, V value)* build();
-}
+import mapbuilder.MapBuilder;
+import java.util.Map;
 
+MapBuilder<;K, V> {
+  void put(K key, V value)* print();
+  Map<K, V> put(K key, V value)* build();
+}

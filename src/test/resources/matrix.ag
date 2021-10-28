@@ -1,8 +1,12 @@
-matrix.MatrixBuilder<;R extends matrix.Size, C extends matrix.Size> {
-  matrix.Matrix<R, C> random() row(R row) col(C col);
+import matrix.MatrixBuilder;
+import matrix.Size;
+import matrix.Matrix;
+
+MatrixBuilder<;R extends Size, C extends Size> {
+  Matrix<R, C> random() row(R row) col(C col);
 }
 
-matrix.Matrix<R extends matrix.Size, C extends matrix.Size; NEW_C extends matrix.Size> {
-  matrix.Matrix<R, C> plus(matrix.Matrix<R, C> matrix);
-  matrix.Matrix<R, NEW_C> mult(matrix.Matrix<C, NEW_C> matrix);
+Matrix<R extends Size, C extends Size; NEW_C extends Size> {
+  Matrix<R, C> plus(Matrix<R, C> matrix);
+  Matrix<R, NEW_C> mult(Matrix<C, NEW_C> matrix);
 }

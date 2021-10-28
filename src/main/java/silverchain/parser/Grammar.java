@@ -1,5 +1,6 @@
 package silverchain.parser;
 
+import java.util.Map;
 import java.util.Optional;
 import silverchain.diagram.Diagram;
 
@@ -23,8 +24,8 @@ public final class Grammar extends ASTNode2<Type, Rules> {
   }
 
   @Override
-  public Diagram diagram() {
-    resolveReferences(typeParameters());
-    return super.diagram();
+  public Diagram diagram(Map<String, QualifiedName> importMap) {
+    resolveReferences(typeParameters(), importMap);
+    return super.diagram(importMap);
   }
 }

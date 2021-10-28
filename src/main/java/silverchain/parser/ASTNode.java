@@ -1,6 +1,7 @@
 package silverchain.parser;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import silverchain.diagram.Diagram;
 
@@ -10,13 +11,14 @@ public abstract class ASTNode implements Comparable<ASTNode> {
 
   public abstract List<TypeParameter> typeParameters();
 
-  public abstract Diagram diagram();
+  public abstract Diagram diagram(Map<String, QualifiedName> importMap);
 
   public abstract List<TypeParameter> referents();
 
   public abstract void validate();
 
-  abstract void resolveReferences(List<TypeParameter> typeParameters);
+  abstract void resolveReferences(
+      List<TypeParameter> typeParameters, Map<String, QualifiedName> importMap);
 
   ASTNode(Range range) {
     this.range = range;

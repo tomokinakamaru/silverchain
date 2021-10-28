@@ -1,10 +1,16 @@
-javadoctest.JavadocTest {
+import javadoctest.JavadocTest;
+import javadoctest.Foo.Bar;
+import javadoctest.Foo;
+import java.util.Map;
+import java.util.List;
 
-  void test1(java.util.List<String> list, java.util.Map<String, String> map);
+JavadocTest {
 
-  void test2(javadoctest.Foo foo);
+  void test1(List<String> list, Map<String, String> map);
 
-  void test3(javadoctest.Foo.Bar bar, javadoctest.Foo.Bar fooBar);
+  void test2(Foo foo);
+
+  void test3(Bar bar, Bar fooBar);
 
   void test4(String str) test4(String str);
 }

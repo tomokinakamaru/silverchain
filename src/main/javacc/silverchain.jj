@@ -71,16 +71,44 @@ TOKEN: {
   < EXTENDS: "extends" > |
   < VOID: "void" > |
   < THROWS: "throws" > |
+  < IMPORT: "import" > |
   < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
 
-List<Grammar> start(): {
-  Grammar g;
-  List<Grammar> gs = new ArrayList<>();
+Input start(): {
+  ImportStatements is = null;
+  Grammars gs;
 } {
-  (g = grammar() { gs.add(g); })+ <EOF> {
-    return gs;
+  (is = importStatements())? gs = grammars() <EOF> {
+    return new Input(range(is, gs), is, gs);
+  }
+}
+
+ImportStatements importStatements(): {
+  ImportStatement i;
+  ImportStatements is = null;
+} {
+  i = importStatement() (is = importStatements())? {
+    return new ImportStatements(range(i, is), i, is);
+  }
+}
+
+ImportStatement importStatement(): {
+  Token t, s;
+  QualifiedName q;
+} {
+  t = <IMPORT> q = qualifiedName() s = ";" {
+    return new ImportStatement(range(t, s), q);
+  }
+}
+
+Grammars grammars(): {
+  Grammar g;
+  Grammars gs = null;
+} {
+  g = grammar() (gs = grammars())* {
+    return new Grammars(range(g, gs), g, gs);
   }
 }
 

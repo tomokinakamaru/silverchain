@@ -2,6 +2,8 @@
 /*
  * Alert dialog
  */
-alertdialog.AlertDialog {
+import alertdialog.AlertDialog;
+
+AlertDialog {
   void setTitle(String title) setMessage(String message) show();
 }
