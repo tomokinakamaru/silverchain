@@ -4,6 +4,7 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/maintainability)](https://codeclimate.com/github/tomokinakamaru/silverchain/maintainability)
 [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/tomokinakamaru/silverchain)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.bannmann.maven.silverchain/silverchain-maven-plugin?label=maven%20central&color=informational)](https://maven-badges.herokuapp.com/maven-central/io.github.tomokinakamaru.silverchain/silverchain)
 
 ## What is Silverchain for?
 
@@ -95,6 +96,33 @@ See [here](https://github.com/tomokinakamaru/silverchain/blob/main/doc/tutorial.
 
 ```sh
 docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
+```
+
+
+## Run with Maven
+
+[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=informational&label=silverchain-maven-plugin%20%E2%99%A6%20latest&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fgithub%2Fbannmann%2Fmaven%2Fsilverchain%2Fsilverchain-maven-plugin%2Fmaven-metadata.xml)](https://maven-badges.herokuapp.com/maven-central/com.github.bannmann.maven.silverchain/silverchain-maven-plugin)
+
+Add the plugin to your `pom.xml` as follows, setting `<version>` and `<inputFile>` as desired.
+
+Output directory and Javadoc source directory are set to the default Maven locations. See the [Mojo source code](https://github.com/bannmann/silverchain-maven-plugin/blob/main/src/main/java/com/github/bannmann/maven/silverchain/GenerateMojo.java) for how to override them.
+
+```xml
+<plugin>
+    <groupId>com.github.bannmann.maven.silverchain</groupId>
+    <artifactId>silverchain-maven-plugin</artifactId>
+    <version>PUT_VERSION_HERE</version>
+    <configuration>
+        <inputFile>src/main/silverchain/my-example-api.ag</inputFile>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>generate</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
 ```
 
 ## Build jar
