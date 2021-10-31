@@ -1,7 +1,10 @@
 # Silverchain: Fluent API generator
 
-[![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/tomokinakamaru/silverchain)
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.bannmann.maven.silverchain/silverchain-maven-plugin?label=maven%20central&color=informational)](https://maven-badges.herokuapp.com/maven-central/io.github.tomokinakamaru.silverchain/silverchain)
+[![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/tomokinakamaru/silverchain)
+
+[![Java CI with Gradle](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml)
+[![CodeQL](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml)
 
 ## What is Silverchain for?
 
