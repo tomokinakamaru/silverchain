@@ -5,12 +5,15 @@ import static silverchain.diagram.Utility.toArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import silverchain.parser.ASTNode;
 import silverchain.parser.Method;
+import silverchain.parser.MethodParameters;
 import silverchain.parser.Range;
 import silverchain.parser.Type;
 import silverchain.parser.TypeParameter;
+import silverchain.parser.TypeParameterList;
 import silverchain.parser.TypeParameters;
 import silverchain.parser.TypeReference;
 
@@ -39,7 +42,10 @@ public final class Label implements Comparable<Label> {
           .orElse(Collections.emptyList());
     }
     if (isMethod()) {
-      return method().referents();
+      List<TypeParameter> ps = method().referents();
+      Optional<TypeParameterList> lps = method().parameters().localTypeParameters();
+      lps.ifPresent(typeParameters -> ps.removeAll(typeParameters.typeParameters()));
+      return ps;
     }
     return Collections.emptyList();
   }
