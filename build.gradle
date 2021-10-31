@@ -30,6 +30,12 @@ java {
     withSourcesJar()
 }
 
+processResources {
+    from ('gradle.properties') {
+        rename '.*', 'silverchain.properties'
+    }
+}
+
 javacc {
     javaCCVersion = '7.0.9'
     configs {

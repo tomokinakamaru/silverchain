@@ -11,6 +11,7 @@ import java.util.Map;
 import silverchain.FileCountError;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
+import silverchain.SilverchainProperties;
 import silverchain.generator.JavaGenerator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
@@ -24,8 +25,6 @@ public final class Command {
   private static final ArgumentParser parser = new ArgumentParser();
 
   private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
-
-  private static final String VERSION = "0.2.0-SNAPSHOT";
 
   private final PrintStream stdout;
 
@@ -76,7 +75,7 @@ public final class Command {
     } else if (result.getFlag("help")) {
       stdout.println(parser.help());
     } else if (result.getFlag("version")) {
-      stdout.println(VERSION);
+      stdout.println(SilverchainProperties.VERSION);
     } else {
       run(result);
     }
