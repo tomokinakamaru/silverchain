@@ -3,7 +3,6 @@ plugins {
     id 'jacoco'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
-    id 'com.github.sherter.google-java-format' version '0.9'
     id 'com.intershop.gradle.javacc' version '4.0.1'
     id 'maven-publish'
     id 'signing'
