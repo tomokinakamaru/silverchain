@@ -2,7 +2,7 @@ name: CI to Docker Hub
 
 on:
   workflow_run:
-    workflows: ["Java CI with Gradle"]
+    workflows: ["Java CI with Gradle", "CodeQL"]
     branches: [ main ]
     types:
       - completed
