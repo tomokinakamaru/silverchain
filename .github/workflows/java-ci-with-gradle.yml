@@ -24,5 +24,17 @@ jobs:
           distribution: adopt
           cache: gradle
 
+      - name: Download cc-test-reporter
+        run: curl -sfL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > cc-test-reporter && chmod +x cc-test-reporter
+
+      - name: Run `cc-test-reporter before-build`
+        run: ./cc-test-reporter before-build
+
       - name: Build with Gradle
         run: ./gradlew check --info
+
+      - name: Run `cc-test-reporter format-coverage`
+        run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage build/reports/jacoco/test/jacocoTestReport.xml -t jacoco
+
+      - name: Run `cc-test-reporter upload-coverage`
+        run: CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} ./cc-test-reporter upload-coverage

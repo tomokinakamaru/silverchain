@@ -5,6 +5,8 @@
 
 [![Java CI with Gradle](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml)
 [![CodeQL](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/maintainability)](https://codeclimate.com/github/tomokinakamaru/silverchain/maintainability)
 
 ## What is Silverchain for?
 
