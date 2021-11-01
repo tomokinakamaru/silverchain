@@ -26,3 +26,13 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew check --info
+
+      - name: Publish code coverage
+        uses: paambaati/codeclimate-action@v2.5.7
+        env:
+          CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
+          JACOCO_SOURCE_PATH: ${{github.workspace}}/src/main/java
+        with:
+          coverageCommand: ./gradlew jacocoTestReport
+          coverageLocations:
+            ${{github.workspace}}/src/app/build/reports/coverage/staging/debug/report.xml::jacoco
