@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import silverchain.parser.ASTNode;
 import silverchain.parser.Method;
-import silverchain.parser.MethodParameters;
 import silverchain.parser.Range;
 import silverchain.parser.Type;
 import silverchain.parser.TypeParameter;
