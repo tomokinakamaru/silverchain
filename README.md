@@ -3,6 +3,8 @@
 [![Maven Central](https://img.shields.io/maven-central/v/com.github.bannmann.maven.silverchain/silverchain-maven-plugin?label=maven%20central&color=informational)](https://maven-badges.herokuapp.com/maven-central/io.github.tomokinakamaru.silverchain/silverchain)
 [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/tomokinakamaru/silverchain)
 
+[![Join the chat at https://gitter.im/tomokinakamaru/silverchain](https://badges.gitter.im/tomokinakamaru/silverchain.svg)](https://gitter.im/tomokinakamaru/silverchain?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![Java CI with Gradle](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/java-ci-with-gradle.yml)
 [![CodeQL](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tomokinakamaru/silverchain/actions/workflows/codeql-analysis.yml)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
