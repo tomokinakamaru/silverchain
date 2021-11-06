@@ -105,7 +105,7 @@ docker run -v $(pwd):/workdir --rm -it tomokinakamaru/silverchain:latest
 
 ## Run with Maven
 
-[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=informational&label=silverchain-maven-plugin%20%E2%99%A6%20latest&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fgithub%2Fbannmann%2Fmaven%2Fsilverchain%2Fsilverchain-maven-plugin%2Fmaven-metadata.xml)](https://maven-badges.herokuapp.com/maven-central/com.github.bannmann.maven.silverchain/silverchain-maven-plugin)
+[![Maven Central](https://img.shields.io/maven-metadata/v.svg?color=informational&label=silverchain-maven-plugin%20%E2%99%A6%20latest&metadataUrl=https%3A%2F%2Frepo1.maven.org%2Fmaven2%2Fcom%2Fgithub%2Fbannmann%2Fmaven%2Fsilverchain%2Fsilverchain-maven-plugin%2Fmaven-metadata.xml)](https://maven-badges.herokuapp.com/maven-central/com.github.bannmann.maven.silverchain/silverchain-maven-plugin) [![Join the chat at https://gitter.im/tomokinakamaru/silverchain](https://badges.gitter.im/tomokinakamaru/silverchain.svg)](https://gitter.im/tomokinakamaru/silverchain?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Add the plugin to your `pom.xml` as follows, setting `<version>` and `<inputFile>` as desired.
 
