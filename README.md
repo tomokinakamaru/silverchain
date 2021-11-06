@@ -82,6 +82,8 @@ SQL {
 }
 ```
 
+To learn how to write the input, see this [reference](./doc/ag-reference.md)
+
 ## Not only preventing invalid chains!
 
 A Silverchain-generated library (i.e. library implemented in the user-friendly way) cooperates well with method completion system and lets the library users write code faster.
@@ -144,6 +146,8 @@ Output directory and Javadoc source directory are set to the default Maven locat
   -j, --javadoc <path>      Javadoc source directory
   -m, --max-file-count <n>  Max number of generated files
 ```
+
+[This page](./doc/javadoc.md) describes the use of `--javadoc`.
 
 ## Contributing
 
