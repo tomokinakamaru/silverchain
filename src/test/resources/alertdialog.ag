@@ -4,6 +4,14 @@
  */
 import alertdialog.AlertDialog;
 
+$SET_MESSAGE = setMessage(String message);
+
+$SET_TITLE = setTitle(String title);
+
+$BUILD = $SET_TITLE $SET_MESSAGE;
+
+$SHOW = show();
+
 AlertDialog {
-  void setTitle(String title) setMessage(String message) show();
+  void $BUILD $SHOW;
 }
