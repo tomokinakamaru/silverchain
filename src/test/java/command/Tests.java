@@ -58,7 +58,7 @@ public class Tests {
 
   @Test
   void testTokenizeError() {
-    input("=");
+    input("~");
     test("-o", workspace.toString()).status(104).stdout("");
   }
 
