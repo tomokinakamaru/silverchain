@@ -8,10 +8,14 @@ PARSER_BEGIN(Parser)
 package silverchain.parser;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public final class Parser {
+
+  private final Map<String, RuleExpression> fragments = new HashMap<>();
 
   private static Range range(ASTNode left, ASTNode right) {
     left = left == null ? right : left;
@@ -73,6 +77,7 @@ TOKEN: {
   < THROWS: "throws" > |
   < IMPORT: "import" > |
   < NAME: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
+  < FRAGMENT_NAME: "$"["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
   < NUMBER: "0" | ["1"-"9"](["0"-"9"])* >
 }
 
@@ -107,7 +112,7 @@ Grammars grammars(): {
   Grammar g;
   Grammars gs = null;
 } {
-  g = grammar() (gs = grammars())* {
+  (fragmentDeclaration())* g = grammar() (fragmentDeclaration())* (gs = grammars())* (fragmentDeclaration())* {
     return new Grammars(range(g, gs), g, gs);
   }
 }
@@ -182,10 +187,16 @@ RuleElement ruleElement(): {
   Method m;
   RuleExpression e;
   Token p;
+  Token f;
   List<RuleExpression> es = new ArrayList<>();
 } {
   m = method() {
     return new RuleElement(m.range(), m, null, false);
+  } |
+  f = <FRAGMENT_NAME> {
+    RuleExpression _e = fragments.get(f.image);
+    RuleExpressions _es = new RuleExpressions(_e.range(), _e, null);
+    return new RuleElement(range(f), null, _es, false);
   } |
   "(" { p = token; } e = ruleExpression() { es.add(e); } ")" {
     RuleExpressions r = new RuleExpressions(e.range(), e, null);
@@ -360,5 +371,14 @@ QualifiedName qualifiedName(): {
       q = new QualifiedName(range(q, t), q, t.image);
     }
     return q;
+  }
+}
+
+void fragmentDeclaration(): {
+  Token t;
+  RuleExpression r;
+} {
+  t = <FRAGMENT_NAME> "=" r = ruleExpression() ";" {
+    fragments.put(t.image, r);
   }
 }
