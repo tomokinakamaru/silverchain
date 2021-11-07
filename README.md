@@ -84,7 +84,7 @@ SQL {
 }
 ```
 
-To learn how to write the input, see this [reference](./doc/ag-reference.md)
+To learn how to write the input, see this [reference](./doc/ag-reference.md).
 
 ## Not only preventing invalid chains!
 
