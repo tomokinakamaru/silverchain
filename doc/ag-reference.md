@@ -121,7 +121,7 @@ $YMD = year(int y) month(int m) day(int d);
 
 DateTimeBuilder {
   // $YMD is expanded into `year(int y) month(int m) day(int d)`
-  LocalDateTime $YMD;
+  LocalDateTime $YMD local();
   ZonedDateTime $YMD timezone(ZoneId z);
 }
 ```
