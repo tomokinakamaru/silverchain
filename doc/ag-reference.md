@@ -33,7 +33,7 @@ One can write any valid Java type/method in a chain rule. One can write `void`, 
 
 ### Repeat operators
 
-Common repeat operators such as `?` is supported. The example below indicates that the invocations of `month(int)` and `day(int)` are optional.
+Common repeat operators such as `?` are supported. The example below indicates that the invocations of `month(int)` and `day(int)` are optional.
 
 ```java
 org.example.DateTimeBuilder {
@@ -46,7 +46,7 @@ The following lists all the operators allowed in AG code:
 | operator     | semantics                                                |
 | :----------- | :------------------------------------------------------- |
 | `foo()?`     | zero or one invocation of `foo()`                        |
-| `foo()*`     | one or more invocations of `foo()`                       |
+| `foo()*`     | zero or more invocations of `foo()`                      |
 | `foo()+`     | one or more invocations of `foo()`                       |
 | `foo()[n]`   | `n` invocations of `foo()`                               |
 | `foo()[n,]`  | `n` or more invocations of `foo()`                       |
@@ -70,7 +70,7 @@ DateTimeBuilder {
 The above example means that the API allows all of the below:
 
 - `year(2021).month(11).day(6)`
-- `year(2021).day(6)month(11)`
+- `year(2021).day(6).month(11)`
 - `month(11).year(2021).day(6)`
 - `month(11).day(6).year(2021)`
 - `day(6).year(2021).month(11)`
@@ -85,7 +85,7 @@ However, the API does not allow
 
 ### Importing types
 
-By importing a type like in Java, one can refer that type by its simple name:
+By importing a type like in Java, one can refer to that type by its simple name:
 
 ```java
 import java.time.LocalDateTime;
@@ -121,7 +121,7 @@ $YMD = year(int y) month(int m) day(int d);
 
 DateTimeBuilder {
   // $YMD is expanded into `year(int y) month(int m) day(int d)`
-  LocalDateTime $YMD;
+  LocalDateTime $YMD local();
   ZonedDateTime $YMD timezone(ZoneId z);
 }
 ```
