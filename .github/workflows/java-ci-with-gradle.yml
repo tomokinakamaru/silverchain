@@ -37,4 +37,9 @@ jobs:
         run: JACOCO_SOURCE_PATH=src/main/java ./cc-test-reporter format-coverage build/reports/jacoco/test/jacocoTestReport.xml -t jacoco
 
       - name: Run `cc-test-reporter upload-coverage`
-        run: CC_TEST_REPORTER_ID=${{ secrets.CC_TEST_REPORTER_ID }} ./cc-test-reporter upload-coverage
+        env:
+          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+        run: |
+          if [[ $CC_TEST_REPORTER_ID != "" ]]; then
+            ./cc-test-reporter upload-coverage
+          fi
