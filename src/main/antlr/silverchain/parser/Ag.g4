@@ -89,6 +89,7 @@ ruleStatements
 
 ruleStatement
   : typeReference ruleExpression ';'
+  | 'void' ruleExpression ';'
   ;
 
 ruleExpression
@@ -163,6 +164,7 @@ repeatOperatorNM
 
 INTEGER
   : [1-9][0-9]*
+  | '0'
   ;
 
 // Method ---------------------------------------------------------------------
@@ -216,7 +218,7 @@ exceptionList
 // Type parameter -------------------------------------------------------------
 typeParameterList
   : typeParameter
-  | typeParameter ',' typeArgumentList
+  | typeParameter ',' typeParameterList
   ;
 
 typeParameter
@@ -235,8 +237,8 @@ typeParameterBoundList
 
 // Type reference -------------------------------------------------------------
 typeReference
-  : qualifiedName
-  | qualifiedName typeArguments
+  : qualifiedName (array='[' ']')?
+  | qualifiedName typeArguments (array='[' ']')?
   ;
 
 typeArguments
