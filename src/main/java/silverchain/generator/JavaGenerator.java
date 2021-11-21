@@ -292,7 +292,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private String getIStateModifier(State state) {
-    return state.number() == 0 ? "" : "public ";
+    return "public ";
   }
 
   private String getIStateQualifiedName(State state) {
@@ -301,11 +301,11 @@ public final class JavaGenerator extends Generator {
 
   private String getIStatePackageName(State state) {
     String qualifier = state.diagram().name().qualifier().map(this::encode).orElse("");
-    return state.number() == 0 ? qualifier : qualifyName(qualifier, "state" + state.number());
+    return qualifyName(qualifier, "intermediates");
   }
 
   private String getIStateName(State state) {
-    return (state.number() == 0 ? "I" : "") + state.diagram().name().name();
+    return state.diagram().name().name() + state.number();
   }
 
   private String getIStateReference(State state) {
@@ -324,7 +324,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private String getStateName(State state) {
-    return state.diagram().name().name() + state.number();
+    return state.diagram().name().name() + state.number() + "Impl";
   }
 
   private String getIActionQualifiedName(Diagram diagram) {
@@ -336,7 +336,7 @@ public final class JavaGenerator extends Generator {
   }
 
   private String getIActionName(Diagram diagram) {
-    return "I" + diagram.name().name() + "Action";
+    return diagram.name().name() + "Action";
   }
 
   private String qualifyName(String qualifier, String name) {
