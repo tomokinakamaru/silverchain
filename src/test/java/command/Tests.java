@@ -80,7 +80,7 @@ public class Tests {
     test("-o", "build.gradle")
         .status(108)
         .stdout("")
-        .stderr("Failed to save generated file: build.gradle/IFooAction.java\n");
+        .stderr("Failed to save generated file: build.gradle/FooAction.java\n");
   }
 
   @Test
