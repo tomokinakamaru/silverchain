@@ -93,9 +93,9 @@ Unfortunately, the generated files are not yet ready to use. They are just a ske
 ```java
 package melodychain;
 
-public final class Melody extends Melody0 {
+public final class Melody extends Melody0Impl {
   public Melody() {
-    super(new MelodyAction());
+    super(new MelodyActionImpl());
   }
 }
 ```
@@ -114,7 +114,7 @@ import javax.sound.midi.Track;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MelodyAction implements IMelodyAction {
+public class MelodyActionImpl implements MelodyAction {
 
   private final List<Integer> notes = new ArrayList<>();
 
@@ -187,9 +187,9 @@ public class MelodyAction implements IMelodyAction {
 }
 ```
 
-The first class `Melody` is an entrypoint class that will be instantiated by the library users. `Melody0` is one of the generated classes, and `MelodyAction` is the second class we create in this section.
+The first class `Melody` is an entrypoint class that will be instantiated by the library users. `Melody0Impl` is one of the generated classes, and `MelodyActionImpl` is the second class we create in this section.
 
-The second class `MelodyAction` defines the action of the generated methods. For instance, the lines in `MelodyAction.A()` are executed when `A()` is invoked in a method chain. Since a melody violating the Pachelbel progression causes a type error, there is no need to check if a composed melody follows the progression at runtime.
+The second class `MelodyActionImpl` defines the action of the generated methods. For instance, the lines in `MelodyActionImpl.A()` are executed when `A()` is invoked in a method chain. Since a melody violating the Pachelbel progression causes a type error, there is no need to check if a composed melody follows the progression at runtime.
 
 ## Compose melodies
 
