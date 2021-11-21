@@ -2,7 +2,7 @@ package silverchain.parser;
 
 public final class TypeParameterBound extends ASTNode2<Boolean, TypeReference> {
 
-  TypeParameterBound(Range range, boolean isUpper, TypeReference reference) {
+  public TypeParameterBound(Range range, boolean isUpper, TypeReference reference) {
     super(range, isUpper, reference);
   }
 

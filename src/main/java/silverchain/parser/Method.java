@@ -11,7 +11,7 @@ public final class Method extends ASTNode2<String, MethodParameters> {
 
   private final TypeReferences exceptions;
 
-  Method(Range range, String name, MethodParameters parameters, TypeReferences exceptions) {
+  public Method(Range range, String name, MethodParameters parameters, TypeReferences exceptions) {
     super(range, name, parameters);
     this.exceptions = exceptions;
   }

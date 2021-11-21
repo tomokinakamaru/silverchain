@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class RepeatOperator extends ASTNode2<Integer, Integer> {
 
-  RepeatOperator(Range range, int min, Integer max) {
+  public RepeatOperator(Range range, int min, Integer max) {
     super(range, min, max);
   }
 

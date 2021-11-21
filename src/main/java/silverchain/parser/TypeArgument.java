@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class TypeArgument extends ASTNode2<TypeReference, TypeParameterBound> {
 
-  TypeArgument(Range range, TypeReference left, TypeParameterBound right) {
+  public TypeArgument(Range range, TypeReference left, TypeParameterBound right) {
     super(range, left, right);
   }
 

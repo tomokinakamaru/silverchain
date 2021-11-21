@@ -8,7 +8,7 @@ import silverchain.diagram.Diagram;
 
 public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
-  RuleFactor(Range range, RuleElement element, RepeatOperator operator) {
+  public RuleFactor(Range range, RuleElement element, RepeatOperator operator) {
     super(range, element, operator);
   }
 

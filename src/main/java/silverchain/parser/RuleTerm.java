@@ -2,7 +2,7 @@ package silverchain.parser;
 
 public final class RuleTerm extends ASTNodeN<RuleFactor, RuleTerm> {
 
-  RuleTerm(Range range, RuleFactor head, RuleTerm tail) {
+  public RuleTerm(Range range, RuleFactor head, RuleTerm tail) {
     super(range, head, tail);
   }
 

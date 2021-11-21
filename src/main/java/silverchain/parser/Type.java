@@ -8,7 +8,7 @@ import silverchain.diagram.Diagram;
 
 public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
-  Type(Range range, QualifiedName name, TypeParameters parameters) {
+  public Type(Range range, QualifiedName name, TypeParameters parameters) {
     super(range, name, parameters);
   }
 

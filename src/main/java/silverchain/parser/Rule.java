@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class Rule extends ASTNode2<RuleExpression, TypeReference> {
 
-  Rule(Range range, RuleExpression expression, TypeReference type) {
+  public Rule(Range range, RuleExpression expression, TypeReference type) {
     super(range, expression, type);
   }
 

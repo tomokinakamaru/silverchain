@@ -8,7 +8,7 @@ public final class Location implements Comparable<Location> {
 
   private final int column;
 
-  Location(int line, int column) {
+  public Location(int line, int column) {
     this.line = line;
     this.column = column;
   }

@@ -6,7 +6,7 @@ import silverchain.diagram.Diagram;
 
 public final class Rules extends ASTNodeN<Rule, Rules> {
 
-  Rules(Range range, Rule head, Rules tail) {
+  public Rules(Range range, Rule head, Rules tail) {
     super(range, head, tail);
   }
 

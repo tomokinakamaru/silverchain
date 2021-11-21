@@ -6,7 +6,7 @@ import java.util.Set;
 
 public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParameterList> {
 
-  TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
+  public TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
     super(range, publicList, privateList);
   }
 
