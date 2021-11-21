@@ -5,7 +5,6 @@ plugins {
     id 'com.diffplug.spotless' version '6.0.0'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
-    id 'com.intershop.gradle.javacc' version '4.0.1'
     id 'maven-publish'
     id 'signing'
 }
@@ -43,16 +42,6 @@ processResources {
     }
 }
 
-javacc {
-    javaCCVersion = '7.0.9'
-    configs {
-        parser {
-            inputFile = file('src/main/javacc/silverchain.jj')
-            packageName = 'silverchain.parser'
-        }
-    }
-}
-
 shadowJar {
     manifest {
         attributes('Main-Class' : 'silverchain.command.EntryPoint')
@@ -84,16 +73,7 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    'silverchain/parser/ParseException.class',
-                    'silverchain/parser/Parser.class',
-                    'silverchain/parser/ParserConstants.class',
-                    'silverchain/parser/ParserTokenManager.class',
-                    'silverchain/parser/SimpleCharStream.class',
-                    'silverchain/parser/Token.class',
-                    'silverchain/parser/TokenMgrError.class',
-                    'silverchain/command/EntryPoint.class'
-            ])
+            fileTree(dir: it, exclude: ['silverchain/parser/*.class'])
         })
     }
 }
