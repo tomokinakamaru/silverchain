@@ -4,176 +4,174 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.function.Function;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.jupiter.api.Test;
 import silverchain.parser.ASTNode;
+import silverchain.parser.AgParser;
 import silverchain.parser.DuplicateDeclaration;
-import silverchain.parser.ParseException;
-import silverchain.parser.Parser;
+import silverchain.parser.adapter.Parser;
 
 final class Tests {
 
   @Test
   void testQualifiedName() {
-    test(Parser::qualifiedName, "foo");
-    test(Parser::qualifiedName, "foo.bar");
-    test(Parser::qualifiedName, "foo.bar.baz");
+    test(AgParser::qualifiedName, "foo");
+    test(AgParser::qualifiedName, "foo.bar");
+    test(AgParser::qualifiedName, "foo.bar.baz");
   }
 
   @Test
   void testTypeParameter() {
-    test(Parser::typeParameter, "T");
+    test(AgParser::typeParameter, "T");
 
-    ASTNode node = parse(Parser::typeParameter, "T");
+    ASTNode node = parse(AgParser::typeParameter, "T");
     assert node.typeParameters().size() == 1;
     assert node.typeParameters().get(0).name().equals("T");
   }
 
   @Test
   void testTypeParameterBound() {
-    test(Parser::typeParameterBound, "extends Foo");
-    test(Parser::typeParameterBound, "super Foo");
+    test(AgParser::wildcardBound, "extends Foo");
+    test(AgParser::wildcardBound, "super Foo");
   }
 
   @Test
   void testTypeParameterList() {
-    test(Parser::typeParameterList, "T");
-    test(Parser::typeParameterList, "T,S");
+    test(AgParser::typeParameterList, "T");
+    test(AgParser::typeParameterList, "T,S");
   }
 
   @Test
   void testTypeParameters() {
-    test(Parser::typeParameters, "T;S");
-    test(Parser::typeParameters, "T");
-    test(Parser::typeParameters, ";T");
+    test(AgParser::classTypeParameterDeclarations, "<T;S>");
+    test(AgParser::classTypeParameterDeclarations, "<T>");
+    test(AgParser::classTypeParameterDeclarations, "<;T>");
   }
 
   @Test
   void testType() {
-    test(Parser::type, "Foo");
-    test(Parser::type, "Foo<T;S>");
-    test(Parser::type, "Foo<T,S>");
-    test(Parser::type, "Foo<T,S;U>");
-    test(Parser::type, "Foo<T;S,U>");
+    test(AgParser::classDeclarationHead, "Foo");
+    test(AgParser::classDeclarationHead, "Foo<T;S>");
+    test(AgParser::classDeclarationHead, "Foo<T,S>");
+    test(AgParser::classDeclarationHead, "Foo<T,S;U>");
+    test(AgParser::classDeclarationHead, "Foo<T;S,U>");
   }
 
   @Test
   void testTypeArgument() {
-    test(Parser::typeArgument, "T");
-    test(Parser::typeArgument, "?");
-    test(Parser::typeArgument, "? extends T");
-    test(Parser::typeArgument, "? super T");
+    test(AgParser::typeArgument, "T");
+    test(AgParser::wildcard, "?");
+    test(AgParser::wildcard, "? extends T");
+    test(AgParser::wildcard, "? super T");
   }
 
   @Test
   void testTypeArguments() {
-    test(Parser::typeArguments, "T");
-    test(Parser::typeArguments, "T,S");
+    test(AgParser::typeArgumentList, "T");
+    test(AgParser::typeArgumentList, "T,S");
   }
 
   @Test
   void testTypeReference() {
-    test(Parser::typeReference, "Foo");
-    test(Parser::typeReference, "foo.Bar<T>");
-    test(Parser::typeReference, "Foo[]");
-    test(Parser::typeReference, "Foo<T>[]");
+    test(AgParser::typeReference, "Foo");
+    test(AgParser::typeReference, "foo.Bar<T>");
+    test(AgParser::typeReference, "Foo[]");
+    test(AgParser::typeReference, "Foo<T>[]");
   }
 
   @Test
   void testFormalParameter() {
-    test(Parser::formalParameter, "Foo foo");
-    test(Parser::formalParameter, "Foo... foo");
+    test(AgParser::formalParameter, "Foo foo");
+    test(AgParser::formalParameter, "Foo... foo");
   }
 
   @Test
   void testFormalParameters() {
-    test(Parser::formalParameters, "Foo foo");
-    test(Parser::formalParameters, "Foo foo,Bar bar");
-  }
-
-  @Test
-  void testMethodParameters() {
-    test(Parser::methodParameters, "()");
-    test(Parser::methodParameters, "<T>()");
+    test(AgParser::formalParameterList, "Foo foo");
+    test(AgParser::formalParameterList, "Foo foo,Bar bar");
   }
 
   @Test
   void testMethod() {
-    test(Parser::method, "foo()");
-    test(Parser::method, "foo(Bar bar)");
-    test(Parser::method, "foo() throws Foo");
+    test(AgParser::method, "foo()");
+    test(AgParser::method, "foo(Bar bar)");
+    test(AgParser::method, "foo() throws Foo");
   }
 
   @Test
   void testRuleElement() {
-    test(Parser::ruleElement, "foo()");
-    test(Parser::ruleElement, "(foo())");
-    test(Parser::ruleElement, "(foo()|bar())");
-    test(Parser::ruleElement, "{foo()}", "{foo()}");
-    test(Parser::ruleElement, "{foo(),bar()}");
+    test(AgParser::ruleElement, "foo()");
+    test(AgParser::ruleElement, "(foo())");
+    test(AgParser::ruleElement, "(foo()|bar())");
+    test(AgParser::ruleElement, "{foo()}", "{foo()}");
+    test(AgParser::ruleElement, "{foo(),bar()}");
   }
 
   @Test
   void testRepeatOperator() {
-    test(Parser::repeatOperator, "*", "[0,]");
-    test(Parser::repeatOperator, "+", "[1,]");
-    test(Parser::repeatOperator, "?", "[0,1]");
-    test(Parser::repeatOperator, "[1]", "[1,1]");
-    test(Parser::repeatOperator, "[2]", "[2,2]");
-    test(Parser::repeatOperator, "[1,]", "[1,]");
-    test(Parser::repeatOperator, "[0,1]");
-    test(Parser::repeatOperator, "[0,2]");
-    test(Parser::repeatOperator, "[1,2]");
-    test(Parser::repeatOperator, "[2,3]");
+    test(AgParser::repeatOperator, "*", "[0,]");
+    test(AgParser::repeatOperator, "+", "[1,]");
+    test(AgParser::repeatOperator, "?", "[0,1]");
+    test(AgParser::repeatOperator, "[1]", "[1,1]");
+    test(AgParser::repeatOperator, "[2]", "[2,2]");
+    test(AgParser::repeatOperator, "[1,]", "[1,]");
+    test(AgParser::repeatOperator, "[0,1]");
+    test(AgParser::repeatOperator, "[0,2]");
+    test(AgParser::repeatOperator, "[1,2]");
+    test(AgParser::repeatOperator, "[2,3]");
   }
 
   @Test
   void testRuleFactor() {
-    test(Parser::ruleFactor, "foo()");
-    test(Parser::ruleFactor, "foo()*", "foo()[0,]");
+    test(AgParser::ruleFactor, "foo()");
+    test(AgParser::ruleFactor, "foo()*", "foo()[0,]");
   }
 
   @Test
   void testRuleTerm() {
-    test(Parser::ruleTerm, "foo()");
-    test(Parser::ruleTerm, "foo() bar()");
+    test(AgParser::ruleTerm, "foo()");
+    test(AgParser::ruleTerm, "foo() bar()");
   }
 
   @Test
   void testRuleExpression() {
-    test(Parser::ruleExpression, "foo()");
-    test(Parser::ruleExpression, "foo()|bar()|baz()");
+    test(AgParser::ruleExpression, "foo()");
+    test(AgParser::ruleExpression, "foo()|bar()|baz()");
   }
 
   @Test
   void testRule() {
-    test(Parser::rule, "void foo();");
-    test(Parser::rule, "Foo foo();");
+    test(AgParser::ruleStatement, "void foo();");
+    test(AgParser::ruleStatements, "Foo foo();");
   }
 
   @Test
   void testRules() {
-    test(Parser::rules, "Foo foo(); Bar bar();");
+    test(AgParser::ruleStatements, "Foo foo(); Bar bar();");
   }
 
   @Test
   void testGrammar() {
-    test(Parser::grammar, "Foo {}");
-    test(Parser::grammar, "Foo { Foo foo(); }");
+    test(AgParser::classDeclaration, "Foo {}");
+    test(AgParser::classDeclaration, "Foo { Foo foo(); }");
 
-    ASTNode node1 = parse(Parser::grammar, "Foo<T, T> {}");
+    ASTNode node1 = parse(AgParser::classDeclaration, "Foo<T, T> {}");
     assertThrows(DuplicateDeclaration.class, node1::validate);
 
-    ASTNode node2 = parse(Parser::grammar, "Foo<T, S> {}");
+    ASTNode node2 = parse(AgParser::classDeclaration, "Foo<T, S> {}");
     assertDoesNotThrow(node2::validate);
   }
 
   @Test
   void testRange() {
-    ASTNode node1 = parse(Parser::grammar, "Foo {}");
-    ASTNode node2 = parse(Parser::grammar, "Bar {}");
-    ASTNode node3 = parse(Parser::grammar, "Baz<T> {}");
-    ASTNode node4 = parse(Parser::grammar, "\nQux {}");
+    ASTNode node1 = parse(AgParser::classDeclaration, "Foo {}");
+    ASTNode node2 = parse(AgParser::classDeclaration, "Bar {}");
+    ASTNode node3 = parse(AgParser::classDeclaration, "Baz<T> {}");
+    ASTNode node4 = parse(AgParser::classDeclaration, "\nQux {}");
 
     assert node1.range().hashCode() == node2.range().hashCode();
 
@@ -191,8 +189,8 @@ final class Tests {
   @Test
   @SuppressWarnings({"EqualsWithItself", "ConstantConditions", "EqualsBetweenInconvertibleTypes"})
   void testForCoverage() {
-    ASTNode node1 = parse(Parser::grammar, "Foo {}");
-    ASTNode node2 = parse(Parser::grammar, "Bar {}");
+    ASTNode node1 = parse(AgParser::classDeclaration, "Foo {}");
+    ASTNode node2 = parse(AgParser::classDeclaration, "Bar {}");
 
     assert node1.hashCode() != node2.hashCode();
     assert !node1.equals(node2);
@@ -212,23 +210,23 @@ final class Tests {
     assert !node1.range().begin().equals(node1);
   }
 
-  private void test(RuleSelector<Parser, ?> selector, String text) {
+  private void test(Function<AgParser, ParseTree> selector, String text) {
     test(selector, text, text);
   }
 
-  private void test(RuleSelector<Parser, ?> selector, String text, String expected) {
+  private void test(Function<AgParser, ParseTree> selector, String text, String expected) {
     ASTNode result = parse(selector, text);
     assert result.toString().equals(expected);
     assert result.range().begin().line() == result.range().end().line();
     assert result.range().end().column() - result.range().begin().column() + 1 == text.length();
   }
 
-  protected ASTNode parse(RuleSelector<Parser, ?> selector, String text) {
+  protected ASTNode parse(Function<AgParser, ParseTree> selector, String text) {
     InputStream stream = new ByteArrayInputStream(text.getBytes());
     Parser parser = new Parser(stream);
     try {
-      return selector.apply(parser);
-    } catch (ParseException e) {
+      return parser.parse(selector);
+    } catch (RecognitionException | IOException e) {
       throw new RuntimeException(e);
     }
   }

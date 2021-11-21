@@ -22,7 +22,7 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
   @Override
   public String toString() {
-    return name() + parameters().map(p -> "<" + p + ">").orElse("");
+    return name() + parameters().map(TypeParameters::toString).orElse("");
   }
 
   @Override

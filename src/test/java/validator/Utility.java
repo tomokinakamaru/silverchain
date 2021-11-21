@@ -2,14 +2,16 @@ package validator;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
+import org.antlr.v4.runtime.RecognitionException;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
+import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
 import silverchain.parser.Input;
-import silverchain.parser.ParseException;
-import silverchain.parser.Parser;
+import silverchain.parser.adapter.Parser;
 import silverchain.validator.JavaValidator;
 
 final class Utility {
@@ -39,8 +41,8 @@ final class Utility {
 
   private static Input parse(InputStream stream) {
     try {
-      return new Parser(stream).start();
-    } catch (ParseException e) {
+      return (Input) new Parser(stream).parse(AgParser::input);
+    } catch (RecognitionException | IOException e) {
       throw new RuntimeException(e);
     }
   }
