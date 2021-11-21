@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public final class TypeParameter extends ASTNode2<String, TypeParameterBound> {
 
-  TypeParameter(Range range, String name, TypeParameterBound bound) {
+  public TypeParameter(Range range, String name, TypeParameterBound bound) {
     super(range, name, bound);
   }
 

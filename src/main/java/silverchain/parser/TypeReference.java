@@ -16,7 +16,7 @@ public final class TypeReference extends ASTNode2<QualifiedName, TypeArguments> 
 
   private final boolean isArray;
 
-  TypeReference(Range range, QualifiedName name, TypeArguments arguments, boolean isArray) {
+  public TypeReference(Range range, QualifiedName name, TypeArguments arguments, boolean isArray) {
     super(range, name, arguments);
     this.isArray = isArray;
   }

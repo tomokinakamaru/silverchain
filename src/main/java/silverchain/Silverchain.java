@@ -2,11 +2,13 @@ package silverchain;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import org.antlr.v4.runtime.RecognitionException;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
@@ -14,11 +16,8 @@ import silverchain.generator.GeneratedFile;
 import silverchain.generator.GeneratorProvider;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
-import silverchain.parser.Grammar;
-import silverchain.parser.Input;
-import silverchain.parser.ParseException;
-import silverchain.parser.Parser;
-import silverchain.parser.QualifiedName;
+import silverchain.parser.*;
+import silverchain.parser.adapter.Parser;
 import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidatorProvider;
 import silverchain.warning.WarningHandler;
@@ -55,7 +54,7 @@ public final class Silverchain {
     maxFileCount = n;
   }
 
-  public void run(InputStream stream, String javadocPath) throws ParseException {
+  public void run(InputStream stream, String javadocPath) throws RecognitionException, IOException {
     Input input = parse(stream);
     Diagrams diagrams = analyze(input);
     Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
@@ -69,8 +68,8 @@ public final class Silverchain {
     }
   }
 
-  private Input parse(InputStream stream) throws ParseException {
-    return new Parser(stream).start();
+  private Input parse(InputStream stream) throws RecognitionException, IOException {
+    return (Input) new Parser(stream).parse(AgParser::input);
   }
 
   private Diagrams analyze(Input input) {

@@ -6,7 +6,7 @@ import java.util.Optional;
 
 public final class Input extends ASTNode2<ImportStatements, Grammars> {
 
-  Input(Range range, ImportStatements left, Grammars right) {
+  public Input(Range range, ImportStatements left, Grammars right) {
     super(range, left, right);
   }
 

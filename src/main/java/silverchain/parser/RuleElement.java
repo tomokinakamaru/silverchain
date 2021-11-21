@@ -15,7 +15,7 @@ public final class RuleElement extends ASTNode2<Method, RuleExpressions> {
 
   private final boolean isSet;
 
-  RuleElement(Range range, Method method, RuleExpressions expressions, boolean isSet) {
+  public RuleElement(Range range, Method method, RuleExpressions expressions, boolean isSet) {
     super(range, method, expressions);
     this.isSet = isSet;
   }

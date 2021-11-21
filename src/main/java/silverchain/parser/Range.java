@@ -8,7 +8,7 @@ public final class Range implements Comparable<Range> {
 
   private final Location end;
 
-  Range(Location begin, Location end) {
+  public Range(Location begin, Location end) {
     this.begin = begin;
     this.end = end;
   }

@@ -8,7 +8,7 @@ import silverchain.diagram.Diagram;
 
 public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
-  Type(Range range, QualifiedName name, TypeParameters parameters) {
+  public Type(Range range, QualifiedName name, TypeParameters parameters) {
     super(range, name, parameters);
   }
 
@@ -22,7 +22,7 @@ public final class Type extends ASTNode2<QualifiedName, TypeParameters> {
 
   @Override
   public String toString() {
-    return name() + parameters().map(p -> "<" + p + ">").orElse("");
+    return name() + parameters().map(TypeParameters::toString).orElse("");
   }
 
   @Override

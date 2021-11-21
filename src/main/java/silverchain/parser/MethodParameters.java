@@ -4,7 +4,7 @@ import java.util.Optional;
 
 public final class MethodParameters extends ASTNode2<TypeParameterList, FormalParameters> {
 
-  MethodParameters(Range range, TypeParameterList left, FormalParameters right) {
+  public MethodParameters(Range range, TypeParameterList left, FormalParameters right) {
     super(range, left, right);
   }
 

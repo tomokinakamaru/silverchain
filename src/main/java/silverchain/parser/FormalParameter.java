@@ -4,7 +4,7 @@ public final class FormalParameter extends ASTNode2<TypeReference, String> {
 
   private boolean isVarArgs;
 
-  FormalParameter(Range range, TypeReference typeReference, String name, boolean isVarArgs) {
+  public FormalParameter(Range range, TypeReference typeReference, String name, boolean isVarArgs) {
     super(range, typeReference, name);
     this.isVarArgs = isVarArgs;
   }

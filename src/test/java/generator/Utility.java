@@ -2,19 +2,21 @@ package generator;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
+import org.antlr.v4.runtime.RecognitionException;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.GeneratedFile;
 import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
+import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
 import silverchain.parser.Input;
-import silverchain.parser.ParseException;
-import silverchain.parser.Parser;
+import silverchain.parser.adapter.Parser;
 
 final class Utility {
 
@@ -44,8 +46,8 @@ final class Utility {
 
   private static Input parse(InputStream stream) {
     try {
-      return new Parser(stream).start();
-    } catch (ParseException e) {
+      return (Input) new Parser(stream).parse(AgParser::input);
+    } catch (RecognitionException | IOException e) {
       throw new RuntimeException(e);
     }
   }

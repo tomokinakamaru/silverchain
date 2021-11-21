@@ -1,10 +1,10 @@
 plugins {
+    id 'antlr'
     id 'java'
     id 'jacoco'
     id 'com.diffplug.spotless' version '6.0.0'
     id 'com.github.ben-manes.versions' version '0.39.0'
     id 'com.github.johnrengelman.shadow' version '7.1.0'
-    id 'com.intershop.gradle.javacc' version '4.0.1'
     id 'maven-publish'
     id 'signing'
 }
@@ -20,10 +20,15 @@ repositories {
 }
 
 dependencies {
+    antlr "org.antlr:antlr4:4.9.3"
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.23.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+}
+
+generateGrammarSource {
+    arguments += ['-visitor', '-long-messages']
 }
 
 java {
@@ -34,16 +39,6 @@ java {
 processResources {
     from ('gradle.properties') {
         rename '.*', 'silverchain.properties'
-    }
-}
-
-javacc {
-    javaCCVersion = '7.0.9'
-    configs {
-        parser {
-            inputFile = file('src/main/javacc/silverchain.jj')
-            packageName = 'silverchain.parser'
-        }
     }
 }
 
@@ -78,16 +73,7 @@ jacocoTestReport {
     }
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: [
-                    'silverchain/parser/ParseException.class',
-                    'silverchain/parser/Parser.class',
-                    'silverchain/parser/ParserConstants.class',
-                    'silverchain/parser/ParserTokenManager.class',
-                    'silverchain/parser/SimpleCharStream.class',
-                    'silverchain/parser/Token.class',
-                    'silverchain/parser/TokenMgrError.class',
-                    'silverchain/command/EntryPoint.class'
-            ])
+            fileTree(dir: it, exclude: ['silverchain/parser/*.class'])
         })
     }
 }

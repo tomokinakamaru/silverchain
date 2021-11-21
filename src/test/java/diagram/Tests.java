@@ -1,14 +1,16 @@
 package diagram;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import org.antlr.v4.runtime.RecognitionException;
 import org.junit.jupiter.api.Test;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Label;
+import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
-import silverchain.parser.ParseException;
-import silverchain.parser.Parser;
+import silverchain.parser.adapter.Parser;
 
 final class Tests {
 
@@ -291,8 +293,8 @@ final class Tests {
     InputStream stream = new ByteArrayInputStream(text.getBytes());
     Parser parser = new Parser(stream);
     try {
-      return parser.grammar();
-    } catch (ParseException e) {
+      return (Grammar) parser.parse(AgParser::classDeclaration);
+    } catch (RecognitionException | IOException e) {
       throw new RuntimeException(e);
     }
   }

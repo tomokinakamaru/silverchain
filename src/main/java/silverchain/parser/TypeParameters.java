@@ -6,7 +6,7 @@ import java.util.Set;
 
 public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParameterList> {
 
-  TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
+  public TypeParameters(Range range, TypeParameterList publicList, TypeParameterList privateList) {
     super(range, publicList, privateList);
   }
 
@@ -20,8 +20,10 @@ public final class TypeParameters extends ASTNode2<TypeParameterList, TypeParame
 
   @Override
   public String toString() {
-    return publicList().map(ASTNodeN::toString).orElse("")
-        + privateList().map(p -> ";" + p).orElse("");
+    return "<"
+        + publicList().map(ASTNodeN::toString).orElse("")
+        + privateList().map(p -> ";" + p).orElse("")
+        + ">";
   }
 
   @Override

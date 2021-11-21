@@ -6,7 +6,7 @@ import silverchain.diagram.Diagram;
 
 public final class Grammar extends ASTNode2<Type, Rules> {
 
-  Grammar(Range range, Type type, Rules rules) {
+  public Grammar(Range range, Type type, Rules rules) {
     super(range, type, rules);
   }
 
