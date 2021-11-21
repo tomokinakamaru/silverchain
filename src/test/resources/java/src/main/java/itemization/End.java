@@ -1,8 +1,8 @@
 package itemization;
 
-public final class End extends End0 {
+public final class End extends End0Impl {
 
   End() {
-    super(new EndAction());
+    super(new EndActionImpl());
   }
 }

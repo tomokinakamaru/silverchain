@@ -1,8 +1,8 @@
 package alertdialog;
 
-public final class AlertDialog extends AlertDialog0 {
+public final class AlertDialog extends AlertDialog0Impl {
 
   public AlertDialog() {
-    super(new AlertDialogAction());
+    super(new AlertDialogActionImpl());
   }
 }

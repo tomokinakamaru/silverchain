@@ -1,8 +1,8 @@
 package matrix;
 
-public final class MatrixBuilder extends MatrixBuilder0 {
+public final class MatrixBuilder extends MatrixBuilder0Impl {
 
   public MatrixBuilder() {
-    super(new MatrixBuilderAction<>());
+    super(new MatrixBuilderActionImpl<>());
   }
 }
