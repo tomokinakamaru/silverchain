@@ -4,13 +4,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public final class GeneratedFile {
+public final class File {
 
   private final Path path;
 
   private final String content;
 
-  public GeneratedFile(Path path, String content) {
+  public File(Path path, String content) {
     this.path = path;
     this.content = content;
   }

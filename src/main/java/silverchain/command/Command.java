@@ -13,7 +13,7 @@ import silverchain.FileCountError;
 import silverchain.Silverchain;
 import silverchain.SilverchainException;
 import silverchain.SilverchainProperties;
-import silverchain.generator.JavaGenerator;
+import silverchain.generator.Generator;
 import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
 import silverchain.parser.adapter.ParseError;
@@ -85,7 +85,7 @@ public final class Command {
   private void run(ParseResult result) throws RecognitionException {
     Silverchain silverchain = new Silverchain();
     silverchain.outputDirectory(Paths.get(result.get("output")));
-    silverchain.generatorProvider(JavaGenerator::new);
+    silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(JavaValidator::new);
     silverchain.warningHandler(new WarningPrinter(stderr));
     silverchain.maxFileCount(Integer.parseInt(result.get("max-file-count")));
