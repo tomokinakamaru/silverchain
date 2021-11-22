@@ -34,9 +34,6 @@ public final class ASTBuilder extends AgBaseVisitor<ASTNode> {
     if (ctx.aliasDeclarations() != null) {
       is = visitAliasDeclarations(ctx.aliasDeclarations());
     }
-    if (ctx.fragmentDeclarations() != null) {
-      visitFragmentDeclarations(ctx.fragmentDeclarations());
-    }
     return is;
   }
 
@@ -90,6 +87,10 @@ public final class ASTBuilder extends AgBaseVisitor<ASTNode> {
 
   @Override
   public Grammar visitClassDeclaration(AgParser.ClassDeclarationContext ctx) {
+    if (ctx.fragmentDeclarations() != null) {
+      visitFragmentDeclarations(ctx.fragmentDeclarations());
+    }
+
     Type t = visitClassDeclarationHead(ctx.classDeclarationHead());
     Rules rs = null;
     if (ctx.classDeclarationBody() != null) {

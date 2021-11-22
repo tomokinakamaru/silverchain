@@ -18,8 +18,6 @@ apiDefinition
 
 apiDefinitionHead
   : aliasDeclarations
-  | fragmentDeclarations
-  | aliasDeclarations fragmentDeclarations
   ;
 
 apiDefinitionBody
@@ -53,7 +51,7 @@ classDeclarations
   ;
 
 classDeclaration
-  : classDeclarationHead classDeclarationBody
+  : fragmentDeclarations? classDeclarationHead classDeclarationBody
   ;
 
 classDeclarationHead
