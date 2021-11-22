@@ -234,7 +234,7 @@ public final class Javadocs {
 
   private static boolean isActionType(ClassOrInterfaceType type) {
     String name = type.getNameAsString();
-    return name.startsWith("I") && name.endsWith("Action");
+    return name.endsWith("Action");
   }
 
   private static ClassOrInterfaceDeclaration getClassOrInterfaceDeclaration(MethodDeclaration d) {
