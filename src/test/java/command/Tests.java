@@ -22,12 +22,12 @@ public class Tests {
         "Usage: silverchain [options]\n"
             + "\n"
             + "Options:\n"
-            + "  -h, --help                Show this message and exit\n"
-            + "  -v, --version             Show version and exit\n"
-            + "  -i, --input <path>        Input grammar file\n"
-            + "  -o, --output <path>       Output directory\n"
-            + "  -j, --javadoc <path>      Javadoc source directory\n"
-            + "  -m, --max-file-count <n>  Max number of generated files\n";
+            + "  -h, --help                 Show this message and exit\n"
+            + "  -v, --version              Show version and exit\n"
+            + "  -i, --input <path>         Input grammar file\n"
+            + "  -o, --output <path>        Output directory\n"
+            + "  -j, --javadoc <path>       Javadoc source directory\n"
+            + "  -m, --max-file-count <n>   Max number of generated files\n";
     test("-h").status(0).stdout(help).stderr("");
     test("--help").status(0).stdout(help).stderr("");
   }
