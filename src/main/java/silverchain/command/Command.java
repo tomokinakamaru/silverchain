@@ -19,12 +19,12 @@ import silverchain.validator.Validator;
 
 @CommandLine.Command(
     name = "silverchain",
-    versionProvider = Cli.class,
+    versionProvider = Command.class,
     sortOptions = false,
     optionListHeading = "%nOptions:%n",
     separator = " ",
     customSynopsis = {"silverchain [options]"})
-public final class Cli
+public final class Command
     implements Runnable, IVersionProvider, IExecutionExceptionHandler, IParameterExceptionHandler {
 
   PrintWriter stdout;
@@ -96,12 +96,12 @@ public final class Cli
   }
 
   public static int run(PrintWriter stdout, PrintWriter stderr, String... args) {
-    Cli cli = new Cli();
-    cli.stdout = stdout;
-    cli.stderr = stderr;
-    return new CommandLine(cli)
-        .setExecutionExceptionHandler(cli)
-        .setParameterExceptionHandler(cli)
+    Command command = new Command();
+    command.stdout = stdout;
+    command.stderr = stderr;
+    return new CommandLine(command)
+        .setExecutionExceptionHandler(command)
+        .setParameterExceptionHandler(command)
         .setOut(stdout)
         .setErr(stderr)
         .execute(args);
