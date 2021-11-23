@@ -1,8 +1,8 @@
 package listutil;
 
-public class ListUtil extends ListUtil0 {
+public class ListUtil extends ListUtil0Impl {
 
   public ListUtil() {
-    super(new ListUtilAction<>());
+    super(new ListUtilActionImpl<>());
   }
 }

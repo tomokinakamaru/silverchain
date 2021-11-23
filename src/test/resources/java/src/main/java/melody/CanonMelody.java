@@ -1,8 +1,8 @@
 package melody;
 
-public class CanonMelody extends CanonMelody0 {
+public class CanonMelody extends CanonMelody0Impl {
 
   public CanonMelody() {
-    super(new MelodyAction());
+    super(new MelodyActionImpl());
   }
 }

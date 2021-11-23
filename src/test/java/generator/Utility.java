@@ -10,8 +10,8 @@ import org.antlr.v4.runtime.RecognitionException;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
-import silverchain.generator.GeneratedFile;
-import silverchain.generator.JavaGenerator;
+import silverchain.generator.File;
+import silverchain.generator.Generator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
@@ -20,8 +20,8 @@ import silverchain.parser.adapter.Parser;
 
 final class Utility {
 
-  static List<GeneratedFile> generateJava(InputStream stream, String javadocPath) {
-    return new JavaGenerator(compile(stream), new Javadocs(javadocPath, new WarningPrinter()))
+  static List<File> generateJava(InputStream stream, String javadocPath) {
+    return new Generator(compile(stream), new Javadocs(javadocPath, new WarningPrinter()))
         .generate();
   }
 

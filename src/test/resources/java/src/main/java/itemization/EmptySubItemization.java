@@ -1,8 +1,8 @@
 package itemization;
 
-public final class EmptySubItemization<INNER> extends EmptySubItemization0<INNER> {
+public final class EmptySubItemization<INNER> extends EmptySubItemization0Impl<INNER> {
 
   EmptySubItemization() {
-    super(new EmptySubItemizationAction<>());
+    super(new EmptySubItemizationActionImpl<>());
   }
 }

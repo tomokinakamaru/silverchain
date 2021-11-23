@@ -12,9 +12,9 @@ import org.antlr.v4.runtime.RecognitionException;
 import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
-import silverchain.generator.GeneratedFile;
+import silverchain.generator.File;
+import silverchain.generator.Generator;
 import silverchain.generator.GeneratorProvider;
-import silverchain.generator.JavaGenerator;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.*;
 import silverchain.parser.adapter.Parser;
@@ -26,7 +26,7 @@ public final class Silverchain {
 
   private Path outputDirectory = Paths.get(".");
 
-  private GeneratorProvider generatorProvider = JavaGenerator::new;
+  private GeneratorProvider generatorProvider = Generator::new;
 
   private ValidatorProvider validatorProvider = JavaValidator::new;
 
@@ -60,7 +60,7 @@ public final class Silverchain {
     Javadocs javadocs = new Javadocs(javadocPath, warningHandler);
     validatorProvider.apply(diagrams).validate();
 
-    List<GeneratedFile> files = generatorProvider.apply(diagrams, javadocs).generate();
+    List<File> files = generatorProvider.apply(diagrams, javadocs).generate();
     if (files.size() <= maxFileCount) {
       files.forEach(f -> f.save(outputDirectory));
     } else {

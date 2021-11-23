@@ -1,8 +1,8 @@
 package tripletbuilder;
 
-public final class TripletBuilder extends TripletBuilder0 {
+public final class TripletBuilder extends TripletBuilder0Impl {
 
   public TripletBuilder() {
-    super(new TripletBuilderAction<>());
+    super(new TripletBuilderActionImpl<>());
   }
 }

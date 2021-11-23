@@ -9,7 +9,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
-import silverchain.generator.GeneratedFile;
+import silverchain.generator.File;
 
 final class Tests {
 
@@ -58,24 +58,24 @@ final class Tests {
   private void test(String name) {
     Path path = resources.resolve(name + ".ag");
     String javadoc = "src/test/resources/java/src/main";
-    List<GeneratedFile> generated = generateJava(Utility.read(path), javadoc);
-    List<GeneratedFile> expected = expectedJavaFiles(name);
+    List<File> generated = generateJava(Utility.read(path), javadoc);
+    List<File> expected = expectedJavaFiles(name);
     assert generated.size() == expected.size();
-    for (GeneratedFile file : generated) {
+    for (File file : generated) {
       assert expected.stream().anyMatch(f -> equals(f, file));
     }
   }
 
-  private boolean equals(GeneratedFile file1, GeneratedFile file2) {
+  private boolean equals(File file1, File file2) {
     return file1.path().equals(file2.path()) && file1.content().equals(file2.content());
   }
 
-  private List<GeneratedFile> expectedJavaFiles(String name) {
+  private List<File> expectedJavaFiles(String name) {
     Path base = resources.resolve("java").resolve("src").resolve("main").resolve("gen");
     try {
       return Files.walk(base.resolve(name))
           .filter(p -> p.toString().endsWith(".java"))
-          .map(p -> new GeneratedFile(base.relativize(p), read(p)))
+          .map(p -> new File(base.relativize(p), read(p)))
           .collect(Collectors.toList());
     } catch (IOException e) {
       throw new RuntimeException(e);
