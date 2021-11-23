@@ -12,12 +12,12 @@ import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
 import silverchain.parser.Input;
 import silverchain.parser.adapter.Parser;
-import silverchain.validator.JavaValidator;
+import silverchain.validator.Validator;
 
 final class Utility {
 
   static void validateJava(InputStream stream) {
-    new JavaValidator(compile(stream)).validate();
+    new Validator(compile(stream)).validate();
   }
 
   static InputStream read(Path path) {

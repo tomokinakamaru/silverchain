@@ -18,8 +18,8 @@ import silverchain.generator.SaveError;
 import silverchain.parser.DuplicateDeclaration;
 import silverchain.parser.adapter.ParseError;
 import silverchain.parser.adapter.TokenizeError;
-import silverchain.validator.JavaValidator;
 import silverchain.validator.ValidationError;
+import silverchain.validator.Validator;
 
 public final class Command {
 
@@ -86,7 +86,7 @@ public final class Command {
     Silverchain silverchain = new Silverchain();
     silverchain.outputDirectory(Paths.get(result.get("output")));
     silverchain.generatorProvider(Generator::new);
-    silverchain.validatorProvider(JavaValidator::new);
+    silverchain.validatorProvider(Validator::new);
     silverchain.warningHandler(new WarningPrinter(stderr));
     silverchain.maxFileCount(Integer.parseInt(result.get("max-file-count")));
     try (InputStream stream = open(result.get("input"))) {

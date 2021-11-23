@@ -20,11 +20,11 @@ import silverchain.parser.Method;
 import silverchain.parser.Range;
 import silverchain.parser.TypeReference;
 
-public final class JavaValidator {
+public final class Validator {
 
   private final Diagrams diagrams;
 
-  public JavaValidator(Diagrams diagrams) {
+  public Validator(Diagrams diagrams) {
     this.diagrams = diagrams;
   }
 

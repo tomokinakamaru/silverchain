@@ -18,7 +18,7 @@ import silverchain.generator.GeneratorProvider;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.*;
 import silverchain.parser.adapter.Parser;
-import silverchain.validator.JavaValidator;
+import silverchain.validator.Validator;
 import silverchain.validator.ValidatorProvider;
 import silverchain.warning.WarningHandler;
 
@@ -28,7 +28,7 @@ public final class Silverchain {
 
   private GeneratorProvider generatorProvider = Generator::new;
 
-  private ValidatorProvider validatorProvider = JavaValidator::new;
+  private ValidatorProvider validatorProvider = Validator::new;
 
   private WarningHandler warningHandler = new WarningPrinter();
 
