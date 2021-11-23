@@ -20,14 +20,19 @@ import silverchain.parser.Method;
 import silverchain.parser.Range;
 import silverchain.parser.TypeReference;
 
-public class JavaValidator extends Validator {
+public final class JavaValidator {
+
+  private final Diagrams diagrams;
 
   public JavaValidator(Diagrams diagrams) {
-    super(diagrams);
+    this.diagrams = diagrams;
   }
 
-  @Override
-  protected void validate(Diagrams diagrams) {
+  public void validate() {
+    validate(new Diagrams(diagrams));
+  }
+
+  private void validate(Diagrams diagrams) {
     diagrams.forEach(this::validate);
   }
 
