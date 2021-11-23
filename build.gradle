@@ -45,7 +45,7 @@ processResources {
 
 shadowJar {
     manifest {
-        attributes('Main-Class' : 'silverchain.command.EntryPoint')
+        attributes('Main-Class' : 'silverchain.command.Command')
     }
 }
 
