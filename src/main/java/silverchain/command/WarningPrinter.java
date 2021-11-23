@@ -1,24 +1,25 @@
 package silverchain.command;
 
-import java.io.PrintStream;
+import java.io.PrintWriter;
 import silverchain.warning.Warning;
 import silverchain.warning.WarningHandler;
 
 public final class WarningPrinter implements WarningHandler {
 
-  private final PrintStream stream;
+  private final PrintWriter writer;
 
-  public WarningPrinter(PrintStream stream) {
-    this.stream = stream;
+  public WarningPrinter(PrintWriter writer) {
+    this.writer = writer;
   }
 
   public WarningPrinter() {
-    this(System.err);
+    this(new PrintWriter(System.err));
   }
 
   @Override
   public void accept(Warning warning) {
-    stream.print("WARNING: ");
-    stream.println(warning);
+    writer.print("WARNING: ");
+    writer.println(warning);
+    writer.flush();
   }
 }

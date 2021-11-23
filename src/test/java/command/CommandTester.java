@@ -2,8 +2,8 @@ package command;
 
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
-import java.io.PrintStream;
-import silverchain.command.Command;
+import java.io.PrintWriter;
+import silverchain.command.Cli;
 
 final class CommandTester {
 
@@ -14,7 +14,7 @@ final class CommandTester {
   private final int status;
 
   CommandTester(String... args) {
-    status = Command.run(new PrintStream(stdout), new PrintStream(stderr), args);
+    status = Cli.run(new PrintWriter(stdout), new PrintWriter(stderr), args);
   }
 
   CommandTester status(int i) {
