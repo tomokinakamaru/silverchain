@@ -1,11 +1,10 @@
-package silverchain.command;
+package silverchain;
 
 import java.io.*;
 import java.nio.file.Paths;
+import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
-import silverchain.Silverchain;
-import silverchain.SilverchainProperties;
 import silverchain.generator.Generator;
 import silverchain.validator.Validator;
 
@@ -17,7 +16,10 @@ import silverchain.validator.Validator;
     separator = " ",
     customSynopsis = {"silverchain [options]"})
 public final class Command
-    implements Runnable, IVersionProvider, IExecutionExceptionHandler, IParameterExceptionHandler {
+    implements Callable<Integer>,
+        IVersionProvider,
+        IExecutionExceptionHandler,
+        IParameterExceptionHandler {
 
   @SuppressWarnings("unused")
   @CommandLine.Option(
@@ -76,18 +78,19 @@ public final class Command
         .execute(args);
   }
 
+  private Command() {}
+
   @Override
-  public void run() {
+  public Integer call() throws Exception {
     Silverchain silverchain = new Silverchain();
     silverchain.outputDirectory(Paths.get(output));
     silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(Validator::new);
     silverchain.maxFileCount(maxFileCount);
-    try (InputStream stream = open(input)) {
-      silverchain.run(stream, javadoc);
-    } catch (IOException e) {
-      throw new InputError(e);
-    }
+    InputStream stream = open(input);
+    silverchain.run(stream, javadoc);
+    stream.close();
+    return 0;
   }
 
   @Override
@@ -95,26 +98,19 @@ public final class Command
     return new String[] {SilverchainProperties.VERSION};
   }
 
-  private InputStream open(String name) {
-    if (name.equals("-")) {
-      return System.in;
-    }
-    try {
-      return new FileInputStream(name);
-    } catch (FileNotFoundException e) {
-      throw new InputError(name);
-    }
-  }
-
   @Override
   public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
-    System.err.println(e.getMessage());
+    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
     return 1;
   }
 
   @Override
-  public int handleParseException(ParameterException ex, String[] args) {
-    System.err.println(ex.getMessage());
+  public int handleParseException(ParameterException e, String[] args) {
+    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
     return 2;
+  }
+
+  private InputStream open(String name) throws FileNotFoundException {
+    return name.equals("-") ? System.in : new FileInputStream(name);
   }
 }

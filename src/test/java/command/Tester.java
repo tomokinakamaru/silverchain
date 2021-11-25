@@ -3,7 +3,7 @@ package command;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import silverchain.command.Command;
+import silverchain.Command;
 
 final class Tester {
 
