@@ -27,10 +27,6 @@ import silverchain.validator.Validator;
 public final class Command
     implements Runnable, IVersionProvider, IExecutionExceptionHandler, IParameterExceptionHandler {
 
-  PrintWriter stdout;
-
-  PrintWriter stderr;
-
   private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
 
   static {
@@ -81,6 +77,7 @@ public final class Command
       paramLabel = "<path>")
   private String javadoc;
 
+  @SuppressWarnings("unused")
   @CommandLine.Option(
       names = {"-m", "--max-file-count"},
       description = "Max number of generated files",
@@ -89,21 +86,14 @@ public final class Command
   private int maxFileCount;
 
   public static void main(String[] args) {
-    PrintWriter stdout = new PrintWriter(System.out);
-    PrintWriter stderr = new PrintWriter(System.err);
-    int code = run(stdout, stderr, args);
-    System.exit(code);
+    System.exit(run(args));
   }
 
-  public static int run(PrintWriter stdout, PrintWriter stderr, String... args) {
+  public static int run(String... args) {
     Command command = new Command();
-    command.stdout = stdout;
-    command.stderr = stderr;
     return new CommandLine(command)
         .setExecutionExceptionHandler(command)
         .setParameterExceptionHandler(command)
-        .setOut(stdout)
-        .setErr(stderr)
         .execute(args);
   }
 
@@ -113,7 +103,7 @@ public final class Command
     silverchain.outputDirectory(Paths.get(output));
     silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(Validator::new);
-    silverchain.warningHandler(new WarningPrinter(stderr));
+    silverchain.warningHandler(new WarningPrinter());
     silverchain.maxFileCount(maxFileCount);
     try (InputStream stream = open(input)) {
       silverchain.run(stream, javadoc);
@@ -140,15 +130,13 @@ public final class Command
 
   @Override
   public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
-    stderr.println(e.getMessage());
-    stderr.flush();
+    System.err.println(e.getMessage());
     return errorCodes.getOrDefault(e.getClass(), 1);
   }
 
   @Override
   public int handleParseException(ParameterException ex, String[] args) {
-    stderr.println(ex.getMessage().replaceAll("'", ""));
-    stderr.flush();
+    System.err.println(ex.getMessage().replaceAll("'", ""));
     return errorCodes.get(UnknownOption.class);
   }
 }

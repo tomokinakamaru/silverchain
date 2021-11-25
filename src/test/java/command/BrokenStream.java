@@ -3,9 +3,9 @@ package command;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 
-final class BrokenInputStream extends ByteArrayInputStream {
+final class BrokenStream extends ByteArrayInputStream {
 
-  public BrokenInputStream(String text) {
+  public BrokenStream(String text) {
     super(text.getBytes());
   }
 
