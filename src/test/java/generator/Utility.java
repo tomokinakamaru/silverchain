@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.nio.file.Path;
 import java.util.List;
 import org.antlr.v4.runtime.RecognitionException;
-import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.File;
@@ -21,7 +20,8 @@ import silverchain.parser.adapter.Parser;
 final class Utility {
 
   static List<File> generateJava(InputStream stream, String javadocPath) {
-    return new Generator(compile(stream), new Javadocs(javadocPath, new WarningPrinter()))
+    return new Generator(
+            compile(stream), new Javadocs(javadocPath, s -> System.err.println("WARNING: " + s)))
         .generate();
   }
 

@@ -103,7 +103,6 @@ public final class Command
     silverchain.outputDirectory(Paths.get(output));
     silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(Validator::new);
-    silverchain.warningHandler(new WarningPrinter());
     silverchain.maxFileCount(maxFileCount);
     try (InputStream stream = open(input)) {
       silverchain.run(stream, javadoc);
