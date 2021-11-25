@@ -60,7 +60,7 @@ public class Tests {
     Result r = test("-foo");
     r.status(101);
     r.stdout("");
-    r.stderr("Unknown option: -foo\n");
+    r.stderr("Unknown option: '-foo'\n");
   }
 
   @Test

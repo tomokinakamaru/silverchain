@@ -135,7 +135,7 @@ public final class Command
 
   @Override
   public int handleParseException(ParameterException ex, String[] args) {
-    System.err.println(ex.getMessage().replaceAll("'", ""));
+    System.err.println(ex.getMessage());
     return errorCodes.get(UnknownOption.class);
   }
 }
