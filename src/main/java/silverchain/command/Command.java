@@ -2,19 +2,11 @@ package silverchain.command;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
 import picocli.CommandLine;
 import picocli.CommandLine.*;
-import silverchain.FileCountError;
 import silverchain.Silverchain;
 import silverchain.SilverchainProperties;
 import silverchain.generator.Generator;
-import silverchain.generator.SaveError;
-import silverchain.parser.DuplicateDeclaration;
-import silverchain.parser.adapter.ParseError;
-import silverchain.parser.adapter.TokenizeError;
-import silverchain.validator.ValidationError;
 import silverchain.validator.Validator;
 
 @CommandLine.Command(
@@ -26,19 +18,6 @@ import silverchain.validator.Validator;
     customSynopsis = {"silverchain [options]"})
 public final class Command
     implements Runnable, IVersionProvider, IExecutionExceptionHandler, IParameterExceptionHandler {
-
-  private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
-
-  static {
-    errorCodes.put(UnknownOption.class, 101);
-    errorCodes.put(InputError.class, 103);
-    errorCodes.put(TokenizeError.class, 104);
-    errorCodes.put(ParseError.class, 105);
-    errorCodes.put(DuplicateDeclaration.class, 106);
-    errorCodes.put(ValidationError.class, 107);
-    errorCodes.put(SaveError.class, 108);
-    errorCodes.put(FileCountError.class, 109);
-  }
 
   @SuppressWarnings("unused")
   @CommandLine.Option(
@@ -130,12 +109,12 @@ public final class Command
   @Override
   public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
     System.err.println(e.getMessage());
-    return errorCodes.getOrDefault(e.getClass(), 1);
+    return 1;
   }
 
   @Override
   public int handleParseException(ParameterException ex, String[] args) {
     System.err.println(ex.getMessage());
-    return errorCodes.get(UnknownOption.class);
+    return 2;
   }
 }

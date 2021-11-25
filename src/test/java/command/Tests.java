@@ -58,7 +58,7 @@ public class Tests {
   @Test
   void testUnknownOption() {
     Result r = test("-foo");
-    r.status(101);
+    r.status(2);
     r.stdout("");
     r.stderr("Unknown option: '-foo'\n");
   }
@@ -66,12 +66,12 @@ public class Tests {
   @Test
   void testInputError1() {
     Result r1 = test("-i", "foo.ag");
-    r1.status(103);
+    r1.status(1);
     r1.stdout("");
     r1.stderr("File not found: foo.ag\n");
 
     Result r2 = test("--input", "foo.ag");
-    r2.status(103);
+    r2.status(1);
     r2.stdout("");
     r2.stderr("File not found: foo.ag\n");
   }
@@ -80,7 +80,7 @@ public class Tests {
   void testInputError2() {
     System.setIn(new BrokenStream("Foo {}"));
     Result r = test("-o", workspace.toString());
-    r.status(103);
+    r.status(1);
     r.stdout("");
     r.stderr("Error on closing input: -\n");
   }
@@ -89,7 +89,7 @@ public class Tests {
   void testTokenizeError() {
     input("~");
     Result r = test("-o", workspace.toString());
-    r.status(104);
+    r.status(1);
     r.stdout("");
   }
 
@@ -97,7 +97,7 @@ public class Tests {
   void testParseError() {
     input("{");
     Result r = test("-o", workspace.toString());
-    r.status(105);
+    r.status(1);
     r.stdout("");
   }
 
@@ -105,7 +105,7 @@ public class Tests {
   void testDuplicateDeclaration() {
     input("Foo<T,T> {}");
     Result r = test("-o", workspace.toString());
-    r.status(106);
+    r.status(1);
     r.stdout("");
     r.stderr("T is already defined (L1C7)\n");
   }
@@ -114,7 +114,7 @@ public class Tests {
   void testSaveError() {
     input("Foo { void foo(); }");
     Result r = test("-o", "build.gradle");
-    r.status(108);
+    r.status(1);
     r.stdout("");
     r.stderr("Failed to save generated file: build.gradle/FooAction.java\n");
   }
