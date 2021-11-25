@@ -1,42 +1,50 @@
 package silverchain;
 
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
-import picocli.CommandLine.*;
+import picocli.CommandLine.Command;
+import picocli.CommandLine.IExecutionExceptionHandler;
+import picocli.CommandLine.IParameterExceptionHandler;
+import picocli.CommandLine.IVersionProvider;
+import picocli.CommandLine.Option;
+import picocli.CommandLine.ParameterException;
+import picocli.CommandLine.ParseResult;
 import silverchain.generator.Generator;
 import silverchain.validator.Validator;
 
-@CommandLine.Command(
+@Command(
     name = "silverchain",
-    versionProvider = Command.class,
+    versionProvider = Cli.class,
     sortOptions = false,
     optionListHeading = "%nOptions:%n",
     separator = " ",
     customSynopsis = {"silverchain [options]"})
-public final class Command
+public final class Cli
     implements Callable<Integer>,
         IVersionProvider,
         IExecutionExceptionHandler,
         IParameterExceptionHandler {
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-h", "--help"},
       usageHelp = true,
       description = "Show this message and exit")
   private boolean helpRequested;
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-v", "--version"},
       versionHelp = true,
       description = "Show version and exit")
   private boolean versionRequested;
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-i", "--input"},
       description = "Input grammar file",
       defaultValue = "-",
@@ -44,7 +52,7 @@ public final class Command
   private String input;
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-o", "--output"},
       description = "Output directory",
       defaultValue = ".",
@@ -52,14 +60,14 @@ public final class Command
   private String output;
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-j", "--javadoc"},
       description = "Javadoc source directory",
       paramLabel = "<path>")
   private String javadoc;
 
   @SuppressWarnings("unused")
-  @CommandLine.Option(
+  @Option(
       names = {"-m", "--max-file-count"},
       description = "Max number of generated files",
       paramLabel = "<n>",
@@ -71,14 +79,14 @@ public final class Command
   }
 
   public static int run(String... args) {
-    Command command = new Command();
-    return new CommandLine(command)
-        .setExecutionExceptionHandler(command)
-        .setParameterExceptionHandler(command)
+    Cli cli = new Cli();
+    return new CommandLine(cli)
+        .setExecutionExceptionHandler(cli)
+        .setParameterExceptionHandler(cli)
         .execute(args);
   }
 
-  private Command() {}
+  private Cli() {}
 
   @Override
   public Integer call() throws Exception {
