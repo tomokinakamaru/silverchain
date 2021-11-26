@@ -16,13 +16,7 @@ import picocli.CommandLine.ParseResult;
 import silverchain.generator.Generator;
 import silverchain.validator.Validator;
 
-@Command(
-    name = "silverchain",
-    versionProvider = Cli.class,
-    sortOptions = false,
-    optionListHeading = "%nOptions:%n",
-    separator = " ",
-    customSynopsis = {"silverchain [options]"})
+@Command(name = "silverchain", versionProvider = Cli.class, sortOptions = false)
 public final class Cli
     implements Callable<Integer>,
         IVersionProvider,
@@ -108,17 +102,21 @@ public final class Cli
 
   @Override
   public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
-    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+    printException(e);
     return 1;
   }
 
   @Override
   public int handleParseException(ParameterException e, String[] args) {
-    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+    printException(e);
     return 2;
   }
 
-  private InputStream open(String name) throws FileNotFoundException {
+  private static void printException(Exception e) {
+    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
+  }
+
+  private static InputStream open(String name) throws FileNotFoundException {
     return name.equals("-") ? System.in : new FileInputStream(name);
   }
 }
