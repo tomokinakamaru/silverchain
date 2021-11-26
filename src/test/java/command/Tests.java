@@ -1,8 +1,8 @@
 package command;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
+import static command.Tester.test;
+
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,94 +22,136 @@ public class Tests {
         "Usage: silverchain [options]\n"
             + "\n"
             + "Options:\n"
-            + "  -h, --help                Show this message and exit\n"
-            + "  -v, --version             Show version and exit\n"
-            + "  -i, --input <path>        Input grammar file\n"
-            + "  -o, --output <path>       Output directory\n"
-            + "  -j, --javadoc <path>      Javadoc source directory\n"
-            + "  -m, --max-file-count <n>  Max number of generated files\n";
-    test("-h").status(0).stdout(help).stderr("");
-    test("--help").status(0).stdout(help).stderr("");
+            + "  -h, --help                 Show this message and exit\n"
+            + "  -v, --version              Show version and exit\n"
+            + "  -i, --input <path>         Input grammar file\n"
+            + "  -o, --output <path>        Output directory\n"
+            + "  -j, --javadoc <path>       Javadoc source directory\n"
+            + "  -m, --max-file-count <n>   Max number of generated files\n";
+
+    Result r1 = test("-h");
+    r1.status(0);
+    r1.stdout(help);
+    r1.stderr("");
+
+    Result r2 = test("--help");
+    r2.status(0);
+    r2.stdout(help);
+    r2.stderr("");
   }
 
   @Test
   void testVersion() {
     String version = findVersion() + "\n";
-    test("-v").status(0).stdout(version).stderr("");
-    test("--version").status(0).stdout(version).stderr("");
+
+    Result r1 = test("-v");
+    r1.status(0);
+    r1.stdout(version);
+    r1.stderr("");
+
+    Result r2 = test("--version");
+    r2.status(0);
+    r2.stdout(version);
+    r2.stderr("");
   }
 
   @Test
   void testUnknownOption() {
-    test("-foo").status(101).stdout("").stderr("Unknown option: -foo\n");
+    Result r = test("-foo");
+    r.status(101);
+    r.stdout("");
+    r.stderr("Unknown option: -foo\n");
   }
 
   @Test
   void testInputError1() {
-    test("-i", "foo.ag").status(103).stdout("").stderr("File not found: foo.ag\n");
-    test("--input", "foo.ag").status(103).stdout("").stderr("File not found: foo.ag\n");
+    Result r1 = test("-i", "foo.ag");
+    r1.status(103);
+    r1.stdout("");
+    r1.stderr("File not found: foo.ag\n");
+
+    Result r2 = test("--input", "foo.ag");
+    r2.status(103);
+    r2.stdout("");
+    r2.stderr("File not found: foo.ag\n");
   }
 
   @Test
   void testInputError2() {
-    System.setIn(new BrokenInputStream("Foo {}"));
-    test("-o", workspace.toString()).status(103).stdout("").stderr("Error on closing input: -\n");
+    System.setIn(new BrokenStream("Foo {}"));
+    Result r = test("-o", workspace.toString());
+    r.status(103);
+    r.stdout("");
+    r.stderr("Error on closing input: -\n");
   }
 
   @Test
   void testTokenizeError() {
     input("~");
-    test("-o", workspace.toString()).status(104).stdout("");
+    Result r = test("-o", workspace.toString());
+    r.status(104);
+    r.stdout("");
   }
 
   @Test
   void testParseError() {
     input("{");
-    test("-o", workspace.toString()).status(105).stdout("");
+    Result r = test("-o", workspace.toString());
+    r.status(105);
+    r.stdout("");
   }
 
   @Test
   void testDuplicateDeclaration() {
     input("Foo<T,T> {}");
-    test("-o", workspace.toString()).status(106).stdout("").stderr("T is already defined (L1C7)\n");
+    Result r = test("-o", workspace.toString());
+    r.status(106);
+    r.stdout("");
+    r.stderr("T is already defined (L1C7)\n");
   }
 
   @Test
   void testSaveError() {
     input("Foo { void foo(); }");
-    test("-o", "build.gradle")
-        .status(108)
-        .stdout("")
-        .stderr("Failed to save generated file: build.gradle/FooAction.java\n");
+    Result r = test("-o", "build.gradle");
+    r.status(108);
+    r.stdout("");
+    r.stderr("Failed to save generated file: build.gradle/FooAction.java\n");
   }
 
   @Test
   void testSuccessStdin() {
     input("Foo { Bar foo(); }");
-    test("-o", workspace.toString()).status(0).stdout("").stderr("");
+    Result r1 = test("-o", workspace.toString());
+    r1.status(0);
+    r1.stdout("");
+    r1.stderr("");
 
     input("Foo { Bar foo(); }");
-    test("--output", workspace.toString()).status(0).stdout("").stderr("");
+    Result r2 = test("--output", workspace.toString());
+    r2.status(0);
+    r2.stdout("");
+    r2.stderr("");
   }
 
   @Test
   void testSuccessFile() {
-    test("-i", resources.resolve("mapbuilder.ag").toString(), "-o", workspace.toString())
-        .status(0)
-        .stdout("")
-        .stderr("");
+    Result r = test("-i", resource("mapbuilder.ag"), "-o", workspace.toString());
+    r.status(0);
+    r.stdout("");
+    r.stderr("");
   }
 
   @Test
   void testNoJavadocs() {
-    test("-i", resources.resolve("mapbuilder.ag").toString(), "-j", "x", "-o", workspace.toString())
-        .status(0)
-        .stdout("")
-        .stderr("WARNING: No javadoc comments were found in x\n");
+    Result r = test("-i", resource("mapbuilder.ag"), "-j", "x", "-o", workspace.toString());
+    r.status(0);
+    r.stdout("");
+    r.stderr("WARNING: No javadoc comments were found in x\n");
   }
 
-  private CommandTester test(String... args) {
-    return new CommandTester(args);
+  private String resource(String name) {
+    return resources.resolve(name).toString();
   }
 
   private void input(String text) {

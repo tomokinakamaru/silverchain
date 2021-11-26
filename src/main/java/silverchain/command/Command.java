@@ -1,17 +1,13 @@
 package silverchain.command;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.PrintStream;
+import java.io.*;
 import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
-import org.antlr.v4.runtime.RecognitionException;
+import picocli.CommandLine;
+import picocli.CommandLine.*;
 import silverchain.FileCountError;
 import silverchain.Silverchain;
-import silverchain.SilverchainException;
 import silverchain.SilverchainProperties;
 import silverchain.generator.Generator;
 import silverchain.generator.SaveError;
@@ -21,26 +17,17 @@ import silverchain.parser.adapter.TokenizeError;
 import silverchain.validator.ValidationError;
 import silverchain.validator.Validator;
 
-public final class Command {
-
-  private static final ArgumentParser parser = new ArgumentParser();
+@CommandLine.Command(
+    name = "silverchain",
+    versionProvider = Command.class,
+    sortOptions = false,
+    optionListHeading = "%nOptions:%n",
+    separator = " ",
+    customSynopsis = {"silverchain [options]"})
+public final class Command
+    implements Runnable, IVersionProvider, IExecutionExceptionHandler, IParameterExceptionHandler {
 
   private static final Map<Class<? extends Throwable>, Integer> errorCodes = new HashMap<>();
-
-  private final PrintStream stdout;
-
-  private final PrintStream stderr;
-
-  private final Arguments arguments;
-
-  static {
-    parser.add(new Option("h", "help", "Show this message and exit"));
-    parser.add(new Option("v", "version", "Show version and exit"));
-    parser.add(new Option("i", "input", "<path>", "Input grammar file", "-"));
-    parser.add(new Option("o", "output", "<path>", "Output directory", "."));
-    parser.add(new Option("j", "javadoc", "<path>", "Javadoc source directory", null));
-    parser.add(new Option("m", "max-file-count", "<n>", "Max number of generated files", "500"));
-  }
 
   static {
     errorCodes.put(UnknownOption.class, 101);
@@ -53,47 +40,80 @@ public final class Command {
     errorCodes.put(FileCountError.class, 109);
   }
 
-  private Command(PrintStream stdout, PrintStream stderr, String[] args) {
-    this.stdout = stdout;
-    this.stderr = stderr;
-    this.arguments = new Arguments(args);
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-h", "--help"},
+      usageHelp = true,
+      description = "Show this message and exit")
+  private boolean helpRequested;
+
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-v", "--version"},
+      versionHelp = true,
+      description = "Show version and exit")
+  private boolean versionRequested;
+
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-i", "--input"},
+      description = "Input grammar file",
+      defaultValue = "-",
+      paramLabel = "<path>")
+  private String input;
+
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-o", "--output"},
+      description = "Output directory",
+      defaultValue = ".",
+      paramLabel = "<path>")
+  private String output;
+
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-j", "--javadoc"},
+      description = "Javadoc source directory",
+      paramLabel = "<path>")
+  private String javadoc;
+
+  @SuppressWarnings("unused")
+  @CommandLine.Option(
+      names = {"-m", "--max-file-count"},
+      description = "Max number of generated files",
+      paramLabel = "<n>",
+      defaultValue = "500")
+  private int maxFileCount;
+
+  public static void main(String[] args) {
+    System.exit(run(args));
   }
 
-  public static int run(PrintStream stdout, PrintStream stderr, String... args) {
-    try {
-      new Command(stdout, stderr, args).run();
-    } catch (SilverchainException e) {
-      stderr.println(e.getMessage());
-      return errorCodes.get(e.getClass());
-    }
-    return 0;
+  public static int run(String... args) {
+    Command command = new Command();
+    return new CommandLine(command)
+        .setExecutionExceptionHandler(command)
+        .setParameterExceptionHandler(command)
+        .execute(args);
   }
 
-  private void run() throws RecognitionException {
-    ParseResult result = parser.parse(arguments);
-    if (!result.success()) {
-      throw new UnknownOption(result.unknownOption());
-    } else if (result.getFlag("help")) {
-      stdout.println(parser.help());
-    } else if (result.getFlag("version")) {
-      stdout.println(SilverchainProperties.VERSION);
-    } else {
-      run(result);
-    }
-  }
-
-  private void run(ParseResult result) throws RecognitionException {
+  @Override
+  public void run() {
     Silverchain silverchain = new Silverchain();
-    silverchain.outputDirectory(Paths.get(result.get("output")));
+    silverchain.outputDirectory(Paths.get(output));
     silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(Validator::new);
-    silverchain.warningHandler(new WarningPrinter(stderr));
-    silverchain.maxFileCount(Integer.parseInt(result.get("max-file-count")));
-    try (InputStream stream = open(result.get("input"))) {
-      silverchain.run(stream, result.get("javadoc"));
+    silverchain.maxFileCount(maxFileCount);
+    try (InputStream stream = open(input)) {
+      silverchain.run(stream, javadoc);
     } catch (IOException e) {
       throw new InputError(e);
     }
+  }
+
+  @Override
+  public String[] getVersion() {
+    return new String[] {SilverchainProperties.VERSION};
   }
 
   private InputStream open(String name) {
@@ -105,5 +125,17 @@ public final class Command {
     } catch (FileNotFoundException e) {
       throw new InputError(name);
     }
+  }
+
+  @Override
+  public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
+    System.err.println(e.getMessage());
+    return errorCodes.getOrDefault(e.getClass(), 1);
+  }
+
+  @Override
+  public int handleParseException(ParameterException ex, String[] args) {
+    System.err.println(ex.getMessage().replaceAll("'", ""));
+    return errorCodes.get(UnknownOption.class);
   }
 }

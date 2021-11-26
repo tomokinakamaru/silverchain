@@ -9,7 +9,6 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import org.antlr.v4.runtime.RecognitionException;
-import silverchain.command.WarningPrinter;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.generator.File;
@@ -30,7 +29,7 @@ public final class Silverchain {
 
   private ValidatorProvider validatorProvider = Validator::new;
 
-  private WarningHandler warningHandler = new WarningPrinter();
+  private WarningHandler warningHandler = s -> System.err.println("WARNING: " + s);
 
   private int maxFileCount = 0;
 
