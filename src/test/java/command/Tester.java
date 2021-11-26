@@ -3,7 +3,7 @@ package command;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import silverchain.command.Command;
+import silverchain.Cli;
 
 final class Tester {
 
@@ -28,7 +28,7 @@ final class Tester {
   private Result test() {
     System.setOut(new PrintStream(stdout));
     System.setErr(new PrintStream(stderr));
-    int status = Command.run(args);
+    int status = Cli.run(args);
     System.setOut(sysOut);
     System.setErr(sysErr);
     return new Result(status, stdout.toString(), stderr.toString());

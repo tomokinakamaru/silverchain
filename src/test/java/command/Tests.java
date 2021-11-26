@@ -16,19 +16,17 @@ public class Tests {
 
   private static final Path workspace = Paths.get("build").resolve("silverchain");
 
+  private static final String help =
+      "Usage: silverchain [-hv] [-i=<path>] [-j=<path>] [-m=<n>] [-o=<path>]\n"
+          + "  -h, --help                 Show this message and exit\n"
+          + "  -v, --version              Show version and exit\n"
+          + "  -i, --input=<path>         Input grammar file\n"
+          + "  -o, --output=<path>        Output directory\n"
+          + "  -j, --javadoc=<path>       Javadoc source directory\n"
+          + "  -m, --max-file-count=<n>   Max number of generated files\n";
+
   @Test
   void testHelp() {
-    String help =
-        "Usage: silverchain [options]\n"
-            + "\n"
-            + "Options:\n"
-            + "  -h, --help                 Show this message and exit\n"
-            + "  -v, --version              Show version and exit\n"
-            + "  -i, --input <path>         Input grammar file\n"
-            + "  -o, --output <path>        Output directory\n"
-            + "  -j, --javadoc <path>       Javadoc source directory\n"
-            + "  -m, --max-file-count <n>   Max number of generated files\n";
-
     Result r1 = test("-h");
     r1.status(0);
     r1.stdout(help);
@@ -58,38 +56,38 @@ public class Tests {
   @Test
   void testUnknownOption() {
     Result r = test("-foo");
-    r.status(101);
+    r.status(2);
     r.stdout("");
-    r.stderr("Unknown option: -foo\n");
+    r.stderr("Unknown option: '-foo'\n" + help);
   }
 
   @Test
   void testInputError1() {
     Result r1 = test("-i", "foo.ag");
-    r1.status(103);
+    r1.status(1);
     r1.stdout("");
-    r1.stderr("File not found: foo.ag\n");
+    r1.stderr1("java.io.FileNotFoundException: foo.ag (No such file or directory)");
 
     Result r2 = test("--input", "foo.ag");
-    r2.status(103);
+    r2.status(1);
     r2.stdout("");
-    r2.stderr("File not found: foo.ag\n");
+    r2.stderr1("java.io.FileNotFoundException: foo.ag (No such file or directory)");
   }
 
   @Test
   void testInputError2() {
     System.setIn(new BrokenStream("Foo {}"));
     Result r = test("-o", workspace.toString());
-    r.status(103);
+    r.status(1);
     r.stdout("");
-    r.stderr("Error on closing input: -\n");
+    r.stderr1("java.io.IOException: -");
   }
 
   @Test
   void testTokenizeError() {
     input("~");
     Result r = test("-o", workspace.toString());
-    r.status(104);
+    r.status(1);
     r.stdout("");
   }
 
@@ -97,7 +95,7 @@ public class Tests {
   void testParseError() {
     input("{");
     Result r = test("-o", workspace.toString());
-    r.status(105);
+    r.status(1);
     r.stdout("");
   }
 
@@ -105,18 +103,19 @@ public class Tests {
   void testDuplicateDeclaration() {
     input("Foo<T,T> {}");
     Result r = test("-o", workspace.toString());
-    r.status(106);
+    r.status(1);
     r.stdout("");
-    r.stderr("T is already defined (L1C7)\n");
+    r.stderr1("silverchain.parser.DuplicateDeclaration: T is already defined (L1C7)");
   }
 
   @Test
   void testSaveError() {
     input("Foo { void foo(); }");
     Result r = test("-o", "build.gradle");
-    r.status(108);
+    r.status(1);
     r.stdout("");
-    r.stderr("Failed to save generated file: build.gradle/FooAction.java\n");
+    r.stderr1(
+        "silverchain.generator.SaveError: Failed to save generated file: build.gradle/FooAction.java");
   }
 
   @Test
