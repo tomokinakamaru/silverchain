@@ -19,15 +19,13 @@ public class Tests {
   @Test
   void testHelp() {
     String help =
-        "Usage: silverchain [options]\n"
-            + "\n"
-            + "Options:\n"
+        "Usage: silverchain [-hv] [-i=<path>] [-j=<path>] [-m=<n>] [-o=<path>]\n"
             + "  -h, --help                 Show this message and exit\n"
             + "  -v, --version              Show version and exit\n"
-            + "  -i, --input <path>         Input grammar file\n"
-            + "  -o, --output <path>        Output directory\n"
-            + "  -j, --javadoc <path>       Javadoc source directory\n"
-            + "  -m, --max-file-count <n>   Max number of generated files\n";
+            + "  -i, --input=<path>         Input grammar file\n"
+            + "  -o, --output=<path>        Output directory\n"
+            + "  -j, --javadoc=<path>       Javadoc source directory\n"
+            + "  -m, --max-file-count=<n>   Max number of generated files\n";
 
     Result r1 = test("-h");
     r1.status(0);
@@ -60,7 +58,7 @@ public class Tests {
     Result r = test("-foo");
     r.status(2);
     r.stdout("");
-    r.stderr("Unknown option: '-foo'\n");
+    r.stderr("UnmatchedArgumentException: Unknown option: '-foo'\n");
   }
 
   @Test
@@ -68,12 +66,12 @@ public class Tests {
     Result r1 = test("-i", "foo.ag");
     r1.status(1);
     r1.stdout("");
-    r1.stderr("File not found: foo.ag\n");
+    r1.stderr("FileNotFoundException: foo.ag (No such file or directory)\n");
 
     Result r2 = test("--input", "foo.ag");
     r2.status(1);
     r2.stdout("");
-    r2.stderr("File not found: foo.ag\n");
+    r2.stderr("FileNotFoundException: foo.ag (No such file or directory)\n");
   }
 
   @Test
@@ -82,7 +80,7 @@ public class Tests {
     Result r = test("-o", workspace.toString());
     r.status(1);
     r.stdout("");
-    r.stderr("Error on closing input: -\n");
+    r.stderr("IOException: -\n");
   }
 
   @Test
@@ -107,7 +105,7 @@ public class Tests {
     Result r = test("-o", workspace.toString());
     r.status(1);
     r.stdout("");
-    r.stderr("T is already defined (L1C7)\n");
+    r.stderr("DuplicateDeclaration: T is already defined (L1C7)\n");
   }
 
   @Test
@@ -116,7 +114,7 @@ public class Tests {
     Result r = test("-o", "build.gradle");
     r.status(1);
     r.stdout("");
-    r.stderr("Failed to save generated file: build.gradle/FooAction.java\n");
+    r.stderr("SaveError: Failed to save generated file: build.gradle/FooAction.java\n");
   }
 
   @Test
