@@ -7,21 +7,13 @@ import java.nio.file.Paths;
 import java.util.concurrent.Callable;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import picocli.CommandLine.IExecutionExceptionHandler;
-import picocli.CommandLine.IParameterExceptionHandler;
 import picocli.CommandLine.IVersionProvider;
 import picocli.CommandLine.Option;
-import picocli.CommandLine.ParameterException;
-import picocli.CommandLine.ParseResult;
 import silverchain.generator.Generator;
 import silverchain.validator.Validator;
 
 @Command(name = "silverchain", versionProvider = Cli.class, sortOptions = false)
-public final class Cli
-    implements Callable<Integer>,
-        IVersionProvider,
-        IExecutionExceptionHandler,
-        IParameterExceptionHandler {
+public final class Cli implements Callable<Integer>, IVersionProvider {
 
   @SuppressWarnings("unused")
   @Option(
@@ -73,11 +65,7 @@ public final class Cli
   }
 
   public static int run(String... args) {
-    Cli cli = new Cli();
-    return new CommandLine(cli)
-        .setExecutionExceptionHandler(cli)
-        .setParameterExceptionHandler(cli)
-        .execute(args);
+    return new CommandLine(new Cli()).execute(args);
   }
 
   private Cli() {}
@@ -98,22 +86,6 @@ public final class Cli
   @Override
   public String[] getVersion() {
     return new String[] {SilverchainProperties.VERSION};
-  }
-
-  @Override
-  public int handleExecutionException(Exception e, CommandLine c, ParseResult r) {
-    printException(e);
-    return 1;
-  }
-
-  @Override
-  public int handleParseException(ParameterException e, String[] args) {
-    printException(e);
-    return 2;
-  }
-
-  private static void printException(Exception e) {
-    System.err.println(e.getClass().getSimpleName() + ": " + e.getMessage());
   }
 
   private static InputStream open(String name) throws FileNotFoundException {
