@@ -27,4 +27,8 @@ final class Result {
   void stderr(String s) {
     assertEquals(s, stderr);
   }
+
+  void stderr1(String s) {
+    assertEquals(s, stderr.split("\n")[0]);
+  }
 }
