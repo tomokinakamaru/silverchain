@@ -77,10 +77,11 @@ public final class Cli implements Callable<Integer>, IVersionProvider {
     silverchain.generatorProvider(Generator::new);
     silverchain.validatorProvider(Validator::new);
     silverchain.maxFileCount(maxFileCount);
-    InputStream stream = open(input);
-    silverchain.run(stream, javadoc);
-    stream.close();
-    return 0;
+    try (InputStream stream = open(input))
+    {
+      silverchain.run(stream, javadoc);
+      return 0;
+    }
   }
 
   @Override

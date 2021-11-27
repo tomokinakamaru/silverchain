@@ -20,9 +20,7 @@ final class Tracer<T> {
   }
 
   void trace(T state) {
-    if (!states.containsKey(state)) {
-      states.put(state, new State());
-    }
+    states.computeIfAbsent(state, t -> new State());
   }
 
   void trace(T source, T destination, Label label) {

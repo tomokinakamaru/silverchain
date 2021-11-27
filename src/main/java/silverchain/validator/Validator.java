@@ -56,7 +56,7 @@ public final class Validator {
   private void checkTypeReferenceMethodConflict(State state) {
     List<Label> labels = state.typeReferences();
     List<Transition> transitions = state.transitions();
-    if (0 < labels.size() && 0 < transitions.size()) {
+    if (!labels.isEmpty() && !transitions.isEmpty()) {
       Stream<Label> s1 = labels.stream();
       Stream<Label> s2 = transitions.stream().map(Transition::label);
       throwError(concat(s1, s2).collect(toList()));
