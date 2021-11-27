@@ -1,5 +1,7 @@
 package diagram;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import silverchain.diagram.Diagram;
 import silverchain.diagram.State;
 import silverchain.diagram.Transition;
@@ -12,89 +14,89 @@ final class DiagramTester {
     this.diagram = diagram;
 
     for (State state : diagram.states()) {
-      assert state.diagram() == diagram;
+      assertThat(state.diagram()).isSameAs(diagram);
     }
 
     for (int i = 0; i < diagram.states().size(); i++) {
-      assert state(i).isStart() == (i == 0);
+      assertThat(state(i).isStart()).isSameAs((i == 0));
     }
 
     for (State state : diagram.states()) {
       for (Transition transition : state.transitions()) {
-        assert transition.source() == state;
+        assertThat(transition.source()).isSameAs(state);
       }
     }
   }
 
   DiagramTester name(String text) {
-    assert diagram.name().toString().equals(text);
+    assertThat((Object) diagram.name()).hasToString(text);
     return this;
   }
 
   DiagramTester typeParameterCount(int n) {
-    assert diagram.typeParameters().size() == n;
+    assertThat(diagram.typeParameters().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester typeParameter(int i, String text) {
-    assert diagram.typeParameters().get(i).toString().equals(text);
+    assertThat(diagram.typeParameters().get(i)).hasToString(text);
     return this;
   }
 
   DiagramTester stateCount(int n) {
-    assert diagram.states().size() == n;
+    assertThat(diagram.states().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester end(int... is) {
     for (int i = 0; i < diagram.states().size(); i++) {
-      assert state(i).isEnd() == in(is, i);
+      assertThat(state(i).isEnd()).isSameAs(in(is, i));
     }
     return this;
   }
 
   DiagramTester stateTypeParameterCount(int i, int n) {
-    assert state(i).typeParameters().size() == n;
+    assertThat(state(i).typeParameters().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester stateTypeParameter(int i, int j, String text) {
-    assert state(i).typeParameters().get(j).toString().equals(text);
+    assertThat(state(i).typeParameters().get(j)).hasToString(text);
     return this;
   }
 
   DiagramTester stateTypeReferenceCount(int i, int n) {
-    assert state(i).typeReferences().size() == n;
+    assertThat(state(i).typeReferences().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester stateTypeReference(int i, int j, String text) {
-    assert state(i).typeReferences().get(j).typeReference().toString().equals(text);
+    assertThat(state(i).typeReferences().get(j).typeReference()).hasToString(text);
     return this;
   }
 
   DiagramTester transitionCount(int i, int n) {
-    assert state(i).transitions().size() == n;
+    assertThat(state(i).transitions().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester transitionDestination(int i, int j, int k) {
-    assert state(i).transitions().get(j).destination() == state(k);
+    assertThat(state(i).transitions().get(j).destination()).isSameAs(state(k));
     return this;
   }
 
   DiagramTester transitionTypeParameterCount(int i, int j, int n) {
-    assert state(i).transitions().get(j).typeParameters().size() == n;
+    assertThat(state(i).transitions().get(j).typeParameters().size()).isSameAs(n);
     return this;
   }
 
   DiagramTester transitionTypeParameter(int i, int j, int k, String text) {
-    assert state(i).transitions().get(j).typeParameters().get(k).toString().equals(text);
+    assertThat(state(i).transitions().get(j).typeParameters().get(k)).hasToString(text);
     return this;
   }
 
   DiagramTester transitionLabelRangeCount(int i, int j, int n) {
-    assert state(i).transitions().get(j).label().ranges().size() == n;
+    assertThat(state(i).transitions().get(j).label().ranges().size()).isSameAs(n);
     return this;
   }
 

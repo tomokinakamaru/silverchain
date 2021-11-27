@@ -1,6 +1,7 @@
 package generator;
 
 import static generator.Utility.generateJava;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -60,9 +61,9 @@ final class Tests {
     String javadoc = "src/test/resources/java/src/main";
     List<File> generated = generateJava(Utility.read(path), javadoc);
     List<File> expected = expectedJavaFiles(name);
-    assert generated.size() == expected.size();
+    assertThat(generated.size()).isEqualTo(expected.size());
     for (File file : generated) {
-      assert expected.stream().anyMatch(f -> equals(f, file));
+      assertThat(expected).anyMatch(f -> equals(f, file));
     }
   }
 

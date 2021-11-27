@@ -1,5 +1,7 @@
 package diagram;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -275,7 +277,7 @@ final class Tests {
   void testForCoverage() {
     Diagram diagram = compile("Foo { void foo(); }");
     Label label = diagram.states().get(0).transitions().get(0).label();
-    assert !label.equals(diagram);
+    assertThat(label).isNotEqualTo(diagram);
   }
 
   private DiagramTester test(String text) {

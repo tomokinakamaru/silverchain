@@ -1,6 +1,6 @@
 package command;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 
 final class Result {
 
@@ -17,18 +17,18 @@ final class Result {
   }
 
   void status(int i) {
-    assertEquals(i, status);
+    assertThat(status).isEqualTo(i);
   }
 
   void stdout(String s) {
-    assertEquals(s, stdout);
+    assertThat(stdout).isEqualTo(s);
   }
 
   void stderr(String s) {
-    assertEquals(s, stderr);
+    assertThat(stderr).isEqualTo(s);
   }
 
   void stderr1(String s) {
-    assertEquals(s, stderr.split("\n")[0]);
+    assertThat(stderr.split("\n")[0]).isEqualTo(s);
   }
 }

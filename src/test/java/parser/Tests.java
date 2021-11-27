@@ -1,7 +1,8 @@
 package parser;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -13,6 +14,8 @@ import org.junit.jupiter.api.Test;
 import silverchain.parser.ASTNode;
 import silverchain.parser.AgParser;
 import silverchain.parser.DuplicateDeclaration;
+import silverchain.parser.Location;
+import silverchain.parser.Range;
 import silverchain.parser.adapter.Parser;
 
 final class Tests {
@@ -29,8 +32,8 @@ final class Tests {
     test(AgParser::typeParameter, "T");
 
     ASTNode node = parse(AgParser::typeParameter, "T");
-    assert node.typeParameters().size() == 1;
-    assert node.typeParameters().get(0).name().equals("T");
+    assertThat(node.typeParameters().size()).isSameAs(1);
+    assertThat(node.typeParameters().get(0).name()).isEqualTo("T");
   }
 
   @Test
@@ -160,10 +163,10 @@ final class Tests {
     test(AgParser::classDeclaration, "Foo { Foo foo(); }");
 
     ASTNode node1 = parse(AgParser::classDeclaration, "Foo<T, T> {}");
-    assertThrows(DuplicateDeclaration.class, node1::validate);
+    assertThatThrownBy(node1::validate).isExactlyInstanceOf(DuplicateDeclaration.class);
 
     ASTNode node2 = parse(AgParser::classDeclaration, "Foo<T, S> {}");
-    assertDoesNotThrow(node2::validate);
+    assertThatCode(node2::validate).doesNotThrowAnyException();
   }
 
   @Test
@@ -173,17 +176,19 @@ final class Tests {
     ASTNode node3 = parse(AgParser::classDeclaration, "Baz<T> {}");
     ASTNode node4 = parse(AgParser::classDeclaration, "\nQux {}");
 
-    assert node1.range().hashCode() == node2.range().hashCode();
+    Range range1 = node1.range();
+    assertThat(range1)
+        .hasSameHashCodeAs(node2.range())
+        .isEqualTo(node2.range())
+        .isEqualByComparingTo(node2.range())
+        .isNotEqualTo(node3.range())
+        .isNotEqualTo(node4.range())
+        .isLessThan(node3.range())
+        .isLessThan(node4.range());
 
-    assert node1.range().equals(node2.range());
-    assert !node1.range().equals(node3.range());
-    assert !node1.range().equals(node4.range());
+    assertThat(node3.range()).isGreaterThan(range1);
 
-    assert node1.range().compareTo(node2.range()) == 0;
-    assert node1.range().compareTo(node3.range()) < 0;
-    assert node3.range().compareTo(node1.range()) > 0;
-    assert node1.range().compareTo(node4.range()) < 0;
-    assert node4.range().compareTo(node1.range()) > 0;
+    assertThat(node4.range()).isGreaterThan(range1);
   }
 
   @Test
@@ -192,22 +197,19 @@ final class Tests {
     ASTNode node1 = parse(AgParser::classDeclaration, "Foo {}");
     ASTNode node2 = parse(AgParser::classDeclaration, "Bar {}");
 
-    assert node1.hashCode() != node2.hashCode();
-    assert !node1.equals(node2);
-    assert node1.compareTo(node2) > 0;
+    assertThat(node1)
+        .isNotNull()
+        .doesNotHaveSameHashCodeAs(node2)
+        .isNotEqualTo(node2)
+        .isGreaterThan(node2)
+        .isEqualTo(node1)
+        .isNotEqualTo(node1.range());
 
-    assert node1.equals(node1);
-    assert !node1.equals(null);
-    assert !node1.equals(node1.range());
+    Range range1 = node1.range();
+    assertThat(range1).isNotNull().isEqualTo(range1).isNotEqualTo(node1).hasToString("L1C1-L1C6");
 
-    assert node1.range().equals(node1.range());
-    assert !node1.range().equals(null);
-    assert !node1.range().equals(node1);
-    assert node1.range().toString().equals("L1C1-L1C6");
-
-    assert node1.range().begin().equals(node1.range().begin());
-    assert !node1.range().begin().equals(null);
-    assert !node1.range().begin().equals(node1);
+    Location begin1 = range1.begin();
+    assertThat(begin1).isNotNull().isEqualTo(begin1).isNotEqualTo(node1);
   }
 
   private void test(Function<AgParser, ParseTree> selector, String text) {
@@ -216,12 +218,13 @@ final class Tests {
 
   private void test(Function<AgParser, ParseTree> selector, String text, String expected) {
     ASTNode result = parse(selector, text);
-    assert result.toString().equals(expected);
-    assert result.range().begin().line() == result.range().end().line();
-    assert result.range().end().column() - result.range().begin().column() + 1 == text.length();
+    assertThat(result).hasToString(expected);
+    assertThat(result.range().begin().line()).isSameAs(result.range().end().line());
+    assertThat(result.range().end().column() - result.range().begin().column() + 1)
+        .isSameAs(text.length());
   }
 
-  protected ASTNode parse(Function<AgParser, ParseTree> selector, String text) {
+  private ASTNode parse(Function<AgParser, ParseTree> selector, String text) {
     InputStream stream = new ByteArrayInputStream(text.getBytes());
     Parser parser = new Parser(stream);
     try {
