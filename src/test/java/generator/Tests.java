@@ -11,54 +11,27 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import silverchain.generator.File;
 
 final class Tests {
 
   private final Path resources = Paths.get("src").resolve("test").resolve("resources");
 
-  @Test
-  void testAlertDialog() {
-    test("alertdialog");
-  }
-
-  @Test
-  void testJavadocTest() {
-    test("javadoctest");
-  }
-
-  @Test
-  void testListUtil() {
-    test("listutil");
-  }
-
-  @Test
-  void testMapBuilder() {
-    test("mapbuilder");
-  }
-
-  @Test
-  void testMatrix() {
-    test("matrix");
-  }
-
-  @Test
-  void testMelody() {
-    test("melody");
-  }
-
-  @Test
-  void testTripletBuilder() {
-    test("tripletbuilder");
-  }
-
-  @Test
-  void testItemization() {
-    test("itemization");
-  }
-
-  private void test(String name) {
+  @ParameterizedTest
+  @ValueSource(
+      strings = {
+        "alertdialog",
+        "javadoctest",
+        "listutil",
+        "mapbuilder",
+        "matrix",
+        "melody",
+        "tripletbuilder",
+        "itemization"
+      })
+  void test(String name) {
     Path path = resources.resolve(name + ".ag");
     String javadoc = "src/test/resources/java/src/main";
     Map<Path, String> generated = toComparisonMap(generateJava(Utility.read(path), javadoc));

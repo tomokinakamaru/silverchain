@@ -11,6 +11,9 @@ import java.util.function.Function;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import silverchain.parser.ASTNode;
 import silverchain.parser.AgParser;
 import silverchain.parser.DuplicateDeclaration;
@@ -20,11 +23,79 @@ import silverchain.parser.adapter.Parser;
 
 final class Tests {
 
-  @Test
-  void testQualifiedName() {
-    test(AgParser::qualifiedName, "foo");
-    test(AgParser::qualifiedName, "foo.bar");
-    test(AgParser::qualifiedName, "foo.bar.baz");
+  static Arguments[] bulkTestData() {
+    return new Arguments[] {
+      args(AgParser::qualifiedName, "foo"),
+      args(AgParser::qualifiedName, "foo.bar"),
+      args(AgParser::qualifiedName, "foo.bar.baz"),
+      args(AgParser::wildcardBound, "extends Foo"),
+      args(AgParser::wildcardBound, "super Foo"),
+      args(AgParser::typeParameterList, "T"),
+      args(AgParser::typeParameterList, "T,S"),
+      args(AgParser::classTypeParameterDeclarations, "<T;S>"),
+      args(AgParser::classTypeParameterDeclarations, "<T>"),
+      args(AgParser::classTypeParameterDeclarations, "<;T>"),
+      args(AgParser::classDeclarationHead, "Foo"),
+      args(AgParser::classDeclarationHead, "Foo<T;S>"),
+      args(AgParser::classDeclarationHead, "Foo<T,S>"),
+      args(AgParser::classDeclarationHead, "Foo<T,S;U>"),
+      args(AgParser::classDeclarationHead, "Foo<T;S,U>"),
+      args(AgParser::typeArgument, "T"),
+      args(AgParser::wildcard, "?"),
+      args(AgParser::wildcard, "? extends T"),
+      args(AgParser::wildcard, "? super T"),
+      args(AgParser::typeArgumentList, "T"),
+      args(AgParser::typeArgumentList, "T,S"),
+      args(AgParser::typeReference, "Foo"),
+      args(AgParser::typeReference, "foo.Bar<T>"),
+      args(AgParser::typeReference, "Foo[]"),
+      args(AgParser::typeReference, "Foo<T>[]"),
+      args(AgParser::formalParameter, "Foo foo"),
+      args(AgParser::formalParameter, "Foo... foo"),
+      args(AgParser::formalParameterList, "Foo foo"),
+      args(AgParser::formalParameterList, "Foo foo,Bar bar"),
+      args(AgParser::method, "foo()"),
+      args(AgParser::method, "foo(Bar bar)"),
+      args(AgParser::method, "foo() throws Foo"),
+      args(AgParser::ruleElement, "foo()"),
+      args(AgParser::ruleElement, "(foo())"),
+      args(AgParser::ruleElement, "(foo()|bar())"),
+      args(AgParser::ruleElement, "{foo()}", "{foo()}"),
+      args(AgParser::ruleElement, "{foo(),bar()}"),
+      args(AgParser::repeatOperator, "*", "[0,]"),
+      args(AgParser::repeatOperator, "+", "[1,]"),
+      args(AgParser::repeatOperator, "?", "[0,1]"),
+      args(AgParser::repeatOperator, "[1]", "[1,1]"),
+      args(AgParser::repeatOperator, "[2]", "[2,2]"),
+      args(AgParser::repeatOperator, "[1,]", "[1,]"),
+      args(AgParser::repeatOperator, "[0,1]"),
+      args(AgParser::repeatOperator, "[0,2]"),
+      args(AgParser::repeatOperator, "[1,2]"),
+      args(AgParser::repeatOperator, "[2,3]"),
+      args(AgParser::ruleFactor, "foo()"),
+      args(AgParser::ruleFactor, "foo()*", "foo()[0,]"),
+      args(AgParser::ruleTerm, "foo()"),
+      args(AgParser::ruleTerm, "foo() bar()"),
+      args(AgParser::ruleExpression, "foo()"),
+      args(AgParser::ruleExpression, "foo()|bar()|baz()"),
+      args(AgParser::ruleStatement, "void foo();"),
+      args(AgParser::ruleStatements, "Foo foo();"),
+      args(AgParser::ruleStatements, "Foo foo(); Bar bar();"),
+    };
+  }
+
+  static Arguments args(Function<AgParser, ParseTree> selector, String text) {
+    return args(selector, text, text);
+  }
+
+  static Arguments args(Function<AgParser, ParseTree> selector, String text, String expected) {
+    return Arguments.of(selector, text, expected);
+  }
+
+  @ParameterizedTest(name = "[{index}] \"{1}\"")
+  @MethodSource("bulkTestData")
+  void testBulk(Function<AgParser, ParseTree> selector, String text, String expected) {
+    test(selector, text, expected);
   }
 
   @Test
@@ -34,127 +105,6 @@ final class Tests {
     ASTNode node = parse(AgParser::typeParameter, "T");
     assertThat(node.typeParameters().size()).isSameAs(1);
     assertThat(node.typeParameters().get(0).name()).isEqualTo("T");
-  }
-
-  @Test
-  void testTypeParameterBound() {
-    test(AgParser::wildcardBound, "extends Foo");
-    test(AgParser::wildcardBound, "super Foo");
-  }
-
-  @Test
-  void testTypeParameterList() {
-    test(AgParser::typeParameterList, "T");
-    test(AgParser::typeParameterList, "T,S");
-  }
-
-  @Test
-  void testTypeParameters() {
-    test(AgParser::classTypeParameterDeclarations, "<T;S>");
-    test(AgParser::classTypeParameterDeclarations, "<T>");
-    test(AgParser::classTypeParameterDeclarations, "<;T>");
-  }
-
-  @Test
-  void testType() {
-    test(AgParser::classDeclarationHead, "Foo");
-    test(AgParser::classDeclarationHead, "Foo<T;S>");
-    test(AgParser::classDeclarationHead, "Foo<T,S>");
-    test(AgParser::classDeclarationHead, "Foo<T,S;U>");
-    test(AgParser::classDeclarationHead, "Foo<T;S,U>");
-  }
-
-  @Test
-  void testTypeArgument() {
-    test(AgParser::typeArgument, "T");
-    test(AgParser::wildcard, "?");
-    test(AgParser::wildcard, "? extends T");
-    test(AgParser::wildcard, "? super T");
-  }
-
-  @Test
-  void testTypeArguments() {
-    test(AgParser::typeArgumentList, "T");
-    test(AgParser::typeArgumentList, "T,S");
-  }
-
-  @Test
-  void testTypeReference() {
-    test(AgParser::typeReference, "Foo");
-    test(AgParser::typeReference, "foo.Bar<T>");
-    test(AgParser::typeReference, "Foo[]");
-    test(AgParser::typeReference, "Foo<T>[]");
-  }
-
-  @Test
-  void testFormalParameter() {
-    test(AgParser::formalParameter, "Foo foo");
-    test(AgParser::formalParameter, "Foo... foo");
-  }
-
-  @Test
-  void testFormalParameters() {
-    test(AgParser::formalParameterList, "Foo foo");
-    test(AgParser::formalParameterList, "Foo foo,Bar bar");
-  }
-
-  @Test
-  void testMethod() {
-    test(AgParser::method, "foo()");
-    test(AgParser::method, "foo(Bar bar)");
-    test(AgParser::method, "foo() throws Foo");
-  }
-
-  @Test
-  void testRuleElement() {
-    test(AgParser::ruleElement, "foo()");
-    test(AgParser::ruleElement, "(foo())");
-    test(AgParser::ruleElement, "(foo()|bar())");
-    test(AgParser::ruleElement, "{foo()}", "{foo()}");
-    test(AgParser::ruleElement, "{foo(),bar()}");
-  }
-
-  @Test
-  void testRepeatOperator() {
-    test(AgParser::repeatOperator, "*", "[0,]");
-    test(AgParser::repeatOperator, "+", "[1,]");
-    test(AgParser::repeatOperator, "?", "[0,1]");
-    test(AgParser::repeatOperator, "[1]", "[1,1]");
-    test(AgParser::repeatOperator, "[2]", "[2,2]");
-    test(AgParser::repeatOperator, "[1,]", "[1,]");
-    test(AgParser::repeatOperator, "[0,1]");
-    test(AgParser::repeatOperator, "[0,2]");
-    test(AgParser::repeatOperator, "[1,2]");
-    test(AgParser::repeatOperator, "[2,3]");
-  }
-
-  @Test
-  void testRuleFactor() {
-    test(AgParser::ruleFactor, "foo()");
-    test(AgParser::ruleFactor, "foo()*", "foo()[0,]");
-  }
-
-  @Test
-  void testRuleTerm() {
-    test(AgParser::ruleTerm, "foo()");
-    test(AgParser::ruleTerm, "foo() bar()");
-  }
-
-  @Test
-  void testRuleExpression() {
-    test(AgParser::ruleExpression, "foo()");
-    test(AgParser::ruleExpression, "foo()|bar()|baz()");
-  }
-
-  @Test
-  void testRule() {
-    test(AgParser::ruleStatement, "void foo();");
-    test(AgParser::ruleStatements, "Foo foo();");
-  }
-
-  @Test
-  void testRules() {
-    test(AgParser::ruleStatements, "Foo foo(); Bar bar();");
   }
 
   @Test
