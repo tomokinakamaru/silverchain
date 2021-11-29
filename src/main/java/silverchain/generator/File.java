@@ -1,6 +1,7 @@
 package silverchain.generator;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -27,7 +28,7 @@ public final class File {
     Path p = path.resolve(this.path);
     try {
       Files.createDirectories(p.getParent());
-      Files.write(p, content.getBytes());
+      Files.write(p, content.getBytes(StandardCharsets.UTF_8));
     } catch (IOException e) {
       throw new SaveError(p);
     }

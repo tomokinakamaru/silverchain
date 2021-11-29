@@ -254,7 +254,7 @@ public final class Generator {
   }
 
   private String getFilePath(String name) {
-    return name.replaceAll("\\.", "/") + ".java";
+    return name.replace('.', '/') + ".java";
   }
 
   /*
