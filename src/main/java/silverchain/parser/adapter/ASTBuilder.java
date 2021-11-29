@@ -420,7 +420,7 @@ public final class ASTBuilder extends AgBaseVisitor<ASTNode> {
 
   @Override
   public TypeArgument visitTypeArgument(AgParser.TypeArgumentContext ctx) {
-    TypeReference r = null;
+    TypeReference r;
     if (ctx.typeReference() != null) {
       r = visitTypeReference(ctx.typeReference());
       return new TypeArgument(range(ctx.start, ctx.stop), r, null);
