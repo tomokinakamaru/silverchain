@@ -1,9 +1,11 @@
 package silverchain.parser;
 
-import static silverchain.diagram.Builders.repeat;
+import static java.util.stream.Stream.generate;
+import static silverchain.diagram.Builders.*;
 
 import java.util.Map;
 import java.util.Optional;
+import silverchain.diagram.Builders;
 import silverchain.diagram.Diagram;
 
 public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
@@ -27,7 +29,21 @@ public final class RuleFactor extends ASTNode2<RuleElement, RepeatOperator> {
 
   @Override
   public Diagram diagram(Map<String, QualifiedName> importMap) {
-    Diagram d = element().diagram(importMap);
-    return operator().map(o -> repeat(d, o.min(), o.max().orElse(null))).orElse(d);
+    Diagram diagram = element().diagram(importMap);
+    if (!operator().isPresent()) {
+      return diagram;
+    }
+
+    int min = operator().get().min();
+    Integer max = operator().get().max().orElse(null);
+    Diagram first = generate(() -> diagram).limit(min).reduce(Builders::join).orElse(atom());
+    Diagram second;
+    if (max == null) {
+      second = repeat(diagram);
+    } else {
+      Diagram d = merge(diagram, atom());
+      second = generate(() -> d).limit(max - min).reduce(Builders::join).orElse(atom());
+    }
+    return join(first, second);
   }
 }
