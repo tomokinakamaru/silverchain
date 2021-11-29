@@ -91,7 +91,7 @@ check {
 
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
-tasks.withType(AbstractPublishToMaven) { it.dependsOn test }
+tasks.withType(AbstractPublishToMaven) { it.dependsOn check }
 
 publishing {
     repositories {
