@@ -6,13 +6,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Path;
 import org.antlr.v4.runtime.RecognitionException;
+import silverchain.Validator;
 import silverchain.diagram.Diagram;
 import silverchain.diagram.Diagrams;
 import silverchain.parser.AgParser;
 import silverchain.parser.Grammar;
 import silverchain.parser.Input;
 import silverchain.parser.adapter.Parser;
-import silverchain.validator.Validator;
 
 final class Utility {
 
