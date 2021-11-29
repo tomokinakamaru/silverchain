@@ -4,7 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
-import silverchain.validator.ValidationError;
+import silverchain.ValidationError;
 
 final class Tests {
 

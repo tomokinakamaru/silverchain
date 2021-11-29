@@ -1,6 +1,4 @@
-package silverchain.validator;
-
-import silverchain.SilverchainException;
+package silverchain;
 
 public final class ValidationError extends SilverchainException {
 

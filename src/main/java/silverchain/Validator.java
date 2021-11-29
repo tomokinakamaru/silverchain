@@ -1,4 +1,4 @@
-package silverchain.validator;
+package silverchain;
 
 import static java.util.stream.Collectors.joining;
 import static java.util.stream.Collectors.toList;

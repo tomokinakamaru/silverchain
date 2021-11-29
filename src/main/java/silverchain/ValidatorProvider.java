@@ -1,4 +1,4 @@
-package silverchain.validator;
+package silverchain;
 
 import java.util.function.Function;
 import silverchain.diagram.Diagrams;

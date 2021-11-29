@@ -10,7 +10,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.IVersionProvider;
 import picocli.CommandLine.Option;
 import silverchain.generator.Generator;
-import silverchain.validator.Validator;
 
 @Command(name = "silverchain", versionProvider = Cli.class, sortOptions = false)
 public final class Cli implements Callable<Integer>, IVersionProvider {
