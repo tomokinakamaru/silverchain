@@ -17,7 +17,6 @@ import silverchain.generator.GeneratorProvider;
 import silverchain.javadoc.Javadocs;
 import silverchain.parser.*;
 import silverchain.parser.adapter.Parser;
-import silverchain.warning.WarningHandler;
 
 public final class Silverchain {
 

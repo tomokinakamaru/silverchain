@@ -37,10 +37,10 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import silverchain.WarningHandler;
 import silverchain.parser.FormalParameter;
 import silverchain.parser.FormalParameters;
 import silverchain.parser.Method;
-import silverchain.warning.WarningHandler;
 
 public final class Javadocs {
 

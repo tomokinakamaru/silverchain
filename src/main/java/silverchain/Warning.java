@@ -1,3 +1,3 @@
-package silverchain.warning;
+package silverchain;
 
 public abstract class Warning {}

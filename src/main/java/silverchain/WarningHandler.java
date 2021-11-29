@@ -1,4 +1,4 @@
-package silverchain.warning;
+package silverchain;
 
 import java.util.function.Consumer;
 

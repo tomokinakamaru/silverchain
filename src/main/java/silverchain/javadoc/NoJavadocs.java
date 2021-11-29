@@ -1,6 +1,6 @@
 package silverchain.javadoc;
 
-import silverchain.warning.Warning;
+import silverchain.Warning;
 
 public final class NoJavadocs extends Warning {
 
