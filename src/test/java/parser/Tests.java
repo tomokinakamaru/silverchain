@@ -142,7 +142,6 @@ final class Tests {
   }
 
   @Test
-  @SuppressWarnings({"EqualsWithItself", "ConstantConditions", "EqualsBetweenInconvertibleTypes"})
   void testForCoverage() {
     ASTNode node1 = parse(AgParser::classDeclaration, "Foo {}");
     ASTNode node2 = parse(AgParser::classDeclaration, "Bar {}");
