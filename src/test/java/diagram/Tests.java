@@ -272,7 +272,7 @@ final class Tests {
         .transitionLabelRangeCount(2, 0, 1);
   }
 
-  @SuppressWarnings("EqualsBetweenInconvertibleTypes")
+  @SuppressWarnings("AssertBetweenInconvertibleTypes")
   @Test
   void testForCoverage() {
     Diagram diagram = compile("Foo { void foo(); }");
