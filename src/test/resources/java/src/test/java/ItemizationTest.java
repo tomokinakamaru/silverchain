@@ -1,3 +1,5 @@
+import static org.assertj.core.api.Assertions.assertThat;
+
 import itemization.Itemization;
 import org.junit.jupiter.api.Test;
 
@@ -17,8 +19,7 @@ final class ItemizationTest {
             .end()
             .toTeX();
 
-    assert s.equals(
-        "\\begin{itemize}\n"
+    assertThat(s).isEqualTo("\\begin{itemize}\n"
             + "\\item foo\n"
             + "\\begin{itemize}\n"
             + "\\item 1\n"
