@@ -17,22 +17,22 @@ import silverchain.internal.front.parser.AgParser.TypeParamsContext;
 import silverchain.internal.front.parser.AgParser.TypeRefContext;
 import silverchain.internal.front.parser.AgParser.WildcardContext;
 import silverchain.internal.front.rewriter.VirtualToken;
-import silverchain.internal.middle.graph.ir.attribute.Method;
-import silverchain.internal.middle.graph.ir.attribute.Name;
-import silverchain.internal.middle.graph.ir.attribute.Parameter;
-import silverchain.internal.middle.graph.ir.attribute.ReturnType;
-import silverchain.internal.middle.graph.ir.attribute.TypeArgument;
-import silverchain.internal.middle.graph.ir.attribute.TypeDeclaration;
-import silverchain.internal.middle.graph.ir.attribute.TypeParameter;
-import silverchain.internal.middle.graph.ir.attribute.TypeReference;
-import silverchain.internal.middle.graph.ir.attribute.Wildcard;
-import silverchain.internal.middle.graph.ir.attribute.collection.Bounds;
-import silverchain.internal.middle.graph.ir.attribute.collection.Exceptions;
-import silverchain.internal.middle.graph.ir.attribute.collection.Parameters;
-import silverchain.internal.middle.graph.ir.attribute.collection.TypeArguments;
-import silverchain.internal.middle.graph.ir.attribute.collection.TypeParameters;
-import silverchain.internal.middle.graph.ir.location.Location;
-import silverchain.internal.middle.graph.ir.location.Locations;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.attribute.Name;
+import silverchain.internal.middle.graph.data.attribute.Parameter;
+import silverchain.internal.middle.graph.data.attribute.ReturnType;
+import silverchain.internal.middle.graph.data.attribute.TypeArgument;
+import silverchain.internal.middle.graph.data.attribute.TypeDeclaration;
+import silverchain.internal.middle.graph.data.attribute.TypeParameter;
+import silverchain.internal.middle.graph.data.attribute.TypeReference;
+import silverchain.internal.middle.graph.data.attribute.Wildcard;
+import silverchain.internal.middle.graph.data.attribute.collection.Bounds;
+import silverchain.internal.middle.graph.data.attribute.collection.Exceptions;
+import silverchain.internal.middle.graph.data.attribute.collection.Parameters;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeArguments;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
+import silverchain.internal.middle.graph.data.location.Location;
+import silverchain.internal.middle.graph.data.location.Locations;
 
 public final class AttrBuilder {
 

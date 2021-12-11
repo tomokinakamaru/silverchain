@@ -1,9 +1,9 @@
 package silverchain.internal.middle.graph.validator;
 
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.attribute.ReturnType;
-import silverchain.internal.middle.graph.ir.graph.Node;
-import silverchain.internal.middle.graph.ir.graph.collection.Graphs;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.attribute.ReturnType;
+import silverchain.internal.middle.graph.data.graph.Node;
+import silverchain.internal.middle.graph.data.graph.collection.Graphs;
 
 public class FileCountChecker extends GraphVisitor {
 

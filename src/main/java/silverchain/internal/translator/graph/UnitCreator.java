@@ -1,10 +1,10 @@
 package silverchain.internal.translator.graph;
 
 import com.github.javaparser.ast.CompilationUnit;
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.attribute.TypeDeclaration;
-import silverchain.internal.middle.graph.ir.graph.Graph;
-import silverchain.internal.middle.graph.ir.graph.Node;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.attribute.TypeDeclaration;
+import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Node;
 
 class UnitCreator extends GraphVisitor {
 

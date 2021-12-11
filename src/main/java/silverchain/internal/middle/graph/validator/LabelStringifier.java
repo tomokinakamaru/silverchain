@@ -1,19 +1,19 @@
 package silverchain.internal.middle.graph.validator;
 
 import java.util.stream.Collectors;
-import silverchain.internal.middle.graph.ir.AttributeVisitor;
-import silverchain.internal.middle.graph.ir.attribute.Method;
-import silverchain.internal.middle.graph.ir.attribute.Name;
-import silverchain.internal.middle.graph.ir.attribute.Parameter;
-import silverchain.internal.middle.graph.ir.attribute.ReturnType;
-import silverchain.internal.middle.graph.ir.attribute.TypeParameter;
-import silverchain.internal.middle.graph.ir.attribute.TypeReference;
-import silverchain.internal.middle.graph.ir.attribute.Wildcard;
-import silverchain.internal.middle.graph.ir.attribute.collection.Bounds;
-import silverchain.internal.middle.graph.ir.attribute.collection.Exceptions;
-import silverchain.internal.middle.graph.ir.attribute.collection.Parameters;
-import silverchain.internal.middle.graph.ir.attribute.collection.TypeArguments;
-import silverchain.internal.middle.graph.ir.attribute.collection.TypeParameters;
+import silverchain.internal.middle.graph.data.AttributeVisitor;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.attribute.Name;
+import silverchain.internal.middle.graph.data.attribute.Parameter;
+import silverchain.internal.middle.graph.data.attribute.ReturnType;
+import silverchain.internal.middle.graph.data.attribute.TypeParameter;
+import silverchain.internal.middle.graph.data.attribute.TypeReference;
+import silverchain.internal.middle.graph.data.attribute.Wildcard;
+import silverchain.internal.middle.graph.data.attribute.collection.Bounds;
+import silverchain.internal.middle.graph.data.attribute.collection.Exceptions;
+import silverchain.internal.middle.graph.data.attribute.collection.Parameters;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeArguments;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
 
 public class LabelStringifier implements AttributeVisitor<String, Void> {
 
