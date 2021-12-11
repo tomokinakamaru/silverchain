@@ -1,6 +1,7 @@
-package silverchain.internal.middle.java;
+package silverchain.internal.translator.java;
 
 import silverchain.internal.back.Files;
+import silverchain.internal.middle.java.CompilationUnits;
 
 public class JavaTranslator {
 

@@ -28,11 +28,11 @@ import silverchain.internal.middle.graph.validator.EdgeConflictValidator;
 import silverchain.internal.middle.graph.validator.FileCountChecker;
 import silverchain.internal.middle.java.ActionInterfaceGenerator;
 import silverchain.internal.middle.java.CompilationUnits;
-import silverchain.internal.middle.java.JavaTranslator;
 import silverchain.internal.middle.java.JavadocProcessor;
 import silverchain.internal.middle.java.NodeClassGenerator;
+import silverchain.internal.translator.ag.TreeCompiler;
 import silverchain.internal.translator.graph.GraphTranslator;
-import silverchain.internal.translator.tree.TreeCompiler;
+import silverchain.internal.translator.java.JavaTranslator;
 import silverchain.internal.utility.JarProperties;
 import silverchain.internal.utility.TreeWalker;
 

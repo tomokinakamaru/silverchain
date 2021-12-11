@@ -1,4 +1,4 @@
-package silverchain.internal.translator.tree;
+package silverchain.internal.translator.ag;
 
 import java.util.stream.Collectors;
 import silverchain.internal.front.parser.AgBaseListener;
