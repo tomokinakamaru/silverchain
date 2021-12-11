@@ -2,11 +2,11 @@ package silverchain.internal.middle.graph.validator;
 
 import java.util.ArrayList;
 import java.util.List;
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.attribute.Label;
-import silverchain.internal.middle.graph.ir.attribute.Method;
-import silverchain.internal.middle.graph.ir.graph.Edge;
-import silverchain.internal.middle.graph.ir.graph.Node;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Node;
 
 public class EdgeConflictValidator extends GraphVisitor {
 

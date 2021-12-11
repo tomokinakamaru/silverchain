@@ -19,7 +19,7 @@ import silverchain.internal.front.validator.InvalidRepetitionValidator;
 import silverchain.internal.front.validator.MissingFragmentValidator;
 import silverchain.internal.front.validator.TypeDeclConflictValidator;
 import silverchain.internal.front.validator.ZeroRepetitionValidator;
-import silverchain.internal.middle.graph.ir.graph.collection.Graphs;
+import silverchain.internal.middle.graph.data.graph.collection.Graphs;
 import silverchain.internal.middle.graph.rewriter.GraphDeterminizer;
 import silverchain.internal.middle.graph.rewriter.GraphReverser;
 import silverchain.internal.middle.graph.rewriter.ParamPropagator;

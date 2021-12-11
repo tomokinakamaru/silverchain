@@ -15,7 +15,7 @@ import silverchain.internal.front.parser.AgParser.ChainStmtsContext;
 import silverchain.internal.front.parser.AgParser.ChainTermContext;
 import silverchain.internal.front.parser.AgParser.MethodContext;
 import silverchain.internal.front.parser.AgParser.TypeDeclContext;
-import silverchain.internal.middle.graph.ir.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Graph;
 
 public class GraphBuilder extends AgBaseVisitor<Graph> {
 

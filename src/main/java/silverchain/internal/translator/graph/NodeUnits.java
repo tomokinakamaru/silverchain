@@ -6,7 +6,7 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import silverchain.internal.middle.graph.ir.graph.Node;
+import silverchain.internal.middle.graph.data.graph.Node;
 
 class NodeUnits {
 

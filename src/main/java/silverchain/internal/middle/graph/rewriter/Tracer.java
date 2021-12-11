@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
-import silverchain.internal.middle.graph.ir.attribute.Label;
-import silverchain.internal.middle.graph.ir.graph.Edge;
-import silverchain.internal.middle.graph.ir.graph.Node;
-import silverchain.internal.middle.graph.ir.graph.collection.Nodes;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Node;
+import silverchain.internal.middle.graph.data.graph.collection.Nodes;
 
 public class Tracer<T> {
 

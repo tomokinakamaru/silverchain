@@ -1,11 +1,11 @@
 package silverchain.internal.middle.graph.rewriter;
 
 import java.util.function.Predicate;
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.graph.Edge;
-import silverchain.internal.middle.graph.ir.graph.Graph;
-import silverchain.internal.middle.graph.ir.graph.Node;
-import silverchain.internal.middle.graph.ir.graph.collection.Nodes;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Node;
+import silverchain.internal.middle.graph.data.graph.collection.Nodes;
 
 class EpsClosure extends GraphVisitor {
 

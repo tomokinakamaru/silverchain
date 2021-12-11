@@ -1,10 +1,10 @@
 package silverchain.internal.translator.tree;
 
-import silverchain.internal.middle.graph.ir.attribute.Label;
-import silverchain.internal.middle.graph.ir.graph.Edge;
-import silverchain.internal.middle.graph.ir.graph.Graph;
-import silverchain.internal.middle.graph.ir.graph.Node;
-import silverchain.internal.middle.graph.ir.graph.collection.Nodes;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Node;
+import silverchain.internal.middle.graph.data.graph.collection.Nodes;
 
 public final class GraphUtils {
 

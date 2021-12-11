@@ -2,13 +2,13 @@ package silverchain.internal.translator.graph;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.attribute.Label;
-import silverchain.internal.middle.graph.ir.attribute.Method;
-import silverchain.internal.middle.graph.ir.attribute.ReturnType;
-import silverchain.internal.middle.graph.ir.graph.Edge;
-import silverchain.internal.middle.graph.ir.graph.Graph;
-import silverchain.internal.middle.graph.ir.graph.Node;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.attribute.ReturnType;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Node;
 
 class UnitBuilder extends GraphVisitor {
 

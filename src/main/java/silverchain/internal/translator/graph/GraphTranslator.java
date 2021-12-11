@@ -1,7 +1,7 @@
 package silverchain.internal.translator.graph;
 
-import silverchain.internal.middle.graph.ir.GraphVisitor;
-import silverchain.internal.middle.graph.ir.graph.collection.Graphs;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.graph.collection.Graphs;
 import silverchain.internal.middle.java.CompilationUnits;
 
 public class GraphTranslator extends GraphVisitor {
