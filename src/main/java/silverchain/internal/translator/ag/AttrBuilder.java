@@ -1,4 +1,4 @@
-package silverchain.internal.translator.tree;
+package silverchain.internal.translator.ag;
 
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.Token;

@@ -1,11 +1,11 @@
-package silverchain.internal.translator.tree;
+package silverchain.internal.translator.ag;
 
-import static silverchain.internal.translator.tree.AttrBuilder.build;
-import static silverchain.internal.translator.tree.GraphUtils.atom;
-import static silverchain.internal.translator.tree.GraphUtils.concat;
-import static silverchain.internal.translator.tree.GraphUtils.optional;
-import static silverchain.internal.translator.tree.GraphUtils.repeat;
-import static silverchain.internal.translator.tree.GraphUtils.union;
+import static silverchain.internal.translator.ag.AttrBuilder.build;
+import static silverchain.internal.translator.ag.GraphUtils.atom;
+import static silverchain.internal.translator.ag.GraphUtils.concat;
+import static silverchain.internal.translator.ag.GraphUtils.optional;
+import static silverchain.internal.translator.ag.GraphUtils.repeat;
+import static silverchain.internal.translator.ag.GraphUtils.union;
 
 import silverchain.internal.front.parser.AgBaseVisitor;
 import silverchain.internal.front.parser.AgParser.ChainExprContext;

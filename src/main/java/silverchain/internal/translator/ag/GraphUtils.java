@@ -1,4 +1,4 @@
-package silverchain.internal.translator.tree;
+package silverchain.internal.translator.ag;
 
 import silverchain.internal.middle.graph.data.attribute.Label;
 import silverchain.internal.middle.graph.data.graph.Edge;
