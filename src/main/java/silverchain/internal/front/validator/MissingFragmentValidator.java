@@ -8,17 +8,17 @@ import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
 
 public class MissingFragmentValidator extends AgBaseListener {
 
-  protected final Set<String> set = new HashSet<>();
+  protected final Set<String> fragments = new HashSet<>();
 
   @Override
   public void enterFragmentDecl(FragmentDeclContext ctx) {
-    set.add(ctx.FRAGMENT_ID().getText());
+    fragments.add(ctx.FRAGMENT_ID().getText());
   }
 
   @Override
   public void enterFragmentRef(FragmentRefContext ctx) {
     String id = ctx.FRAGMENT_ID().getText();
-    if (!set.contains(id)) {
+    if (!fragments.contains(id)) {
       throw new MissingFragment(id, ctx);
     }
   }

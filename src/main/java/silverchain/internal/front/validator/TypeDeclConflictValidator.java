@@ -8,15 +8,15 @@ import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
 
 public class TypeDeclConflictValidator extends AgBaseListener {
 
-  protected final Map<String, TypeDeclContext> typeDecls = new HashMap<>();
+  protected final Map<String, TypeDeclContext> declarations = new HashMap<>();
 
   @Override
   public void enterTypeDecl(TypeDeclContext ctx) {
     String id = stringify(ctx.name());
-    if (typeDecls.containsKey(id)) {
-      throw new TypeDeclConflict(typeDecls.get(id), ctx);
+    if (declarations.containsKey(id)) {
+      throw new TypeDeclConflict(declarations.get(id), ctx);
     } else {
-      typeDecls.put(id, ctx);
+      declarations.put(id, ctx);
     }
   }
 
