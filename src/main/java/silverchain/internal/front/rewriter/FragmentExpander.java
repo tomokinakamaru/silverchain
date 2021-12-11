@@ -6,11 +6,11 @@ import static silverchain.internal.front.rewriter.RewriteUtils.replaceChild;
 
 import java.util.HashMap;
 import java.util.Map;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.ChainElemContext;
-import silverchain.internal.front.parser.AgParser.ChainExprContext;
-import silverchain.internal.front.parser.AgParser.FragmentDeclContext;
-import silverchain.internal.front.parser.AgParser.FragmentRefContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.ChainElemContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
 
 public class FragmentExpander extends AgBaseListener {
 

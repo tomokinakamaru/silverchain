@@ -1,7 +1,7 @@
 package silverchain.internal.front.validator;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.AgParser.FragmentRefContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
 
 public class MissingFragment extends SilverchainException {
 

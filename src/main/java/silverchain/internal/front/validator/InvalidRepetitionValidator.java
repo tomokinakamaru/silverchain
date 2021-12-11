@@ -1,8 +1,8 @@
 package silverchain.internal.front.validator;
 
 import org.antlr.v4.runtime.Token;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.RepeatSugarContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.RepeatSugarContext;
 
 public class InvalidRepetitionValidator extends AgBaseListener {
 

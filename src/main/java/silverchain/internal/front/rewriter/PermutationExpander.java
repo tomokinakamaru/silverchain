@@ -7,11 +7,11 @@ import static silverchain.internal.front.rewriter.RewriteUtils.replaceChild;
 import static silverchain.internal.front.rewriter.RewriteUtils.term;
 
 import java.util.List;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.ChainElemContext;
-import silverchain.internal.front.parser.AgParser.ChainExprContext;
-import silverchain.internal.front.parser.AgParser.ChainTermContext;
-import silverchain.internal.front.parser.AgParser.PermutationContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.ChainElemContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainTermContext;
+import silverchain.internal.front.parser.antlr.AgParser.PermutationContext;
 
 public class PermutationExpander extends AgBaseListener {
 

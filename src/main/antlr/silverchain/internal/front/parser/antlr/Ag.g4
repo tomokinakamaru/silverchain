@@ -1,7 +1,7 @@
 grammar Ag;
 
 @header {
-package silverchain.internal.front.parser;
+package silverchain.internal.front.parser.antlr;
 import org.antlr.v4.runtime.Parser;
 }
 

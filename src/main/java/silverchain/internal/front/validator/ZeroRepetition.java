@@ -1,7 +1,7 @@
 package silverchain.internal.front.validator;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.AgParser.RepeatSugarContext;
+import silverchain.internal.front.parser.antlr.AgParser.RepeatSugarContext;
 
 public class ZeroRepetition extends SilverchainException {
 

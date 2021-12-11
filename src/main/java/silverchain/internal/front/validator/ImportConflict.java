@@ -1,7 +1,7 @@
 package silverchain.internal.front.validator;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.AgParser.ImportDeclContext;
+import silverchain.internal.front.parser.antlr.AgParser.ImportDeclContext;
 
 public class ImportConflict extends SilverchainException {
 

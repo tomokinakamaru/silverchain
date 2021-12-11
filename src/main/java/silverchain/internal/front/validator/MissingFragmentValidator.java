@@ -2,9 +2,9 @@ package silverchain.internal.front.validator;
 
 import java.util.HashSet;
 import java.util.Set;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.FragmentDeclContext;
-import silverchain.internal.front.parser.AgParser.FragmentRefContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
 
 public class MissingFragmentValidator extends AgBaseListener {
 
