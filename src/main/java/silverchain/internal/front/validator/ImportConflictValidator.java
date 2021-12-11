@@ -2,8 +2,8 @@ package silverchain.internal.front.validator;
 
 import java.util.HashMap;
 import java.util.Map;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.ImportDeclContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.ImportDeclContext;
 
 public class ImportConflictValidator extends AgBaseListener {
 

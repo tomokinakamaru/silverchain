@@ -3,11 +3,11 @@ package silverchain.internal.front.rewriter;
 import java.lang.reflect.Constructor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
-import silverchain.internal.front.parser.AgParser.ChainElemContext;
-import silverchain.internal.front.parser.AgParser.ChainExprContext;
-import silverchain.internal.front.parser.AgParser.ChainFactContext;
-import silverchain.internal.front.parser.AgParser.ChainTermContext;
-import silverchain.internal.front.parser.AgParser.RepeatContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainElemContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainFactContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainTermContext;
+import silverchain.internal.front.parser.antlr.AgParser.RepeatContext;
 
 public final class RewriteUtils {
 

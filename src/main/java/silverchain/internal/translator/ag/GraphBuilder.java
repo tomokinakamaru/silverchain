@@ -7,14 +7,14 @@ import static silverchain.internal.translator.ag.GraphUtils.optional;
 import static silverchain.internal.translator.ag.GraphUtils.repeat;
 import static silverchain.internal.translator.ag.GraphUtils.union;
 
-import silverchain.internal.front.parser.AgBaseVisitor;
-import silverchain.internal.front.parser.AgParser.ChainExprContext;
-import silverchain.internal.front.parser.AgParser.ChainFactContext;
-import silverchain.internal.front.parser.AgParser.ChainStmtContext;
-import silverchain.internal.front.parser.AgParser.ChainStmtsContext;
-import silverchain.internal.front.parser.AgParser.ChainTermContext;
-import silverchain.internal.front.parser.AgParser.MethodContext;
-import silverchain.internal.front.parser.AgParser.TypeDeclContext;
+import silverchain.internal.front.parser.antlr.AgBaseVisitor;
+import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainFactContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainStmtContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainStmtsContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainTermContext;
+import silverchain.internal.front.parser.antlr.AgParser.MethodContext;
+import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.middle.graph.data.graph.Graph;
 
 public class GraphBuilder extends AgBaseVisitor<Graph> {

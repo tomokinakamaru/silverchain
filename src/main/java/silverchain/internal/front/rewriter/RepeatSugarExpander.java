@@ -10,12 +10,12 @@ import static silverchain.internal.front.rewriter.RewriteUtils.replaceChild;
 import static silverchain.internal.front.rewriter.RewriteUtils.term;
 
 import java.util.function.Supplier;
-import silverchain.internal.front.parser.AgBaseListener;
-import silverchain.internal.front.parser.AgParser.ChainElemContext;
-import silverchain.internal.front.parser.AgParser.ChainFactContext;
-import silverchain.internal.front.parser.AgParser.ChainTermContext;
-import silverchain.internal.front.parser.AgParser.RepeatContext;
-import silverchain.internal.front.parser.AgParser.RepeatSugarContext;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.ChainElemContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainFactContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainTermContext;
+import silverchain.internal.front.parser.antlr.AgParser.RepeatContext;
+import silverchain.internal.front.parser.antlr.AgParser.RepeatSugarContext;
 
 public class RepeatSugarExpander extends AgBaseListener {
 

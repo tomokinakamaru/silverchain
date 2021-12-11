@@ -1,7 +1,7 @@
 package silverchain.internal.front.validator;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.AgParser.TypeDeclContext;
+import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
 
 public class TypeDeclConflict extends SilverchainException {
 

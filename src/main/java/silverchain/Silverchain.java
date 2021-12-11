@@ -7,8 +7,8 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
-import silverchain.internal.front.parser.AgParser.InputContext;
-import silverchain.internal.front.parser.Parser;
+import silverchain.internal.front.parser.AgParser;
+import silverchain.internal.front.parser.antlr.AgParser.InputContext;
 import silverchain.internal.front.rewriter.FragmentExpander;
 import silverchain.internal.front.rewriter.ImportResolver;
 import silverchain.internal.front.rewriter.PermutationExpander;
@@ -87,7 +87,7 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   public void run(InputStream stream) throws IOException {
-    InputContext ctx = new Parser().parse(CharStreams.fromStream(stream));
+    InputContext ctx = new AgParser().parse(CharStreams.fromStream(stream));
     TreeWalker.walk(new TypeDeclConflictValidator(), ctx);
     TreeWalker.walk(new ZeroRepetitionValidator(), ctx);
     TreeWalker.walk(new InvalidRepetitionValidator(), ctx);
