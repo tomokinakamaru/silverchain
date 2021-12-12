@@ -5,21 +5,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
+import silverchain.internal.front.compiler.AgCompiler;
 import silverchain.internal.front.parser.AgParser;
 import silverchain.internal.front.parser.antlr.AgParser.InputContext;
-import silverchain.internal.front.rewriter.FragmentExpander;
+import silverchain.internal.front.rewriter.FragmentResolver;
 import silverchain.internal.front.rewriter.ImportResolver;
-import silverchain.internal.front.rewriter.PermutationExpander;
-import silverchain.internal.front.rewriter.RepeatSugarExpander;
-import silverchain.internal.front.validator.FragmentConflictValidator;
+import silverchain.internal.front.validator.DuplicateFragmentValidator;
+import silverchain.internal.front.validator.DuplicateTypeDeclValidator;
 import silverchain.internal.front.validator.ImportConflictValidator;
-import silverchain.internal.front.validator.InvalidRepetitionValidator;
-import silverchain.internal.front.validator.MissingFragmentValidator;
-import silverchain.internal.front.validator.TypeDeclConflictValidator;
-import silverchain.internal.front.validator.ZeroRepetitionValidator;
-import silverchain.internal.middle.graph.data.graph.collection.Graphs;
+import silverchain.internal.front.validator.InvalidRangeValidator;
+import silverchain.internal.front.validator.UndefinedFragmentValidator;
+import silverchain.internal.front.validator.ZeroRepeatValidator;
+import silverchain.internal.middle.data.graph.collection.Graphs;
+import silverchain.internal.middle.graph.compiler.GraphTranslator;
 import silverchain.internal.middle.graph.rewriter.GraphDeterminizer;
 import silverchain.internal.middle.graph.rewriter.GraphReverser;
 import silverchain.internal.middle.graph.rewriter.ParamPropagator;
@@ -30,9 +31,7 @@ import silverchain.internal.middle.java.ActionInterfaceGenerator;
 import silverchain.internal.middle.java.CompilationUnits;
 import silverchain.internal.middle.java.JavadocProcessor;
 import silverchain.internal.middle.java.NodeClassGenerator;
-import silverchain.internal.translator.ag.TreeCompiler;
-import silverchain.internal.translator.graph.GraphTranslator;
-import silverchain.internal.translator.java.JavaTranslator;
+import silverchain.internal.middle.java.compiler.JavaTranslator;
 import silverchain.internal.utility.JarProperties;
 import silverchain.internal.utility.TreeWalker;
 
@@ -86,20 +85,19 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     new CommandLine(new Silverchain()).execute(args);
   }
 
-  public void run(InputStream stream) throws IOException {
-    InputContext ctx = new AgParser().parse(CharStreams.fromStream(stream));
-    TreeWalker.walk(new TypeDeclConflictValidator(), ctx);
-    TreeWalker.walk(new ZeroRepetitionValidator(), ctx);
-    TreeWalker.walk(new InvalidRepetitionValidator(), ctx);
+  public void run(InputStream inputStream) throws IOException {
+    CharStream charStream = CharStreams.fromStream(inputStream);
+    InputContext ctx = new AgParser().parse(charStream);
+    TreeWalker.walk(new DuplicateTypeDeclValidator(), ctx);
+    TreeWalker.walk(new ZeroRepeatValidator(), ctx);
+    TreeWalker.walk(new InvalidRangeValidator(), ctx);
     TreeWalker.walk(new ImportConflictValidator(), ctx);
-    TreeWalker.walk(new FragmentConflictValidator(), ctx);
-    TreeWalker.walk(new MissingFragmentValidator(), ctx);
+    TreeWalker.walk(new DuplicateFragmentValidator(), ctx);
+    TreeWalker.walk(new UndefinedFragmentValidator(), ctx);
     TreeWalker.walk(new ImportResolver(), ctx);
-    TreeWalker.walk(new FragmentExpander(), ctx);
-    TreeWalker.walk(new PermutationExpander(), ctx);
-    TreeWalker.walk(new RepeatSugarExpander(), ctx);
+    TreeWalker.walk(new FragmentResolver(), ctx);
 
-    Graphs graphs = new TreeCompiler().compile(ctx);
+    Graphs graphs = new AgCompiler().compile(ctx);
     new GraphReverser().visit(graphs);
     new GraphDeterminizer().visit(graphs);
     new GraphReverser().visit(graphs);

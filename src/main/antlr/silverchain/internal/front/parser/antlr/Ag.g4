@@ -11,25 +11,25 @@ importDecl: 'import' name ';' ;
 
 fragmentDecl: FRAGMENT_ID '=' chainExpr ';' ;
 
-typeDecl: name ('<' (eParams=typeParams (';' iParams=typeParams)? | ';' iParams=typeParams) '>')? '{' chainStmts? '}' ;
+typeDecl: name ('<' (external=typeParams (';' internal=typeParams)? | ';' internal=typeParams) '>')? '{' chainStmts '}' ;
 
-chainStmts: chainStmt chainStmts? ;
+chainStmts: chainStmt+ ;
 
-chainStmt: returnType chainExpr ;
+chainStmt: returnType chainExpr ';' ;
 
-chainExpr: chainTerm '|' chainExpr? ;
+chainExpr: chainTerm ('|' chainTerm)* ;
 
-chainTerm: chainFact chainTerm? ;
+chainTerm: chainFact+ ;
 
 chainFact: chainElem (repeat | repeatSugar)? ;
 
 chainElem: method | permutation | fragmentRef | '(' chainExpr ')' ;
 
-returnType: typeRef | 'void' ;
+returnType: 'void' | typeRef ;
 
-repeat: ZERO_MORE='*' | ZERO_ONE='?' ;
+repeat: ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' ;
 
-repeatSugar: ONE_MORE='+' | '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
+repeatSugar: '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
 
 permutation: '{' chainExpr (',' chainExpr)* ','? '}';
 

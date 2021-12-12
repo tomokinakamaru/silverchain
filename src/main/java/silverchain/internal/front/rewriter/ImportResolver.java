@@ -1,7 +1,7 @@
 package silverchain.internal.front.rewriter;
 
-import static silverchain.internal.front.rewriter.RewriteUtils.deepCopy;
-import static silverchain.internal.front.rewriter.RewriteUtils.pushInterval;
+import static silverchain.internal.front.rewriter.RewriteUtils.copy;
+import static silverchain.internal.front.rewriter.RewriteUtils.pushTokens;
 import static silverchain.internal.front.rewriter.RewriteUtils.replaceChild;
 
 import java.util.HashMap;
@@ -35,10 +35,13 @@ public class ImportResolver extends AgBaseListener {
 
   protected void replace(ParserRuleContext ctx, NameContext oldCtx) {
     if (oldCtx.name() == null) {
-      NameContext refCtx = imports.get(oldCtx.ID().getText());
-      NameContext newCtx = deepCopy(refCtx);
-      pushInterval(oldCtx, newCtx);
-      replaceChild(ctx, oldCtx, newCtx);
+      String id = oldCtx.ID().getText();
+      if (imports.containsKey(id)) {
+        NameContext refCtx = imports.get(oldCtx.ID().getText());
+        NameContext newCtx = copy(refCtx);
+        pushTokens(oldCtx, newCtx);
+        replaceChild(ctx, oldCtx, newCtx);
+      }
     }
   }
 }
