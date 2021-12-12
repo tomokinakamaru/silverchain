@@ -25,7 +25,7 @@ chainFact: chainElem (repeat | repeatSugar)? ;
 
 chainElem: method | permutation | fragmentRef | '(' chainExpr ')' ;
 
-returnType: 'void' | typeRef ;
+returnType: typeRef ;
 
 repeat: ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' ;
 
