@@ -2,6 +2,7 @@ package silverchain.internal.frontend;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
 import silverchain.internal.frontend.checker.DuplicateTypeChecker;
 import silverchain.internal.frontend.checker.ImportConflictChecker;
@@ -13,6 +14,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.rewriter.FragmentExpander;
 import silverchain.internal.frontend.rewriter.ImportExpander;
 
+@API(status = API.Status.INTERNAL)
 public class Frontend {
 
   public InputContext run(CharStream stream) {
