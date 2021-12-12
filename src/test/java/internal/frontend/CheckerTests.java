@@ -1,4 +1,4 @@
-package internal.front;
+package internal.frontend;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -7,8 +7,6 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.front.parser.antlr.AgBaseListener;
-import silverchain.internal.front.parser.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.checker.DuplicateFragment;
 import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
 import silverchain.internal.frontend.checker.DuplicateType;
@@ -22,8 +20,10 @@ import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeat;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
 import silverchain.internal.frontend.parser.AgParser;
+import silverchain.internal.frontend.parser.antlr.AgBaseListener;
+import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
-class ValidatorTests {
+class CheckerTests {
 
   private static Arguments[] testData() {
     return new Arguments[] {
