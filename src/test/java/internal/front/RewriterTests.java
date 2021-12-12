@@ -5,21 +5,21 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.api.Test;
-import silverchain.internal.front.parser.AgParser;
 import silverchain.internal.front.parser.antlr.AgBaseListener;
 import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
 import silverchain.internal.front.parser.antlr.AgParser.InputContext;
 import silverchain.internal.front.parser.antlr.AgParser.NameContext;
-import silverchain.internal.front.rewriter.FragmentResolver;
-import silverchain.internal.front.rewriter.ImportResolver;
-import silverchain.internal.front.rewriter.VirtualToken;
+import silverchain.internal.frontend.parser.AgParser;
+import silverchain.internal.frontend.rewriter.FragmentExpander;
+import silverchain.internal.frontend.rewriter.ImportExpander;
+import silverchain.internal.frontend.rewriter.VirtualToken;
 
 class RewriterTests {
 
   @Test
   void testFragmentResolver() {
     ChainExprContext expr =
-        parseAndRewrite("$FOO = foo() bar(); Foo { Foo $FOO; }", new FragmentResolver())
+        parseAndRewrite("$FOO = foo() bar(); Foo { Foo $FOO; }", new FragmentExpander())
             .typeDecl(0)
             .chainStmts()
             .chainStmt(0)
@@ -46,7 +46,7 @@ class RewriterTests {
   @Test
   void testImportResolver() {
     NameContext name =
-        parseAndRewrite("import foo.Foo; Foo { Bar baz(); }", new ImportResolver())
+        parseAndRewrite("import foo.Foo; Foo { Bar baz(); }", new ImportExpander())
             .typeDecl(0)
             .name();
 

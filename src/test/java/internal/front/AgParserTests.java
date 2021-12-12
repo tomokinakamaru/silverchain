@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.front.parser.AgParser;
-import silverchain.internal.front.parser.SyntaxError;
+import silverchain.internal.frontend.parser.AgParser;
+import silverchain.internal.frontend.parser.SyntaxError;
 
 class AgParserTests {
 

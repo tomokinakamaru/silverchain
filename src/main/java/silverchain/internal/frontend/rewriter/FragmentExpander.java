@@ -1,0 +1,34 @@
+package silverchain.internal.frontend.rewriter;
+
+import static silverchain.internal.frontend.rewriter.RewriteUtils.copy;
+import static silverchain.internal.frontend.rewriter.RewriteUtils.pushTokens;
+import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
+
+import java.util.HashMap;
+import java.util.Map;
+import silverchain.internal.front.parser.antlr.AgBaseListener;
+import silverchain.internal.front.parser.antlr.AgParser.ChainElemContext;
+import silverchain.internal.front.parser.antlr.AgParser.ChainExprContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
+
+public class FragmentExpander extends AgBaseListener {
+
+  protected final Map<String, ChainExprContext> fragments = new HashMap<>();
+
+  @Override
+  public void exitFragmentDecl(FragmentDeclContext ctx) {
+    fragments.put(ctx.FRAGMENT_ID().getText(), ctx.chainExpr());
+  }
+
+  @Override
+  public void exitChainElem(ChainElemContext ctx) {
+    FragmentRefContext oldCtx = ctx.fragmentRef();
+    if (oldCtx != null) {
+      ChainExprContext refCtx = fragments.get(oldCtx.FRAGMENT_ID().getText());
+      ChainExprContext newCtx = copy(refCtx);
+      pushTokens(oldCtx, newCtx);
+      replaceChild(ctx, oldCtx, newCtx);
+    }
+  }
+}
