@@ -6,7 +6,6 @@ import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainElemContext;
