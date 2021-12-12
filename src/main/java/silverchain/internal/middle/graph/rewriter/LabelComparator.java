@@ -3,15 +3,15 @@ package silverchain.internal.middle.graph.rewriter;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
-import silverchain.internal.middle.data.AttributeVisitor;
-import silverchain.internal.middle.data.attribute.Attribute;
-import silverchain.internal.middle.data.attribute.Label;
-import silverchain.internal.middle.data.attribute.Method;
-import silverchain.internal.middle.data.attribute.Name;
-import silverchain.internal.middle.data.attribute.Parameter;
-import silverchain.internal.middle.data.attribute.TypeParameter;
-import silverchain.internal.middle.data.attribute.TypeReference;
-import silverchain.internal.middle.data.attribute.Wildcard;
+import silverchain.internal.middle.graph.data.AttributeVisitor;
+import silverchain.internal.middle.graph.data.attribute.Attribute;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.attribute.Name;
+import silverchain.internal.middle.graph.data.attribute.Parameter;
+import silverchain.internal.middle.graph.data.attribute.TypeParameter;
+import silverchain.internal.middle.graph.data.attribute.TypeReference;
+import silverchain.internal.middle.graph.data.attribute.Wildcard;
 
 public class LabelComparator implements AttributeVisitor<Boolean, Attribute> {
 

@@ -8,7 +8,9 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
-import silverchain.internal.front.compiler.AgCompiler;
+import silverchain.internal.JarProperties;
+import silverchain.internal.back.parser.JavaTranslator;
+import silverchain.internal.front.TreeWalker;
 import silverchain.internal.front.parser.AgParser;
 import silverchain.internal.front.parser.antlr.AgParser.InputContext;
 import silverchain.internal.front.rewriter.FragmentResolver;
@@ -19,8 +21,8 @@ import silverchain.internal.front.validator.ImportConflictValidator;
 import silverchain.internal.front.validator.InvalidRangeValidator;
 import silverchain.internal.front.validator.UndefinedFragmentValidator;
 import silverchain.internal.front.validator.ZeroRepeatValidator;
-import silverchain.internal.middle.data.graph.collection.Graphs;
-import silverchain.internal.middle.graph.compiler.GraphTranslator;
+import silverchain.internal.middle.graph.data.graph.collection.Graphs;
+import silverchain.internal.middle.graph.parser.AgCompiler;
 import silverchain.internal.middle.graph.rewriter.GraphDeterminizer;
 import silverchain.internal.middle.graph.rewriter.GraphReverser;
 import silverchain.internal.middle.graph.rewriter.ParamPropagator;
@@ -31,9 +33,7 @@ import silverchain.internal.middle.java.ActionInterfaceGenerator;
 import silverchain.internal.middle.java.CompilationUnits;
 import silverchain.internal.middle.java.JavadocProcessor;
 import silverchain.internal.middle.java.NodeClassGenerator;
-import silverchain.internal.middle.java.compiler.JavaTranslator;
-import silverchain.internal.utility.JarProperties;
-import silverchain.internal.utility.TreeWalker;
+import silverchain.internal.middle.java.parser.GraphTranslator;
 
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
 public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvider {
