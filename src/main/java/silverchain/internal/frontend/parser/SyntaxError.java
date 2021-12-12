@@ -7,6 +7,10 @@ public class SyntaxError extends SilverchainException {
   protected static final String FORMAT = "Syntax error: %s (L%dC%d)";
 
   public SyntaxError(int line, int charPosition, String message) {
-    super(FORMAT, message, line, charPosition + 1);
+    super(FORMAT, capitalize(message), line, charPosition + 1);
+  }
+
+  protected static String capitalize(String message) {
+    return message.substring(0, 1).toLowerCase() + message.substring(1);
   }
 }

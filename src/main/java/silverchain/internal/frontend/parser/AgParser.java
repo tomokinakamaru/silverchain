@@ -28,7 +28,7 @@ public class AgParser {
   }
 
   protected static class AntlrParser extends silverchain.internal.front.parser.antlr.AgParser {
-    public AntlrParser(TokenStream input) {
+    protected AntlrParser(TokenStream input) {
       super(input);
     }
   }
