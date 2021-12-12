@@ -1,19 +1,19 @@
 package silverchain.internal.middle.graph.validator;
 
 import java.util.stream.Collectors;
-import silverchain.internal.middle.data.AttributeVisitor;
-import silverchain.internal.middle.data.attribute.Method;
-import silverchain.internal.middle.data.attribute.Name;
-import silverchain.internal.middle.data.attribute.Parameter;
-import silverchain.internal.middle.data.attribute.ReturnType;
-import silverchain.internal.middle.data.attribute.TypeParameter;
-import silverchain.internal.middle.data.attribute.TypeReference;
-import silverchain.internal.middle.data.attribute.Wildcard;
-import silverchain.internal.middle.data.attribute.collection.Bounds;
-import silverchain.internal.middle.data.attribute.collection.Exceptions;
-import silverchain.internal.middle.data.attribute.collection.Parameters;
-import silverchain.internal.middle.data.attribute.collection.TypeArguments;
-import silverchain.internal.middle.data.attribute.collection.TypeParameters;
+import silverchain.internal.middle.graph.data.AttributeVisitor;
+import silverchain.internal.middle.graph.data.attribute.Method;
+import silverchain.internal.middle.graph.data.attribute.Name;
+import silverchain.internal.middle.graph.data.attribute.Parameter;
+import silverchain.internal.middle.graph.data.attribute.ReturnType;
+import silverchain.internal.middle.graph.data.attribute.TypeParameter;
+import silverchain.internal.middle.graph.data.attribute.TypeReference;
+import silverchain.internal.middle.graph.data.attribute.Wildcard;
+import silverchain.internal.middle.graph.data.attribute.collection.Bounds;
+import silverchain.internal.middle.graph.data.attribute.collection.Exceptions;
+import silverchain.internal.middle.graph.data.attribute.collection.Parameters;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeArguments;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
 
 public class LabelStringifier implements AttributeVisitor<String, Void> {
 

@@ -1,8 +1,8 @@
 package silverchain.internal.middle.graph.rewriter;
 
-import silverchain.internal.middle.data.AttributeVisitor;
-import silverchain.internal.middle.data.attribute.TypeReference;
-import silverchain.internal.middle.data.attribute.collection.TypeParameters;
+import silverchain.internal.middle.graph.data.AttributeVisitor;
+import silverchain.internal.middle.graph.data.attribute.TypeReference;
+import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
 
 public class ParamRefCollector implements AttributeVisitor<TypeParameters, TypeParameters> {
 

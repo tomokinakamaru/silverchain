@@ -6,13 +6,13 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
-import silverchain.internal.middle.data.GraphVisitor;
-import silverchain.internal.middle.data.attribute.Label;
-import silverchain.internal.middle.data.graph.Edge;
-import silverchain.internal.middle.data.graph.Graph;
-import silverchain.internal.middle.data.graph.Node;
-import silverchain.internal.middle.data.graph.collection.Nodes;
-import silverchain.internal.utility.Tracer;
+import silverchain.internal.middle.graph.Tracer;
+import silverchain.internal.middle.graph.data.GraphVisitor;
+import silverchain.internal.middle.graph.data.attribute.Label;
+import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.graph.data.graph.Node;
+import silverchain.internal.middle.graph.data.graph.collection.Nodes;
 
 public class GraphDeterminizer extends GraphVisitor {
 

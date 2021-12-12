@@ -3,7 +3,7 @@ package silverchain.internal.middle.graph.validator;
 import java.util.List;
 import java.util.stream.Collectors;
 import silverchain.SilverchainException;
-import silverchain.internal.middle.data.attribute.Label;
+import silverchain.internal.middle.graph.data.attribute.Label;
 
 public class EdgeConflict extends SilverchainException {
 
