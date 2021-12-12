@@ -3,14 +3,14 @@ package silverchain.internal.middle.graph.rewriter;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
-import silverchain.internal.middle.graph.data.AttributeVisitor;
-import silverchain.internal.middle.graph.data.GraphVisitor;
-import silverchain.internal.middle.graph.data.attribute.Method;
-import silverchain.internal.middle.graph.data.attribute.TypeParameter;
-import silverchain.internal.middle.graph.data.attribute.TypeReference;
-import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
-import silverchain.internal.middle.graph.data.graph.Edge;
-import silverchain.internal.middle.graph.data.graph.Graph;
+import silverchain.internal.middle.data.AttributeVisitor;
+import silverchain.internal.middle.data.GraphVisitor;
+import silverchain.internal.middle.data.attribute.Method;
+import silverchain.internal.middle.data.attribute.TypeParameter;
+import silverchain.internal.middle.data.attribute.TypeReference;
+import silverchain.internal.middle.data.attribute.collection.TypeParameters;
+import silverchain.internal.middle.data.graph.Edge;
+import silverchain.internal.middle.data.graph.Graph;
 
 public class ParamRefResolver extends GraphVisitor implements AttributeVisitor<Void, Void> {
 

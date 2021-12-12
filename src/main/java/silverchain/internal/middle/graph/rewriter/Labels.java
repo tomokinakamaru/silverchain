@@ -4,8 +4,8 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
-import silverchain.internal.middle.graph.data.attribute.Label;
-import silverchain.internal.middle.graph.data.graph.Edge;
+import silverchain.internal.middle.data.attribute.Label;
+import silverchain.internal.middle.data.graph.Edge;
 
 public class Labels implements Iterable<Label> {
 

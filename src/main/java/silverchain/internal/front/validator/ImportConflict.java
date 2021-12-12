@@ -11,8 +11,8 @@ public class ImportConflict extends SilverchainException {
     super(
         FORMAT,
         ctx1.start.getLine(),
-        ctx1.start.getCharPositionInLine(),
+        ctx1.start.getCharPositionInLine() + 1,
         ctx2.start.getLine(),
-        ctx2.start.getLine());
+        ctx2.start.getCharPositionInLine() + 1);
   }
 }

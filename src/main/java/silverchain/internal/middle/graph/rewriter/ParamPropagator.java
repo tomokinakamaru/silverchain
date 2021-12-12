@@ -1,11 +1,11 @@
 package silverchain.internal.middle.graph.rewriter;
 
-import silverchain.internal.middle.graph.data.GraphVisitor;
-import silverchain.internal.middle.graph.data.attribute.collection.TypeParameters;
-import silverchain.internal.middle.graph.data.graph.Edge;
-import silverchain.internal.middle.graph.data.graph.Graph;
-import silverchain.internal.middle.graph.data.graph.Node;
-import silverchain.internal.middle.graph.data.graph.collection.Edges;
+import silverchain.internal.middle.data.GraphVisitor;
+import silverchain.internal.middle.data.attribute.collection.TypeParameters;
+import silverchain.internal.middle.data.graph.Edge;
+import silverchain.internal.middle.data.graph.Graph;
+import silverchain.internal.middle.data.graph.Node;
+import silverchain.internal.middle.data.graph.collection.Edges;
 
 public class ParamPropagator extends GraphVisitor {
 
