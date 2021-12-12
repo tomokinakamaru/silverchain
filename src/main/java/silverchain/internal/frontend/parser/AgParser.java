@@ -3,9 +3,11 @@ package silverchain.internal.frontend.parser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.TokenStream;
+import org.apiguardian.api.API;
 import silverchain.internal.front.parser.antlr.AgLexer;
 import silverchain.internal.front.parser.antlr.AgParser.InputContext;
 
+@API(status = API.Status.INTERNAL)
 public class AgParser {
 
   public InputContext parse(CharStream stream) {

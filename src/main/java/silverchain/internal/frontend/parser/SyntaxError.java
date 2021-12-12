@@ -1,7 +1,9 @@
 package silverchain.internal.frontend.parser;
 
+import org.apiguardian.api.API;
 import silverchain.SilverchainException;
 
+@API(status = API.Status.INTERNAL)
 public class SyntaxError extends SilverchainException {
 
   protected static final String FORMAT = "Syntax error: %s (L%dC%d)";
