@@ -7,12 +7,14 @@ import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
 
+@API(status = API.Status.INTERNAL)
 public class ImportExpander extends AgBaseListener {
 
   protected final Map<String, NameContext> imports = new HashMap<>();

@@ -6,12 +6,15 @@ import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainElemContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
 
+@API(status = API.Status.INTERNAL)
 public class FragmentExpander extends AgBaseListener {
 
   protected final Map<String, ChainExprContext> fragments = new HashMap<>();
