@@ -1,7 +1,7 @@
 package silverchain.internal.frontend.checker;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 
 public class DuplicateType extends SilverchainException {
 

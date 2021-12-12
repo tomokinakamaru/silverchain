@@ -1,7 +1,7 @@
 package silverchain.internal.frontend.checker;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
 
 public class UndefinedFragment extends SilverchainException {
 

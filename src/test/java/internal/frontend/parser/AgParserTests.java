@@ -1,5 +1,6 @@
-package internal.front;
+package internal.frontend.parser;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import org.antlr.v4.runtime.CharStream;
@@ -10,6 +11,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import silverchain.internal.frontend.parser.AgParser;
 import silverchain.internal.frontend.parser.SyntaxError;
+import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
 class AgParserTests {
 
@@ -31,6 +33,7 @@ class AgParserTests {
 
   @Test
   void testNoError() {
-    new AgParser().parse(CharStreams.fromString(""));
+    InputContext ctx = new AgParser().parse(CharStreams.fromString(""));
+    assertThat(ctx).isNotNull();
   }
 }
