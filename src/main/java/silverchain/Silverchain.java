@@ -8,22 +8,13 @@ import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
 import silverchain.internal.JarProperties;
-import silverchain.internal.backend.builder.JavaTranslator;
+import silverchain.internal.backend.Backend;
 import silverchain.internal.frontend.Frontend;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
-import silverchain.internal.middleware.graph.builder.AgCompiler;
-import silverchain.internal.middleware.graph.checker.EdgeConflictValidator;
-import silverchain.internal.middleware.graph.checker.FileCountChecker;
+import silverchain.internal.middleware.graph.GraphMiddleware;
 import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
-import silverchain.internal.middleware.graph.rewriter.GraphDeterminizer;
-import silverchain.internal.middleware.graph.rewriter.GraphReverser;
-import silverchain.internal.middleware.graph.rewriter.ParamPropagator;
-import silverchain.internal.middleware.graph.rewriter.ParamRefResolver;
-import silverchain.internal.middleware.java.builder.GraphTranslator;
+import silverchain.internal.middleware.java.JavaMiddleware;
 import silverchain.internal.middleware.java.data.CompilationUnits;
-import silverchain.internal.middleware.java.rewriter.ActionInterfaceGenerator;
-import silverchain.internal.middleware.java.rewriter.JavadocProcessor;
-import silverchain.internal.middleware.java.rewriter.NodeClassGenerator;
 
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
 public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvider {
@@ -77,25 +68,9 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
 
   public void run(CharStream stream) {
     InputContext ctx = new Frontend().run(stream);
-
-    Graphs graphs = new AgCompiler().compile(ctx);
-    new GraphReverser().visit(graphs);
-    new GraphDeterminizer().visit(graphs);
-    new GraphReverser().visit(graphs);
-    new GraphDeterminizer().visit(graphs);
-    new ParamRefResolver().visit(graphs);
-    new ParamPropagator().visit(graphs);
-    new FileCountChecker(maxFileCount).visit(graphs);
-    new EdgeConflictValidator().visit(graphs);
-
-    CompilationUnits stateInterfaces = new GraphTranslator().translate(graphs);
-    new JavadocProcessor(javadoc, warningHandler).process(stateInterfaces);
-
-    CompilationUnits actionInterface = new ActionInterfaceGenerator().generate(stateInterfaces);
-
-    CompilationUnits stateClasses = new NodeClassGenerator().generate(stateInterfaces);
-
-    new JavaTranslator().translate(stateInterfaces, actionInterface, stateClasses).save(output);
+    Graphs graphs = new GraphMiddleware().run(ctx);
+    CompilationUnits units = new JavaMiddleware(javadoc, warningHandler).run(graphs);
+    new Backend(maxFileCount, output).run(units);
   }
 
   public String getInput() {
