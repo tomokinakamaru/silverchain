@@ -1,8 +1,10 @@
 package silverchain.internal.frontend.checker;
 
+import org.apiguardian.api.API;
 import silverchain.SilverchainException;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
 
+@API(status = API.Status.INTERNAL)
 public class UndefinedFragment extends SilverchainException {
 
   protected static final String FORMAT = "Undefined fragment %s (L%dC%d)";

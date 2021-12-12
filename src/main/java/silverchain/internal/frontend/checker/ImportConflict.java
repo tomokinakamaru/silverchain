@@ -1,8 +1,10 @@
 package silverchain.internal.frontend.checker;
 
+import org.apiguardian.api.API;
 import silverchain.SilverchainException;
 import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
 
+@API(status = API.Status.INTERNAL)
 public class ImportConflict extends SilverchainException {
 
   protected static final String FORMAT = "Import conflict (L%dC%d and L%dC%d)";
