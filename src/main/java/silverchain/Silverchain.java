@@ -1,26 +1,16 @@
 package silverchain;
 
 import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import picocli.CommandLine;
 import silverchain.internal.JarProperties;
 import silverchain.internal.backend.builder.JavaTranslator;
-import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
-import silverchain.internal.frontend.checker.DuplicateTypeChecker;
-import silverchain.internal.frontend.checker.ImportConflictChecker;
-import silverchain.internal.frontend.checker.InvalidRangeChecker;
-import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
-import silverchain.internal.frontend.checker.ZeroRepeatChecker;
-import silverchain.internal.frontend.parser.AgParser;
+import silverchain.internal.frontend.Frontend;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
-import silverchain.internal.frontend.rewriter.FragmentExpander;
-import silverchain.internal.frontend.rewriter.ImportExpander;
 import silverchain.internal.middleware.graph.builder.AgCompiler;
 import silverchain.internal.middleware.graph.checker.EdgeConflictValidator;
 import silverchain.internal.middleware.graph.checker.FileCountChecker;
@@ -85,17 +75,8 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     new CommandLine(new Silverchain()).execute(args);
   }
 
-  public void run(InputStream inputStream) throws IOException {
-    CharStream charStream = CharStreams.fromStream(inputStream);
-    InputContext ctx = new AgParser().parse(charStream);
-    ParseTreeWalker.DEFAULT.walk(new DuplicateTypeChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ZeroRepeatChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new InvalidRangeChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ImportConflictChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new DuplicateFragmentChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new UndefinedFragmentChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ImportExpander(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new FragmentExpander(), ctx);
+  public void run(CharStream stream) {
+    InputContext ctx = new Frontend().run(stream);
 
     Graphs graphs = new AgCompiler().compile(ctx);
     new GraphReverser().visit(graphs);
@@ -159,7 +140,8 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
 
   @Override
   public Integer call() throws Exception {
-    new Silverchain().run(input.equals("-") ? System.in : new FileInputStream(input));
+    InputStream stream = input.equals("-") ? System.in : new FileInputStream(input);
+    new Silverchain().run(CharStreams.fromStream(stream));
     return 0;
   }
 
