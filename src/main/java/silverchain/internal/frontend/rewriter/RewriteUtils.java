@@ -3,7 +3,9 @@ package silverchain.internal.frontend.rewriter;
 import java.lang.reflect.Constructor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apiguardian.api.API;
 
+@API(status = API.Status.INTERNAL)
 public final class RewriteUtils {
 
   private RewriteUtils() {}

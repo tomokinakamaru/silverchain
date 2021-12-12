@@ -3,7 +3,9 @@ package silverchain.internal.frontend.rewriter;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.TokenSource;
+import org.apiguardian.api.API;
 
+@API(status = API.Status.INTERNAL)
 public class VirtualToken implements Token {
 
   private Token token;
