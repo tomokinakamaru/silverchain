@@ -7,11 +7,11 @@ import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.ParserRuleContext;
-import silverchain.internal.front.parser.antlr.AgBaseListener;
-import silverchain.internal.front.parser.antlr.AgParser.ImportDeclContext;
-import silverchain.internal.front.parser.antlr.AgParser.NameContext;
-import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
-import silverchain.internal.front.parser.antlr.AgParser.TypeRefContext;
+import silverchain.internal.frontend.parser.antlr.AgBaseListener;
+import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
 
 public class ImportExpander extends AgBaseListener {
 

@@ -1,7 +1,7 @@
 package silverchain.internal.frontend.checker;
 
 import silverchain.SilverchainException;
-import silverchain.internal.front.parser.antlr.AgParser.RepeatSugarContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.RepeatSugarContext;
 
 public class InvalidRange extends SilverchainException {
 
