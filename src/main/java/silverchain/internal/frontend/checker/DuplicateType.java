@@ -1,8 +1,10 @@
 package silverchain.internal.frontend.checker;
 
+import org.apiguardian.api.API;
 import silverchain.SilverchainException;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 
+@API(status = API.Status.INTERNAL)
 public class DuplicateType extends SilverchainException {
 
   protected static final String FORMAT = "Duplicate type declaration (L%dC%d and L%dC%d)";
