@@ -2,9 +2,9 @@ package silverchain.internal.frontend.checker;
 
 import java.util.HashMap;
 import java.util.Map;
-import silverchain.internal.front.parser.antlr.AgBaseListener;
-import silverchain.internal.front.parser.antlr.AgParser.NameContext;
-import silverchain.internal.front.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.parser.antlr.AgBaseListener;
+import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 
 public class DuplicateTypeChecker extends AgBaseListener {
 

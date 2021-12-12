@@ -2,9 +2,9 @@ package silverchain.internal.frontend.checker;
 
 import java.util.HashSet;
 import java.util.Set;
-import silverchain.internal.front.parser.antlr.AgBaseListener;
-import silverchain.internal.front.parser.antlr.AgParser.FragmentDeclContext;
-import silverchain.internal.front.parser.antlr.AgParser.FragmentRefContext;
+import silverchain.internal.frontend.parser.antlr.AgBaseListener;
+import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
 
 public class UndefinedFragmentChecker extends AgBaseListener {
 
