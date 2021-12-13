@@ -11,8 +11,8 @@ import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
 import silverchain.internal.frontend.parser.AgParser;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
-import silverchain.internal.frontend.rewriter.FragmentExpander;
-import silverchain.internal.frontend.rewriter.ImportExpander;
+import silverchain.internal.frontend.rewriter.FragmentResolver;
+import silverchain.internal.frontend.rewriter.ImportResolver;
 
 @API(status = API.Status.INTERNAL)
 public class Frontend {
@@ -25,8 +25,8 @@ public class Frontend {
     ParseTreeWalker.DEFAULT.walk(new UndefinedFragmentChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new ZeroRepeatChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new InvalidRangeChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ImportExpander(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new FragmentExpander(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new ImportResolver(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new FragmentResolver(), ctx);
     return ctx;
   }
 }
