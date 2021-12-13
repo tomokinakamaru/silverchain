@@ -147,6 +147,28 @@ publishing {
 signing {
     sign publishing.publications.mavenJava
 }
+
 tasks.withType(Sign) {
     onlyIf { isReleaseVersion }
 }
+
+task annotateAntlrGeneratedTypes(dependsOn: generateGrammarSource) {
+    doLast {
+        def tmpDir = "${generateGrammarSource.outputDirectory}.tmp"
+        copy {
+            from generateGrammarSource.outputDirectory
+            into tmpDir
+            filter { line -> line
+                    .replaceAll('^public class', '@API(status = API.Status.INTERNAL) public class')
+                    .replaceAll('^public interface', '@API(status = API.Status.INTERNAL) public interface')
+            }
+        }
+        copy {
+            from tmpDir
+            into generateGrammarSource.outputDirectory
+        }
+        delete tmpDir
+    }
+}
+
+compileJava.dependsOn(annotateAntlrGeneratedTypes)
