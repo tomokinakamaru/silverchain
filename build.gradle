@@ -56,6 +56,7 @@ spotless {
     java {
         target 'src/*/java/**/*.java'
         googleJavaFormat()
+        toggleOffOn('@formatter:off', '@formatter:on')
     }
 }
 
