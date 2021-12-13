@@ -6,6 +6,7 @@ import silverchain.internal.middleware.graph.data.GraphWalker;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
+import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
 import silverchain.internal.middleware.graph.data.graph.collection.Nodes;
 
 class EpsClosure implements GraphListener {
@@ -18,7 +19,9 @@ class EpsClosure implements GraphListener {
     EpsClosure closure = new EpsClosure();
     Graph graph = new Graph();
     graph.sources(nodes);
-    new GraphWalker().walk(closure, graph);
+    Graphs graphs = new Graphs();
+    graphs.add(graph);
+    new GraphWalker().walk(closure, graphs);
     return closure.nodes;
   }
 
