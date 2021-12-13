@@ -1,24 +1,20 @@
 package silverchain.internal.middleware.graph.builder;
 
 import silverchain.internal.middleware.graph.Tracer;
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 
-public class GraphReplicator extends GraphVisitor {
+public class GraphReplicator implements GraphListener {
 
   protected final Tracer<Node> tracer = new Tracer<>();
 
   public void replicate(Graph graph) {}
 
   @Override
-  protected void visit(Node node) {
-    super.visit(node);
-  }
+  public void visit(Graph graph, Node node) {}
 
   @Override
-  protected void visit(Edge edge) {
-    super.visit(edge);
-  }
+  public void visit(Graph graph, Node source, Edge edge) {}
 }

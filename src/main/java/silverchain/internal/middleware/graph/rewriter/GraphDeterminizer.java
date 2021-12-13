@@ -7,17 +7,17 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
 import silverchain.internal.middleware.graph.Tracer;
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 import silverchain.internal.middleware.graph.data.graph.collection.Nodes;
 
-public class GraphDeterminizer extends GraphVisitor {
+public class GraphDeterminizer implements GraphListener {
 
   @Override
-  protected void enter(Graph graph) {
+  public void enter(Graph graph) {
     Graph g = remove(graph);
     graph.sources(g.sources());
     graph.targets(g.targets());

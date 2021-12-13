@@ -4,15 +4,16 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.TypeParameter;
 import silverchain.internal.middleware.graph.data.attribute.TypeReference;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
+import silverchain.internal.middleware.graph.data.graph.Node;
 
-public class ParamRefResolver extends GraphVisitor implements AttributeVisitor<Void, Void> {
+public class ParamRefResolver implements AttributeVisitor<Void, Void>, GraphListener {
 
   protected TypeParameters externalTypeParameters;
 
@@ -21,14 +22,14 @@ public class ParamRefResolver extends GraphVisitor implements AttributeVisitor<V
   protected TypeParameters methodTypeParameters;
 
   @Override
-  protected void enter(Graph graph) {
+  public void enter(Graph graph) {
     externalTypeParameters = graph.typeDeclaration().externalParameters();
     internalTypeParameters = graph.typeDeclaration().internalParameters();
     graph.typeDeclaration().accept(this, null);
   }
 
   @Override
-  protected void visit(Edge edge) {
+  public void visit(Graph graph, Node source, Edge edge) {
     if (edge.label() != null) edge.label().accept(this, null);
   }
 

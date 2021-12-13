@@ -1,10 +1,10 @@
 package silverchain.internal.middleware.java.builder;
 
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
 import silverchain.internal.middleware.java.data.CompilationUnits;
 
-public class GraphTranslator extends GraphVisitor {
+public class GraphTranslator implements GraphListener {
 
   private final PkgNameProvider pkgNameProvider;
 

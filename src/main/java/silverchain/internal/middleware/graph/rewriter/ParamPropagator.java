@@ -1,33 +1,33 @@
 package silverchain.internal.middleware.graph.rewriter;
 
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 import silverchain.internal.middleware.graph.data.graph.collection.Edges;
 
-public class ParamPropagator extends GraphVisitor {
+public class ParamPropagator implements GraphListener {
 
   @Override
-  protected void enter(Graph graph) {
+  public void enter(Graph graph) {
     graph.sources().forEach(node -> node.parameters(new TypeParameters()));
   }
 
   @Override
-  protected void visit(Node node) {
+  public void visit(Graph graph, Node node) {
     Edges edges = new Edges();
     edges.addAll(node.edges());
-    for (Edge edge : edges) visit(node, edge);
+    for (Edge edge : edges) propagate(graph, node, edge);
   }
 
-  private void visit(Node source, Edge edge) {
+  private void propagate(Graph graph, Node source, Edge edge) {
     Node target = edge.target();
     TypeParameters params = targetParams(source, edge);
     if (target.parameters() == null) {
       target.parameters(params);
     } else if (!target.parameters().equals(params)) {
-      Node copy = copy(edge.target());
+      Node copy = copy(graph, edge.target());
       copy.parameters(params);
       Edge e = new Edge();
       e.target(copy);
@@ -44,10 +44,10 @@ public class ParamPropagator extends GraphVisitor {
     return params;
   }
 
-  private Node copy(Node node) {
+  private Node copy(Graph graph, Node node) {
     Node copy = new Node();
-    if (graph().targets().contains(node)) {
-      graph().targets().add(copy);
+    if (graph.targets().contains(node)) {
+      graph.targets().add(copy);
     }
     for (Edge e : node.edges()) {
       Edge c = new Edge();

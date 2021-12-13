@@ -1,12 +1,12 @@
 package silverchain.internal.middleware.java.builder;
 
 import com.github.javaparser.ast.CompilationUnit;
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.TypeDeclaration;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 
-class UnitCreator extends GraphVisitor {
+class UnitCreator implements GraphListener {
 
   private final PkgNameProvider pkgNameProvider;
 
@@ -20,12 +20,12 @@ class UnitCreator extends GraphVisitor {
   }
 
   @Override
-  protected void visit(Node node) {
-    create(node, graph().typeDeclaration());
+  public void visit(Graph graph, Node node) {
+    create(node, graph.typeDeclaration());
   }
 
   @Override
-  protected void exit(Graph graph) {
+  public void exit(Graph graph) {
     // return units;
   }
 
