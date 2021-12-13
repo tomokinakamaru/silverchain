@@ -2,6 +2,7 @@ grammar Ag;
 
 @header {
 package silverchain.internal.frontend.parser.antlr;
+import org.apiguardian.api.API;
 }
 
 input: (importDecl | fragmentDecl | typeDecl)* EOF ;
