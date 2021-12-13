@@ -14,7 +14,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
 
 @API(status = API.Status.INTERNAL)
-public class FragmentExpander extends AgBaseListener {
+public class FragmentResolver extends AgBaseListener {
 
   protected final Map<String, ChainExprContext> fragments = new HashMap<>();
 

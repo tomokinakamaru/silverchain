@@ -1,4 +1,4 @@
-package internal.frontend.parser;
+package internal.frontend;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

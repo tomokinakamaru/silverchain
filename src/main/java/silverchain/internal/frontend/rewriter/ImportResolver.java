@@ -15,7 +15,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
 
 @API(status = API.Status.INTERNAL)
-public class ImportExpander extends AgBaseListener {
+public class ImportResolver extends AgBaseListener {
 
   protected final Map<String, NameContext> imports = new HashMap<>();
 
