@@ -1,9 +1,11 @@
 package silverchain.internal.middleware.graph.data.attribute;
 
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 
+@API(status = API.Status.INTERNAL)
 public class TypeDeclaration implements Attribute {
 
   private Name name;

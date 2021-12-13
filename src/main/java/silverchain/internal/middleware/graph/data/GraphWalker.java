@@ -6,12 +6,14 @@ import java.util.LinkedList;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Set;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
 import silverchain.internal.middleware.graph.data.graph.collection.Nodes;
 
+@API(status = API.Status.INTERNAL)
 public class GraphWalker {
 
   protected Queue<Entry<Node, Edge>> queue;

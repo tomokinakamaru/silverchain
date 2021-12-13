@@ -1,8 +1,10 @@
 package silverchain.internal.middleware.graph.data.graph;
 
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 import silverchain.internal.middleware.graph.data.graph.collection.Edges;
 
+@API(status = API.Status.INTERNAL)
 public class Node {
 
   private Edges edges = new Edges();

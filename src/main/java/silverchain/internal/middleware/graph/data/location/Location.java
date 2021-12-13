@@ -1,5 +1,8 @@
 package silverchain.internal.middleware.graph.data.location;
 
+import org.apiguardian.api.API;
+
+@API(status = API.Status.INTERNAL)
 public class Location {
 
   private int line;

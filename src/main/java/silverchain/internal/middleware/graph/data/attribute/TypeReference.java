@@ -1,9 +1,11 @@
 package silverchain.internal.middleware.graph.data.attribute;
 
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeArguments;
 
+@API(status = API.Status.INTERNAL)
 public class TypeReference extends TypeArgument {
 
   private Name name;
