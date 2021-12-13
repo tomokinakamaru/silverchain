@@ -1,7 +1,9 @@
 package silverchain.internal.middleware.graph.data.graph;
 
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 
+@API(status = API.Status.INTERNAL)
 public class Edge {
 
   private Node target;

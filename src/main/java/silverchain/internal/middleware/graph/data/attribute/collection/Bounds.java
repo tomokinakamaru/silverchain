@@ -1,8 +1,10 @@
 package silverchain.internal.middleware.graph.data.attribute.collection;
 
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 import silverchain.internal.middleware.graph.data.attribute.TypeReference;
 
+@API(status = API.Status.INTERNAL)
 public class Bounds extends Attributes<TypeReference> {
 
   @Override

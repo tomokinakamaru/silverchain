@@ -3,11 +3,13 @@ package silverchain.internal.middleware.graph.data;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.function.Predicate;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
 
+@API(status = API.Status.INTERNAL)
 public interface GraphListener {
 
   default Comparator<Node> nodeComparator() {

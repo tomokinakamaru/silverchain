@@ -1,8 +1,10 @@
 package silverchain.internal.middleware.graph.data.attribute;
 
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 
+@API(status = API.Status.INTERNAL)
 public class Name implements Attribute {
 
   private String id;

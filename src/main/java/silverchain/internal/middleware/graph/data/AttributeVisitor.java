@@ -2,6 +2,7 @@ package silverchain.internal.middleware.graph.data;
 
 import java.util.Iterator;
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.attribute.Attribute;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
@@ -17,6 +18,7 @@ import silverchain.internal.middleware.graph.data.attribute.collection.Parameter
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeArguments;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 
+@API(status = API.Status.INTERNAL)
 public interface AttributeVisitor<R, A> {
 
   default R visit(Method method, A arg) {
