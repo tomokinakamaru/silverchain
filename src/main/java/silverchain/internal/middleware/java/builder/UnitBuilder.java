@@ -2,7 +2,7 @@ package silverchain.internal.middleware.java.builder;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
-import silverchain.internal.middleware.graph.data.GraphVisitor;
+import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.ReturnType;
@@ -10,7 +10,7 @@ import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 
-class UnitBuilder extends GraphVisitor {
+class UnitBuilder implements GraphListener {
 
   private final NodeUnits units;
 
@@ -19,13 +19,13 @@ class UnitBuilder extends GraphVisitor {
   }
 
   @Override
-  protected void visit(Node node) {
+  public void visit(Graph graph, Node node) {
     ClassOrInterfaceDeclaration decl = units.get(node);
     if (decl != null) build(node, decl);
   }
 
   @Override
-  protected void exit(Graph graph) {
+  public void exit(Graph graph) {
     // return units.get();
   }
 
