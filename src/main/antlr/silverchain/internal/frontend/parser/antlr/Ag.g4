@@ -2,7 +2,6 @@ grammar Ag;
 
 @header {
 package silverchain.internal.frontend.parser.antlr;
-import org.antlr.v4.runtime.Parser;
 }
 
 input: (importDecl | fragmentDecl | typeDecl)* EOF ;
