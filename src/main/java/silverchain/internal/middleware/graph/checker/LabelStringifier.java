@@ -17,8 +17,6 @@ import silverchain.internal.middleware.graph.data.attribute.collection.TypeParam
 
 public class LabelStringifier implements AttributeVisitor<String, Void> {
 
-  public LabelStringifier() {}
-
   @Override
   public String visit(Method method, Void arg) {
     return AttributeVisitor.super.visit(method, arg);

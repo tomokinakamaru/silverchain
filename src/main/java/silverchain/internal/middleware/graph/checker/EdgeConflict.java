@@ -14,8 +14,7 @@ public class EdgeConflict extends SilverchainException {
   }
 
   protected static String stringify(List<Label> labels) {
-    return labels.stream()
-        .map(l -> l.accept(new LabelStringifier(), null))
-        .collect(Collectors.joining("; "));
+    LabelStringifier stringifier = new LabelStringifier();
+    return labels.stream().map(l -> l.accept(stringifier, null)).collect(Collectors.joining("; "));
   }
 }
