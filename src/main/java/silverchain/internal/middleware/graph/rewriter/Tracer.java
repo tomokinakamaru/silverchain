@@ -1,4 +1,4 @@
-package silverchain.internal.middleware.graph;
+package silverchain.internal.middleware.graph.rewriter;
 
 import java.util.HashMap;
 import java.util.Map;

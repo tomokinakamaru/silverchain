@@ -18,30 +18,30 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
 
   @Override
   public Graph visitTypeDecl(TypeDeclContext ctx) {
-    Graph g = super.visitTypeDecl(ctx);
-    g.typeDeclaration(AttributeBuilder.build(ctx));
-    return g;
+    Graph graph = super.visitTypeDecl(ctx);
+    graph.typeDeclaration(AttributeBuilder.build(ctx));
+    return graph;
   }
 
   @Override
   public Graph visitChainStmts(ChainStmtsContext ctx) {
     return ctx.chainStmt().stream()
-        .map(c -> c.accept(this))
+        .map(this::visitChainStmt)
         .reduce(GraphBuilder::union)
         .orElseThrow(RuntimeException::new);
   }
 
   @Override
   public Graph visitChainStmt(ChainStmtContext ctx) {
-    Graph g1 = visitChainExpr(ctx.chainExpr());
-    Graph g2 = atom(AttributeBuilder.build(ctx.returnType()));
-    return concat(g1, g2);
+    Graph graph1 = visitChainExpr(ctx.chainExpr());
+    Graph graph2 = atom(AttributeBuilder.build(ctx.returnType()));
+    return concat(graph1, graph2);
   }
 
   @Override
   public Graph visitChainExpr(ChainExprContext ctx) {
     return ctx.chainTerm().stream()
-        .map(c -> c.accept(this))
+        .map(this::visitChainTerm)
         .reduce(GraphBuilder::union)
         .orElseThrow(RuntimeException::new);
   }
@@ -49,18 +49,18 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   @Override
   public Graph visitChainTerm(ChainTermContext ctx) {
     return ctx.chainFact().stream()
-        .map(c -> c.accept(this))
+        .map(this::visitChainFact)
         .reduce(GraphBuilder::concat)
         .orElseThrow(RuntimeException::new);
   }
 
   @Override
   public Graph visitChainFact(ChainFactContext ctx) {
-    Graph g = visitChainElem(ctx.chainElem());
-    if (ctx.repeatSugar().ZERO_MORE != null) return repeat0(g);
-    if (ctx.repeatSugar().ONE_MORE != null) return repeat1(g);
-    if (ctx.repeatSugar().ZERO_ONE != null) return optional(g);
-    return g;
+    Graph graph = super.visitChainFact(ctx);
+    if (ctx.ONE_MORE != null) return oneMore(graph);
+    if (ctx.ZERO_ONE != null) return zeroOne(graph);
+    if (ctx.ZERO_MORE != null) return zeroMore(graph);
+    return graph;
   }
 
   @Override
@@ -68,7 +68,7 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
     return atom(AttributeBuilder.build(ctx));
   }
 
-  public static Graph atom(Label label) {
+  protected static Graph atom(Label label) {
     Graph graph = new Graph();
     Node source = new Node();
     Node target = new Node();
@@ -81,33 +81,33 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
     return graph;
   }
 
-  public static Graph repeat0(Graph graph) {
-    return optional(repeat1(graph));
-  }
-
-  public static Graph repeat1(Graph graph) {
+  protected static Graph oneMore(Graph graph) {
     fuse(graph.targets(), graph.sources());
     return graph;
   }
 
-  public static Graph optional(Graph graph) {
+  protected static Graph zeroOne(Graph graph) {
     fuse(graph.sources(), graph.targets());
     return graph;
   }
 
-  public static Graph concat(Graph graph1, Graph graph2) {
+  protected static Graph zeroMore(Graph graph) {
+    return zeroOne(oneMore(graph));
+  }
+
+  protected static Graph concat(Graph graph1, Graph graph2) {
     fuse(graph1.targets(), graph2.sources());
     graph1.targets(graph2.targets());
     return graph1;
   }
 
-  public static Graph union(Graph graph1, Graph graph2) {
+  protected static Graph union(Graph graph1, Graph graph2) {
     graph1.sources().addAll(graph2.sources());
     graph1.targets().addAll(graph2.targets());
     return graph1;
   }
 
-  private static void fuse(Nodes sources, Nodes targets) {
+  protected static void fuse(Nodes sources, Nodes targets) {
     for (Node source : sources) {
       for (Node target : targets) {
         Edge edge = new Edge();
