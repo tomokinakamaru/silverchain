@@ -1,6 +1,8 @@
 package silverchain.internal.middleware.graph.builder;
 
 import java.util.stream.Collectors;
+
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgParser.BoundsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ExceptionsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.MethodContext;
@@ -30,6 +32,7 @@ import silverchain.internal.middleware.graph.data.attribute.collection.Parameter
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeArguments;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 
+@API(status = API.Status.INTERNAL)
 public final class AttributeBuilder {
 
   private AttributeBuilder() {}
