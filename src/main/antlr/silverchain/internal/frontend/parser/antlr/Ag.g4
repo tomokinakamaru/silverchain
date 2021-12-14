@@ -27,9 +27,9 @@ chainElem: method | permutation | fragmentRef | '(' chainExpr ')' ;
 
 returnType: typeRef ;
 
-repeat: ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' ;
+repeat: '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
 
-repeatSugar: '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
+repeatSugar: ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' ;
 
 permutation: '{' chainExpr (',' chainExpr)* ','? '}';
 

@@ -73,35 +73,35 @@ class AntlrParserTests {
         args(
             AgParser::chainFact,
             "foo()*",
-            "(chainFact (chainElem (method foo ( ))) (repeat *))"),
+            "(chainFact (chainElem (method foo ( ))) (repeatSugar *))"),
         args(
             AgParser::returnType,
             "Foo",
             "(returnType (typeRef (name Foo)))"),
         args(
-            AgParser::repeat,
+            AgParser::repeatSugar,
             "*",
-            "(repeat *)"),
+            "(repeatSugar *)"),
         args(
-            AgParser::repeat,
+            AgParser::repeatSugar,
             "?",
-            "(repeat ?)"),
+            "(repeatSugar ?)"),
+        args(
+            AgParser::repeatSugar,
+            "+",
+            "(repeatSugar +)"),
         args(
             AgParser::repeat,
-            "+",
-            "(repeat +)"),
-        args(
-            AgParser::repeatSugar,
             "[1]",
-            "(repeatSugar [ 1 ])"),
+            "(repeat [ 1 ])"),
         args(
-            AgParser::repeatSugar,
+            AgParser::repeat,
             "[1,]",
-            "(repeatSugar [ 1 , ])"),
+            "(repeat [ 1 , ])"),
         args(
-            AgParser::repeatSugar,
+            AgParser::repeat,
             "[1,2]",
-            "(repeatSugar [ 1 , 2 ])"),
+            "(repeat [ 1 , 2 ])"),
         args(
             AgParser::permutation,
             "{ foo() }",
