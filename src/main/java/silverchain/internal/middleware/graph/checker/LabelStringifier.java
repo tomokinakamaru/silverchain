@@ -1,6 +1,7 @@
 package silverchain.internal.middleware.graph.checker;
 
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
@@ -15,6 +16,7 @@ import silverchain.internal.middleware.graph.data.attribute.collection.Parameter
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeArguments;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
 
+@API(status = API.Status.INTERNAL)
 public class LabelStringifier implements AttributeVisitor<String, Void> {
 
   @Override
