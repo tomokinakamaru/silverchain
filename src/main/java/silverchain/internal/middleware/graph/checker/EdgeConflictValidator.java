@@ -2,6 +2,7 @@ package silverchain.internal.middleware.graph.checker;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.GraphListener;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.attribute.Method;
@@ -9,6 +10,7 @@ import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 
+@API(status = API.Status.INTERNAL)
 public class EdgeConflictValidator implements GraphListener {
 
   @Override
