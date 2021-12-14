@@ -61,7 +61,9 @@ class CheckerTests {
           "Foo { Foo foo()[0,0]; }",
           new ZeroRepeatChecker(),
           ZeroRepeat.class,
-          "Max is zero (L1C16)")
+          "Max is zero (L1C16)"),
+      Arguments.of(
+          "Foo { Foo foo()[0]; }", new ZeroRepeatChecker(), ZeroRepeat.class, "Max is zero (L1C16)")
     };
   }
 
