@@ -36,7 +36,7 @@ public class GraphWalker {
       Node source = entry.getKey();
       Node target = edge.target();
       listener.visit(graph, source, edge);
-      if (!visited.contains(target)) {
+      if (!visited.contains(target) && listener.nodeFilter().test(target)) {
         visited.add(target);
         visit(listener, graph, target).forEach(queue::add);
       }
@@ -45,6 +45,7 @@ public class GraphWalker {
 
   protected Stream<Entry> visit(GraphListener listener, Graph graph, Nodes nodes) {
     return nodes.stream()
+        .filter(listener.nodeFilter())
         .sorted(listener.nodeComparator())
         .flatMap(node -> visit(listener, graph, node));
   }
