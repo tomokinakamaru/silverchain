@@ -21,15 +21,13 @@ chainExpr: chainTerm ('|' chainTerm)* ;
 
 chainTerm: chainFact+ ;
 
-chainFact: chainElem (repeat | repeatSugar)? ;
+chainFact: chainElem (ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' | repeat)? ;
 
 chainElem: method | permutation | fragmentRef | '(' chainExpr ')' ;
 
 returnType: typeRef ;
 
 repeat: '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
-
-repeatSugar: ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' ;
 
 permutation: '{' chainExpr (',' chainExpr)* ','? '}';
 

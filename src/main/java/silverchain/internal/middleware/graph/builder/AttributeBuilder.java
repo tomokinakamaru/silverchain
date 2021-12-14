@@ -1,7 +1,6 @@
 package silverchain.internal.middleware.graph.builder;
 
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.Token;
 import silverchain.internal.frontend.parser.antlr.AgParser.BoundsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ExceptionsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.MethodContext;
@@ -16,7 +15,6 @@ import silverchain.internal.frontend.parser.antlr.AgParser.TypeParamContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeParamsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.WildcardContext;
-import silverchain.internal.frontend.rewriter.VirtualToken;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
 import silverchain.internal.middleware.graph.data.attribute.Parameter;
@@ -31,8 +29,6 @@ import silverchain.internal.middleware.graph.data.attribute.collection.Exception
 import silverchain.internal.middleware.graph.data.attribute.collection.Parameters;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeArguments;
 import silverchain.internal.middleware.graph.data.attribute.collection.TypeParameters;
-import silverchain.internal.middleware.graph.data.location.Location;
-import silverchain.internal.middleware.graph.data.location.Locations;
 
 public final class AttributeBuilder {
 
@@ -45,7 +41,7 @@ public final class AttributeBuilder {
     method.typeParameters(build(ctx.typeParams()));
     method.parameters(build(ctx.params()));
     method.exceptions(build(ctx.exceptions()));
-    method.locations(build(ctx.start));
+    method.locations(LocationBuilder.build(ctx.start));
     return method;
   }
 
@@ -70,7 +66,7 @@ public final class AttributeBuilder {
     if (ctx == null) return null;
     ReturnType returnType = new ReturnType();
     returnType.type(build(ctx.typeRef()));
-    returnType.locations(build(ctx.start));
+    returnType.locations(LocationBuilder.build(ctx.start));
     return returnType;
   }
 
@@ -146,17 +142,5 @@ public final class AttributeBuilder {
     return ctx.typeParam().stream()
         .map(AttributeBuilder::build)
         .collect(Collectors.toCollection(TypeParameters::new));
-  }
-
-  public static Locations build(Token token) {
-    Locations locations = new Locations();
-    Location location = new Location();
-    location.line(token.getLine());
-    location.column(token.getCharPositionInLine());
-    if (token instanceof VirtualToken) {
-      VirtualToken v = (VirtualToken) token;
-      locations.addAll(build(v.subToken()));
-    }
-    return locations;
   }
 }
