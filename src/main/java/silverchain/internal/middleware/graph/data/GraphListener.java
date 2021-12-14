@@ -16,6 +16,10 @@ public interface GraphListener {
     return Comparator.comparing(Objects::hashCode);
   }
 
+  default Predicate<Node> nodeFilter() {
+    return node -> true;
+  }
+
   default Comparator<Edge> edgeComparator() {
     return Comparator.comparing(Objects::hashCode);
   }
