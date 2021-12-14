@@ -57,9 +57,9 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   @Override
   public Graph visitChainFact(ChainFactContext ctx) {
     Graph g = visitChainElem(ctx.chainElem());
-    if (ctx.repeat().ZERO_MORE != null) return repeat0(g);
-    if (ctx.repeat().ONE_MORE != null) return repeat1(g);
-    if (ctx.repeat().ZERO_ONE != null) return optional(g);
+    if (ctx.repeatSugar().ZERO_MORE != null) return repeat0(g);
+    if (ctx.repeatSugar().ONE_MORE != null) return repeat1(g);
+    if (ctx.repeatSugar().ZERO_ONE != null) return optional(g);
     return g;
   }
 
