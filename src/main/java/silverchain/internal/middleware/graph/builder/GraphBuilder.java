@@ -1,5 +1,6 @@
 package silverchain.internal.middleware.graph.builder;
 
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgBaseVisitor;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainFactContext;
@@ -14,6 +15,7 @@ import silverchain.internal.middleware.graph.data.graph.Graph;
 import silverchain.internal.middleware.graph.data.graph.Node;
 import silverchain.internal.middleware.graph.data.graph.collection.Nodes;
 
+@API(status = API.Status.INTERNAL)
 public class GraphBuilder extends AgBaseVisitor<Graph> {
 
   @Override

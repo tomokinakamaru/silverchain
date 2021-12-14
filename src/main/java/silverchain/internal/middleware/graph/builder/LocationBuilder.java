@@ -1,10 +1,12 @@
 package silverchain.internal.middleware.graph.builder;
 
 import org.antlr.v4.runtime.Token;
+import org.apiguardian.api.API;
 import silverchain.internal.frontend.rewriter.VirtualToken;
 import silverchain.internal.middleware.graph.data.location.Location;
 import silverchain.internal.middleware.graph.data.location.Locations;
 
+@API(status = API.Status.INTERNAL)
 public final class LocationBuilder {
 
   private LocationBuilder() {}
