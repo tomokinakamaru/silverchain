@@ -196,9 +196,9 @@ class AntlrParserTest {
             "foo.foo",
             "(name (qualifier foo .) foo)"),
         args(
-            AgParser::name,
-            "foo.foo.foo",
-            "(name (qualifier foo . foo .) foo)"),
+            AgParser::qualifier,
+            "foo.foo.",
+            "(qualifier foo . foo .)")
     };
     // @formatter:on
   }

@@ -14,7 +14,7 @@ class AgParserErrorTest {
 
   private static Arguments[] data() {
     return new Arguments[] {
-      Arguments.of("!", "Syntax error: token recognition error at: '!' (L1C1)")
+      Arguments.of("!", "Syntax error: Token recognition error at: '!' (L1C1)")
     };
   }
 

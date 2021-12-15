@@ -13,6 +13,6 @@ public class SyntaxError extends SilverchainException {
   }
 
   protected static String capitalize(String message) {
-    return message.substring(0, 1).toLowerCase() + message.substring(1);
+    return message.substring(0, 1).toUpperCase() + message.substring(1);
   }
 }
