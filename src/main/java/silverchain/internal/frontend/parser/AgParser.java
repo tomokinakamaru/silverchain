@@ -21,7 +21,7 @@ public class AgParser {
     return lexer;
   }
 
-  protected silverchain.internal.frontend.parser.antlr.AgParser parser(AgLexer lexer) {
+  protected AntlrParser parser(AgLexer lexer) {
     TokenStream stream = new CommonTokenStream(lexer);
     AntlrParser parser = new AntlrParser(stream);
     parser.removeErrorListeners();
