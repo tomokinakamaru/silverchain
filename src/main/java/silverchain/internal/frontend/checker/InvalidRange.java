@@ -7,9 +7,14 @@ import silverchain.internal.frontend.parser.antlr.AgParser.RepeatContext;
 @API(status = API.Status.INTERNAL)
 public class InvalidRange extends SilverchainException {
 
-  protected static final String FORMAT = "min > max (L%dC%d)";
+  protected static final String FORMAT = "min=%s > max=%s (L%dC%d)";
 
   public InvalidRange(RepeatContext ctx) {
-    super(FORMAT, ctx.start.getLine(), ctx.start.getCharPositionInLine() + 1);
+    super(
+        FORMAT,
+        ctx.MIN.getText(),
+        ctx.MAX.getText(),
+        ctx.start.getLine(),
+        ctx.start.getCharPositionInLine() + 1);
   }
 }
