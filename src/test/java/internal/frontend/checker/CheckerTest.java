@@ -1,4 +1,4 @@
-package internal.frontend;
+package internal.frontend.checker;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -23,7 +23,7 @@ import silverchain.internal.frontend.parser.AgParser;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
-class CheckerTests {
+class CheckerTest {
 
   private static Arguments[] testData() {
     return new Arguments[] {
@@ -58,12 +58,15 @@ class CheckerTests {
           UndefinedFragment.class,
           "Undefined fragment $FOO (L1C11)"),
       Arguments.of(
-          "Foo { Foo foo()[0,0]; }",
+          "Foo { Foo foo()[0]; }",
           new ZeroRepeatChecker(),
           ZeroRepeat.class,
           "Max is zero (L1C16)"),
       Arguments.of(
-          "Foo { Foo foo()[0]; }", new ZeroRepeatChecker(), ZeroRepeat.class, "Max is zero (L1C16)")
+          "Foo { Foo foo()[0,0]; }",
+          new ZeroRepeatChecker(),
+          ZeroRepeat.class,
+          "Max is zero (L1C16)")
     };
   }
 
