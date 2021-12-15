@@ -25,38 +25,38 @@ import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
 class CheckerTest {
 
-  private static Arguments[] testData() {
+  private static Arguments[] data() {
     return new Arguments[] {
       Arguments.of(
           "$FOO = foo(); $FOO = foo();",
           new DuplicateFragmentChecker(),
           DuplicateFragment.class,
-          "Duplicate fragment (L1C1 and L1C15)"),
+          "Duplicate fragment: $FOO (L1C1 and L1C15)"),
       Arguments.of(
           "Foo { Foo foo(); } Foo { Foo foo(); }",
           new DuplicateTypeChecker(),
           DuplicateType.class,
-          "Duplicate type declaration (L1C1 and L1C20)"),
+          "Duplicate type declaration: Foo (L1C1 and L1C20)"),
       Arguments.of(
           "foo.Foo { Foo foo(); } foo.Foo { Foo foo(); }",
           new DuplicateTypeChecker(),
           DuplicateType.class,
-          "Duplicate type declaration (L1C1 and L1C24)"),
+          "Duplicate type declaration: foo.Foo (L1C1 and L1C24)"),
       Arguments.of(
           "import foo.Foo; import bar.Foo;",
           new ImportConflictChecker(),
           ImportConflict.class,
-          "Import conflict (L1C1 and L1C17)"),
+          "Import conflict: Foo (L1C1 and L1C17)"),
       Arguments.of(
           "Foo { Foo foo()[2,1]; }",
           new InvalidRangeChecker(),
           InvalidRange.class,
-          "min > max (L1C16)"),
+          "min=2 > max=1 (L1C16)"),
       Arguments.of(
           "Foo { Foo $FOO; }",
           new UndefinedFragmentChecker(),
           UndefinedFragment.class,
-          "Undefined fragment $FOO (L1C11)"),
+          "Undefined fragment: $FOO (L1C11)"),
       Arguments.of(
           "Foo { Foo foo()[0]; }",
           new ZeroRepeatChecker(),
@@ -71,7 +71,7 @@ class CheckerTest {
   }
 
   @ParameterizedTest(name = "[{index}] \"{0}\" -> \"{3}\"")
-  @MethodSource("testData")
+  @MethodSource("data")
   void test(String text, AgBaseListener listener, Class<?> cls, String message) {
     InputContext ctx = new AgParser().parse(CharStreams.fromString(text));
     assertThatThrownBy(() -> ParseTreeWalker.DEFAULT.walk(listener, ctx))
