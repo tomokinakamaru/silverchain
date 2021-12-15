@@ -7,6 +7,7 @@ import silverchain.internal.middleware.graph.data.attribute.Attribute;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
 import silverchain.internal.middleware.graph.data.attribute.Parameter;
+import silverchain.internal.middleware.graph.data.attribute.Qualifier;
 import silverchain.internal.middleware.graph.data.attribute.ReturnType;
 import silverchain.internal.middleware.graph.data.attribute.TypeDeclaration;
 import silverchain.internal.middleware.graph.data.attribute.TypeParameter;
@@ -31,6 +32,10 @@ public interface AttributeVisitor<R, A> {
 
   default R visit(Parameter parameter, A arg) {
     return visit(parameter.children(), arg);
+  }
+
+  default R visit(Qualifier qualifier, A arg) {
+    return visit(qualifier.children(), arg);
   }
 
   default R visit(ReturnType returnType, A arg) {

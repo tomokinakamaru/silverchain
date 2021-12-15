@@ -6,6 +6,7 @@ import silverchain.internal.middleware.graph.data.AttributeVisitor;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
 import silverchain.internal.middleware.graph.data.attribute.Parameter;
+import silverchain.internal.middleware.graph.data.attribute.Qualifier;
 import silverchain.internal.middleware.graph.data.attribute.ReturnType;
 import silverchain.internal.middleware.graph.data.attribute.TypeParameter;
 import silverchain.internal.middleware.graph.data.attribute.TypeReference;
@@ -26,7 +27,7 @@ public class LabelStringifier implements AttributeVisitor<String, Void> {
 
   @Override
   public String visit(Name name, Void arg) {
-    Name q = name.qualifier();
+    Qualifier q = name.qualifier();
     return q == null ? name.id() : q.accept(this, arg) + "." + name.id();
   }
 
@@ -34,6 +35,11 @@ public class LabelStringifier implements AttributeVisitor<String, Void> {
   public String visit(Parameter parameter, Void arg) {
     String s = AttributeVisitor.super.visit(parameter, arg);
     return s + (parameter.varargs() ? "... " : " ") + parameter.name();
+  }
+
+  @Override
+  public String visit(Qualifier qualifier, Void arg) {
+    return String.join(".", qualifier.ids());
   }
 
   @Override

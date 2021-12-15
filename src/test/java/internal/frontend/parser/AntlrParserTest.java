@@ -12,7 +12,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import silverchain.internal.frontend.parser.antlr.AgLexer;
 import silverchain.internal.frontend.parser.antlr.AgParser;
 
-class AntlrParserTests {
+class AntlrParserTest {
 
   private static Arguments[] data() {
     // @formatter:off
@@ -194,11 +194,11 @@ class AntlrParserTests {
         args(
             AgParser::name,
             "foo.foo",
-            "(name (name foo) . foo)"),
+            "(name (qualifier foo .) foo)"),
         args(
             AgParser::name,
             "foo.foo.foo",
-            "(name (name (name foo) . foo) . foo)"),
+            "(name (qualifier foo . foo .) foo)"),
     };
     // @formatter:on
   }

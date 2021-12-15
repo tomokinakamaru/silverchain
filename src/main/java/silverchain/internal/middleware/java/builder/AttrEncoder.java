@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
 import silverchain.internal.middleware.graph.data.attribute.Parameter;
+import silverchain.internal.middleware.graph.data.attribute.Qualifier;
 import silverchain.internal.middleware.graph.data.attribute.ReturnType;
 import silverchain.internal.middleware.graph.data.attribute.TypeArgument;
 import silverchain.internal.middleware.graph.data.attribute.TypeParameter;
@@ -62,6 +63,18 @@ class AttrEncoder {
     p.setVarArgs(parameter.varargs());
     p.setName(parameter.name());
     return p;
+  }
+
+  public static com.github.javaparser.ast.expr.Name encode(Qualifier qualifier) {
+    if (qualifier == null) return null;
+    com.github.javaparser.ast.expr.Name name = null;
+    for (String id : qualifier.ids()) {
+      com.github.javaparser.ast.expr.Name n = new com.github.javaparser.ast.expr.Name();
+      n.setIdentifier(id);
+      n.setQualifier(name);
+      name = n;
+    }
+    return name;
   }
 
   private static NodeList<com.github.javaparser.ast.body.Parameter> encode(Parameters parameters) {
