@@ -55,7 +55,9 @@ typeParam: ID bounds? ;
 
 bounds: 'extends' typeRef ('&' typeRef)* ;
 
-name: ID | name '.' ID ;
+name: qualifier? ID ;
+
+qualifier: (ID '.')+ ;
 
 ID: [a-zA-Z_][a-zA-Z0-9_]* ;
 

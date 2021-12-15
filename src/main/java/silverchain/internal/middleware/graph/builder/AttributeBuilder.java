@@ -1,6 +1,7 @@
 package silverchain.internal.middleware.graph.builder;
 
 import java.util.stream.Collectors;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.parser.antlr.AgParser.BoundsContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ExceptionsContext;
@@ -8,6 +9,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser.MethodContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ParamContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ParamsContext;
+import silverchain.internal.frontend.parser.antlr.AgParser.QualifierContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ReturnTypeContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeArgContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeArgsContext;
@@ -19,6 +21,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser.WildcardContext;
 import silverchain.internal.middleware.graph.data.attribute.Method;
 import silverchain.internal.middleware.graph.data.attribute.Name;
 import silverchain.internal.middleware.graph.data.attribute.Parameter;
+import silverchain.internal.middleware.graph.data.attribute.Qualifier;
 import silverchain.internal.middleware.graph.data.attribute.ReturnType;
 import silverchain.internal.middleware.graph.data.attribute.TypeArgument;
 import silverchain.internal.middleware.graph.data.attribute.TypeDeclaration;
@@ -51,7 +54,7 @@ public final class AttributeBuilder {
     if (ctx == null) return null;
     Name name = new Name();
     name.id(ctx.ID().getText());
-    name.qualifier(build(ctx.name()));
+    name.qualifier(build(ctx.qualifier()));
     return name;
   }
 
@@ -62,6 +65,13 @@ public final class AttributeBuilder {
     parameter.varargs(ctx.ELLIPSIS != null);
     parameter.name(ctx.ID().getText());
     return parameter;
+  }
+
+  public static Qualifier build(QualifierContext ctx) {
+    if (ctx == null) return null;
+    Qualifier qualifier = new Qualifier();
+    ctx.ID().stream().map(ParseTree::getText).forEach(qualifier.ids()::add);
+    return qualifier;
   }
 
   public static ReturnType build(ReturnTypeContext ctx) {

@@ -1,35 +1,27 @@
 package silverchain.internal.middleware.graph.data.attribute;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.internal.middleware.graph.data.AttributeVisitor;
 
 @API(status = API.Status.INTERNAL)
-public class Name implements Attribute {
+public class Qualifier implements Attribute {
 
-  private String id;
+  private List<String> ids = new ArrayList<>();
 
-  private Qualifier qualifier;
-
-  public String id() {
-    return id;
+  public List<String> ids() {
+    return ids;
   }
 
-  public void id(String id) {
-    this.id = id;
-  }
-
-  public Qualifier qualifier() {
-    return qualifier;
-  }
-
-  public void qualifier(Qualifier qualifier) {
-    this.qualifier = qualifier;
+  public void ids(List<String> ids) {
+    this.ids = ids;
   }
 
   @Override
   public Stream<? extends Attribute> children() {
-    return Stream.of(qualifier);
+    return Stream.empty();
   }
 
   @Override
