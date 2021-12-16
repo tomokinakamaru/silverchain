@@ -1,4 +1,4 @@
-package silverchain.internal.frontend.rewriter;
+package silverchain.internal.frontend.data;
 
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.Token;
