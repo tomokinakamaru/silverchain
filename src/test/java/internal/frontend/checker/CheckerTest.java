@@ -1,9 +1,9 @@
 package internal.frontend.checker;
 
+import static internal.utility.Functions.parse;
+import static internal.utility.Functions.walk;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -19,9 +19,7 @@ import silverchain.internal.frontend.checker.UndefinedFragment;
 import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeat;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
-import silverchain.internal.frontend.parser.AgParser;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
-import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
 class CheckerTest {
 
@@ -73,8 +71,7 @@ class CheckerTest {
   @ParameterizedTest(name = "[{index}] \"{0}\" -> \"{3}\"")
   @MethodSource("data")
   void test(String text, AgBaseListener listener, Class<?> cls, String message) {
-    InputContext ctx = new AgParser().parse(CharStreams.fromString(text));
-    assertThatThrownBy(() -> ParseTreeWalker.DEFAULT.walk(listener, ctx))
+    assertThatThrownBy(() -> walk(listener, parse(text)))
         .isExactlyInstanceOf(cls)
         .hasMessage(message);
   }
