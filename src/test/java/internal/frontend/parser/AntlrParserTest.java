@@ -1,15 +1,14 @@
 package internal.frontend.parser;
 
+import static internal.utility.Functions.args;
+import static internal.utility.Functions.parser;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.function.Function;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.frontend.parser.antlr.AgLexer;
 import silverchain.internal.frontend.parser.antlr.AgParser;
 
 class AntlrParserTest {
@@ -206,15 +205,8 @@ class AntlrParserTest {
   @ParameterizedTest(name = "[{index}] \"{1}\" ->\"{2}\"")
   @MethodSource("data")
   void test(Function<AgParser, ParserRuleContext> selector, String text, String expected) {
-    AgLexer lexer = new AgLexer(CharStreams.fromString(text));
-    AgParser parser = new AgParser(new CommonTokenStream(lexer));
+    AgParser parser = parser(text);
     ParserRuleContext ctx = selector.apply(parser);
     assertThat(ctx.toStringTree(parser)).isEqualTo(expected);
   }
-
-  private static Arguments args(Selector selector, String text, String expected) {
-    return Arguments.of(selector, text, expected);
-  }
-
-  private interface Selector extends Function<AgParser, ParserRuleContext> {}
 }
