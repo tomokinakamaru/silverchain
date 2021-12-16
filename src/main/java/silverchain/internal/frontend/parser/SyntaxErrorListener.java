@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 import org.apiguardian.api.API;
+import silverchain.internal.frontend.exception.SyntaxError;
 
 @API(status = API.Status.INTERNAL)
 public class SyntaxErrorListener extends BaseErrorListener {

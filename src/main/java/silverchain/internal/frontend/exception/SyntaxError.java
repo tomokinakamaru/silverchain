@@ -1,4 +1,4 @@
-package silverchain.internal.frontend.parser;
+package silverchain.internal.frontend.exception;
 
 import org.apiguardian.api.API;
 import silverchain.SilverchainException;

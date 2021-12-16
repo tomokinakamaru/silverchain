@@ -6,7 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.frontend.parser.SyntaxError;
+import silverchain.internal.frontend.exception.SyntaxError;
 
 class AgParserErrorTest {
 
