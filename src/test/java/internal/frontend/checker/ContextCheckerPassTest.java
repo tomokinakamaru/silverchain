@@ -14,7 +14,7 @@ import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 
-class CheckerPassTest {
+class ContextCheckerPassTest {
 
   private static Arguments[] data() {
     return new Arguments[] {
