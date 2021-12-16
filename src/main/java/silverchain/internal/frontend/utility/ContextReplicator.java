@@ -1,4 +1,4 @@
-package silverchain.internal.frontend.rewriter.utility;
+package silverchain.internal.frontend.utility;
 
 import java.util.ArrayList;
 import org.antlr.v4.runtime.ParserRuleContext;

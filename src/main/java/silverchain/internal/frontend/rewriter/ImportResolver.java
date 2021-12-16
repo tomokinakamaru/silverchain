@@ -8,8 +8,8 @@ import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
-import silverchain.internal.frontend.rewriter.utility.ContextReplicator;
-import silverchain.internal.frontend.rewriter.utility.ContextRewriter;
+import silverchain.internal.frontend.utility.ContextReplicator;
+import silverchain.internal.frontend.utility.ContextRewriter;
 
 @API(status = API.Status.INTERNAL)
 public class ImportResolver extends ContextRewriter {

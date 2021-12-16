@@ -12,7 +12,7 @@ import silverchain.internal.frontend.parser.antlr.AgParser;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.rewriter.FragmentResolver;
 import silverchain.internal.frontend.rewriter.ImportResolver;
-import silverchain.internal.frontend.rewriter.utility.ContextRewriter;
+import silverchain.internal.frontend.utility.ContextRewriter;
 
 class RewriterTest {
 

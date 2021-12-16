@@ -8,8 +8,8 @@ import silverchain.internal.frontend.parser.antlr.AgParser.ChainElemContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
-import silverchain.internal.frontend.rewriter.utility.ContextReplicator;
-import silverchain.internal.frontend.rewriter.utility.ContextRewriter;
+import silverchain.internal.frontend.utility.ContextReplicator;
+import silverchain.internal.frontend.utility.ContextRewriter;
 
 @API(status = API.Status.INTERNAL)
 public class FragmentResolver extends ContextRewriter {
