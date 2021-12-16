@@ -3,8 +3,10 @@ package silverchain.internal.frontend.checker;
 import java.util.HashMap;
 import java.util.Map;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.antlr.AgBaseListener;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.exception.DuplicateType;
+import silverchain.internal.frontend.utility.ContextStringifier;
 
 @API(status = API.Status.INTERNAL)
 public class DuplicateTypeChecker extends AgBaseListener {

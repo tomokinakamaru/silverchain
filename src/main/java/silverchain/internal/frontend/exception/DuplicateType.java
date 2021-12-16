@@ -1,8 +1,9 @@
-package silverchain.internal.frontend.checker;
+package silverchain.internal.frontend.exception;
 
 import org.apiguardian.api.API;
 import silverchain.SilverchainException;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.utility.ContextStringifier;
 
 @API(status = API.Status.INTERNAL)
 public class DuplicateType extends SilverchainException {

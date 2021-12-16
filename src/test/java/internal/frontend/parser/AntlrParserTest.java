@@ -9,7 +9,7 @@ import org.antlr.v4.runtime.ParserRuleContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.frontend.parser.antlr.AgParser;
+import silverchain.internal.frontend.antlr.AgParser;
 
 class AntlrParserTest {
 

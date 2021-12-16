@@ -3,8 +3,9 @@ package silverchain.internal.frontend.checker;
 import java.util.HashMap;
 import java.util.Map;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
-import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.frontend.antlr.AgBaseListener;
+import silverchain.internal.frontend.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.frontend.exception.DuplicateFragment;
 
 @API(status = API.Status.INTERNAL)
 public class DuplicateFragmentChecker extends AgBaseListener {

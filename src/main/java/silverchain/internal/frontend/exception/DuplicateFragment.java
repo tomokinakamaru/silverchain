@@ -1,8 +1,8 @@
-package silverchain.internal.frontend.checker;
+package silverchain.internal.frontend.exception;
 
 import org.apiguardian.api.API;
 import silverchain.SilverchainException;
-import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
+import silverchain.internal.frontend.antlr.AgParser.FragmentDeclContext;
 
 @API(status = API.Status.INTERNAL)
 public class DuplicateFragment extends SilverchainException {

@@ -1,7 +1,7 @@
 package silverchain.internal.middleware.graph;
 
 import java.util.stream.Collectors;
-import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
+import silverchain.internal.frontend.antlr.AgParser.InputContext;
 import silverchain.internal.middleware.graph.builder.GraphBuilder;
 import silverchain.internal.middleware.graph.checker.EdgeConflictValidator;
 import silverchain.internal.middleware.graph.data.GraphWalker;

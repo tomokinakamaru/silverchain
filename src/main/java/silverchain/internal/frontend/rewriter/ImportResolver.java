@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeRefContext;
+import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
+import silverchain.internal.frontend.antlr.AgParser.NameContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeRefContext;
 import silverchain.internal.frontend.utility.ContextReplicator;
 import silverchain.internal.frontend.utility.ContextRewriter;
 

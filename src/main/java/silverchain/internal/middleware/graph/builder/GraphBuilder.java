@@ -1,14 +1,14 @@
 package silverchain.internal.middleware.graph.builder;
 
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseVisitor;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainFactContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainStmtContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainStmtsContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainTermContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.MethodContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.antlr.AgBaseVisitor;
+import silverchain.internal.frontend.antlr.AgParser.ChainExprContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainFactContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainStmtContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainStmtsContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainTermContext;
+import silverchain.internal.frontend.antlr.AgParser.MethodContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;

@@ -7,19 +7,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.internal.frontend.checker.DuplicateFragment;
+import silverchain.internal.frontend.antlr.AgBaseListener;
 import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
-import silverchain.internal.frontend.checker.DuplicateType;
 import silverchain.internal.frontend.checker.DuplicateTypeChecker;
-import silverchain.internal.frontend.checker.ImportConflict;
 import silverchain.internal.frontend.checker.ImportConflictChecker;
-import silverchain.internal.frontend.checker.InvalidRange;
 import silverchain.internal.frontend.checker.InvalidRangeChecker;
-import silverchain.internal.frontend.checker.UndefinedFragment;
 import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
-import silverchain.internal.frontend.checker.ZeroRepeat;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
+import silverchain.internal.frontend.exception.DuplicateFragment;
+import silverchain.internal.frontend.exception.DuplicateType;
+import silverchain.internal.frontend.exception.ImportConflict;
+import silverchain.internal.frontend.exception.InvalidRange;
+import silverchain.internal.frontend.exception.UndefinedFragment;
+import silverchain.internal.frontend.exception.ZeroRepeat;
 
 class ContextCheckerTest {
 

@@ -3,6 +3,7 @@ package silverchain.internal.frontend;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apiguardian.api.API;
+import silverchain.internal.frontend.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
 import silverchain.internal.frontend.checker.DuplicateTypeChecker;
 import silverchain.internal.frontend.checker.ImportConflictChecker;
@@ -10,7 +11,6 @@ import silverchain.internal.frontend.checker.InvalidRangeChecker;
 import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
 import silverchain.internal.frontend.parser.AgParser;
-import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.rewriter.FragmentResolver;
 import silverchain.internal.frontend.rewriter.ImportResolver;
 

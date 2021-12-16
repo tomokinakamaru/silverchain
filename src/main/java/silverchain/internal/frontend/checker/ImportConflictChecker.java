@@ -3,8 +3,9 @@ package silverchain.internal.frontend.checker;
 import java.util.HashMap;
 import java.util.Map;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
-import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
+import silverchain.internal.frontend.antlr.AgBaseListener;
+import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
+import silverchain.internal.frontend.exception.ImportConflict;
 
 @API(status = API.Status.INTERNAL)
 public class ImportConflictChecker extends AgBaseListener {

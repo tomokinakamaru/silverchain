@@ -1,7 +1,7 @@
 grammar Ag;
 
 @header {
-package silverchain.internal.frontend.parser.antlr;
+package silverchain.internal.frontend.antlr;
 import org.apiguardian.api.API;
 }
 

@@ -1,9 +1,9 @@
-package silverchain.internal.frontend.checker;
+package silverchain.internal.frontend.utility;
 
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgParser.NameContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.QualifierContext;
+import silverchain.internal.frontend.antlr.AgParser.NameContext;
+import silverchain.internal.frontend.antlr.AgParser.QualifierContext;
 
 @API(status = API.Status.INTERNAL)
 public final class ContextStringifier {

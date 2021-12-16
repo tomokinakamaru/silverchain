@@ -1,8 +1,9 @@
 package silverchain.internal.frontend.checker;
 
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
-import silverchain.internal.frontend.parser.antlr.AgParser.RepeatContext;
+import silverchain.internal.frontend.antlr.AgBaseListener;
+import silverchain.internal.frontend.antlr.AgParser.RepeatContext;
+import silverchain.internal.frontend.exception.ZeroRepeat;
 
 @API(status = API.Status.INTERNAL)
 public class ZeroRepeatChecker extends AgBaseListener {

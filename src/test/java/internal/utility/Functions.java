@@ -5,9 +5,9 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import silverchain.internal.frontend.antlr.AgLexer;
+import silverchain.internal.frontend.antlr.AgParser.InputContext;
 import silverchain.internal.frontend.parser.AgParser;
-import silverchain.internal.frontend.parser.antlr.AgLexer;
-import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
 public class Functions {
 
@@ -15,9 +15,9 @@ public class Functions {
     return new AgParser().parse(CharStreams.fromString(text));
   }
 
-  public static silverchain.internal.frontend.parser.antlr.AgParser parser(String text) {
+  public static silverchain.internal.frontend.antlr.AgParser parser(String text) {
     AgLexer lexer = new AgLexer(CharStreams.fromString(text));
-    return new silverchain.internal.frontend.parser.antlr.AgParser(new CommonTokenStream(lexer));
+    return new silverchain.internal.frontend.antlr.AgParser(new CommonTokenStream(lexer));
   }
 
   public static void walk(ParseTreeListener listener, ParseTree tree) {

@@ -6,13 +6,13 @@ import static internal.utility.Functions.walk;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import silverchain.internal.frontend.antlr.AgBaseListener;
 import silverchain.internal.frontend.checker.DuplicateFragmentChecker;
 import silverchain.internal.frontend.checker.DuplicateTypeChecker;
 import silverchain.internal.frontend.checker.ImportConflictChecker;
 import silverchain.internal.frontend.checker.InvalidRangeChecker;
 import silverchain.internal.frontend.checker.UndefinedFragmentChecker;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 
 class ContextCheckerPassTest {
 

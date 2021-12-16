@@ -1,8 +1,8 @@
-package silverchain.internal.frontend.checker;
+package silverchain.internal.frontend.exception;
 
 import org.apiguardian.api.API;
 import silverchain.SilverchainException;
-import silverchain.internal.frontend.parser.antlr.AgParser.ImportDeclContext;
+import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
 
 @API(status = API.Status.INTERNAL)
 public class ImportConflict extends SilverchainException {
