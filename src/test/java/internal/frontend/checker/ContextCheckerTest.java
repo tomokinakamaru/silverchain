@@ -21,7 +21,7 @@ import silverchain.internal.frontend.checker.ZeroRepeat;
 import silverchain.internal.frontend.checker.ZeroRepeatChecker;
 import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 
-class CheckerTest {
+class ContextCheckerTest {
 
   private static Arguments[] data() {
     return new Arguments[] {
