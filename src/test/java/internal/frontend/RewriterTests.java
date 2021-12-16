@@ -22,9 +22,9 @@ class RewriterTests {
       Arguments.of(
           "import foo.Foo; Foo { Foo foo(); }",
           new ImportResolver(),
-          "(input (importDecl import (name (name foo) . Foo) ;) "
-              + "(typeDecl (name (name foo) . Foo) { (chainStmts (chainStmt "
-              + "(returnType (typeRef (name (name foo) . Foo))) "
+          "(input (importDecl import (name (qualifier foo .) Foo) ;) "
+              + "(typeDecl (name (qualifier foo .) Foo) { (chainStmts (chainStmt "
+              + "(returnType (typeRef (name (qualifier foo .) Foo))) "
               + "(chainExpr (chainTerm (chainFact (chainElem (method foo ( )))))) ;)) }) <EOF>)"),
       Arguments.of(
           "$FOO = foo(); Foo { Foo $FOO; }",

@@ -36,7 +36,7 @@ public class ImportResolver extends AgBaseListener {
   }
 
   protected void replace(ParserRuleContext ctx, NameContext oldCtx) {
-    if (oldCtx.name() == null) {
+    if (oldCtx.qualifier() == null) {
       String id = oldCtx.ID().getText();
       if (imports.containsKey(id)) {
         NameContext refCtx = imports.get(oldCtx.ID().getText());
