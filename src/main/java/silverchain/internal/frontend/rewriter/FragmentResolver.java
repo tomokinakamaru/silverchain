@@ -1,36 +1,39 @@
 package silverchain.internal.frontend.rewriter;
 
-import static silverchain.internal.frontend.rewriter.RewriteUtils.copy;
-import static silverchain.internal.frontend.rewriter.RewriteUtils.pushTokens;
-import static silverchain.internal.frontend.rewriter.RewriteUtils.replaceChild;
-
 import java.util.HashMap;
 import java.util.Map;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseListener;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainElemContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.parser.antlr.AgParser.FragmentRefContext;
+import silverchain.internal.frontend.rewriter.utility.ContextReplicator;
+import silverchain.internal.frontend.rewriter.utility.ContextRewriter;
 
 @API(status = API.Status.INTERNAL)
-public class FragmentResolver extends AgBaseListener {
+public class FragmentResolver extends ContextRewriter {
 
   protected final Map<String, ChainExprContext> fragments = new HashMap<>();
 
   @Override
-  public void exitFragmentDecl(FragmentDeclContext ctx) {
+  public ParseTree visitFragmentDecl(FragmentDeclContext ctx) {
+    ctx = (FragmentDeclContext) super.visitFragmentDecl(ctx);
     fragments.put(ctx.FRAGMENT_ID().getText(), ctx.chainExpr());
+    return null;
   }
 
   @Override
-  public void exitChainElem(ChainElemContext ctx) {
-    FragmentRefContext oldCtx = ctx.fragmentRef();
-    if (oldCtx != null) {
-      ChainExprContext refCtx = fragments.get(oldCtx.FRAGMENT_ID().getText());
-      ChainExprContext newCtx = copy(refCtx);
-      pushTokens(oldCtx, newCtx);
-      replaceChild(ctx, oldCtx, newCtx);
+  public ParseTree visitChainElem(ChainElemContext ctx) {
+    ctx = (ChainElemContext) ctx.accept(new ContextReplicator());
+    FragmentRefContext r = ctx.fragmentRef();
+    if (r != null) {
+      ChainExprContext refCtx = fragments.get(r.FRAGMENT_ID().getText());
+      ChainExprContext newCtx = (ChainExprContext) refCtx.accept(new ContextReplicator());
+      ChainElemContext elem = (ChainElemContext) ctx.accept(new ContextReplicator());
+      elem.children.replaceAll(t -> t == elem.fragmentRef() ? newCtx : t);
+      return elem;
     }
+    return ctx;
   }
 }

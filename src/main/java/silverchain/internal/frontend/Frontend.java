@@ -25,8 +25,8 @@ public class Frontend {
     ParseTreeWalker.DEFAULT.walk(new UndefinedFragmentChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new ZeroRepeatChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new InvalidRangeChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ImportResolver(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new FragmentResolver(), ctx);
+    ctx = (InputContext) ctx.accept(new ImportResolver());
+    ctx = (InputContext) ctx.accept(new FragmentResolver());
     return ctx;
   }
 }
