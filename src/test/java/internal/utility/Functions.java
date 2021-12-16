@@ -5,16 +5,11 @@ import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
-import org.junit.jupiter.params.provider.Arguments;
 import silverchain.internal.frontend.parser.AgParser;
 import silverchain.internal.frontend.parser.antlr.AgLexer;
 import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
 
 public class Functions {
-
-  public static Arguments args(Selector selector, String text, String expected) {
-    return Arguments.of(selector, text, expected);
-  }
 
   public static InputContext parse(String text) {
     return new AgParser().parse(CharStreams.fromString(text));

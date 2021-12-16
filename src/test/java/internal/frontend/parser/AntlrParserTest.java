@@ -1,9 +1,9 @@
 package internal.frontend.parser;
 
-import static internal.utility.Functions.args;
 import static internal.utility.Functions.parser;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import internal.utility.ParserSelector;
 import java.util.function.Function;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -208,5 +208,9 @@ class AntlrParserTest {
     AgParser parser = parser(text);
     ParserRuleContext ctx = selector.apply(parser);
     assertThat(ctx.toStringTree(parser)).isEqualTo(expected);
+  }
+
+  private static Arguments args(ParserSelector selector, String text, String expected) {
+    return Arguments.of(selector, text, expected);
   }
 }
