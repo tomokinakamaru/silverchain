@@ -6,8 +6,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.NameContext;
-import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
-import silverchain.internal.frontend.antlr.AgParser.TypeRefContext;
+import silverchain.internal.frontend.antlr.AgParser.ReturnTypeContext;
+import silverchain.internal.frontend.data.ReturnTypeCtx;
 import silverchain.internal.frontend.utility.ContextReplicator;
 import silverchain.internal.frontend.utility.ContextRewriter;
 
@@ -24,36 +24,14 @@ public class ImportResolver extends ContextRewriter {
   }
 
   @Override
-  public ParseTree visitTypeDecl(TypeDeclContext ctx) {
-    ctx = (TypeDeclContext) super.visitTypeDecl(ctx);
-    NameContext n = find(ctx.name());
-    if (n != null) {
-      TypeDeclContext c = (TypeDeclContext) ctx.accept(new ContextReplicator());
-      c.children.replaceAll(t -> t == c.name() ? n : t);
-      return c;
-    }
-    return ctx;
-  }
-
-  @Override
-  public ParseTree visitTypeRef(TypeRefContext ctx) {
-    ctx = (TypeRefContext) super.visitTypeRef(ctx);
-    NameContext n = find(ctx.name());
-    if (n != null) {
-      TypeRefContext c = (TypeRefContext) ctx.accept(new ContextReplicator());
-      c.children.replaceAll(t -> t == c.name() ? n : t);
-      return c;
-    }
-    return ctx;
-  }
-
-  protected NameContext find(NameContext name) {
-    if (name.qualifier() == null) {
-      String id = name.ID().getText();
+  public ParseTree visitName(NameContext ctx) {
+    ctx = (NameContext) super.visitName(ctx);
+    if (ctx.qualifier() == null) {
+      String id = ctx.ID().getText();
       if (imports.containsKey(id)) {
-        return imports.get(id);
+        return imports.get(id).accept(new ContextReplicator());
       }
     }
-    return null;
+    return ctx;
   }
 }
