@@ -6,8 +6,6 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.NameContext;
-import silverchain.internal.frontend.antlr.AgParser.ReturnTypeContext;
-import silverchain.internal.frontend.data.ReturnTypeCtx;
 import silverchain.internal.frontend.utility.ContextReplicator;
 import silverchain.internal.frontend.utility.ContextRewriter;
 
