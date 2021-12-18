@@ -36,17 +36,17 @@ class AntlrParserTest {
         args(
             AgParser::typeDecl,
             "Foo<T> { Foo foo(); }",
-            "(typeDecl (name Foo) < (typeParams (typeParam T)) > { (chainStmts (chainStmt (returnType (typeRef (name Foo))) " +
+            "(typeDecl (name Foo) < (externalParams (typeParams (typeParam T))) > { (chainStmts (chainStmt (returnType (typeRef (name Foo))) " +
                 "(chainExpr (chainTerm (chainFact (chainElem (method foo ( )))))) ;)) })"),
         args(
             AgParser::typeDecl,
             "Foo<T;S> { Foo foo(); }",
-            "(typeDecl (name Foo) < (typeParams (typeParam T)) ; (typeParams (typeParam S)) > { (chainStmts (chainStmt " +
+            "(typeDecl (name Foo) < (externalParams (typeParams (typeParam T))) (internalParams ; (typeParams (typeParam S))) > { (chainStmts (chainStmt " +
                 "(returnType (typeRef (name Foo))) (chainExpr (chainTerm (chainFact (chainElem (method foo ( )))))) ;)) })"),
         args(
             AgParser::typeDecl,
             "Foo<;T> { Foo foo(); }",
-            "(typeDecl (name Foo) < ; (typeParams (typeParam T)) > { (chainStmts (chainStmt " +
+            "(typeDecl (name Foo) < (internalParams ; (typeParams (typeParam T))) > { (chainStmts (chainStmt " +
                 "(returnType (typeRef (name Foo))) (chainExpr (chainTerm (chainFact (chainElem (method foo ( )))))) ;)) })"),
         args(
             AgParser::chainStmts,
@@ -83,17 +83,17 @@ class AntlrParserTest {
             "Foo",
             "(returnType (typeRef (name Foo)))"),
         args(
-            AgParser::repeat,
+            AgParser::repeatN,
             "[1]",
-            "(repeat [ 1 ])"),
+            "(repeatN [ 1 ])"),
         args(
-            AgParser::repeat,
+            AgParser::repeatNX,
             "[1,]",
-            "(repeat [ 1 , ])"),
+            "(repeatNX [ 1 , ])"),
         args(
-            AgParser::repeat,
+            AgParser::repeatNM,
             "[1,2]",
-            "(repeat [ 1 , 2 ])"),
+            "(repeatNM [ 1 , 2 ])"),
         args(
             AgParser::permutation,
             "{ foo() }",

@@ -59,9 +59,9 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   @Override
   public Graph visitChainFact(ChainFactContext ctx) {
     Graph graph = super.visitChainFact(ctx);
-    if (ctx.ONE_MORE != null) return oneMore(graph);
-    if (ctx.ZERO_ONE != null) return zeroOne(graph);
-    if (ctx.ZERO_MORE != null) return zeroMore(graph);
+    if (ctx.PLUS() != null) return oneMore(graph);
+    if (ctx.QUESTION() != null) return zeroOne(graph);
+    if (ctx.ASTERISK() != null) return zeroMore(graph);
     return graph;
   }
 

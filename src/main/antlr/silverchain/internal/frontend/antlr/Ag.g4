@@ -7,63 +7,115 @@ import org.apiguardian.api.API;
 
 input: (importDecl | fragmentDecl | typeDecl)* EOF ;
 
-importDecl: 'import' name ';' ;
+importDecl: IMPORT name SEMICOLON ;
 
-fragmentDecl: FRAGMENT_ID '=' chainExpr ';' ;
+fragmentDecl: FRAGMENT_ID EQUAL chainExpr SEMICOLON ;
 
-typeDecl: name ('<' (external=typeParams (';' internal=typeParams)? | ';' internal=typeParams) '>')? '{' chainStmts '}' ;
+typeDecl: name (L_BRACKET (externalParams internalParams? | internalParams) R_BRACKET)? L_BRACE chainStmts R_BRACE ;
+
+externalParams: typeParams ;
+
+internalParams: SEMICOLON typeParams ;
 
 chainStmts: chainStmt+ ;
 
-chainStmt: returnType chainExpr ';' ;
+chainStmt: returnType chainExpr SEMICOLON ;
 
-chainExpr: chainTerm ('|' chainTerm)* ;
+chainExpr: chainTerm (V_BAR chainTerm)* ;
 
 chainTerm: chainFact+ ;
 
-chainFact: chainElem (ZERO_MORE='*' | ZERO_ONE='?' | ONE_MORE='+' | repeat)? ;
+chainFact: chainElem (ASTERISK | QUESTION | PLUS | repeatN | repeatNX | repeatNM)? ;
 
-chainElem: method | permutation | fragmentRef | '(' chainExpr ')' ;
+chainElem: method | permutation | fragmentRef | L_PAREN chainExpr R_PAREN ;
 
 returnType: typeRef ;
 
-repeat: '[' MIN=INT (COMMA=',' MAX=INT?)? ']' ;
+repeatN: LS_BRACKET INT RS_BRACKET ;
 
-permutation: '{' chainExpr (',' chainExpr)* ','? '}';
+repeatNX: LS_BRACKET INT COMMA RS_BRACKET ;
 
-method: ID ('<' typeParams '>')? '(' params? ')' exceptions? ;
+repeatNM: LS_BRACKET INT COMMA INT RS_BRACKET ;
 
-exceptions: 'throws' typeRef (',' typeRef)* ;
+permutation: L_BRACE chainExpr (COMMA chainExpr)* COMMA? R_BRACE;
 
-params: param (',' param)* ;
+method: ID (L_BRACKET typeParams R_BRACKET)? L_PAREN params? R_PAREN exceptions? ;
 
-param: typeRef ELLIPSIS='...'? ID ;
+exceptions: THROWS typeRef (COMMA typeRef)* ;
+
+params: param (COMMA param)* ;
+
+param: typeRef ELLIPSIS? ID ;
 
 fragmentRef: FRAGMENT_ID ;
 
 typeRef: name typeArgs? ARRAY* ;
 
-typeArgs: '<' typeArg (',' typeArg)* '>' ;
+typeArgs: L_BRACKET typeArg (COMMA typeArg)* R_BRACKET ;
 
 typeArg: typeRef | wildcard ;
 
-wildcard: '?' (('super' | EXTENDS='extends') typeRef)? ;
+wildcard: QUESTION ((SUPER | EXTENDS) typeRef)? ;
 
-typeParams: typeParam (',' typeParam)* ? ;
+typeParams: typeParam (COMMA typeParam)* ? ;
 
 typeParam: ID bounds? ;
 
-bounds: 'extends' typeRef ('&' typeRef)* ;
+bounds: EXTENDS typeRef (AMPERSAND typeRef)* ;
 
 name: qualifier? ID ;
 
-qualifier: (ID '.')+ ;
+qualifier: (ID PERIOD)+ ;
+
+IMPORT: 'import' ;
+
+THROWS: 'throws' ;
+
+SUPER: 'super' ;
+
+EXTENDS: 'extends' ;
+
+ELLIPSIS: '...' ;
+
+COMMA: ',' ;
+
+PERIOD: '.' ;
+
+SEMICOLON: ';' ;
+
+QUESTION: '?' ;
+
+PLUS: '+' ;
+
+ASTERISK: '*' ;
+
+EQUAL: '=' ;
+
+AMPERSAND: '&' ;
+
+L_BRACKET: '<' ;
+
+R_BRACKET: '>' ;
+
+L_BRACE: '{' ;
+
+R_BRACE: '}' ;
+
+L_PAREN: '(' ;
+
+R_PAREN: ')' ;
+
+V_BAR: '|' ;
+
+LS_BRACKET: '[' ;
+
+RS_BRACKET: ']' ;
+
+INT: [1-9][0-9]* | '0' ;
 
 ID: [a-zA-Z_][a-zA-Z0-9_]* ;
 
 FRAGMENT_ID: '$' [a-zA-Z_][a-zA-Z0-9_]* ;
-
-INT: [1-9][0-9]* | '0' ;
 
 ARRAY: '[' ']' ;
 

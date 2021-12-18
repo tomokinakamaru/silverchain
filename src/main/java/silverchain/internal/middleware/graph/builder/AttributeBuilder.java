@@ -5,6 +5,8 @@ import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.antlr.AgParser.BoundsContext;
 import silverchain.internal.frontend.antlr.AgParser.ExceptionsContext;
+import silverchain.internal.frontend.antlr.AgParser.ExternalParamsContext;
+import silverchain.internal.frontend.antlr.AgParser.InternalParamsContext;
 import silverchain.internal.frontend.antlr.AgParser.MethodContext;
 import silverchain.internal.frontend.antlr.AgParser.NameContext;
 import silverchain.internal.frontend.antlr.AgParser.ParamContext;
@@ -62,7 +64,7 @@ public final class AttributeBuilder {
     if (ctx == null) return null;
     Parameter parameter = new Parameter();
     parameter.type(build(ctx.typeRef()));
-    parameter.varargs(ctx.ELLIPSIS != null);
+    parameter.varargs(ctx.ELLIPSIS() != null);
     parameter.name(ctx.ID().getText());
     return parameter;
   }
@@ -91,8 +93,8 @@ public final class AttributeBuilder {
     if (ctx == null) return null;
     TypeDeclaration typeDeclaration = new TypeDeclaration();
     typeDeclaration.name(build(ctx.name()));
-    typeDeclaration.externalParameters(build(ctx.external));
-    typeDeclaration.internalParameters(build(ctx.internal));
+    typeDeclaration.externalParameters(build(ctx.externalParams()));
+    typeDeclaration.internalParameters(build(ctx.internalParams()));
     return typeDeclaration;
   }
 
@@ -116,7 +118,7 @@ public final class AttributeBuilder {
   public static Wildcard build(WildcardContext ctx) {
     if (ctx == null) return null;
     Wildcard wildcard = new Wildcard();
-    wildcard.upperBound(ctx.EXTENDS != null);
+    wildcard.upperBound(ctx.EXTENDS() != null);
     wildcard.bound(build(ctx.typeRef()));
     return wildcard;
   }
@@ -154,5 +156,15 @@ public final class AttributeBuilder {
     return ctx.typeParam().stream()
         .map(AttributeBuilder::build)
         .collect(Collectors.toCollection(TypeParameters::new));
+  }
+
+  public static TypeParameters build(ExternalParamsContext ctx) {
+    if (ctx == null) return new TypeParameters();
+    return build(ctx.typeParams());
+  }
+
+  public static TypeParameters build(InternalParamsContext ctx) {
+    if (ctx == null) return new TypeParameters();
+    return build(ctx.typeParams());
   }
 }

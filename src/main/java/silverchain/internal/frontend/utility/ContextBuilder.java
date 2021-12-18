@@ -15,17 +15,21 @@ import silverchain.internal.frontend.antlr.AgParser.ChainStmtContext;
 import silverchain.internal.frontend.antlr.AgParser.ChainStmtsContext;
 import silverchain.internal.frontend.antlr.AgParser.ChainTermContext;
 import silverchain.internal.frontend.antlr.AgParser.ExceptionsContext;
+import silverchain.internal.frontend.antlr.AgParser.ExternalParamsContext;
 import silverchain.internal.frontend.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.FragmentRefContext;
 import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.InputContext;
+import silverchain.internal.frontend.antlr.AgParser.InternalParamsContext;
 import silverchain.internal.frontend.antlr.AgParser.MethodContext;
 import silverchain.internal.frontend.antlr.AgParser.NameContext;
 import silverchain.internal.frontend.antlr.AgParser.ParamContext;
 import silverchain.internal.frontend.antlr.AgParser.ParamsContext;
 import silverchain.internal.frontend.antlr.AgParser.PermutationContext;
 import silverchain.internal.frontend.antlr.AgParser.QualifierContext;
-import silverchain.internal.frontend.antlr.AgParser.RepeatContext;
+import silverchain.internal.frontend.antlr.AgParser.RepeatNContext;
+import silverchain.internal.frontend.antlr.AgParser.RepeatNMContext;
+import silverchain.internal.frontend.antlr.AgParser.RepeatNXContext;
 import silverchain.internal.frontend.antlr.AgParser.ReturnTypeContext;
 import silverchain.internal.frontend.antlr.AgParser.TypeArgContext;
 import silverchain.internal.frontend.antlr.AgParser.TypeArgsContext;
@@ -57,6 +61,16 @@ public abstract class ContextBuilder implements AgVisitor<ParseTree> {
   @Override
   public ParseTree visitTypeDecl(TypeDeclContext ctx) {
     return build(ctx, TypeDeclContext::new);
+  }
+
+  @Override
+  public ParseTree visitExternalParams(ExternalParamsContext ctx) {
+    return build(ctx, ExternalParamsContext::new);
+  }
+
+  @Override
+  public ParseTree visitInternalParams(InternalParamsContext ctx) {
+    return build(ctx, InternalParamsContext::new);
   }
 
   @Override
@@ -95,8 +109,18 @@ public abstract class ContextBuilder implements AgVisitor<ParseTree> {
   }
 
   @Override
-  public ParseTree visitRepeat(RepeatContext ctx) {
-    return build(ctx, RepeatContext::new);
+  public ParseTree visitRepeatN(RepeatNContext ctx) {
+    return build(ctx, RepeatNContext::new);
+  }
+
+  @Override
+  public ParseTree visitRepeatNX(RepeatNXContext ctx) {
+    return build(ctx, RepeatNXContext::new);
+  }
+
+  @Override
+  public ParseTree visitRepeatNM(RepeatNMContext ctx) {
+    return build(ctx, RepeatNMContext::new);
   }
 
   @Override
