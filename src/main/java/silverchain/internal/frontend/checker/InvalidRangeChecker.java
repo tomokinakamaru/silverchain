@@ -10,7 +10,9 @@ public class InvalidRangeChecker extends AgBaseListener {
 
   @Override
   public void enterRepeatNM(RepeatNMContext ctx) {
-    if (Integer.parseInt(ctx.INT(0).getText()) > Integer.parseInt(ctx.INT(1).getText())) {
+    int min = Integer.parseInt(ctx.INT(0).getText());
+    int max = Integer.parseInt(ctx.INT(1).getText());
+    if (min > max) {
       throw new InvalidRange(ctx);
     }
   }
