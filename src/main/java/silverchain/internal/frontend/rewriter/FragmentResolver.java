@@ -1,5 +1,8 @@
 package silverchain.internal.frontend.rewriter;
 
+import static silverchain.internal.frontend.rewriter.utility.TargetAppender.append;
+import static silverchain.internal.frontend.rewriter.utility.TreeReplicator.replicate;
+
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -7,13 +10,12 @@ import org.apiguardian.api.API;
 import silverchain.internal.frontend.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.antlr.AgParser.FragmentDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.FragmentRefContext;
-import silverchain.internal.frontend.utility.ContextReplicator;
-import silverchain.internal.frontend.utility.ContextRewriter;
+import silverchain.internal.frontend.core.AgTreeRewriter;
 
 @API(status = API.Status.INTERNAL)
-public class FragmentResolver extends ContextRewriter {
+public class FragmentResolver extends AgTreeRewriter {
 
-  protected final Map<String, ChainExprContext> fragments = new HashMap<>();
+  protected Map<String, ChainExprContext> fragments = new HashMap<>();
 
   @Override
   public ParseTree visitFragmentDecl(FragmentDeclContext ctx) {
@@ -24,8 +26,7 @@ public class FragmentResolver extends ContextRewriter {
 
   @Override
   public ParseTree visitFragmentRef(FragmentRefContext ctx) {
-    ctx = (FragmentRefContext) super.visitFragmentRef(ctx);
-    ChainExprContext refCtx = fragments.get(ctx.FRAGMENT_ID().getText());
-    return refCtx.accept(new ContextReplicator());
+    ChainExprContext c = replicate(fragments.get(ctx.FRAGMENT_ID().getText()));
+    return append(c, ctx.start);
   }
 }

@@ -1,18 +1,20 @@
 package silverchain.internal.frontend.rewriter;
 
+import static silverchain.internal.frontend.rewriter.utility.TreeReplicator.replicate;
+
 import java.util.HashMap;
 import java.util.Map;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.apiguardian.api.API;
 import silverchain.internal.frontend.antlr.AgParser.ImportDeclContext;
 import silverchain.internal.frontend.antlr.AgParser.NameContext;
-import silverchain.internal.frontend.utility.ContextReplicator;
-import silverchain.internal.frontend.utility.ContextRewriter;
+import silverchain.internal.frontend.core.AgTreeRewriter;
+import silverchain.internal.frontend.core.data.ReturnTypeContext;
 
 @API(status = API.Status.INTERNAL)
-public class ImportResolver extends ContextRewriter {
+public class ImportResolver extends AgTreeRewriter {
 
-  protected final Map<String, NameContext> imports = new HashMap<>();
+  protected Map<String, NameContext> imports = new HashMap<>();
 
   @Override
   public ParseTree visitImportDecl(ImportDeclContext ctx) {
@@ -22,12 +24,19 @@ public class ImportResolver extends ContextRewriter {
   }
 
   @Override
+  public ParseTree visitReturnType(ReturnTypeContext ctx) {
+    ReturnTypeContext c = (ReturnTypeContext) super.visitReturnType(ctx);
+    if (c != ctx) c.sources().add(c.typeRef().name().start);
+    return c;
+  }
+
+  @Override
   public ParseTree visitName(NameContext ctx) {
     ctx = (NameContext) super.visitName(ctx);
     if (ctx.qualifier() == null) {
       String id = ctx.ID().getText();
       if (imports.containsKey(id)) {
-        return imports.get(id).accept(new ContextReplicator());
+        return replicate(imports.get(id));
       }
     }
     return ctx;

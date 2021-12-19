@@ -11,13 +11,13 @@ importDecl: IMPORT name SEMICOLON ;
 
 fragmentDecl: FRAGMENT_ID EQUAL chainExpr SEMICOLON ;
 
-typeDecl: name (L_BRACKET (externalParams internalParams? | internalParams) R_BRACKET)? L_BRACE chainStmts R_BRACE ;
+typeDecl: name (LT_BRACKET (externalParams internalParams? | internalParams) RT_BRACKET)? typeDeclBody ;
 
 externalParams: typeParams ;
 
 internalParams: SEMICOLON typeParams ;
 
-chainStmts: chainStmt+ ;
+typeDeclBody: L_BRACE chainStmt+ R_BRACE ;
 
 chainStmt: returnType chainExpr SEMICOLON ;
 
@@ -39,7 +39,7 @@ repeatNM: LS_BRACKET INT COMMA INT RS_BRACKET ;
 
 permutation: L_BRACE chainExpr (COMMA chainExpr)* COMMA? R_BRACE;
 
-method: ID (L_BRACKET typeParams R_BRACKET)? L_PAREN params? R_PAREN exceptions? ;
+method: ID (LT_BRACKET typeParams RT_BRACKET)? L_PAREN params? R_PAREN exceptions? ;
 
 exceptions: THROWS typeRef (COMMA typeRef)* ;
 
@@ -51,7 +51,7 @@ fragmentRef: FRAGMENT_ID ;
 
 typeRef: name typeArgs? ARRAY* ;
 
-typeArgs: L_BRACKET typeArg (COMMA typeArg)* R_BRACKET ;
+typeArgs: LT_BRACKET typeArg (COMMA typeArg)* RT_BRACKET ;
 
 typeArg: typeRef | wildcard ;
 
@@ -93,19 +93,19 @@ EQUAL: '=' ;
 
 AMPERSAND: '&' ;
 
-L_BRACKET: '<' ;
-
-R_BRACKET: '>' ;
-
-L_BRACE: '{' ;
-
-R_BRACE: '}' ;
+V_BAR: '|' ;
 
 L_PAREN: '(' ;
 
 R_PAREN: ')' ;
 
-V_BAR: '|' ;
+L_BRACE: '{' ;
+
+R_BRACE: '}' ;
+
+LT_BRACKET: '<' ;
+
+RT_BRACKET: '>' ;
 
 LS_BRACKET: '[' ;
 

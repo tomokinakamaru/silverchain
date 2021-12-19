@@ -5,9 +5,9 @@ import silverchain.internal.frontend.antlr.AgBaseVisitor;
 import silverchain.internal.frontend.antlr.AgParser.ChainExprContext;
 import silverchain.internal.frontend.antlr.AgParser.ChainFactContext;
 import silverchain.internal.frontend.antlr.AgParser.ChainStmtContext;
-import silverchain.internal.frontend.antlr.AgParser.ChainStmtsContext;
 import silverchain.internal.frontend.antlr.AgParser.ChainTermContext;
 import silverchain.internal.frontend.antlr.AgParser.MethodContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclBodyContext;
 import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.graph.Edge;
@@ -26,7 +26,7 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   }
 
   @Override
-  public Graph visitChainStmts(ChainStmtsContext ctx) {
+  public Graph visitTypeDeclBody(TypeDeclBodyContext ctx) {
     return ctx.chainStmt().stream()
         .map(this::visitChainStmt)
         .reduce(GraphBuilder::union)
