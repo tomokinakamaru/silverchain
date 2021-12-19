@@ -10,7 +10,7 @@ import picocli.CommandLine;
 import silverchain.internal.JarProperties;
 import silverchain.internal.backend.Backend;
 import silverchain.internal.frontend.Frontend;
-import silverchain.internal.frontend.parser.antlr.AgParser.InputContext;
+import silverchain.internal.frontend.antlr.AgParser.InputContext;
 import silverchain.internal.middleware.graph.GraphMiddleware;
 import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
 import silverchain.internal.middleware.java.JavaMiddleware;

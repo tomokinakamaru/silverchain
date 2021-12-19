@@ -2,7 +2,6 @@ package silverchain.internal.middleware.graph.builder;
 
 import org.antlr.v4.runtime.Token;
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.rewriter.VirtualToken;
 import silverchain.internal.middleware.graph.data.location.Location;
 import silverchain.internal.middleware.graph.data.location.Locations;
 
@@ -16,10 +15,6 @@ public final class LocationBuilder {
     Location location = new Location();
     location.line(token.getLine());
     location.column(token.getCharPositionInLine());
-    if (token instanceof VirtualToken) {
-      VirtualToken v = (VirtualToken) token;
-      locations.addAll(build(v.subToken()));
-    }
     return locations;
   }
 }

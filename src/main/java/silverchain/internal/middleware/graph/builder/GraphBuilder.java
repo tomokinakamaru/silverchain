@@ -1,14 +1,14 @@
 package silverchain.internal.middleware.graph.builder;
 
 import org.apiguardian.api.API;
-import silverchain.internal.frontend.parser.antlr.AgBaseVisitor;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainExprContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainFactContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainStmtContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainStmtsContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.ChainTermContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.MethodContext;
-import silverchain.internal.frontend.parser.antlr.AgParser.TypeDeclContext;
+import silverchain.internal.frontend.antlr.AgBaseVisitor;
+import silverchain.internal.frontend.antlr.AgParser.ChainExprContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainFactContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainStmtContext;
+import silverchain.internal.frontend.antlr.AgParser.ChainTermContext;
+import silverchain.internal.frontend.antlr.AgParser.MethodContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclBodyContext;
+import silverchain.internal.frontend.antlr.AgParser.TypeDeclContext;
 import silverchain.internal.middleware.graph.data.attribute.Label;
 import silverchain.internal.middleware.graph.data.graph.Edge;
 import silverchain.internal.middleware.graph.data.graph.Graph;
@@ -26,7 +26,7 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   }
 
   @Override
-  public Graph visitChainStmts(ChainStmtsContext ctx) {
+  public Graph visitTypeDeclBody(TypeDeclBodyContext ctx) {
     return ctx.chainStmt().stream()
         .map(this::visitChainStmt)
         .reduce(GraphBuilder::union)
@@ -59,9 +59,9 @@ public class GraphBuilder extends AgBaseVisitor<Graph> {
   @Override
   public Graph visitChainFact(ChainFactContext ctx) {
     Graph graph = super.visitChainFact(ctx);
-    if (ctx.ONE_MORE != null) return oneMore(graph);
-    if (ctx.ZERO_ONE != null) return zeroOne(graph);
-    if (ctx.ZERO_MORE != null) return zeroMore(graph);
+    if (ctx.PLUS() != null) return oneMore(graph);
+    if (ctx.QUESTION() != null) return zeroOne(graph);
+    if (ctx.ASTERISK() != null) return zeroMore(graph);
     return graph;
   }
 
