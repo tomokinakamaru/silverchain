@@ -4,9 +4,11 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import javax.annotation.Nonnull;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.attribute.Label;
 
+@API(status = API.Status.INTERNAL)
 public class Labels implements Iterable<Label> {
 
   private final Set<Label> labels = new LinkedHashSet<>();

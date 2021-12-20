@@ -8,6 +8,7 @@ import com.github.javaparser.ast.type.ReferenceType;
 import com.github.javaparser.ast.type.Type;
 import com.github.javaparser.ast.type.WildcardType;
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
 import silverchain.data.graph.attribute.Method;
 import silverchain.data.graph.attribute.Name;
 import silverchain.data.graph.attribute.Parameter;
@@ -23,6 +24,7 @@ import silverchain.data.graph.attribute.collection.Parameters;
 import silverchain.data.graph.attribute.collection.TypeArguments;
 import silverchain.data.graph.attribute.collection.TypeParameters;
 
+@API(status = API.Status.INTERNAL)
 class AttrEncoder {
 
   static MethodDeclaration encode(Method method) {

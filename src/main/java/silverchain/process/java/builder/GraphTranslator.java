@@ -1,9 +1,11 @@
 package silverchain.process.java.builder;
 
+import org.apiguardian.api.API;
 import silverchain.data.graph.Graphs;
 import silverchain.data.graph.visitor.GraphListener;
 import silverchain.data.java.CompilationUnits;
 
+@API(status = API.Status.INTERNAL)
 public class GraphTranslator implements GraphListener {
 
   private final PkgNameProvider pkgNameProvider;

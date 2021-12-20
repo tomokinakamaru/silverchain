@@ -2,6 +2,7 @@ package silverchain.process.java.builder;
 
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Node;
@@ -10,6 +11,7 @@ import silverchain.data.graph.attribute.Method;
 import silverchain.data.graph.attribute.ReturnType;
 import silverchain.data.graph.visitor.GraphListener;
 
+@API(status = API.Status.INTERNAL)
 class UnitBuilder implements GraphListener {
 
   private final NodeUnits units;

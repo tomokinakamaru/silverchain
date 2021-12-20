@@ -1,5 +1,8 @@
 package silverchain;
 
+import org.apiguardian.api.API;
+
+@API(status = API.Status.EXPERIMENTAL)
 public abstract class SilverchainWarning {
 
   private String message;

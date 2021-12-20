@@ -3,6 +3,7 @@ package silverchain.process.graph.rewriter;
 import java.util.Iterator;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.data.graph.attribute.Attribute;
 import silverchain.data.graph.attribute.Label;
 import silverchain.data.graph.attribute.Method;
@@ -13,6 +14,7 @@ import silverchain.data.graph.attribute.TypeReference;
 import silverchain.data.graph.attribute.Wildcard;
 import silverchain.data.graph.visitor.AttributeVisitor;
 
+@API(status = API.Status.INTERNAL)
 public class LabelComparator implements AttributeVisitor<Boolean, Attribute> {
 
   private static final LabelComparator COMPARATOR = new LabelComparator();

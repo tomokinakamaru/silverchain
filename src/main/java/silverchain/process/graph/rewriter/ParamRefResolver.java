@@ -3,6 +3,7 @@ package silverchain.process.graph.rewriter;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Node;
@@ -13,6 +14,7 @@ import silverchain.data.graph.attribute.collection.TypeParameters;
 import silverchain.data.graph.visitor.AttributeVisitor;
 import silverchain.data.graph.visitor.GraphListener;
 
+@API(status = API.Status.INTERNAL)
 public class ParamRefResolver implements AttributeVisitor<Void, Void>, GraphListener {
 
   protected TypeParameters externalTypeParameters;
