@@ -53,7 +53,7 @@ shadowJar {
 
 spotless {
     java {
-        target 'src/*/java/**/*.java'
+        target 'src/*/java/**/*.java', 'buildSrc/src/*/java/**/*.java'
         googleJavaFormat()
         toggleOffOn('@formatter:off', '@formatter:on')
     }
@@ -171,3 +171,7 @@ task annotateAntlrGeneratedTypes(dependsOn: generateGrammarSource) {
 }
 
 compileJava.dependsOn(annotateAntlrGeneratedTypes)
+
+task checkConvention(type: CheckConvention) {
+    sourceSets sourceSets
+}
