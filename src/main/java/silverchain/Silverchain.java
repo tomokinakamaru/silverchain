@@ -7,14 +7,13 @@ import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import picocli.CommandLine;
-import silverchain.internal.JarProperties;
-import silverchain.internal.backend.Backend;
-import silverchain.internal.frontend.Frontend;
-import silverchain.internal.frontend.antlr.AgParser.InputContext;
-import silverchain.internal.middleware.graph.GraphMiddleware;
-import silverchain.internal.middleware.graph.data.graph.collection.Graphs;
-import silverchain.internal.middleware.java.JavaMiddleware;
-import silverchain.internal.middleware.java.data.CompilationUnits;
+import silverchain.data.graph.Graphs;
+import silverchain.data.java.CompilationUnits;
+import silverchain.process.ag.Frontend;
+import silverchain.process.ag.antlr.AgParser.InputContext;
+import silverchain.process.graph.GraphMiddleware;
+import silverchain.process.java.Backend;
+import silverchain.process.java.JavaMiddleware;
 
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
 public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvider {
@@ -122,6 +121,6 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
 
   @Override
   public String[] getVersion() {
-    return new String[] {JarProperties.getProperty("version")};
+    return new String[] {SilverchainProperties.getProperty("version")};
   }
 }
