@@ -4,12 +4,14 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apiguardian.api.API;
 import picocli.CommandLine;
 import silverchain.data.graph.Graphs;
+import silverchain.data.graph.visitor.GraphWalker;
 import silverchain.data.java.CompilationUnits;
 import silverchain.process.ag.antlr.AgParser.InputContext;
 import silverchain.process.ag.builder.AgParser;
@@ -24,7 +26,12 @@ import silverchain.process.ag.rewriter.FragmentResolver;
 import silverchain.process.ag.rewriter.ImportResolver;
 import silverchain.process.ag.rewriter.PermutationRewriter;
 import silverchain.process.ag.rewriter.RepeatRewriter;
-import silverchain.process.graph.GraphMiddleware;
+import silverchain.process.graph.builder.GraphBuilder;
+import silverchain.process.graph.checker.EdgeConflictValidator;
+import silverchain.process.graph.rewriter.GraphDeterminizer;
+import silverchain.process.graph.rewriter.GraphReverser;
+import silverchain.process.graph.rewriter.ParamPropagator;
+import silverchain.process.graph.rewriter.ParamRefResolver;
 import silverchain.process.java.Backend;
 import silverchain.process.java.JavaMiddleware;
 
@@ -80,8 +87,8 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   public void run(CharStream stream) {
-    InputContext ctx = rewrite(check(build(parse(stream))));
-    Graphs graphs = new GraphMiddleware().run(ctx);
+    InputContext ctx = rewriteAgTree(checkAgTree(buildAgTree(parse(stream))));
+    Graphs graphs = checkGraphs(rewriteGraphs(buildGraphs(ctx)));
     CompilationUnits units = new JavaMiddleware(javadoc, warningHandler).run(graphs);
     new Backend(maxFileCount, output).run(units);
   }
@@ -142,11 +149,11 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return new AgParser().parse(stream);
   }
 
-  private InputContext build(InputContext ctx) {
+  private InputContext buildAgTree(InputContext ctx) {
     return (InputContext) ctx.accept(new AgTreeBuilder());
   }
 
-  private InputContext check(InputContext ctx) {
+  private InputContext checkAgTree(InputContext ctx) {
     ParseTreeWalker.DEFAULT.walk(new ImportConflictChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new DuplicateTypeChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new DuplicateFragmentChecker(), ctx);
@@ -156,11 +163,34 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return ctx;
   }
 
-  private InputContext rewrite(InputContext ctx) {
+  private InputContext rewriteAgTree(InputContext ctx) {
     return (InputContext)
         ctx.accept(new ImportResolver())
             .accept(new FragmentResolver())
             .accept(new RepeatRewriter())
             .accept(new PermutationRewriter());
+  }
+
+  private Graphs buildGraphs(InputContext ctx) {
+    return ctx.typeDecl().stream()
+        .map(d -> d.accept(new GraphBuilder()))
+        .collect(Collectors.toCollection(Graphs::new));
+  }
+
+  private Graphs rewriteGraphs(Graphs graphs) {
+    GraphWalker walker = new GraphWalker();
+    walker.walk(new GraphReverser(), graphs);
+    walker.walk(new GraphDeterminizer(), graphs);
+    walker.walk(new GraphReverser(), graphs);
+    walker.walk(new GraphDeterminizer(), graphs);
+    walker.walk(new ParamRefResolver(), graphs);
+    walker.walk(new ParamPropagator(), graphs);
+    return graphs;
+  }
+
+  private Graphs checkGraphs(Graphs graphs) {
+    GraphWalker walker = new GraphWalker();
+    walker.walk(new EdgeConflictValidator(), graphs);
+    return graphs;
   }
 }
