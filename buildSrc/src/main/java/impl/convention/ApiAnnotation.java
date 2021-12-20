@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 public class ApiAnnotation implements Convention {
 
-  private static final List<String> MAINTAINED = new ArrayList<>();
+  private static final List<String> EXPERIMENTAL = new ArrayList<>();
 
   static {
-    MAINTAINED.add("Silverchain");
-    MAINTAINED.add("SilverchainException");
-    MAINTAINED.add("SilverchainWarning");
+    EXPERIMENTAL.add("Silverchain");
+    EXPERIMENTAL.add("SilverchainException");
+    EXPERIMENTAL.add("SilverchainWarning");
   }
 
   @Override
@@ -37,7 +37,7 @@ public class ApiAnnotation implements Convention {
 
   private static Violation check(String path, TypeDeclaration<?> decl, AnnotationExpr expr) {
     String name = decl.getName().asString();
-    return MAINTAINED.contains(name) ? checkMaintained(path, expr) : checkInternal(path, expr);
+    return EXPERIMENTAL.contains(name) ? checkExperimental(path, expr) : checkInternal(path, expr);
   }
 
   private static Violation checkInternal(String path, AnnotationExpr expr) {
@@ -45,8 +45,8 @@ public class ApiAnnotation implements Convention {
     return new Violation(path, "Wrong @API(...)");
   }
 
-  private static Violation checkMaintained(String path, AnnotationExpr expr) {
-    if (expr.toString().equals("@API(status = API.Status.MAINTAINED)")) return null;
+  private static Violation checkExperimental(String path, AnnotationExpr expr) {
+    if (expr.toString().equals("@API(status = API.Status.EXPERIMENTAL)")) return null;
     return new Violation(path, "Wrong @API(...)");
   }
 }
