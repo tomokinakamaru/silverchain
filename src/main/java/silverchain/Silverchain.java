@@ -4,17 +4,34 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apiguardian.api.API;
 import picocli.CommandLine;
 import silverchain.data.graph.Graphs;
-import silverchain.data.java.CompilationUnits;
-import silverchain.process.ag.Frontend;
+import silverchain.data.graph.visitor.GraphWalker;
+import silverchain.data.java.JavaFiles;
 import silverchain.process.ag.antlr.AgParser.InputContext;
-import silverchain.process.graph.GraphMiddleware;
-import silverchain.process.java.Backend;
-import silverchain.process.java.JavaMiddleware;
+import silverchain.process.ag.builder.AgParser;
+import silverchain.process.ag.builder.AgTreeBuilder;
+import silverchain.process.ag.checker.DuplicateFragmentChecker;
+import silverchain.process.ag.checker.DuplicateTypeChecker;
+import silverchain.process.ag.checker.ImportConflictChecker;
+import silverchain.process.ag.checker.InvalidRepeatChecker;
+import silverchain.process.ag.checker.UndefinedFragmentChecker;
+import silverchain.process.ag.checker.ZeroRepeatChecker;
+import silverchain.process.ag.rewriter.FragmentResolver;
+import silverchain.process.ag.rewriter.ImportResolver;
+import silverchain.process.ag.rewriter.PermutationRewriter;
+import silverchain.process.ag.rewriter.RepeatRewriter;
+import silverchain.process.graph.builder.GraphBuilder;
+import silverchain.process.graph.checker.EdgeConflictValidator;
+import silverchain.process.graph.rewriter.GraphDeterminizer;
+import silverchain.process.graph.rewriter.GraphReverser;
+import silverchain.process.graph.rewriter.ParamPropagator;
+import silverchain.process.graph.rewriter.ParamRefResolver;
 
 @API(status = API.Status.EXPERIMENTAL)
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
@@ -68,10 +85,10 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   public void run(CharStream stream) {
-    InputContext ctx = new Frontend().run(stream);
-    Graphs graphs = new GraphMiddleware().run(ctx);
-    CompilationUnits units = new JavaMiddleware(javadoc, warningHandler).run(graphs);
-    new Backend(maxFileCount, output).run(units);
+    InputContext ctx = rewrite(check(build(stream)));
+    Graphs graphs = check(rewrite(build(ctx)));
+    JavaFiles files = check(rewrite(build(graphs)));
+    files.save(output);
   }
 
   public String getInput() {
@@ -124,5 +141,62 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   @Override
   public String[] getVersion() {
     return new String[] {SilverchainProperties.getProperty("version")};
+  }
+
+  private InputContext build(CharStream stream) {
+    return (InputContext) new AgParser().parse(stream).accept(new AgTreeBuilder());
+  }
+
+  private InputContext check(InputContext ctx) {
+    ParseTreeWalker.DEFAULT.walk(new ImportConflictChecker(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new DuplicateTypeChecker(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new DuplicateFragmentChecker(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new UndefinedFragmentChecker(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new ZeroRepeatChecker(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new InvalidRepeatChecker(), ctx);
+    return ctx;
+  }
+
+  private InputContext rewrite(InputContext ctx) {
+    return (InputContext)
+        ctx.accept(new ImportResolver())
+            .accept(new FragmentResolver())
+            .accept(new RepeatRewriter())
+            .accept(new PermutationRewriter());
+  }
+
+  private Graphs build(InputContext ctx) {
+    return ctx.typeDecl().stream()
+        .map(d -> d.accept(new GraphBuilder()))
+        .collect(Collectors.toCollection(Graphs::new));
+  }
+
+  private Graphs rewrite(Graphs graphs) {
+    GraphWalker walker = new GraphWalker();
+    walker.walk(new GraphReverser(), graphs);
+    walker.walk(new GraphDeterminizer(), graphs);
+    walker.walk(new GraphReverser(), graphs);
+    walker.walk(new GraphDeterminizer(), graphs);
+    walker.walk(new ParamRefResolver(), graphs);
+    walker.walk(new ParamPropagator(), graphs);
+    return graphs;
+  }
+
+  private Graphs check(Graphs graphs) {
+    GraphWalker walker = new GraphWalker();
+    walker.walk(new EdgeConflictValidator(), graphs);
+    return graphs;
+  }
+
+  private JavaFiles build(Graphs graphs) {
+    return new JavaFiles();
+  }
+
+  private JavaFiles rewrite(JavaFiles files) {
+    return files;
+  }
+
+  private JavaFiles check(JavaFiles files) {
+    return files;
   }
 }
