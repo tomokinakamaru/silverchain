@@ -12,7 +12,7 @@ import org.apiguardian.api.API;
 import picocli.CommandLine;
 import silverchain.data.graph.Graphs;
 import silverchain.data.graph.visitor.GraphWalker;
-import silverchain.data.java.CompilationUnits;
+import silverchain.data.java.JavaFiles;
 import silverchain.process.ag.antlr.AgParser.InputContext;
 import silverchain.process.ag.builder.AgParser;
 import silverchain.process.ag.builder.AgTreeBuilder;
@@ -32,8 +32,6 @@ import silverchain.process.graph.rewriter.GraphDeterminizer;
 import silverchain.process.graph.rewriter.GraphReverser;
 import silverchain.process.graph.rewriter.ParamPropagator;
 import silverchain.process.graph.rewriter.ParamRefResolver;
-import silverchain.process.java.Backend;
-import silverchain.process.java.JavaMiddleware;
 
 @API(status = API.Status.EXPERIMENTAL)
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
@@ -89,8 +87,8 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   public void run(CharStream stream) {
     InputContext ctx = rewriteAgTree(checkAgTree(buildAgTree(parse(stream))));
     Graphs graphs = checkGraphs(rewriteGraphs(buildGraphs(ctx)));
-    CompilationUnits units = new JavaMiddleware(javadoc, warningHandler).run(graphs);
-    new Backend(maxFileCount, output).run(units);
+    JavaFiles files = rewriteJavaFiles(buildJavaFiles(graphs));
+    files.save(output);
   }
 
   public String getInput() {
@@ -193,4 +191,18 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     walker.walk(new EdgeConflictValidator(), graphs);
     return graphs;
   }
+
+  private JavaFiles buildJavaFiles(Graphs graphs) {
+    return new JavaFiles();
+  }
+
+  private JavaFiles rewriteJavaFiles(JavaFiles files) {
+    return files;
+  }
+
+  private JavaFiles checkJavaFiles(JavaFiles files) {
+    return files;
+  }
+
+  private void generate(JavaFiles files) {}
 }
