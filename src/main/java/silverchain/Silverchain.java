@@ -85,9 +85,9 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   public void run(CharStream stream) {
-    InputContext ctx = rewriteAgTree(checkAgTree(buildAgTree(parse(stream))));
-    Graphs graphs = checkGraphs(rewriteGraphs(buildGraphs(ctx)));
-    JavaFiles files = rewriteJavaFiles(buildJavaFiles(graphs));
+    InputContext ctx = rewrite(check(build(stream)));
+    Graphs graphs = check(rewrite(build(ctx)));
+    JavaFiles files = check(rewrite(build(graphs)));
     files.save(output);
   }
 
@@ -143,15 +143,11 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return new String[] {SilverchainProperties.getProperty("version")};
   }
 
-  private InputContext parse(CharStream stream) {
-    return new AgParser().parse(stream);
+  private InputContext build(CharStream stream) {
+    return (InputContext) new AgParser().parse(stream).accept(new AgTreeBuilder());
   }
 
-  private InputContext buildAgTree(InputContext ctx) {
-    return (InputContext) ctx.accept(new AgTreeBuilder());
-  }
-
-  private InputContext checkAgTree(InputContext ctx) {
+  private InputContext check(InputContext ctx) {
     ParseTreeWalker.DEFAULT.walk(new ImportConflictChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new DuplicateTypeChecker(), ctx);
     ParseTreeWalker.DEFAULT.walk(new DuplicateFragmentChecker(), ctx);
@@ -161,7 +157,7 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return ctx;
   }
 
-  private InputContext rewriteAgTree(InputContext ctx) {
+  private InputContext rewrite(InputContext ctx) {
     return (InputContext)
         ctx.accept(new ImportResolver())
             .accept(new FragmentResolver())
@@ -169,13 +165,13 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
             .accept(new PermutationRewriter());
   }
 
-  private Graphs buildGraphs(InputContext ctx) {
+  private Graphs build(InputContext ctx) {
     return ctx.typeDecl().stream()
         .map(d -> d.accept(new GraphBuilder()))
         .collect(Collectors.toCollection(Graphs::new));
   }
 
-  private Graphs rewriteGraphs(Graphs graphs) {
+  private Graphs rewrite(Graphs graphs) {
     GraphWalker walker = new GraphWalker();
     walker.walk(new GraphReverser(), graphs);
     walker.walk(new GraphDeterminizer(), graphs);
@@ -186,23 +182,21 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return graphs;
   }
 
-  private Graphs checkGraphs(Graphs graphs) {
+  private Graphs check(Graphs graphs) {
     GraphWalker walker = new GraphWalker();
     walker.walk(new EdgeConflictValidator(), graphs);
     return graphs;
   }
 
-  private JavaFiles buildJavaFiles(Graphs graphs) {
+  private JavaFiles build(Graphs graphs) {
     return new JavaFiles();
   }
 
-  private JavaFiles rewriteJavaFiles(JavaFiles files) {
+  private JavaFiles rewrite(JavaFiles files) {
     return files;
   }
 
-  private JavaFiles checkJavaFiles(JavaFiles files) {
+  private JavaFiles check(JavaFiles files) {
     return files;
   }
-
-  private void generate(JavaFiles files) {}
 }
