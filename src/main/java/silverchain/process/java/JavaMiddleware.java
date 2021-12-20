@@ -1,6 +1,7 @@
 package silverchain.process.java;
 
 import java.util.function.Consumer;
+import org.apiguardian.api.API;
 import silverchain.SilverchainWarning;
 import silverchain.data.graph.Graphs;
 import silverchain.data.java.CompilationUnits;
@@ -9,6 +10,7 @@ import silverchain.process.java.rewriter.ActionInterfaceGenerator;
 import silverchain.process.java.rewriter.JavadocProcessor;
 import silverchain.process.java.rewriter.NodeClassGenerator;
 
+@API(status = API.Status.INTERNAL)
 public class JavaMiddleware {
 
   private String javadoc;

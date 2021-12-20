@@ -6,6 +6,7 @@ import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.apiguardian.api.API;
 import picocli.CommandLine;
 import silverchain.data.graph.Graphs;
 import silverchain.data.java.CompilationUnits;
@@ -15,6 +16,7 @@ import silverchain.process.graph.GraphMiddleware;
 import silverchain.process.java.Backend;
 import silverchain.process.java.JavaMiddleware;
 
+@API(status = API.Status.EXPERIMENTAL)
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
 public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvider {
 

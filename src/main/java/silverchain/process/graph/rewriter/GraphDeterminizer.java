@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Node;
@@ -13,6 +14,7 @@ import silverchain.data.graph.Nodes;
 import silverchain.data.graph.attribute.Label;
 import silverchain.data.graph.visitor.GraphListener;
 
+@API(status = API.Status.INTERNAL)
 public class GraphDeterminizer implements GraphListener {
 
   @Override

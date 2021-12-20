@@ -1,9 +1,11 @@
 package silverchain.process.graph.rewriter;
 
+import org.apiguardian.api.API;
 import silverchain.data.graph.attribute.TypeReference;
 import silverchain.data.graph.attribute.collection.TypeParameters;
 import silverchain.data.graph.visitor.AttributeVisitor;
 
+@API(status = API.Status.INTERNAL)
 public class ParamRefCollector implements AttributeVisitor<TypeParameters, TypeParameters> {
 
   @Override

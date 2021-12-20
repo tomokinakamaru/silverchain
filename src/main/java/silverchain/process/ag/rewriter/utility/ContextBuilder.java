@@ -1,9 +1,11 @@
 package silverchain.process.ag.rewriter.utility;
 
+import org.apiguardian.api.API;
 import silverchain.process.ag.antlr.AgParser.ChainElemContext;
 import silverchain.process.ag.antlr.AgParser.ChainExprContext;
 import silverchain.process.ag.antlr.AgParser.ChainFactContext;
 
+@API(status = API.Status.INTERNAL)
 public final class ContextBuilder {
 
   private ContextBuilder() {}

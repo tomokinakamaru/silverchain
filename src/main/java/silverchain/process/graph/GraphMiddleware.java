@@ -1,6 +1,7 @@
 package silverchain.process.graph;
 
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Graphs;
 import silverchain.data.graph.visitor.GraphWalker;
 import silverchain.process.ag.antlr.AgParser.InputContext;
@@ -11,6 +12,7 @@ import silverchain.process.graph.rewriter.GraphReverser;
 import silverchain.process.graph.rewriter.ParamPropagator;
 import silverchain.process.graph.rewriter.ParamRefResolver;
 
+@API(status = API.Status.INTERNAL)
 public class GraphMiddleware {
 
   public Graphs run(InputContext ctx) {

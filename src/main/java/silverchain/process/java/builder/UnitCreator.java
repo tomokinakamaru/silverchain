@@ -1,11 +1,13 @@
 package silverchain.process.java.builder;
 
 import com.github.javaparser.ast.CompilationUnit;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Node;
 import silverchain.data.graph.attribute.TypeDeclaration;
 import silverchain.data.graph.visitor.GraphListener;
 
+@API(status = API.Status.INTERNAL)
 class UnitCreator implements GraphListener {
 
   private final PkgNameProvider pkgNameProvider;

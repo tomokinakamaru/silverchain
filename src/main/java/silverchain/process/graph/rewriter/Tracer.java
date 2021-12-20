@@ -4,11 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Node;
 import silverchain.data.graph.Nodes;
 import silverchain.data.graph.attribute.Label;
 
+@API(status = API.Status.INTERNAL)
 public class Tracer<T> {
 
   protected final Map<T, Node> map = new HashMap<>();

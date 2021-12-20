@@ -6,8 +6,10 @@ import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Node;
 
+@API(status = API.Status.INTERNAL)
 class NodeUnits {
 
   private final Map<Node, CompilationUnit> map = new HashMap<>();

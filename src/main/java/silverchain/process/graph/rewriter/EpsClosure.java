@@ -1,6 +1,7 @@
 package silverchain.process.graph.rewriter;
 
 import java.util.function.Predicate;
+import org.apiguardian.api.API;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Graphs;
@@ -9,6 +10,7 @@ import silverchain.data.graph.Nodes;
 import silverchain.data.graph.visitor.GraphListener;
 import silverchain.data.graph.visitor.GraphWalker;
 
+@API(status = API.Status.INTERNAL)
 class EpsClosure implements GraphListener {
 
   private final Nodes nodes = new Nodes();

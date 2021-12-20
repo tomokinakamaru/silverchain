@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Properties;
+import org.apiguardian.api.API;
 
+@API(status = API.Status.INTERNAL)
 public final class SilverchainProperties {
 
   private static final Properties PROPERTIES = load();
