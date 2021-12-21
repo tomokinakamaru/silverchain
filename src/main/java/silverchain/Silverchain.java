@@ -2,30 +2,36 @@ package silverchain;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apiguardian.api.API;
 import picocli.CommandLine;
+import silverchain.ag.antlr.AgListener;
+import silverchain.ag.antlr.AgParser.InputContext;
+import silverchain.ag.builder.AgBuilder;
+import silverchain.ag.builder.AgLexer;
+import silverchain.ag.builder.AgParser;
+import silverchain.ag.checker.AliasConflictChecker;
+import silverchain.ag.checker.DuplicateFragmentChecker;
+import silverchain.ag.checker.DuplicateTypeChecker;
+import silverchain.ag.checker.InvalidRepeatChecker;
+import silverchain.ag.checker.UndefinedFragmentChecker;
+import silverchain.ag.checker.ZeroRepeatChecker;
+import silverchain.ag.rewriter.AliasResolver;
+import silverchain.ag.rewriter.FragmentResolver;
+import silverchain.ag.rewriter.PermutationRewriter;
+import silverchain.ag.rewriter.RepeatRewriter;
 import silverchain.data.graph.Graphs;
 import silverchain.data.graph.visitor.GraphWalker;
 import silverchain.data.java.JavaFiles;
-import silverchain.process.ag.antlr.AgParser.InputContext;
-import silverchain.process.ag.builder.AgParser;
-import silverchain.process.ag.builder.AgTreeBuilder;
-import silverchain.process.ag.checker.DuplicateFragmentChecker;
-import silverchain.process.ag.checker.DuplicateTypeChecker;
-import silverchain.process.ag.checker.ImportConflictChecker;
-import silverchain.process.ag.checker.InvalidRepeatChecker;
-import silverchain.process.ag.checker.UndefinedFragmentChecker;
-import silverchain.process.ag.checker.ZeroRepeatChecker;
-import silverchain.process.ag.rewriter.FragmentResolver;
-import silverchain.process.ag.rewriter.ImportResolver;
-import silverchain.process.ag.rewriter.PermutationRewriter;
-import silverchain.process.ag.rewriter.RepeatRewriter;
 import silverchain.process.graph.builder.GraphBuilder;
 import silverchain.process.graph.checker.EdgeConflictValidator;
 import silverchain.process.graph.rewriter.GraphDeterminizer;
@@ -85,7 +91,7 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   public void run(CharStream stream) {
-    InputContext ctx = rewrite(check(build(stream)));
+    InputContext ctx = analyze(parse(stream));
     Graphs graphs = check(rewrite(build(ctx)));
     JavaFiles files = check(rewrite(build(graphs)));
     files.save(output);
@@ -143,26 +149,32 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
     return new String[] {SilverchainProperties.getProperty("version")};
   }
 
-  private InputContext build(CharStream stream) {
-    return (InputContext) new AgParser().parse(stream).accept(new AgTreeBuilder());
+  protected InputContext parse(CharStream stream) {
+    return parser().apply(stream);
   }
 
-  private InputContext check(InputContext ctx) {
-    ParseTreeWalker.DEFAULT.walk(new ImportConflictChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new DuplicateTypeChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new DuplicateFragmentChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new UndefinedFragmentChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new ZeroRepeatChecker(), ctx);
-    ParseTreeWalker.DEFAULT.walk(new InvalidRepeatChecker(), ctx);
+  protected InputContext analyze(InputContext ctx) {
+    for (AgListener listener : analyzers()) ParseTreeWalker.DEFAULT.walk(listener, ctx);
     return ctx;
   }
 
-  private InputContext rewrite(InputContext ctx) {
-    return (InputContext)
-        ctx.accept(new ImportResolver())
-            .accept(new FragmentResolver())
-            .accept(new RepeatRewriter())
-            .accept(new PermutationRewriter());
+  protected Function<CharStream, InputContext> parser() {
+    return stream -> new AgParser(new CommonTokenStream(new AgLexer(stream))).input();
+  }
+
+  protected List<AgListener> analyzers() {
+    return Arrays.asList(
+        new AgBuilder(),
+        new AliasConflictChecker(),
+        new DuplicateTypeChecker(),
+        new DuplicateFragmentChecker(),
+        new UndefinedFragmentChecker(),
+        new ZeroRepeatChecker(),
+        new InvalidRepeatChecker(),
+        new AliasResolver(),
+        new FragmentResolver(),
+        new RepeatRewriter(),
+        new PermutationRewriter());
   }
 
   private Graphs build(InputContext ctx) {

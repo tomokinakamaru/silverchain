@@ -8,31 +8,44 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import silverchain.data.ag.MethodContext;
-import silverchain.data.ag.ReturnTypeContext;
-import silverchain.process.ag.antlr.AgBaseListener;
-import silverchain.process.ag.antlr.AgParser;
-import silverchain.process.ag.antlr.AgParser.ChainExprContext;
-import silverchain.process.ag.antlr.AgParser.InputContext;
-import silverchain.process.ag.builder.AgTreeBuilder;
-import silverchain.process.ag.builder.AntlrParser;
-import silverchain.process.ag.rewriter.FragmentResolver;
-import silverchain.process.ag.rewriter.ImportResolver;
-import silverchain.process.ag.rewriter.PermutationRewriter;
-import silverchain.process.ag.rewriter.RepeatRewriter;
+import silverchain.ag.MethodContext;
+import silverchain.ag.ReturnTypeContext;
+import silverchain.ag.antlr.AgBaseListener;
+import silverchain.ag.antlr.AgParser.ChainExprContext;
+import silverchain.ag.antlr.AgParser.ChainStmtContext;
+import silverchain.ag.antlr.AgParser.InputContext;
+import silverchain.ag.builder.AgBuilder;
+import silverchain.ag.builder.AgParser;
+import silverchain.ag.rewriter.AliasResolver;
+import silverchain.ag.rewriter.FragmentResolver;
+import silverchain.ag.rewriter.PermutationRewriter;
+import silverchain.ag.rewriter.RepeatRewriter;
 
 public class ContextRewriterTest {
 
   @Test
   void testFragmentResolver() {
     InputContext ctx = parse("$FOO = foo(); Foo { Foo $FOO; }");
-    ctx = (InputContext) ctx.accept(new FragmentResolver());
-    assertThat(ctx.fragmentDecl()).isEmpty();
+    ParseTreeWalker.DEFAULT.walk(new FragmentResolver(), ctx);
 
     AgBaseListener listener =
         new AgBaseListener() {
+
+          private boolean active;
+
           @Override
-          public void enterMethod(AgParser.MethodContext ctx) {
+          public void enterChainStmt(ChainStmtContext ctx) {
+            active = true;
+          }
+
+          @Override
+          public void exitChainStmt(ChainStmtContext ctx) {
+            active = false;
+          }
+
+          @Override
+          public void enterMethod(silverchain.ag.antlr.AgParser.MethodContext ctx) {
+            if (!active) return;
             MethodContext c = (MethodContext) ctx;
             assertThat(c.getText()).isEqualTo("foo()");
             assertThat(c.start.getLine()).isEqualTo(1);
@@ -42,39 +55,33 @@ public class ContextRewriterTest {
             assertThat(c.targets().iterator().next().getCharPositionInLine()).isEqualTo(24);
           }
         };
-
     ParseTreeWalker.DEFAULT.walk(listener, ctx);
   }
 
   @Test
   void testImportResolver1() {
     InputContext ctx = parse("import foo.Foo; Foo { Bar bar(); }");
-    ctx = (InputContext) ctx.accept(new ImportResolver());
-    assertThat(ctx.importDecl()).isEmpty();
+    ParseTreeWalker.DEFAULT.walk(new AliasResolver(), ctx);
     assertThat(ctx.typeDecl(0).name().getText()).isEqualTo("foo.Foo");
   }
 
   @Test
   void testImportResolver2() {
     InputContext ctx = parse("import foo.Foo; Bar { Foo foo(); }");
-    ctx = (InputContext) ctx.accept(new ImportResolver());
-
-    assertThat(ctx.importDecl()).isEmpty();
+    ParseTreeWalker.DEFAULT.walk(new AliasResolver(), ctx);
 
     ReturnTypeContext c =
         (ReturnTypeContext) ctx.typeDecl(0).typeDeclBody().chainStmt(0).returnType();
     assertThat(c.start.getLine()).isEqualTo(1);
     assertThat(c.start.getCharPositionInLine()).isEqualTo(22);
     assertThat(c.getText()).isEqualTo("foo.Foo");
-    assertThat(c.sources()).hasSize(1);
-    assertThat(c.sources().iterator().next().getLine()).isEqualTo(1);
-    assertThat(c.sources().iterator().next().getCharPositionInLine()).isEqualTo(7);
+    assertThat(c.name()).isEqualTo("Foo");
   }
 
   @Test
   void testImportResolver3() {
     InputContext ctx = parse("import foo.Foo; Bar { bar.Foo foo(); }");
-    ctx = (InputContext) ctx.accept(new ImportResolver());
+    ParseTreeWalker.DEFAULT.walk(new AliasResolver(), ctx);
 
     assertThat(ctx.fragmentDecl()).isEmpty();
 
@@ -83,7 +90,7 @@ public class ContextRewriterTest {
     assertThat(c.start.getLine()).isEqualTo(1);
     assertThat(c.start.getCharPositionInLine()).isEqualTo(22);
     assertThat(c.getText()).isEqualTo("bar.Foo");
-    assertThat(c.sources()).isEmpty();
+    assertThat(c.name()).isEqualTo("bar.Foo");
   }
 
   private static Arguments[] permutationRewriterData() {
@@ -108,10 +115,10 @@ public class ContextRewriterTest {
   @ParameterizedTest(name = "[{index}] \"{0}\" -> \"{1}\"")
   @MethodSource("permutationRewriterData")
   void testPermutationRewriter(String text, String expected) {
-    AntlrParser parser = parser(text);
+    AgParser parser = parser(text);
     InputContext ctx = parser.input();
-    ctx = (InputContext) ctx.accept(new AgTreeBuilder());
-    ctx = (InputContext) ctx.accept(new PermutationRewriter());
+    ParseTreeWalker.DEFAULT.walk(new AgBuilder(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new PermutationRewriter(), ctx);
     ChainExprContext expr = ctx.typeDecl(0).typeDeclBody().chainStmt(0).chainExpr();
     assertThat(expr.toStringTree(parser)).isEqualTo(expected);
   }
@@ -142,10 +149,10 @@ public class ContextRewriterTest {
   @ParameterizedTest(name = "[{index}] \"{0}\" -> \"{1}\"")
   @MethodSource("repeatRewriterData")
   void testRepeatRewriter(String text, String expected) {
-    AntlrParser parser = parser(text);
+    AgParser parser = parser(text);
     InputContext ctx = parser.input();
-    ctx = (InputContext) ctx.accept(new AgTreeBuilder());
-    ctx = (InputContext) ctx.accept(new RepeatRewriter());
+    ParseTreeWalker.DEFAULT.walk(new AgBuilder(), ctx);
+    ParseTreeWalker.DEFAULT.walk(new RepeatRewriter(), ctx);
     ChainExprContext expr = ctx.typeDecl(0).typeDeclBody().chainStmt(0).chainExpr();
     assertThat(expr.toStringTree(parser)).isEqualTo(expected);
   }

@@ -1,19 +1,19 @@
 package silverchain.process.graph.builder;
 
 import org.apiguardian.api.API;
+import silverchain.ag.antlr.AgBaseVisitor;
+import silverchain.ag.antlr.AgParser.ChainExprContext;
+import silverchain.ag.antlr.AgParser.ChainFactContext;
+import silverchain.ag.antlr.AgParser.ChainStmtContext;
+import silverchain.ag.antlr.AgParser.ChainTermContext;
+import silverchain.ag.antlr.AgParser.MethodContext;
+import silverchain.ag.antlr.AgParser.TypeDeclBodyContext;
+import silverchain.ag.antlr.AgParser.TypeDeclContext;
 import silverchain.data.graph.Edge;
 import silverchain.data.graph.Graph;
 import silverchain.data.graph.Node;
 import silverchain.data.graph.Nodes;
 import silverchain.data.graph.attribute.Label;
-import silverchain.process.ag.antlr.AgBaseVisitor;
-import silverchain.process.ag.antlr.AgParser.ChainExprContext;
-import silverchain.process.ag.antlr.AgParser.ChainFactContext;
-import silverchain.process.ag.antlr.AgParser.ChainStmtContext;
-import silverchain.process.ag.antlr.AgParser.ChainTermContext;
-import silverchain.process.ag.antlr.AgParser.MethodContext;
-import silverchain.process.ag.antlr.AgParser.TypeDeclBodyContext;
-import silverchain.process.ag.antlr.AgParser.TypeDeclContext;
 
 @API(status = API.Status.INTERNAL)
 public class GraphBuilder extends AgBaseVisitor<Graph> {
