@@ -2,7 +2,9 @@ package silverchain.ag.rewriter;
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ParseTree;
+import org.apiguardian.api.API;
 
+@API(status = API.Status.INTERNAL)
 public final class AgAssembler {
 
   private AgAssembler() {}
