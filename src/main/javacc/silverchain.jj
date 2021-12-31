@@ -1,0 +1,293 @@
+options {
+  JAVA_TEMPLATE_TYPE = "modern";
+  JDK_VERSION = "1.8";
+  STATIC = false;
+}
+
+PARSER_BEGIN(GeneratedParser)
+package silverchain.ag.javacc;
+
+import silverchain.ag.data.*;
+import java.util.Stack;
+
+public class GeneratedParser {
+
+  private final Stack<Trees> treeStack = new Stack<>();
+
+  private final Stack<SrcLocation> locationStack = new Stack<>();
+
+  private Tree<?> $;
+
+  private void $() {
+    treeStack.peek().add($);
+  }
+
+  private <T extends Tree<T>> T $$(T t) {
+    treeStack.push(new Trees());
+    locationStack.push(beginOfNextToken());
+    return t;
+  }
+
+  private <T extends Tree<T>> T $$$(T t) {
+    t.children().addAll(treeStack.pop());
+    t.intervals().add(new SrcInterval(locationStack.pop(), endOfCurrentToken()));
+    return t;
+  }
+
+  private int I() {
+    return Integer.parseInt(token.image);
+  }
+
+  private String S() {
+    return token.image;
+  }
+
+  private SrcLocation beginOfNextToken() {
+    Token t = getToken(1);
+    return new SrcLocation(t.beginLine, t.beginColumn);
+  }
+
+  private SrcLocation endOfCurrentToken() {
+    return new SrcLocation(token.endLine, token.endColumn);
+  }
+}
+PARSER_END(GeneratedParser)
+
+SKIP: {
+  " " |
+  "\t" |
+  "\r" |
+  "\n" |
+  "\f" |
+  <"//" (~["\r", "\n"])*> |
+  <"/*" (~["*"] | ("*" ~["/"]))* "*/">
+}
+
+TOKEN: {
+  <IMPORT: "import"> |
+  <THROWS: "throws"> |
+  <SUPER: "super"> |
+  <EXTENDS: "extends"> |
+  <COMMA: ","> |
+  <PERIOD: "."> |
+  <SEMICOLON: ";"> |
+  <ELLIPSIS: "..."> |
+  <QUESTION: "?"> |
+  <ASTERISK: "*"> |
+  <PLUS: "+"> |
+  <EQUAL: "="> |
+  <AMPERSAND: "&"> |
+  <BAR: "|"> |
+  <L_PAREN: "("> |
+  <R_PAREN: ")"> |
+  <L_BRACE: "{"> |
+  <R_BRACE: "}"> |
+  <LT_BRACKET: "<"> |
+  <RT_BRACKET: ">"> |
+  <LS_BRACKET: "["> |
+  <RS_BRACKET: "]"> |
+  <INT: "0" | ["1"-"9"](["0"-"9"])* > |
+  <ID: ["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
+  <FRAGMENT_ID: "$"["a"-"z","A"-"Z","_"](["a"-"z","A"-"Z","0"-"9","_"])* > |
+  <UNKNOWN: ~[" ","\t","\r","\n","\f"]>
+}
+
+DeclsTree decls(): { DeclsTree t = $$(new DeclsTree()); }
+{
+  ($=decl() {$();})* <EOF> { return $$$(t); }
+}
+
+DeclTree decl(): { DeclTree<?> t; }
+{
+  (t=aliasDecl() | t=fragmentDecl() | t=typeDecl()) { return t; }
+}
+
+AliasDeclTree aliasDecl(): { AliasDeclTree t = $$(new AliasDeclTree()); }
+{
+  <IMPORT> $=name() {$();} <SEMICOLON> { return $$$(t); }
+}
+
+FragmentDeclTree fragmentDecl(): { FragmentDeclTree t = $$(new FragmentDeclTree()); }
+{
+  <FRAGMENT_ID> {t.id(S());} <EQUAL> $=chainExpr() {$();} <SEMICOLON> { return $$$(t); }
+}
+
+TypeDeclTree typeDecl(): { TypeDeclTree t = $$(new TypeDeclTree()); }
+{
+  $=typeDeclHead() {$();} $=typeDeclBody() {$();} { return $$$(t); }
+}
+
+TypeDeclHeadTree typeDeclHead(): { TypeDeclHeadTree t = $$(new TypeDeclHeadTree()); }
+{
+  $=name() {$();} ($=paramsPair() {$();})? { return $$$(t); }
+}
+
+ParamsPairTree paramsPair(): { ParamsPairTree t = $$(new ParamsPairTree()); }
+{
+  <LT_BRACKET> ($=outerParams() {$();})? ($=innerParams() {$();})? <RT_BRACKET> { return $$$(t); }
+}
+
+OuterParamsTree outerParams(): { OuterParamsTree t = $$(new OuterParamsTree()); }
+{
+  $=typeParam() {$();} (<COMMA> $=typeParam() {$();})* { return $$$(t); }
+}
+
+InnerParamsTree innerParams(): { InnerParamsTree t = $$(new InnerParamsTree()); }
+{
+  <SEMICOLON> $=typeParam() {$();} (<COMMA> $=typeParam() {$();})* { return $$$(t); }
+}
+
+TypeDeclBodyTree typeDeclBody(): { TypeDeclBodyTree t = $$(new TypeDeclBodyTree()); }
+{
+  <L_BRACE> ($=chainStmt() {$();})* <R_BRACE> { return $$$(t); }
+}
+
+ChainStmtTree chainStmt(): { ChainStmtTree t = $$(new ChainStmtTree()); }
+{
+  $=retType() {$();} $=chainExpr() {$();} <SEMICOLON> { return $$$(t); }
+}
+
+RetTypeTree retType(): { RetTypeTree t = $$(new RetTypeTree()); }
+{
+  $=typeRef() {$();} { return $$$(t); }
+}
+
+ChainExprTree chainExpr(): { ChainExprTree t = $$(new ChainExprTree()); }
+{
+  $=chainTerm() {$();} (<BAR> $=chainTerm() {$();})* { return $$$(t); }
+}
+
+ChainTermTree chainTerm(): { ChainTermTree t = $$(new ChainTermTree()); }
+{
+  (LOOKAHEAD(2) $=chainFact() {$();})+ { return $$$(t); }
+}
+
+ChainFactTree chainFact(): { ChainFactTree t = $$(new ChainFactTree()); }
+{
+  $=chainElem() {$();} (LOOKAHEAD(2) $=quantifier() {$();})? { return $$$(t); }
+}
+
+QuantifierTree quantifier(): { QuantifierTree<?> t; }
+{
+  (t=range() | t=repeat01() | t=repeat0X() | t=repeat1X()) { return t; }
+}
+
+Repeat01Tree repeat01(): { Repeat01Tree t = $$(new Repeat01Tree()); }
+{
+  <QUESTION> { return $$$(t); }
+}
+
+Repeat0XTree repeat0X(): { Repeat0XTree t = $$(new Repeat0XTree()); }
+{
+  <ASTERISK> { return $$$(t); }
+}
+
+Repeat1XTree repeat1X(): { Repeat1XTree t = $$(new Repeat1XTree()); }
+{
+  <PLUS> { return $$$(t); }
+}
+
+RangeTree range(): { RangeTree<?> t; }
+{
+  (LOOKAHEAD(3) t=rangeN() | (LOOKAHEAD(4) t=rangeNX() | t=rangeNM())) { return t; }
+}
+
+RangeNTree rangeN(): { RangeNTree t = $$(new RangeNTree()); }
+{
+  <LS_BRACKET> <INT> {t.n(I());} <RS_BRACKET> { return $$$(t); }
+}
+
+RangeNXTree rangeNX(): { RangeNXTree t = $$(new RangeNXTree()); }
+{
+  <LS_BRACKET> <INT> {t.min(I());} <COMMA> <RS_BRACKET> { return $$$(t); }
+}
+
+RangeNMTree rangeNM(): { RangeNMTree t = $$(new RangeNMTree()); }
+{
+  <LS_BRACKET> <INT> {t.min(I());} <COMMA> <INT> {t.max(I());} <RS_BRACKET> { return $$$(t); }
+}
+
+ChainElemTree chainElem(): { ChainElemTree<?> t; }
+{
+  (t=fragmentRef() | t=permutation() | t=groupedExpr() | t=method()) { return t; }
+}
+
+FragmentRefTree fragmentRef(): { FragmentRefTree t = $$(new FragmentRefTree()); }
+{
+  <FRAGMENT_ID> {t.id(S());} { return $$$(t); }
+}
+
+PermutationTree permutation(): { PermutationTree t = $$(new PermutationTree()); }
+{
+  <L_BRACE> $=chainExpr() {$();} (LOOKAHEAD(2) <COMMA> $=chainExpr() {$();})* (<COMMA>)? <R_BRACE> { return $$$(t); }
+}
+
+GroupedExprTree groupedExpr(): { GroupedExprTree t = $$(new GroupedExprTree()); }
+{
+  <L_PAREN> $=chainExpr() {$();} <R_PAREN> { return $$$(t); }
+}
+
+MethodTree method(): { MethodTree t = $$(new MethodTree()); }
+{
+  <ID> {t.name(S());} ($=typeParams() {$();})? $=params() {$();} ($=exceptions() {$();})? { return $$$(t); }
+}
+
+ParamsTree params(): { ParamsTree t = $$(new ParamsTree()); }
+{
+  <L_PAREN> ($=param() {$();} (<COMMA> $=param() {$();})*)? <R_PAREN> { return $$$(t); }
+}
+
+ParamTree param(): { ParamTree t = $$(new ParamTree()); }
+{
+  $=typeRef() {$();} (<ELLIPSIS> {t.varargs(true);} )? <ID> {t.name(S());} { return $$$(t); }
+}
+
+ExceptionsTree exceptions(): { ExceptionsTree t = $$(new ExceptionsTree()); }
+{
+  <THROWS> $=typeRef() {$();} (LOOKAHEAD(2) <COMMA> $=typeRef() {$();})* { return $$$(t); }
+}
+
+TypeParamsTree typeParams(): { TypeParamsTree t = $$(new TypeParamsTree()); }
+{
+  <LT_BRACKET> $=typeParam() {$();} (<COMMA> $=typeParam() {$();})* <RT_BRACKET> { return $$$(t); }
+}
+
+TypeParamTree typeParam(): { TypeParamTree t = $$(new TypeParamTree()); }
+{
+  <ID> {t.name(S());} ($=bounds() {$();})? { return $$$(t); }
+}
+
+BoundsTree bounds(): { BoundsTree t = $$(new BoundsTree()); }
+{
+  <EXTENDS> $=typeRef() {$();} (<AMPERSAND> $=typeRef() {$();})* { return $$$(t); }
+}
+
+TypeRefTree typeRef(): { TypeRefTree t = $$(new TypeRefTree()); }
+{
+  $=name() {$();} ($=typeArgs() {$();})? (LOOKAHEAD(2) <LS_BRACKET> <RS_BRACKET> {t.dim(t.dim() + 1);})* { return $$$(t); }
+}
+
+TypeArgsTree typeArgs(): { TypeArgsTree t = $$(new TypeArgsTree()); }
+{
+  <LT_BRACKET> $=typeArg() {$();} (<COMMA> $=typeArg() {$();} )* <RT_BRACKET> { return $$$(t); }
+}
+
+TypeArgTree typeArg(): { TypeArgTree<?> t; }
+{
+  (t=typeRef() | t=wildcard()) { return t; }
+}
+
+WildcardTree wildcard(): { WildcardTree t = $$(new WildcardTree()); }
+{
+  <QUESTION> ($=bound() {$();})? { return $$$(t); }
+}
+
+BoundTree bound(): { BoundTree t = $$(new BoundTree()); }
+{
+  (<SUPER> | <EXTENDS> {t.upperBound(true);}) $=typeRef() {$();} { return $$$(t); }
+}
+
+NameTree name(): { NameTree t = $$(new NameTree()); }
+{
+  (LOOKAHEAD(2) <ID> {t.qualifier().add(S());} <PERIOD>)* <ID> {t.id(S());} { return $$$(t); }
+}

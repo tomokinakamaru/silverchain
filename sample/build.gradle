@@ -1,0 +1,15 @@
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 1.8
+
+targetCompatibility = 1.8
+
+sourceSets {
+    main {
+        java {
+            srcDirs file('src/main/gen').listFiles()
+        }
+    }
+}

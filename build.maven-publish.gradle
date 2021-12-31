@@ -1,0 +1,50 @@
+tasks.withType(AbstractPublishToMaven) {
+    it.dependsOn check
+}
+
+publishing {
+    repositories {
+        maven {
+            def releaseRepo = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotRepo = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+            url = isReleaseVersion ? releaseRepo : snapshotRepo
+            credentials {
+                username = project.hasProperty('ossrhUsername') ? ossrhUsername : 'Unknown user'
+                password = project.hasProperty('ossrhPassword') ? ossrhPassword : 'Unknown password'
+            }
+        }
+    }
+
+    publications {
+        def mavenGroupId = 'io.github.tomokinakamaru.silverchain'
+
+        mavenJava(MavenPublication) {
+            pom {
+                groupId = mavenGroupId
+                name = mavenGroupId + ':' + project.name
+                description = 'Fluent API generator'
+                url = 'https://github.com/tomokinakamaru/silverchain/'
+                from components.java
+                licenses {
+                    license {
+                        name = 'MIT'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
+                }
+                developers {
+                    developer {
+                        name = 'Tomoki Nakamaru'
+                        email = 'tomoki.nakamaru@gmail.com'
+                        organization = 'Tomoki Nakamaru'
+                        organizationUrl = 'https://github.com/tomokinakamaru/'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
+                    developerConnection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
+                    url = 'https://github.com/tomokinakamaru/silverchain/'
+                }
+            }
+        }
+    }
+}

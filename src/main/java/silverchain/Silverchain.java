@@ -1,56 +1,52 @@
 package silverchain;
 
+import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
-import java.util.List;
+import java.io.InputStreamReader;
+import java.util.Properties;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
-import java.util.function.Function;
 import java.util.stream.Collectors;
-import org.antlr.v4.runtime.CharStream;
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.apiguardian.api.API;
 import picocli.CommandLine;
-import silverchain.ag.antlr.AgListener;
-import silverchain.ag.antlr.AgParser.InputContext;
-import silverchain.ag.builder.AgBuilder;
-import silverchain.ag.builder.AgLexer;
-import silverchain.ag.builder.AgParser;
-import silverchain.ag.checker.AliasConflictChecker;
-import silverchain.ag.checker.DuplicateFragmentChecker;
-import silverchain.ag.checker.DuplicateTypeChecker;
-import silverchain.ag.checker.InvalidRepeatChecker;
-import silverchain.ag.checker.UndefinedFragmentChecker;
-import silverchain.ag.checker.ZeroRepeatChecker;
-import silverchain.ag.rewriter.AliasResolver;
-import silverchain.ag.rewriter.FragmentResolver;
-import silverchain.ag.rewriter.PermutationRewriter;
-import silverchain.ag.rewriter.RepeatRewriter;
-import silverchain.data.graph.Graphs;
-import silverchain.data.graph.visitor.GraphWalker;
-import silverchain.data.java.JavaFiles;
-import silverchain.process.graph.builder.GraphBuilder;
-import silverchain.process.graph.checker.EdgeConflictValidator;
-import silverchain.process.graph.rewriter.GraphDeterminizer;
-import silverchain.process.graph.rewriter.GraphReverser;
-import silverchain.process.graph.rewriter.ParamPropagator;
-import silverchain.process.graph.rewriter.ParamRefResolver;
+import silverchain.ag.AgParser;
+import silverchain.ag.AliasConflictChecker;
+import silverchain.ag.AliasResolver;
+import silverchain.ag.DuplicateFragmentChecker;
+import silverchain.ag.DuplicateTypeChecker;
+import silverchain.ag.FragmentResolver;
+import silverchain.ag.InvalidRangeChecker;
+import silverchain.ag.PermutationRewriter;
+import silverchain.ag.RangeRewriter;
+import silverchain.ag.UndefinedFragmentChecker;
+import silverchain.ag.ZeroRepeatChecker;
+import silverchain.ag.data.DeclsTree;
+import silverchain.ag.walker.TreeWalker;
+import silverchain.graph.EdgeConflictChecker;
+import silverchain.graph.GraphBuilder;
+import silverchain.graph.GraphDeterminizer;
+import silverchain.graph.GraphReverser;
+import silverchain.graph.ParamPropagator;
+import silverchain.graph.TypeRefResolver;
+import silverchain.graph.data.Graphs;
+import silverchain.graph.walker.GraphWalker;
+import silverchain.java.JavaGenerator;
+import silverchain.java.NodeAnalyzer;
+import silverchain.java.NodeBuilder;
+import silverchain.java.data.TypesNode;
 
 @API(status = API.Status.EXPERIMENTAL)
 @CommandLine.Command(name = "silverchain", versionProvider = Silverchain.class, sortOptions = false)
 public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvider {
 
-  @SuppressWarnings("unused")
   @CommandLine.Option(
       names = {"-h", "--help"},
       usageHelp = true,
       description = "Show this message and exit")
   private boolean helpRequested;
 
-  @SuppressWarnings("unused")
   @CommandLine.Option(
       names = {"-v", "--version"},
       versionHelp = true,
@@ -84,17 +80,46 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
       defaultValue = "500")
   private int maxFileCount = 500;
 
-  private Consumer<SilverchainWarning> warningHandler = w -> System.err.println(w.message());
+  private Consumer<SilverchainWarning> warningHandler = w -> System.err.println(w.getMessage());
 
-  public static void run(String... args) {
+  public static void main(String... args) {
     new CommandLine(new Silverchain()).execute(args);
   }
 
-  public void run(CharStream stream) {
-    InputContext ctx = analyze(parse(stream));
-    Graphs graphs = check(rewrite(build(ctx)));
-    JavaFiles files = check(rewrite(build(graphs)));
-    files.save(output);
+  public void run(String text) {
+    DeclsTree tree = new AgParser().parse(text);
+    TreeWalker.walk(tree, new AliasConflictChecker());
+    TreeWalker.walk(tree, new DuplicateTypeChecker());
+    TreeWalker.walk(tree, new DuplicateFragmentChecker());
+    TreeWalker.walk(tree, new UndefinedFragmentChecker());
+    TreeWalker.walk(tree, new InvalidRangeChecker());
+    TreeWalker.walk(tree, new ZeroRepeatChecker());
+    TreeWalker.walk(tree, new AliasResolver());
+    TreeWalker.walk(tree, new FragmentResolver());
+    TreeWalker.walk(tree, new RangeRewriter());
+    TreeWalker.walk(tree, new PermutationRewriter());
+
+    Graphs graphs = GraphBuilder.build(tree);
+    GraphWalker.walk(graphs, new GraphReverser());
+    GraphWalker.walk(graphs, new GraphDeterminizer());
+    GraphWalker.walk(graphs, new GraphReverser());
+    GraphWalker.walk(graphs, new GraphDeterminizer());
+    GraphWalker.walk(graphs, new TypeRefResolver());
+    GraphWalker.walk(graphs, new ParamPropagator());
+    GraphWalker.walk(graphs, new EdgeConflictChecker());
+
+    TypesNode node = NodeBuilder.build(graphs);
+    new NodeAnalyzer().analyze(node);
+
+    new JavaGenerator(output).save(node);
+  }
+
+  @Override
+  public Integer call() throws Exception {
+    InputStream stream = input.equals("-") ? System.in : new FileInputStream(input);
+    BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+    run(reader.lines().collect(Collectors.joining("\n")));
+    return 0;
   }
 
   public String getInput() {
@@ -138,77 +163,9 @@ public class Silverchain implements Callable<Integer>, CommandLine.IVersionProvi
   }
 
   @Override
-  public Integer call() throws Exception {
-    InputStream stream = input.equals("-") ? System.in : new FileInputStream(input);
-    new Silverchain().run(CharStreams.fromStream(stream));
-    return 0;
-  }
-
-  @Override
-  public String[] getVersion() {
-    return new String[] {SilverchainProperties.getProperty("version")};
-  }
-
-  protected InputContext parse(CharStream stream) {
-    return parser().apply(stream);
-  }
-
-  protected InputContext analyze(InputContext ctx) {
-    for (AgListener listener : analyzers()) ParseTreeWalker.DEFAULT.walk(listener, ctx);
-    return ctx;
-  }
-
-  protected Function<CharStream, InputContext> parser() {
-    return stream -> new AgParser(new CommonTokenStream(new AgLexer(stream))).input();
-  }
-
-  protected List<AgListener> analyzers() {
-    return Arrays.asList(
-        new AgBuilder(),
-        new AliasConflictChecker(),
-        new DuplicateTypeChecker(),
-        new DuplicateFragmentChecker(),
-        new UndefinedFragmentChecker(),
-        new ZeroRepeatChecker(),
-        new InvalidRepeatChecker(),
-        new AliasResolver(),
-        new FragmentResolver(),
-        new RepeatRewriter(),
-        new PermutationRewriter());
-  }
-
-  private Graphs build(InputContext ctx) {
-    return ctx.typeDecl().stream()
-        .map(d -> d.accept(new GraphBuilder()))
-        .collect(Collectors.toCollection(Graphs::new));
-  }
-
-  private Graphs rewrite(Graphs graphs) {
-    GraphWalker walker = new GraphWalker();
-    walker.walk(new GraphReverser(), graphs);
-    walker.walk(new GraphDeterminizer(), graphs);
-    walker.walk(new GraphReverser(), graphs);
-    walker.walk(new GraphDeterminizer(), graphs);
-    walker.walk(new ParamRefResolver(), graphs);
-    walker.walk(new ParamPropagator(), graphs);
-    return graphs;
-  }
-
-  private Graphs check(Graphs graphs) {
-    GraphWalker walker = new GraphWalker();
-    walker.walk(new EdgeConflictValidator(), graphs);
-    return graphs;
-  }
-
-  private JavaFiles build(Graphs graphs) {
-    return new JavaFiles();
-  }
-
-  private JavaFiles rewrite(JavaFiles files) {
-    return files;
-  }
-
-  private JavaFiles check(JavaFiles files) {
-    return files;
+  public String[] getVersion() throws IOException {
+    Properties properties = new Properties();
+    properties.load(Properties.class.getResourceAsStream("silverchain.properties"));
+    return new String[] {properties.getProperty("version")};
   }
 }

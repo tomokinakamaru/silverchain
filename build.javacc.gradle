@@ -1,0 +1,38 @@
+def pkgName = 'silverchain.ag.javacc'
+
+def jjPath = 'src/main/javacc/silverchain.jj'
+
+javacc {
+    javaCCVersion = '7.0.10'
+    configs {
+        parser {
+            inputFile = file(jjPath)
+            packageName = pkgName
+        }
+    }
+}
+
+task annotateJavaCCGeneratedTypes(dependsOn: javaccParser) {
+    def annotation = '@org.apiguardian.api.API(status=org.apiguardian.api.API.Status.INTERNAL)';
+    def genDir = "build/generated/javacc/parser/${pkgName.replace('.', '/')}"
+    def tmpDir = "${genDir}.tmp";
+    def annotate = line -> line
+            .replaceAll('^\\s*public class', "${annotation} public class")
+            .replaceAll('^\\s*public interface', "${annotation} public interface")
+    doLast {
+        copy {
+            from genDir
+            into tmpDir
+            filter { line -> annotate(line) }
+        }
+        copy {
+            from tmpDir
+            into genDir
+        }
+        delete tmpDir
+    }
+}
+
+compileJava {
+    dependsOn annotateJavaCCGeneratedTypes
+}

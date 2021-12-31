@@ -1,12 +1,12 @@
 plugins {
-    id 'antlr'
-    id 'java'
     id 'jacoco'
-    id 'com.diffplug.spotless' version '6.0.4'
-    id 'com.github.ben-manes.versions' version '0.39.0'
-    id 'com.github.johnrengelman.shadow' version '7.1.0'
+    id 'java'
     id 'maven-publish'
     id 'signing'
+    id 'com.diffplug.spotless' version '6.1.0'
+    id 'com.github.ben-manes.versions' version '0.40.0'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.intershop.gradle.javacc' version '4.0.1'
 }
 
 group 'silverchain'
@@ -15,23 +15,17 @@ sourceCompatibility = 1.8
 
 targetCompatibility = 1.8
 
+ext.isReleaseVersion = !version.endsWith('SNAPSHOT')
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    antlr "org.antlr:antlr4:4.9.3"
-    compileOnlyApi 'org.apiguardian:apiguardian-api:1.1.2'
+    compileOnly 'org.apiguardian:apiguardian-api:1.1.2'
     implementation 'info.picocli:picocli:4.6.2'
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.23.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
-    testImplementation 'org.assertj:assertj-core:3.21.0'
-}
-
-generateGrammarSource {
-    arguments += ['-visitor', '-long-messages']
+    implementation 'org.apache.commons:commons-collections4:4.4'
 }
 
 java {
@@ -45,133 +39,10 @@ processResources {
     }
 }
 
-shadowJar {
-    manifest {
-        attributes('Main-Class' : 'silverchain.Cli')
-    }
-}
-
-spotless {
-    java {
-        target 'src/*/java/**/*.java', 'buildSrc/src/*/java/**/*.java'
-        googleJavaFormat()
-        toggleOffOn('@formatter:off', '@formatter:on')
-    }
-}
-
-test {
-    useJUnitPlatform()
-}
-
-check {
-    dependsOn jacocoTestReport
-}
-
-jacoco {
-    toolVersion = '0.8.7'
-}
-
-jacocoTestReport {
-    reports {
-        xml.enabled true
-    }
-    afterEvaluate {
-        classDirectories.from = files(classDirectories.files.collect {
-            fileTree(dir: it, exclude: ['silverchain/parser/*.class'])
-        })
-    }
-}
-
-task testGeneratedJava(type: Exec) {
-    dependsOn 'test'
-    workingDir 'src/test/resources/java'
-    commandLine './gradlew', 'check', '--no-daemon'
-}
-
-check {
-    dependsOn testGeneratedJava
-}
-
-ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-
-tasks.withType(AbstractPublishToMaven) { it.dependsOn check }
-
-publishing {
-    repositories {
-        maven {
-            def releaseRepo = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
-            def snapshotRepo = "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            url = isReleaseVersion ? releaseRepo : snapshotRepo
-            credentials {
-                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
-                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
-            }
-        }
-    }
-
-    publications {
-        def mavenGroupId = 'io.github.tomokinakamaru.silverchain'
-
-        mavenJava(MavenPublication) {
-            pom {
-                groupId = mavenGroupId
-                name = mavenGroupId + ':' + project.name
-                description = 'Fluent API generator'
-                url = 'https://github.com/tomokinakamaru/silverchain/'
-                from components.java
-                licenses {
-                    license {
-                        name = 'MIT'
-                        url = 'https://opensource.org/licenses/MIT'
-                    }
-                }
-                developers {
-                    developer {
-                        name = 'Tomoki Nakamaru'
-                        email = 'tomoki.nakamaru@gmail.com'
-                        organization = 'Tomoki Nakamaru'
-                        organizationUrl = 'https://github.com/tomokinakamaru/'
-                    }
-                }
-                scm {
-                    connection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
-                    developerConnection = 'scm:git:git@github.com:tomokinakamaru/silverchain.git'
-                    url = 'https://github.com/tomokinakamaru/silverchain/'
-                }
-            }
-        }
-    }
-}
-
-signing {
-    sign publishing.publications.mavenJava
-}
-
-tasks.withType(Sign) {
-    onlyIf { isReleaseVersion }
-}
-
-task annotateAntlrGeneratedTypes(dependsOn: generateGrammarSource) {
-    doLast {
-        def tmpDir = "${generateGrammarSource.outputDirectory}.tmp"
-        copy {
-            from generateGrammarSource.outputDirectory
-            into tmpDir
-            filter { line -> line
-                    .replaceAll('^public class', '@API(status = API.Status.INTERNAL) public class')
-                    .replaceAll('^public interface', '@API(status = API.Status.INTERNAL) public interface')
-            }
-        }
-        copy {
-            from tmpDir
-            into generateGrammarSource.outputDirectory
-        }
-        delete tmpDir
-    }
-}
-
-compileJava.dependsOn(annotateAntlrGeneratedTypes)
-
-task checkConvention(type: CheckConvention) {
-    sourceSets sourceSets
-}
+apply from: 'build.jacoco.gradle'
+apply from: 'build.javacc.gradle'
+apply from: 'build.maven-publish.gradle'
+apply from: 'build.shadowjar.gradle'
+apply from: 'build.signing.gradle'
+apply from: 'build.spotless.gradle'
+apply from: 'build.test.gradle'

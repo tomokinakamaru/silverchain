@@ -1,0 +1,5 @@
+shadowJar {
+    manifest {
+        attributes('Main-Class' : 'silverchain.Silverchain')
+    }
+}

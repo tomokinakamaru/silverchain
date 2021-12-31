@@ -1,0 +1,8 @@
+spotless {
+    java {
+        target 'src/*/java/**/*.java', 'buildSrc/src/*/java/**/*.java'
+        targetExclude 'sample/**/*.java'
+        toggleOffOn '@formatter:off', '@formatter:on'
+        googleJavaFormat()
+    }
+}
