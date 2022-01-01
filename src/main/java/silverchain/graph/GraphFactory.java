@@ -6,9 +6,9 @@ import silverchain.ag.data.ChainFactTree;
 import silverchain.ag.data.ChainStmtTree;
 import silverchain.ag.data.ChainTermTree;
 import silverchain.ag.data.MethodTree;
-import silverchain.ag.data.RetTypeTree;
 import silverchain.ag.data.TypeDeclBodyTree;
 import silverchain.ag.data.TypeDeclTree;
+import silverchain.ag.data.TypeRefTree;
 import silverchain.graph.data.Graph;
 
 @API(status = API.Status.INTERNAL)
@@ -57,7 +57,7 @@ public final class GraphFactory {
     return graph;
   }
 
-  public static Graph create(RetTypeTree tree) {
+  public static Graph create(TypeRefTree tree) {
     return GraphEditor.atom(AttrBuilder.build(tree));
   }
 

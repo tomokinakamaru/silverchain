@@ -6,8 +6,8 @@ import silverchain.ag.walker.TreeListener;
 @API(status = API.Status.INTERNAL)
 public class ChainStmtTree extends Tree<ChainStmtTree> {
 
-  public RetTypeTree retType() {
-    return children().find(RetTypeTree.class);
+  public TypeRefTree retType() {
+    return children().find(TypeRefTree.class);
   }
 
   public ChainExprTree expr() {

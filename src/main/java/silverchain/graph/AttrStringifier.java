@@ -12,7 +12,6 @@ import silverchain.graph.data.Method;
 import silverchain.graph.data.Name;
 import silverchain.graph.data.Param;
 import silverchain.graph.data.Params;
-import silverchain.graph.data.RetType;
 import silverchain.graph.data.TypeArgs;
 import silverchain.graph.data.TypeParam;
 import silverchain.graph.data.TypeParams;
@@ -49,12 +48,6 @@ public final class AttrStringifier implements AttrVisitor<String, Void> {
   public String visit(Param param, Void arg) {
     String s = param.varargs() ? "... " : " ";
     return visitChildren(param, arg) + s + param.name();
-  }
-
-  @Override
-  public String visit(RetType retType, Void arg) {
-    String s = "@" + retType.intervals().toString();
-    return visitChildren(retType, arg) + s;
   }
 
   @Override

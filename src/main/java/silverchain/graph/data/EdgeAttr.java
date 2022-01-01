@@ -9,15 +9,15 @@ public interface EdgeAttr extends Attr {
     return this instanceof Method;
   }
 
-  default boolean isRetType() {
-    return this instanceof RetType;
-  }
-
   default Method asMethod() {
     return (Method) this;
   }
 
-  default RetType asRetType() {
-    return (RetType) this;
+  default boolean isTypeRef() {
+    return this instanceof TypeRef;
+  }
+
+  default TypeRef asTypeRef() {
+    return (TypeRef) this;
   }
 }

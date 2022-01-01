@@ -27,7 +27,6 @@ import silverchain.ag.data.RangeNXTree;
 import silverchain.ag.data.Repeat01Tree;
 import silverchain.ag.data.Repeat0XTree;
 import silverchain.ag.data.Repeat1XTree;
-import silverchain.ag.data.RetTypeTree;
 import silverchain.ag.data.TypeArgsTree;
 import silverchain.ag.data.TypeDeclBodyTree;
 import silverchain.ag.data.TypeDeclHeadTree;
@@ -139,10 +138,6 @@ public interface TreeListener<T> {
   default void exit(Repeat0XTree tree, T arg) {}
 
   default void exit(Repeat1XTree tree, T arg) {}
-
-  default void enter(RetTypeTree tree, T arg) {}
-
-  default void exit(RetTypeTree tree, T arg) {}
 
   default void enter(TypeArgsTree tree, T arg) {}
 

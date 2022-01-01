@@ -144,12 +144,7 @@ TypeDeclBodyTree typeDeclBody(): { TypeDeclBodyTree t = $$(new TypeDeclBodyTree(
 
 ChainStmtTree chainStmt(): { ChainStmtTree t = $$(new ChainStmtTree()); }
 {
-  $=retType() {$();} $=chainExpr() {$();} <SEMICOLON> { return $$$(t); }
-}
-
-RetTypeTree retType(): { RetTypeTree t = $$(new RetTypeTree()); }
-{
-  $=typeRef() {$();} { return $$$(t); }
+  $=typeRef() {$();} $=chainExpr() {$();} <SEMICOLON> { return $$$(t); }
 }
 
 ChainExprTree chainExpr(): { ChainExprTree t = $$(new ChainExprTree()); }

@@ -12,7 +12,6 @@ import silverchain.ag.data.NameTree;
 import silverchain.ag.data.OuterParamsTree;
 import silverchain.ag.data.ParamTree;
 import silverchain.ag.data.ParamsTree;
-import silverchain.ag.data.RetTypeTree;
 import silverchain.ag.data.TypeArgTree;
 import silverchain.ag.data.TypeArgsTree;
 import silverchain.ag.data.TypeDeclTree;
@@ -27,7 +26,6 @@ import silverchain.graph.data.Method;
 import silverchain.graph.data.Name;
 import silverchain.graph.data.Param;
 import silverchain.graph.data.Params;
-import silverchain.graph.data.RetType;
 import silverchain.graph.data.Type;
 import silverchain.graph.data.TypeArg;
 import silverchain.graph.data.TypeArgs;
@@ -67,14 +65,6 @@ public final class AttrBuilder {
     param.varargs(tree.varargs());
     param.name(tree.name());
     return param;
-  }
-
-  public static RetType build(RetTypeTree tree) {
-    if (tree == null) return null;
-    RetType retType = new RetType();
-    retType.type(build(tree.ref()));
-    retType.intervals().addAll(tree.intervals());
-    return retType;
   }
 
   public static TypeArg build(TypeArgTree<?> tree) {

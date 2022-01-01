@@ -14,7 +14,7 @@ public class EdgeConflictChecker implements GraphListener {
   @Override
   public void visit(Graph graph, Vertex vertex) {
     Set<EdgeAttr> attrs = AttrCollector.collect(vertex);
-    long typeCount = attrs.stream().filter(EdgeAttr::isRetType).count();
+    long typeCount = attrs.stream().filter(EdgeAttr::isTypeRef).count();
     long methodCount = attrs.stream().filter(EdgeAttr::isMethod).count();
     if (1 < typeCount || (0 < typeCount && 0 < methodCount)) {
       throw new EdgeConflict(attrs);
