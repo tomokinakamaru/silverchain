@@ -48,7 +48,7 @@ public final class AttrBuilder {
     method.typeParams(build(tree.typeParams()));
     method.params(build(tree.params()));
     method.exceptions(build(tree.exceptions()));
-    method.locations().add(LocationBuilder.build(tree.intervals()));
+    method.intervals().add(tree.intervals());
     return method;
   }
 
@@ -73,7 +73,7 @@ public final class AttrBuilder {
     if (tree == null) return null;
     RetType retType = new RetType();
     retType.type(build(tree.ref()));
-    retType.locations().addAll(LocationBuilder.build(tree.intervals()));
+    retType.intervals().addAll(tree.intervals());
     return retType;
   }
 

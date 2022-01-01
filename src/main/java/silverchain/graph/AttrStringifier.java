@@ -36,7 +36,7 @@ public final class AttrStringifier implements AttrVisitor<String, Void> {
 
   @Override
   public String visit(Method method, Void arg) {
-    String s = "@" + LocationStringifier.stringify(method.locations());
+    String s = "@" + method.intervals().toString();
     return method.name() + visitChildren(method, arg) + s;
   }
 
@@ -53,7 +53,7 @@ public final class AttrStringifier implements AttrVisitor<String, Void> {
 
   @Override
   public String visit(RetType retType, Void arg) {
-    String s = "@" + LocationStringifier.stringify(retType.locations());
+    String s = "@" + retType.intervals().toString();
     return visitChildren(retType, arg) + s;
   }
 

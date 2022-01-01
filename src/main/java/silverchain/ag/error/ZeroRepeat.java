@@ -10,6 +10,6 @@ public class ZeroRepeat extends SilverchainException {
   public static String FORMAT = "Max is zero (%s)";
 
   public ZeroRepeat(RangeTree<?> t) {
-    super(FORMAT, t.intervals().first().begin().toString());
+    super(FORMAT, t.intervals().get(0).begin().toString());
   }
 }

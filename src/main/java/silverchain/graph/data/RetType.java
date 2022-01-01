@@ -5,13 +5,14 @@ import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
+import silverchain.interval.IntervalList;
 
 @API(status = API.Status.INTERNAL)
 public class RetType implements EdgeAttr {
 
   private TypeRef type;
 
-  private LocationGroup locations = new LocationGroup();
+  private IntervalList intervals = new IntervalList();
 
   public TypeRef type() {
     return type;
@@ -21,12 +22,12 @@ public class RetType implements EdgeAttr {
     this.type = type;
   }
 
-  public LocationGroup locations() {
-    return locations;
+  public IntervalList intervals() {
+    return intervals;
   }
 
-  public void locations(LocationGroup locations) {
-    this.locations = locations;
+  public void intervals(IntervalList intervals) {
+    this.intervals = intervals;
   }
 
   @Override

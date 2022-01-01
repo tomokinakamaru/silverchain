@@ -1,15 +1,15 @@
-package silverchain.ag.data;
+package silverchain.interval;
 
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public class SrcLocation {
+public class Position {
 
   private int line;
 
   private int column;
 
-  public SrcLocation(int line, int column) {
+  public Position(int line, int column) {
     line(line);
     column(column);
   }

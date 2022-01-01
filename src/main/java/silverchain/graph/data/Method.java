@@ -5,6 +5,7 @@ import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
+import silverchain.interval.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
 public class Method implements EdgeAttr {
@@ -17,7 +18,7 @@ public class Method implements EdgeAttr {
 
   private Exceptions exceptions = new Exceptions();
 
-  private LocationGroups locations = new LocationGroups();
+  private IntervalLists intervals = new IntervalLists();
 
   public String name() {
     return name;
@@ -51,12 +52,12 @@ public class Method implements EdgeAttr {
     this.exceptions = exceptions;
   }
 
-  public LocationGroups locations() {
-    return locations;
+  public IntervalLists intervals() {
+    return intervals;
   }
 
-  public void locations(LocationGroups locations) {
-    this.locations = locations;
+  public void intervals(IntervalLists intervals) {
+    this.intervals = intervals;
   }
 
   @Override

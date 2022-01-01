@@ -10,6 +10,6 @@ public class UndefinedFragment extends SilverchainException {
   public static String FORMAT = "Undefined fragment: %s (%s)";
 
   public UndefinedFragment(String id, FragmentRefTree t) {
-    super(FORMAT, id, t.intervals().first().begin().toString());
+    super(FORMAT, id, t.intervals().get(0).begin().toString());
   }
 }

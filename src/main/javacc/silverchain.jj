@@ -7,14 +7,14 @@ options {
 PARSER_BEGIN(GeneratedParser)
 package silverchain.ag.javacc;
 
-import silverchain.ag.data.*;
+import silverchain.ag.data.*;import silverchain.interval.Interval;import silverchain.interval.Position;
 import java.util.Stack;
 
 public class GeneratedParser {
 
   private final Stack<Trees> treeStack = new Stack<>();
 
-  private final Stack<SrcLocation> locationStack = new Stack<>();
+  private final Stack<Position> positionStack = new Stack<>();
 
   private Tree<?> $;
 
@@ -24,13 +24,13 @@ public class GeneratedParser {
 
   private <T extends Tree<T>> T $$(T t) {
     treeStack.push(new Trees());
-    locationStack.push(beginOfNextToken());
+    positionStack.push(beginOfNextToken());
     return t;
   }
 
   private <T extends Tree<T>> T $$$(T t) {
     t.children().addAll(treeStack.pop());
-    t.intervals().add(new SrcInterval(locationStack.pop(), endOfCurrentToken()));
+    t.intervals().add(new Interval(positionStack.pop(), endOfCurrentToken()));
     return t;
   }
 
@@ -42,13 +42,13 @@ public class GeneratedParser {
     return token.image;
   }
 
-  private SrcLocation beginOfNextToken() {
+  private Position beginOfNextToken() {
     Token t = getToken(1);
-    return new SrcLocation(t.beginLine, t.beginColumn);
+    return new Position(t.beginLine, t.beginColumn);
   }
 
-  private SrcLocation endOfCurrentToken() {
-    return new SrcLocation(token.endLine, token.endColumn);
+  private Position endOfCurrentToken() {
+    return new Position(token.endLine, token.endColumn);
   }
 }
 PARSER_END(GeneratedParser)

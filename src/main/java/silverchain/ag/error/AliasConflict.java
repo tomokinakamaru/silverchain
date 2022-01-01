@@ -13,7 +13,7 @@ public class AliasConflict extends SilverchainException {
     super(
         FORMAT,
         t1.name().id(),
-        t1.intervals().first().begin().toString(),
-        t2.intervals().first().begin().toString());
+        t1.intervals().get(0).begin().toString(),
+        t2.intervals().get(0).begin().toString());
   }
 }

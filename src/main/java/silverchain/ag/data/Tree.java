@@ -3,6 +3,7 @@ package silverchain.ag.data;
 import java.util.Collections;
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.interval.IntervalList;
 
 @API(status = API.Status.INTERNAL)
 public abstract class Tree<SELF extends Tree<SELF>> {
@@ -11,7 +12,7 @@ public abstract class Tree<SELF extends Tree<SELF>> {
 
   private TreeChildren children = new TreeChildren(this);
 
-  private SrcIntervals intervals = new SrcIntervals();
+  private IntervalList intervals = new IntervalList();
 
   public abstract <T> void enter(TreeListener<T> listener, T arg);
 
@@ -33,17 +34,17 @@ public abstract class Tree<SELF extends Tree<SELF>> {
     this.children = children;
   }
 
-  public SrcIntervals intervals() {
+  public IntervalList intervals() {
     return intervals;
   }
 
-  public void intervals(SrcIntervals intervals) {
+  public void intervals(IntervalList intervals) {
     this.intervals = intervals;
   }
 
-  public void addRewriteTarget(SrcIntervals target) {
+  public void add(IntervalList target) {
     intervals.addAll(target);
-    children.forEach(t -> t.addRewriteTarget(target));
+    children.forEach(t -> t.add(target));
   }
 
   @SuppressWarnings("unchecked")

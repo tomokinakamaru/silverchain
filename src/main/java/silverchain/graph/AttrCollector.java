@@ -6,10 +6,10 @@ import org.apiguardian.api.API;
 import silverchain.graph.data.Edge;
 import silverchain.graph.data.EdgeAttr;
 import silverchain.graph.data.Edges;
-import silverchain.graph.data.LocationGroup;
-import silverchain.graph.data.LocationGroups;
 import silverchain.graph.data.Vertex;
 import silverchain.graph.data.Vertices;
+import silverchain.interval.IntervalList;
+import silverchain.interval.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
 public final class AttrCollector {
@@ -45,11 +45,11 @@ public final class AttrCollector {
       attrs.add(attr);
     } else {
       if (a.isMethod()) {
-        LocationGroups ls = attr.asMethod().locations();
-        a.asMethod().locations().addAll(ls);
+        IntervalLists ls = attr.asMethod().intervals();
+        a.asMethod().intervals().addAll(ls);
       } else {
-        LocationGroup ls = attr.asRetType().locations();
-        a.asRetType().locations().addAll(ls);
+        IntervalList ls = attr.asRetType().intervals();
+        a.asRetType().intervals().addAll(ls);
       }
     }
   }

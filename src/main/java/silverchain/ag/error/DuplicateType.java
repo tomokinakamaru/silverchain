@@ -13,7 +13,7 @@ public class DuplicateType extends SilverchainException {
     super(
         FORMAT,
         id,
-        t1.intervals().first().begin().toString(),
-        t2.intervals().first().begin().toString());
+        t1.intervals().get(0).begin().toString(),
+        t2.intervals().get(0).begin().toString());
   }
 }
