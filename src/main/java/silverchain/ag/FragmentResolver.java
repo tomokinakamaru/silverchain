@@ -21,7 +21,7 @@ public class FragmentResolver implements TreeListener<Void> {
   @Override
   public void exit(FragmentRefTree tree, Void arg) {
     ChainExprTree t = fragments.get(tree.id()).copy();
-    t.add(tree.intervals());
+    t.add(tree.srcMap());
     tree.parent().children().replace(tree, t);
   }
 }

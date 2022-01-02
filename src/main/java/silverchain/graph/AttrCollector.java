@@ -8,7 +8,7 @@ import silverchain.graph.data.EdgeAttr;
 import silverchain.graph.data.Edges;
 import silverchain.graph.data.Vertex;
 import silverchain.graph.data.Vertices;
-import silverchain.interval.IntervalLists;
+import silverchain.srcmap.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
 public final class AttrCollector {
@@ -44,8 +44,8 @@ public final class AttrCollector {
       attrs.add(attr);
     } else {
       if (a.isMethod()) {
-        IntervalLists ls = attr.asMethod().intervals();
-        a.asMethod().intervals().addAll(ls);
+        IntervalLists ls = attr.asMethod().srcMap();
+        a.asMethod().srcMap().addAll(ls);
       } else {
         // IntervalList ls = attr.asTypeRef().intervals();
         // a.asTypeRef().intervals().addAll(ls);

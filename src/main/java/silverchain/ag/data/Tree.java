@@ -3,7 +3,7 @@ package silverchain.ag.data;
 import java.util.Collections;
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
-import silverchain.interval.IntervalList;
+import silverchain.srcmap.IntervalList;
 
 @API(status = API.Status.INTERNAL)
 public abstract class Tree<SELF extends Tree<SELF>> {
@@ -12,7 +12,7 @@ public abstract class Tree<SELF extends Tree<SELF>> {
 
   private TreeChildren children = new TreeChildren(this);
 
-  private IntervalList intervals = new IntervalList();
+  private IntervalList srcMap = new IntervalList();
 
   public abstract <T> void enter(TreeListener<T> listener, T arg);
 
@@ -34,16 +34,16 @@ public abstract class Tree<SELF extends Tree<SELF>> {
     this.children = children;
   }
 
-  public IntervalList intervals() {
-    return intervals;
+  public IntervalList srcMap() {
+    return srcMap;
   }
 
-  public void intervals(IntervalList intervals) {
-    this.intervals = intervals;
+  public void srcMap(IntervalList srcMap) {
+    this.srcMap = srcMap;
   }
 
   public void add(IntervalList target) {
-    intervals.addAll(target);
+    srcMap.addAll(target);
     children.forEach(t -> t.add(target));
   }
 
@@ -58,7 +58,7 @@ public abstract class Tree<SELF extends Tree<SELF>> {
     try {
       SELF tree = (SELF) getClass().getDeclaredConstructor().newInstance();
       children.forEach(t -> tree.children().add(t.copy()));
-      intervals.forEach(l -> tree.intervals().add(l));
+      srcMap.forEach(l -> tree.srcMap().add(l));
       return tree;
     } catch (ReflectiveOperationException e) {
       throw new RuntimeException(e);

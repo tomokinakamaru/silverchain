@@ -5,7 +5,7 @@ import org.apiguardian.api.API;
 import silverchain.SilverchainException;
 import silverchain.ag.javacc.ParseException;
 import silverchain.ag.javacc.Token;
-import silverchain.interval.Position;
+import silverchain.srcmap.Position;
 
 @API(status = API.Status.INTERNAL)
 public class SyntaxError extends SilverchainException {

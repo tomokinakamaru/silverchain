@@ -13,7 +13,7 @@ public class DuplicateFragment extends SilverchainException {
     super(
         FORMAT,
         t1.id(),
-        t1.intervals().get(0).begin().toString(),
-        t2.intervals().get(0).begin().toString());
+        t1.srcMap().get(0).begin().toString(),
+        t2.srcMap().get(0).begin().toString());
   }
 }

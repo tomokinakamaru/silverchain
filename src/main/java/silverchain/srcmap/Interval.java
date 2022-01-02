@@ -1,4 +1,4 @@
-package silverchain.interval;
+package silverchain.srcmap;
 
 import org.apiguardian.api.API;
 

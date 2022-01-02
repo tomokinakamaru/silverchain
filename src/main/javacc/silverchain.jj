@@ -7,7 +7,8 @@ options {
 PARSER_BEGIN(GeneratedParser)
 package silverchain.ag.javacc;
 
-import silverchain.ag.data.*;import silverchain.interval.Interval;import silverchain.interval.Position;
+import silverchain.ag.data.*;
+import silverchain.srcmap.*;
 import java.util.Stack;
 
 public class GeneratedParser {
@@ -30,7 +31,7 @@ public class GeneratedParser {
 
   private <T extends Tree<T>> T $$$(T t) {
     t.children().addAll(treeStack.pop());
-    t.intervals().add(new Interval(positionStack.pop(), endOfCurrentToken()));
+    t.srcMap().add(new Interval(positionStack.pop(), endOfCurrentToken()));
     return t;
   }
 

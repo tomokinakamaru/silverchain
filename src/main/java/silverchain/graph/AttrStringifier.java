@@ -35,7 +35,7 @@ public final class AttrStringifier implements AttrVisitor<String, Void> {
 
   @Override
   public String visit(Method method, Void arg) {
-    String s = "@" + method.intervals().toString();
+    String s = "@" + method.srcMap().toString();
     return method.name() + visitChildren(method, arg) + s;
   }
 

@@ -10,10 +10,6 @@ public class DuplicateType extends SilverchainException {
   public static String FORMAT = "Duplicate type declaration: %s (%s and %s)";
 
   public DuplicateType(String id, TypeDeclTree t1, TypeDeclTree t2) {
-    super(
-        FORMAT,
-        id,
-        t1.intervals().get(0).begin().toString(),
-        t2.intervals().get(0).begin().toString());
+    super(FORMAT, id, t1.srcMap().get(0).begin().toString(), t2.srcMap().get(0).begin().toString());
   }
 }

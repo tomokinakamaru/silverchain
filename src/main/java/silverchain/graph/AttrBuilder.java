@@ -46,7 +46,7 @@ public final class AttrBuilder {
     method.typeParams(build(tree.typeParams()));
     method.params(build(tree.params()));
     method.exceptions(build(tree.exceptions()));
-    method.intervals().add(tree.intervals());
+    method.srcMap().add(tree.srcMap());
     return method;
   }
 
