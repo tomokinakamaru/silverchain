@@ -6,11 +6,13 @@ import silverchain.graph.data.Attr;
 @API(status = API.Status.INTERNAL)
 public final class AttrWalker {
 
-  private AttrWalker() {}
+  public static <T> void walk(Attr attr, AttrListener<T> listener) {
+    walk(attr, listener, null);
+  }
 
-  public static void walk(AttrListener listener, Attr attr) {
-    attr.enter(listener);
-    attr.children().forEach(a -> walk(listener, a));
-    attr.exit(listener);
+  public static <T> void walk(Attr attr, AttrListener<T> listener, T arg) {
+    attr.enter(listener, arg);
+    attr.children().forEach(a -> walk(a, listener, arg));
+    attr.exit(listener, arg);
   }
 }

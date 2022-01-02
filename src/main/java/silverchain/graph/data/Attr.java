@@ -23,7 +23,7 @@ public abstract class Attr {
 
   public abstract <R, A> R accept(AttrVisitor<R, A> visitor, A arg);
 
-  public abstract void enter(AttrListener listener);
+  public abstract <T> void enter(AttrListener<T> listener, T arg);
 
-  public abstract void exit(AttrListener listener);
+  public abstract <T> void exit(AttrListener<T> listener, T arg);
 }

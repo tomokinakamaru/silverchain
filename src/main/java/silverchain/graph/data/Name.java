@@ -39,12 +39,12 @@ public class Name extends Attr {
   }
 
   @Override
-  public void enter(AttrListener listener) {
-    listener.enter(this);
+  public <T> void enter(AttrListener<T> listener, T arg) {
+    listener.enter(this, arg);
   }
 
   @Override
-  public void exit(AttrListener listener) {
-    listener.exit(this);
+  public <T> void exit(AttrListener<T> listener, T arg) {
+    listener.exit(this, arg);
   }
 }

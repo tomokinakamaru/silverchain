@@ -17,61 +17,61 @@ import silverchain.graph.data.TypeRef;
 import silverchain.graph.data.Wildcard;
 
 @API(status = API.Status.INTERNAL)
-public interface AttrListener {
+public interface AttrListener<T> {
 
-  default void enter(Bound attr) {}
+  default void enter(Bound attr, T arg) {}
 
-  default void exit(Bound attr) {}
+  default void exit(Bound attr, T arg) {}
 
-  default void enter(Bounds attr) {}
+  default void enter(Bounds attr, T arg) {}
 
-  default void exit(Bounds attr) {}
+  default void exit(Bounds attr, T arg) {}
 
-  default void enter(Exceptions attr) {}
+  default void enter(Exceptions attr, T arg) {}
 
-  default void exit(Exceptions attr) {}
+  default void exit(Exceptions attr, T arg) {}
 
-  default void enter(Method attr) {}
+  default void enter(Method attr, T arg) {}
 
-  default void exit(Method attr) {}
+  default void exit(Method attr, T arg) {}
 
-  default void enter(Name attr) {}
+  default void enter(Name attr, T arg) {}
 
-  default void exit(Name attr) {}
+  default void exit(Name attr, T arg) {}
 
-  default void enter(Param attr) {}
+  default void enter(Param attr, T arg) {}
 
-  default void exit(Param attr) {}
+  default void exit(Param attr, T arg) {}
 
-  default void enter(Params attr) {}
+  default void enter(Params attr, T arg) {}
 
-  default void exit(Params attr) {}
+  default void exit(Params attr, T arg) {}
 
-  default void enter(RetType attr) {}
+  default void enter(RetType attr, T arg) {}
 
-  default void exit(RetType attr) {}
+  default void exit(RetType attr, T arg) {}
 
-  default void enter(TypeArgs attr) {}
+  default void enter(TypeArgs attr, T arg) {}
 
-  default void exit(TypeArgs attr) {}
+  default void exit(TypeArgs attr, T arg) {}
 
-  default void enter(TypeParam attr) {}
+  default void enter(TypeParam attr, T arg) {}
 
-  default void exit(TypeParam attr) {}
+  default void exit(TypeParam attr, T arg) {}
 
-  default void enter(TypeParams attr) {}
+  default void enter(TypeParams attr, T arg) {}
 
-  default void exit(TypeParams attr) {}
+  default void exit(TypeParams attr, T arg) {}
 
-  default void enter(TypeRef attr) {}
+  default void enter(TypeRef attr, T arg) {}
 
-  default void exit(TypeRef attr) {}
+  default void exit(TypeRef attr, T arg) {}
 
-  default void enter(Type attr) {}
+  default void enter(Type attr, T arg) {}
 
-  default void exit(Type attr) {}
+  default void exit(Type attr, T arg) {}
 
-  default void enter(Wildcard attr) {}
+  default void enter(Wildcard attr, T arg) {}
 
-  default void exit(Wildcard attr) {}
+  default void exit(Wildcard attr, T arg) {}
 }
