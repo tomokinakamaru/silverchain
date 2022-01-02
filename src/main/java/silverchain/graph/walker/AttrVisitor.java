@@ -10,6 +10,7 @@ import silverchain.graph.data.Method;
 import silverchain.graph.data.Name;
 import silverchain.graph.data.Param;
 import silverchain.graph.data.Params;
+import silverchain.graph.data.RetType;
 import silverchain.graph.data.Type;
 import silverchain.graph.data.TypeArgs;
 import silverchain.graph.data.TypeParam;
@@ -30,6 +31,10 @@ public interface AttrVisitor<R, A> {
 
   default R visit(Param param, A arg) {
     return visitChildren(param, arg);
+  }
+
+  default R visit(RetType retType, A arg) {
+    return visitChildren(retType, arg);
   }
 
   default R visit(Type type, A arg) {

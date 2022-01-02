@@ -7,7 +7,7 @@ import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
 
 @API(status = API.Status.INTERNAL)
-public class Bound implements Attr {
+public class Bound extends Attr {
 
   private boolean upperBound;
 

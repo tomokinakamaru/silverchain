@@ -58,7 +58,7 @@ public final class GraphFactory {
   }
 
   public static Graph create(TypeRefTree tree) {
-    return GraphEditor.atom(AttrBuilder.build(tree));
+    return GraphEditor.atom(AttrBuilder.buildRetType(tree));
   }
 
   public static Graph create(MethodTree tree) {

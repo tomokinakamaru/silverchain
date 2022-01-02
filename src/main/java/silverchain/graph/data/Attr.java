@@ -4,15 +4,26 @@ import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
+import silverchain.srcmap.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
-public interface Attr {
+public abstract class Attr {
 
-  Stream<? extends Attr> children();
+  private IntervalLists srcMap;
 
-  <R, A> R accept(AttrVisitor<R, A> visitor, A arg);
+  public IntervalLists srcMap() {
+    return srcMap;
+  }
 
-  void enter(AttrListener listener);
+  public void srcMap(IntervalLists srcMap) {
+    this.srcMap = srcMap;
+  }
 
-  void exit(AttrListener listener);
+  public abstract Stream<? extends Attr> children();
+
+  public abstract <R, A> R accept(AttrVisitor<R, A> visitor, A arg);
+
+  public abstract void enter(AttrListener listener);
+
+  public abstract void exit(AttrListener listener);
 }

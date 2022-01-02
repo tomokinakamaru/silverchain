@@ -7,7 +7,7 @@ import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
 
 @API(status = API.Status.INTERNAL)
-public class Type implements Attr {
+public class Type extends Attr {
 
   private Name name;
 

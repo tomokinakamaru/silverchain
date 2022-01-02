@@ -8,6 +8,7 @@ import silverchain.graph.data.Method;
 import silverchain.graph.data.Name;
 import silverchain.graph.data.Param;
 import silverchain.graph.data.Params;
+import silverchain.graph.data.RetType;
 import silverchain.graph.data.Type;
 import silverchain.graph.data.TypeArgs;
 import silverchain.graph.data.TypeParam;
@@ -45,6 +46,10 @@ public interface AttrListener {
   default void enter(Params attr) {}
 
   default void exit(Params attr) {}
+
+  default void enter(RetType attr) {}
+
+  default void exit(RetType attr) {}
 
   default void enter(TypeArgs attr) {}
 

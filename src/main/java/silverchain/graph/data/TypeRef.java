@@ -7,7 +7,7 @@ import silverchain.graph.walker.AttrListener;
 import silverchain.graph.walker.AttrVisitor;
 
 @API(status = API.Status.INTERNAL)
-public class TypeRef extends TypeArg implements EdgeAttr {
+public class TypeRef extends TypeArg {
 
   private Name name;
 

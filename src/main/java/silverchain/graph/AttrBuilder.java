@@ -26,6 +26,7 @@ import silverchain.graph.data.Method;
 import silverchain.graph.data.Name;
 import silverchain.graph.data.Param;
 import silverchain.graph.data.Params;
+import silverchain.graph.data.RetType;
 import silverchain.graph.data.Type;
 import silverchain.graph.data.TypeArg;
 import silverchain.graph.data.TypeArgs;
@@ -88,6 +89,14 @@ public final class AttrBuilder {
     typeParam.name(tree.name());
     typeParam.bounds(build(tree.bounds()));
     return typeParam;
+  }
+
+  public static RetType buildRetType(TypeRefTree tree) {
+    if (tree == null) return null;
+    TypeRef typeRef = build(tree);
+    RetType retType = new RetType();
+    retType.ref(typeRef);
+    return retType;
   }
 
   public static TypeRef build(TypeRefTree tree) {

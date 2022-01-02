@@ -8,7 +8,7 @@ import silverchain.graph.walker.AttrVisitor;
 import silverchain.srcmap.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
-public class Method implements EdgeAttr {
+public class Method extends EdgeAttr {
 
   private String name;
 
