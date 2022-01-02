@@ -3,7 +3,6 @@ package silverchain.graph.data;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
-import silverchain.graph.walker.AttrVisitor;
 
 @API(status = API.Status.INTERNAL)
 public class Name extends Attr {
@@ -31,11 +30,6 @@ public class Name extends Attr {
   @Override
   public Stream<? extends Attr> children() {
     return Stream.empty();
-  }
-
-  @Override
-  public <R, A> R accept(AttrVisitor<R, A> visitor, A arg) {
-    return visitor.visit(this, arg);
   }
 
   @Override

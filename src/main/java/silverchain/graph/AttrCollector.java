@@ -54,6 +54,6 @@ public final class AttrCollector {
   }
 
   private EdgeAttr find(EdgeAttr attr) {
-    return attrs.stream().filter(a -> AttrComparator.equals(a, attr)).findFirst().orElse(null);
+    return attrs.stream().filter(attr::equals).findFirst().orElse(null);
   }
 }

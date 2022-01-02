@@ -4,27 +4,24 @@ import org.apiguardian.api.API;
 import silverchain.graph.data.Attr;
 import silverchain.graph.data.TypeParams;
 import silverchain.graph.data.TypeRef;
-import silverchain.graph.walker.AttrVisitor;
+import silverchain.graph.walker.AttrListener;
+import silverchain.graph.walker.AttrWalker;
 
 @API(status = API.Status.INTERNAL)
-public final class ParamCollector implements AttrVisitor<TypeParams, TypeParams> {
+public final class ParamCollector implements AttrListener<TypeParams> {
 
   private static final ParamCollector COLLECTOR = new ParamCollector();
 
   private ParamCollector() {}
 
   public static TypeParams collect(Attr attr) {
-    return attr.accept(COLLECTOR, new TypeParams());
+    TypeParams params = new TypeParams();
+    AttrWalker.walk(attr, COLLECTOR, params);
+    return params;
   }
 
   @Override
-  public TypeParams visit(TypeRef typeRef, TypeParams arg) {
-    if (typeRef.target() != null) arg.add(typeRef.target());
-    return arg;
-  }
-
-  @Override
-  public TypeParams defaultResult(TypeParams arg) {
-    return arg;
+  public void enter(TypeRef attr, TypeParams arg) {
+    if (attr.target() != null) arg.add(attr.target());
   }
 }

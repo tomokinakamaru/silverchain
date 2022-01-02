@@ -4,7 +4,6 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
-import silverchain.graph.walker.AttrVisitor;
 
 @API(status = API.Status.INTERNAL)
 public class TypeRef extends TypeArg {
@@ -62,11 +61,6 @@ public class TypeRef extends TypeArg {
   @Override
   public Stream<? extends Attr> children() {
     return Stream.of(name, args).filter(Objects::nonNull);
-  }
-
-  @Override
-  public <R, A> R accept(AttrVisitor<R, A> visitor, A arg) {
-    return visitor.visit(this, arg);
   }
 
   @Override

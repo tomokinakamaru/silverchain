@@ -56,7 +56,7 @@ public class GraphDeterminizer implements GraphListener {
     return vertices.stream()
         .map(Vertex::edges)
         .flatMap(Collection::stream)
-        .filter(e -> AttrComparator.equals(e.attr(), attribute))
+        .filter(e -> e.attr().equals(attribute))
         .map(Edge::target)
         .collect(Collectors.toCollection(Vertices::new));
   }
