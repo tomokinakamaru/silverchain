@@ -1,7 +1,9 @@
 package silverchain.graph.data;
 
+import java.util.List;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.NameTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -9,7 +11,16 @@ public class Name extends Attr {
 
   private String id;
 
-  private String qualifier;
+  private List<String> qualifier;
+
+  public static Name build(NameTree tree) {
+    if (tree == null) return null;
+    Name attr = new Name();
+    attr.id(tree.id());
+    attr.qualifier(tree.qualifier());
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public String id() {
     return id;
@@ -19,11 +30,11 @@ public class Name extends Attr {
     this.id = id;
   }
 
-  public String qualifier() {
+  public List<String> qualifier() {
     return qualifier;
   }
 
-  public void qualifier(String qualifier) {
+  public void qualifier(List<String> qualifier) {
     this.qualifier = qualifier;
   }
 

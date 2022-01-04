@@ -3,6 +3,7 @@ package silverchain.graph.data;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.TypeRefTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -17,6 +18,17 @@ public class TypeRef extends TypeArg {
   private Name originalName;
 
   private TypeParam target;
+
+  public static TypeRef build(TypeRefTree tree) {
+    if (tree == null) return null;
+    TypeRef attr = new TypeRef();
+    attr.name(Name.build(tree.name()));
+    attr.args(TypeArgs.build(tree.args()));
+    attr.dim(tree.dim());
+    attr.originalName(Name.build(tree.originalName()));
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public Name name() {
     return name;

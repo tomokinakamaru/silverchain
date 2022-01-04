@@ -3,6 +3,7 @@ package silverchain.graph.data;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.ParamTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -13,6 +14,16 @@ public class Param extends Attr {
   private boolean varargs;
 
   private String name;
+
+  public static Param build(ParamTree tree) {
+    if (tree == null) return null;
+    Param attr = new Param();
+    attr.type(TypeRef.build(tree.type()));
+    attr.varargs(tree.varargs());
+    attr.name(tree.name());
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public TypeRef type() {
     return type;

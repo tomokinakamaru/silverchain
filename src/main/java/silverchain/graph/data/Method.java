@@ -3,6 +3,7 @@ package silverchain.graph.data;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.MethodTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -15,6 +16,17 @@ public class Method extends EdgeAttr {
   private Params params;
 
   private Exceptions exceptions;
+
+  public static Method build(MethodTree tree) {
+    if (tree == null) return null;
+    Method attr = new Method();
+    attr.name(tree.name());
+    attr.typeParams(TypeParams.build(tree.typeParams()));
+    attr.params(Params.build(tree.params()));
+    attr.exceptions(Exceptions.build(tree.exceptions()));
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public String name() {
     return name;

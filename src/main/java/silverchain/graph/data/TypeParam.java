@@ -3,6 +3,7 @@ package silverchain.graph.data;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.TypeParamTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -11,6 +12,15 @@ public class TypeParam extends Attr {
   private String name;
 
   private Bounds bounds;
+
+  public static TypeParam build(TypeParamTree tree) {
+    if (tree == null) return null;
+    TypeParam attr = new TypeParam();
+    attr.name(tree.name());
+    attr.bounds(Bounds.build(tree.bounds()));
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public String name() {
     return name;

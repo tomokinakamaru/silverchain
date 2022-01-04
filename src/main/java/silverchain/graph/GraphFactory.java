@@ -10,6 +10,9 @@ import silverchain.ag.data.TypeDeclBodyTree;
 import silverchain.ag.data.TypeDeclTree;
 import silverchain.ag.data.TypeRefTree;
 import silverchain.graph.data.Graph;
+import silverchain.graph.data.Method;
+import silverchain.graph.data.RetType;
+import silverchain.graph.data.Type;
 
 @API(status = API.Status.INTERNAL)
 public final class GraphFactory {
@@ -18,7 +21,7 @@ public final class GraphFactory {
 
   public static Graph create(TypeDeclTree tree) {
     Graph graph = create(tree.body());
-    graph.type(AttrBuilder.build(tree));
+    graph.type(Type.build(tree));
     return graph;
   }
 
@@ -58,10 +61,10 @@ public final class GraphFactory {
   }
 
   public static Graph create(TypeRefTree tree) {
-    return GraphEditor.atom(AttrBuilder.buildRetType(tree));
+    return GraphEditor.atom(RetType.build(tree));
   }
 
   public static Graph create(MethodTree tree) {
-    return GraphEditor.atom(AttrBuilder.build(tree));
+    return GraphEditor.atom(Method.build(tree));
   }
 }

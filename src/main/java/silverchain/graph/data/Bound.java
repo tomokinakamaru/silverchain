@@ -3,6 +3,7 @@ package silverchain.graph.data;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
+import silverchain.ag.data.BoundTree;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
@@ -11,6 +12,15 @@ public class Bound extends Attr {
   private boolean upperBound;
 
   private TypeRef type;
+
+  public static Bound build(BoundTree tree) {
+    if (tree == null) return null;
+    Bound attr = new Bound();
+    attr.upperBound(tree.upperBound());
+    attr.type(TypeRef.build(tree.type()));
+    attr.srcMap().add(tree.srcMap());
+    return attr;
+  }
 
   public boolean upperBound() {
     return upperBound;
