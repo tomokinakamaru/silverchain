@@ -74,4 +74,28 @@ public class Method extends EdgeAttr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return name
+        + Objects.toString(typeParams, "")
+        + params.toString()
+        + Objects.toString(exceptions, "");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Method method = (Method) o;
+    return Objects.equals(name, method.name)
+        && Objects.equals(typeParams, method.typeParams)
+        && Objects.equals(params, method.params)
+        && Objects.equals(exceptions, method.exceptions);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, typeParams, params, exceptions);
+  }
 }

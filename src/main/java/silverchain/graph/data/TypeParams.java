@@ -2,6 +2,7 @@ package silverchain.graph.data;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.data.InnerParamsTree;
 import silverchain.ag.data.OuterParamsTree;
@@ -46,5 +47,10 @@ public class TypeParams extends Attrs<TypeParam> {
   @Override
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
+  }
+
+  @Override
+  public String toString() {
+    return "<" + stream().map(TypeParam::toString).collect(Collectors.joining(", ")) + ">";
   }
 }

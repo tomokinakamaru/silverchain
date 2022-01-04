@@ -63,4 +63,24 @@ public class Param extends Attr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return type.toString() + (varargs ? "... " : " ") + name;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Param param = (Param) o;
+    return varargs == param.varargs
+        && Objects.equals(type, param.type)
+        && Objects.equals(name, param.name);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(type, varargs, name);
+  }
 }

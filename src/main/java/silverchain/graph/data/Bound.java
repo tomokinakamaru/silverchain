@@ -52,4 +52,22 @@ public class Bound extends Attr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return (upperBound ? " extends " : " super ") + type.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Bound bound = (Bound) o;
+    return upperBound == bound.upperBound && Objects.equals(type, bound.type);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(upperBound, type);
+  }
 }

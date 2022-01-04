@@ -2,6 +2,7 @@ package silverchain.graph.data;
 
 import static java.util.stream.Collectors.toCollection;
 
+import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.data.BoundsTree;
 import silverchain.graph.walker.AttrListener;
@@ -24,5 +25,10 @@ public class Bounds extends Attrs<TypeRef> {
   @Override
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
+  }
+
+  @Override
+  public String toString() {
+    return stream().map(TypeRef::toString).collect(Collectors.joining(" & "));
   }
 }

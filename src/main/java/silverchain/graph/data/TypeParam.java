@@ -52,4 +52,22 @@ public class TypeParam extends Attr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return name + Objects.toString(bounds, "");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    TypeParam typeParam = (TypeParam) o;
+    return Objects.equals(name, typeParam.name) && Objects.equals(bounds, typeParam.bounds);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, bounds);
+  }
 }

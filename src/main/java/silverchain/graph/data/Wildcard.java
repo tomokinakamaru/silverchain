@@ -41,4 +41,22 @@ public class Wildcard extends TypeArg {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return "?" + Objects.toString(bound, "");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Wildcard wildcard = (Wildcard) o;
+    return Objects.equals(bound, wildcard.bound);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(bound);
+  }
 }

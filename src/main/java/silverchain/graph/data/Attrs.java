@@ -84,4 +84,17 @@ public abstract class Attrs<T extends Attr> extends Attr implements Set<T> {
   public void clear() {
     attrs.clear();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Attrs<?> a = (Attrs<?>) o;
+    return Objects.equals(attrs, a.attrs);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(attrs);
+  }
 }

@@ -41,4 +41,22 @@ public class RetType extends EdgeAttr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return ref.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    RetType retType = (RetType) o;
+    return Objects.equals(ref, retType.ref);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(ref);
+  }
 }

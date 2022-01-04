@@ -84,4 +84,26 @@ public class TypeRef extends TypeArg {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder(originalName + Objects.toString(args, ""));
+    for (int i = 0; i < dim; i++) builder.append("[]");
+    return builder.toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    TypeRef typeRef = (TypeRef) o;
+    return dim == typeRef.dim
+        && Objects.equals(name, typeRef.name)
+        && Objects.equals(args, typeRef.args);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, args, dim, originalName, target);
+  }
 }

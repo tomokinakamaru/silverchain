@@ -76,4 +76,24 @@ public class Type extends Attr {
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
   }
+
+  @Override
+  public String toString() {
+    return originalName + Objects.toString(outerParams, "") + Objects.toString(innerParams, "");
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Type type = (Type) o;
+    return Objects.equals(name, type.name)
+        && Objects.equals(outerParams, type.outerParams)
+        && Objects.equals(innerParams, type.innerParams);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, outerParams, innerParams, originalName);
+  }
 }

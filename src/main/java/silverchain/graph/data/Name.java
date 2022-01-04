@@ -1,6 +1,7 @@
 package silverchain.graph.data;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.NameTree;
@@ -51,5 +52,23 @@ public class Name extends Attr {
   @Override
   public <T> void exit(AttrListener<T> listener, T arg) {
     listener.exit(this, arg);
+  }
+
+  @Override
+  public String toString() {
+    return (qualifier == null ? "" : String.join(".", qualifier) + ".") + id;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Name name = (Name) o;
+    return Objects.equals(id, name.id) && Objects.equals(qualifier, name.qualifier);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(id, qualifier);
   }
 }
