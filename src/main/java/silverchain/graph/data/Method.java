@@ -4,20 +4,17 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.graph.walker.AttrListener;
-import silverchain.srcmap.IntervalLists;
 
 @API(status = API.Status.INTERNAL)
 public class Method extends EdgeAttr {
 
   private String name;
 
-  private TypeParams typeParams = new TypeParams();
+  private TypeParams typeParams;
 
-  private Params params = new Params();
+  private Params params;
 
-  private Exceptions exceptions = new Exceptions();
-
-  private IntervalLists srcMap = new IntervalLists();
+  private Exceptions exceptions;
 
   public String name() {
     return name;
@@ -49,14 +46,6 @@ public class Method extends EdgeAttr {
 
   public void exceptions(Exceptions exceptions) {
     this.exceptions = exceptions;
-  }
-
-  public IntervalLists srcMap() {
-    return srcMap;
-  }
-
-  public void srcMap(IntervalLists srcMap) {
-    this.srcMap = srcMap;
   }
 
   @Override

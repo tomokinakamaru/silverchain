@@ -10,9 +10,9 @@ public class Type extends Attr {
 
   private Name name;
 
-  private TypeParams outerParams = new TypeParams();
+  private TypeParams outerParams;
 
-  private TypeParams innerParams = new TypeParams();
+  private TypeParams innerParams;
 
   private Name originalName;
 

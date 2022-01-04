@@ -8,7 +8,13 @@ import silverchain.srcmap.IntervalLists;
 @API(status = API.Status.INTERNAL)
 public abstract class Attr {
 
-  private IntervalLists srcMap;
+  private IntervalLists srcMap = new IntervalLists();
+
+  public abstract Stream<? extends Attr> children();
+
+  public abstract <T> void enter(AttrListener<T> listener, T arg);
+
+  public abstract <T> void exit(AttrListener<T> listener, T arg);
 
   public IntervalLists srcMap() {
     return srcMap;
@@ -17,10 +23,4 @@ public abstract class Attr {
   public void srcMap(IntervalLists srcMap) {
     this.srcMap = srcMap;
   }
-
-  public abstract Stream<? extends Attr> children();
-
-  public abstract <T> void enter(AttrListener<T> listener, T arg);
-
-  public abstract <T> void exit(AttrListener<T> listener, T arg);
 }

@@ -10,7 +10,7 @@ public class TypeRef extends TypeArg {
 
   private Name name;
 
-  private TypeArgs args = new TypeArgs();
+  private TypeArgs args;
 
   private int dim;
 

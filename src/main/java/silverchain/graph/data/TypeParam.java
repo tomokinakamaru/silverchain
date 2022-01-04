@@ -10,7 +10,7 @@ public class TypeParam extends Attr {
 
   private String name;
 
-  private Bounds bounds = new Bounds();
+  private Bounds bounds;
 
   public String name() {
     return name;
