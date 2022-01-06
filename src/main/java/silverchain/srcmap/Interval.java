@@ -14,6 +14,10 @@ public class Interval {
     end(end);
   }
 
+  public Interval copy() {
+    return new Interval(begin.copy(), end.copy());
+  }
+
   public Position begin() {
     return begin;
   }

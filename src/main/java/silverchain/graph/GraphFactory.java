@@ -34,7 +34,7 @@ public final class GraphFactory {
 
   public static Graph create(ChainStmtTree tree) {
     Graph graph1 = create(tree.expr());
-    Graph graph2 = create(tree.retType());
+    Graph graph2 = create(tree.type());
     return GraphEditor.concat(graph1, graph2);
   }
 

@@ -2,9 +2,10 @@ package silverchain.ag.data;
 
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class ParamTree extends Tree<ParamTree> {
+public class ParamTree extends TreeImpl {
 
   private boolean varargs;
 
@@ -31,17 +32,17 @@ public class ParamTree extends Tree<ParamTree> {
   }
 
   @Override
-  public <T> void enter(TreeListener<T> listener, T arg) {
-    listener.enter(this, arg);
+  public ParamTree copy() {
+    return (ParamTree) super.copy();
   }
 
   @Override
-  public <T> void exit(TreeListener<T> listener, T arg) {
-    listener.exit(this, arg);
+  public <T> void enter(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.enter(ancestors, this, arg);
   }
 
   @Override
-  public String toString() {
-    return type() + (varargs ? "... " : " ") + name;
+  public <T> void exit(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.exit(ancestors, this, arg);
   }
 }

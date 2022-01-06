@@ -5,10 +5,11 @@ import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.data.ParamsTree;
+import silverchain.graph.core.AttrsImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Params extends Attrs<Param> {
+public class Params extends AttrsImpl<Param> {
 
   public static Params build(ParamsTree tree) {
     if (tree == null) return null;

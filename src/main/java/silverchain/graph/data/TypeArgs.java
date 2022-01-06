@@ -4,10 +4,11 @@ import static java.util.stream.Collectors.toCollection;
 
 import org.apiguardian.api.API;
 import silverchain.ag.data.TypeArgsTree;
+import silverchain.graph.core.AttrsImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class TypeArgs extends Attrs<TypeArg> {
+public class TypeArgs extends AttrsImpl<TypeArg> {
 
   public static TypeArgs build(TypeArgsTree tree) {
     if (tree == null) return null;

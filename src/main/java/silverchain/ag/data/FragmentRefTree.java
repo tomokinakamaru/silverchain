@@ -2,9 +2,10 @@ package silverchain.ag.data;
 
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class FragmentRefTree extends ChainElemTree<FragmentRefTree> {
+public class FragmentRefTree extends TreeImpl implements ChainElemTree {
 
   private String id;
 
@@ -17,17 +18,17 @@ public class FragmentRefTree extends ChainElemTree<FragmentRefTree> {
   }
 
   @Override
-  public <T> void enter(TreeListener<T> listener, T arg) {
-    listener.enter(this, arg);
+  public FragmentRefTree copy() {
+    return (FragmentRefTree) super.copy();
   }
 
   @Override
-  public <T> void exit(TreeListener<T> listener, T arg) {
-    listener.exit(this, arg);
+  public <T> void enter(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.enter(ancestors, this, arg);
   }
 
   @Override
-  public String toString() {
-    return id;
+  public <T> void exit(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.exit(ancestors, this, arg);
   }
 }

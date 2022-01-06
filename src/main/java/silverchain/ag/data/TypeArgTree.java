@@ -3,21 +3,24 @@ package silverchain.ag.data;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class TypeArgTree<SELF extends TypeArgTree<SELF>> extends Tree<SELF> {
+public interface TypeArgTree extends Tree {
 
-  public boolean isTypeRef() {
-    return is(TypeRefTree.class);
+  default boolean isTypeRef() {
+    return this instanceof TypeRefTree;
   }
 
-  public TypeRefTree asTypeRef() {
-    return as(TypeRefTree.class);
+  default TypeRefTree asTypeRef() {
+    return (TypeRefTree) this;
   }
 
-  public boolean isWildcard() {
-    return is(WildcardTree.class);
+  default boolean isWildcard() {
+    return this instanceof WildcardTree;
   }
 
-  public WildcardTree asWildcard() {
-    return as(WildcardTree.class);
+  default WildcardTree asWildcard() {
+    return (WildcardTree) this;
   }
+
+  @Override
+  TypeArgTree copy();
 }

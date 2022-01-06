@@ -7,6 +7,7 @@ import silverchain.ag.data.ChainExprTree;
 import silverchain.ag.data.FragmentDeclTree;
 import silverchain.ag.data.FragmentRefTree;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
 public class FragmentResolver implements TreeListener<Void> {
@@ -14,14 +15,14 @@ public class FragmentResolver implements TreeListener<Void> {
   protected Map<String, ChainExprTree> fragments = new HashMap<>();
 
   @Override
-  public void exit(FragmentDeclTree tree, Void arg) {
+  public void exit(TreeStack ancestors, FragmentDeclTree tree, Void arg) {
     fragments.put(tree.id(), tree.expr());
   }
 
   @Override
-  public void exit(FragmentRefTree tree, Void arg) {
+  public void exit(TreeStack ancestors, FragmentRefTree tree, Void arg) {
     ChainExprTree t = fragments.get(tree.id()).copy();
-    t.add(tree.srcMap());
-    tree.parent().children().replace(tree, t);
+    t.addSrcMap(tree.srcMap());
+    ancestors.peek().children().replace(tree, t);
   }
 }

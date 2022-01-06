@@ -1,13 +1,11 @@
 package silverchain.ag.data;
 
-import java.util.Objects;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class TypeRefTree extends TypeArgTree<TypeRefTree> {
+public class TypeRefTree extends TreeImpl implements TypeArgTree {
 
   private int dim;
 
@@ -28,23 +26,21 @@ public class TypeRefTree extends TypeArgTree<TypeRefTree> {
   }
 
   public NameTree originalName() {
-    return children().original(NameTree.class);
+    return children().findOriginal(NameTree.class);
   }
 
   @Override
-  public <T> void enter(TreeListener<T> listener, T arg) {
-    listener.enter(this, arg);
+  public TypeRefTree copy() {
+    return (TypeRefTree) super.copy();
   }
 
   @Override
-  public <T> void exit(TreeListener<T> listener, T arg) {
-    listener.exit(this, arg);
+  public <T> void enter(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.enter(ancestors, this, arg);
   }
 
   @Override
-  public String toString() {
-    return name().toString()
-        + Objects.toString(args(), "")
-        + IntStream.range(0, dim).mapToObj(i -> "[]").collect(Collectors.joining());
+  public <T> void exit(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.exit(ancestors, this, arg);
   }
 }

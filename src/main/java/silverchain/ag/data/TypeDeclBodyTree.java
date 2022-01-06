@@ -1,24 +1,24 @@
 package silverchain.ag.data;
 
-import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class TypeDeclBodyTree extends Tree<TypeDeclBodyTree> implements SetTree<ChainStmtTree> {
+public class TypeDeclBodyTree extends SetTreeImpl<ChainStmtTree> {
 
   @Override
-  public <T> void enter(TreeListener<T> listener, T arg) {
-    listener.enter(this, arg);
+  public TypeDeclBodyTree copy() {
+    return (TypeDeclBodyTree) super.copy();
   }
 
   @Override
-  public <T> void exit(TreeListener<T> listener, T arg) {
-    listener.exit(this, arg);
+  public <T> void enter(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.enter(ancestors, this, arg);
   }
 
   @Override
-  public String toString() {
-    return "{" + stream().map(t -> "\n  " + t).collect(Collectors.joining()) + "\n}";
+  public <T> void exit(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.exit(ancestors, this, arg);
   }
 }

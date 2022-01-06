@@ -1,7 +1,7 @@
 package silverchain.graph;
 
 import org.apiguardian.api.API;
-import silverchain.graph.data.Attr;
+import silverchain.graph.data.EdgeAttr;
 import silverchain.graph.data.TypeParams;
 import silverchain.graph.data.TypeRef;
 import silverchain.graph.walker.AttrListener;
@@ -14,7 +14,7 @@ public final class ParamCollector implements AttrListener<TypeParams> {
 
   private ParamCollector() {}
 
-  public static TypeParams collect(Attr attr) {
+  public static TypeParams collect(EdgeAttr attr) {
     TypeParams params = new TypeParams();
     AttrWalker.walk(attr, COLLECTOR, params);
     return params;

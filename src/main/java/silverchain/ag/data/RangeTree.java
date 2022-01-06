@@ -3,29 +3,32 @@ package silverchain.ag.data;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class RangeTree<SELF extends RangeTree<SELF>> extends QuantifierTree<SELF> {
+public interface RangeTree extends QuantifierTree {
 
-  public boolean isRangeNM() {
-    return is(RangeNMTree.class);
+  default boolean isRangeNM() {
+    return this instanceof RangeNMTree;
   }
 
-  public RangeNMTree asRangeNM() {
-    return as(RangeNMTree.class);
+  default RangeNMTree asRangeNM() {
+    return (RangeNMTree) this;
   }
 
-  public boolean isRangeN() {
-    return is(RangeNTree.class);
+  default boolean isRangeN() {
+    return this instanceof RangeNTree;
   }
 
-  public RangeNTree asRangeN() {
-    return as(RangeNTree.class);
+  default RangeNTree asRangeN() {
+    return (RangeNTree) this;
   }
 
-  public boolean isRangeNX() {
-    return is(RangeNXTree.class);
+  default boolean isRangeNX() {
+    return this instanceof RangeNXTree;
   }
 
-  public RangeNXTree asRangeNX() {
-    return as(RangeNXTree.class);
+  default RangeNXTree asRangeNX() {
+    return (RangeNXTree) this;
   }
+
+  @Override
+  RangeTree copy();
 }

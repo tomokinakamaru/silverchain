@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.TypeParamTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class TypeParam extends Attr {
+public class TypeParam extends AttrImpl {
 
   private String name;
 
@@ -39,7 +40,7 @@ public class TypeParam extends Attr {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(bounds).filter(Objects::nonNull);
   }
 

@@ -1,17 +1,13 @@
 package silverchain.ag.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class NameTree extends Tree<NameTree> {
+public class NameTree extends TreeImpl {
 
   private String id;
-
-  private List<String> qualifier = new ArrayList<>();
 
   public String id() {
     return id;
@@ -21,26 +17,22 @@ public class NameTree extends Tree<NameTree> {
     this.id = id;
   }
 
-  public List<String> qualifier() {
-    return qualifier;
-  }
-
-  public void qualifier(List<String> qualifier) {
-    this.qualifier = qualifier;
+  public QualifierTree qualifier() {
+    return children().find(QualifierTree.class);
   }
 
   @Override
-  public <T> void enter(TreeListener<T> listener, T arg) {
-    listener.enter(this, arg);
+  public NameTree copy() {
+    return (NameTree) super.copy();
   }
 
   @Override
-  public <T> void exit(TreeListener<T> listener, T arg) {
-    listener.exit(this, arg);
+  public <T> void enter(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.enter(ancestors, this, arg);
   }
 
   @Override
-  public String toString() {
-    return qualifier.stream().map(s -> s + ".").collect(Collectors.joining()) + id;
+  public <T> void exit(TreeStack ancestors, TreeListener<T> listener, T arg) {
+    listener.exit(ancestors, this, arg);
   }
 }

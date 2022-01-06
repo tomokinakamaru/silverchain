@@ -5,10 +5,11 @@ import static java.util.stream.Collectors.toCollection;
 import java.util.stream.Collectors;
 import org.apiguardian.api.API;
 import silverchain.ag.data.BoundsTree;
+import silverchain.graph.core.AttrsImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Bounds extends Attrs<TypeRef> {
+public class Bounds extends AttrsImpl<TypeRef> {
 
   public static Bounds build(BoundsTree tree) {
     if (tree == null) return null;

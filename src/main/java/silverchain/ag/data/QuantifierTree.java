@@ -3,37 +3,40 @@ package silverchain.ag.data;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class QuantifierTree<SELF extends QuantifierTree<SELF>> extends Tree<SELF> {
+public interface QuantifierTree extends Tree {
 
-  public boolean isRange() {
-    return is(RangeTree.class);
+  default boolean isRange() {
+    return this instanceof RangeTree;
   }
 
-  public RangeTree<?> asRange() {
-    return as(RangeTree.class);
+  default RangeTree asRange() {
+    return (RangeTree) this;
   }
 
-  public boolean isRepeat0X() {
-    return is(Repeat0XTree.class);
+  default boolean isRepeat0X() {
+    return this instanceof Repeat0XTree;
   }
 
-  public Repeat0XTree asRepeat0X() {
-    return as(Repeat0XTree.class);
+  default Repeat0XTree asRepeat0X() {
+    return (Repeat0XTree) this;
   }
 
-  public boolean isRepeat1X() {
-    return is(Repeat1XTree.class);
+  default boolean isRepeat1X() {
+    return this instanceof Repeat1XTree;
   }
 
-  public Repeat1XTree asRepeat1X() {
-    return as(Repeat1XTree.class);
+  default Repeat1XTree asRepeat1X() {
+    return (Repeat1XTree) this;
   }
 
-  public boolean isRepeat01() {
-    return is(Repeat01Tree.class);
+  default boolean isRepeat01() {
+    return this instanceof Repeat01Tree;
   }
 
-  public Repeat01Tree asRepeat01() {
-    return as(Repeat01Tree.class);
+  default Repeat01Tree asRepeat01() {
+    return (Repeat01Tree) this;
   }
+
+  @Override
+  QuantifierTree copy();
 }

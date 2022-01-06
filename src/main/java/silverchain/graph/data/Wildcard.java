@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.WildcardTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Wildcard extends TypeArg {
+public class Wildcard extends AttrImpl implements TypeArg {
 
   private Bound bound;
 
@@ -28,7 +29,7 @@ public class Wildcard extends TypeArg {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(bound).filter(Objects::nonNull);
   }
 

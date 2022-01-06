@@ -1,4 +1,4 @@
-package silverchain.graph.data;
+package silverchain.graph.core;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class Attrs<T extends Attr> extends Attr implements Set<T> {
+public abstract class AttrsImpl<T extends Attr> extends AttrImpl implements Attrs<T> {
 
   private final Set<T> attrs = new LinkedHashSet<>();
 
@@ -89,7 +89,7 @@ public abstract class Attrs<T extends Attr> extends Attr implements Set<T> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    Attrs<?> a = (Attrs<?>) o;
+    AttrsImpl<?> a = (AttrsImpl<?>) o;
     return Objects.equals(attrs, a.attrs);
   }
 

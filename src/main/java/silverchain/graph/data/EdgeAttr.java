@@ -1,23 +1,24 @@
 package silverchain.graph.data;
 
 import org.apiguardian.api.API;
+import silverchain.graph.core.Attr;
 
 @API(status = API.Status.INTERNAL)
-public abstract class EdgeAttr extends Attr {
+public interface EdgeAttr extends Attr {
 
-  public boolean isMethod() {
+  default boolean isMethod() {
     return this instanceof Method;
   }
 
-  public Method asMethod() {
+  default Method asMethod() {
     return (Method) this;
   }
 
-  public boolean isRetType() {
+  default boolean isRetType() {
     return this instanceof RetType;
   }
 
-  public RetType asRetType() {
+  default RetType asRetType() {
     return (RetType) this;
   }
 }

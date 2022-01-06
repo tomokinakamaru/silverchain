@@ -5,11 +5,25 @@ import silverchain.ag.walker.TreeListener;
 import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class Repeat1XTree extends TreeImpl implements QuantifierTree {
+public class QualifierTree extends TreeImpl {
+
+  private String head;
+
+  public String head() {
+    return head;
+  }
+
+  public void head(String head) {
+    this.head = head;
+  }
+
+  public QualifierTree tail() {
+    return children().find(QualifierTree.class);
+  }
 
   @Override
-  public Repeat1XTree copy() {
-    return (Repeat1XTree) super.copy();
+  public QualifierTree copy() {
+    return (QualifierTree) super.copy();
   }
 
   @Override

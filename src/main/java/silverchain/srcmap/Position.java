@@ -14,6 +14,10 @@ public class Position {
     column(column);
   }
 
+  public Position copy() {
+    return new Position(line, column);
+  }
+
   public int line() {
     return line;
   }

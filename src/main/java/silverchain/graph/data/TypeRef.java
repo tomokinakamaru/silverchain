@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.TypeRefTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class TypeRef extends TypeArg {
+public class TypeRef extends AttrImpl implements TypeArg {
 
   private Name name;
 
@@ -71,7 +72,7 @@ public class TypeRef extends TypeArg {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(name, args).filter(Objects::nonNull);
   }
 

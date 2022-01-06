@@ -5,11 +5,15 @@ import silverchain.ag.walker.TreeListener;
 import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
-public class Repeat1XTree extends TreeImpl implements QuantifierTree {
+public class RetTypeTree extends TreeImpl {
+
+  TypeRefTree ref() {
+    return children().find(TypeRefTree.class);
+  }
 
   @Override
-  public Repeat1XTree copy() {
-    return (Repeat1XTree) super.copy();
+  public RetTypeTree copy() {
+    return (RetTypeTree) super.copy();
   }
 
   @Override

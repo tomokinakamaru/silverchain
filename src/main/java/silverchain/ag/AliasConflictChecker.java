@@ -6,6 +6,7 @@ import org.apiguardian.api.API;
 import silverchain.ag.data.AliasDeclTree;
 import silverchain.ag.error.AliasConflict;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
 public class AliasConflictChecker implements TreeListener<Void> {
@@ -13,7 +14,7 @@ public class AliasConflictChecker implements TreeListener<Void> {
   protected Map<String, AliasDeclTree> aliases = new HashMap<>();
 
   @Override
-  public void enter(AliasDeclTree tree, Void arg) {
+  public void enter(TreeStack ancestors, AliasDeclTree tree, Void arg) {
     String id = tree.name().id();
     if (aliases.containsKey(id)) {
       throw new AliasConflict(aliases.get(id), tree);

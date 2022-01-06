@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.MethodTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Method extends EdgeAttr {
+public class Method extends AttrImpl implements EdgeAttr {
 
   private String name;
 
@@ -61,7 +62,7 @@ public class Method extends EdgeAttr {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(typeParams, params, exceptions).filter(Objects::nonNull);
   }
 

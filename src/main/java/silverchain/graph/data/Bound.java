@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.BoundTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Bound extends Attr {
+public class Bound extends AttrImpl {
 
   private boolean upperBound;
 
@@ -39,7 +40,7 @@ public class Bound extends Attr {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(type).filter(Objects::nonNull);
   }
 

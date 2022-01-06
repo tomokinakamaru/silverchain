@@ -5,10 +5,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.NameTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class Name extends Attr {
+public class Name extends AttrImpl {
 
   private String id;
 
@@ -18,7 +19,7 @@ public class Name extends Attr {
     if (tree == null) return null;
     Name attr = new Name();
     attr.id(tree.id());
-    attr.qualifier(tree.qualifier());
+    // attr.qualifier(tree.qualifier());
     attr.srcMap().add(tree.srcMap());
     return attr;
   }
@@ -40,7 +41,7 @@ public class Name extends Attr {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.empty();
   }
 

@@ -1,7 +1,7 @@
 package silverchain.graph.walker;
 
 import org.apiguardian.api.API;
-import silverchain.graph.data.Attr;
+import silverchain.graph.core.Attr;
 
 @API(status = API.Status.INTERNAL)
 public final class AttrWalker {

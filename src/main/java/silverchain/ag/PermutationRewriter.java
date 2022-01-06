@@ -6,15 +6,17 @@ import org.apiguardian.api.API;
 import silverchain.ag.data.ChainExprTree;
 import silverchain.ag.data.ChainFactTree;
 import silverchain.ag.data.ChainTermTree;
+import silverchain.ag.data.GroupedExprTree;
 import silverchain.ag.data.PermutationTree;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 
 @API(status = API.Status.INTERNAL)
 public class PermutationRewriter implements TreeListener<Void> {
 
   @Override
-  public void exit(PermutationTree tree, Void arg) {
-    tree.parent().children().replace(tree, permutation(tree));
+  public void exit(TreeStack ancestors, PermutationTree tree, Void arg) {
+    ancestors.peek().children().replace(tree, permutation(tree));
   }
 
   protected ChainExprTree permutation(PermutationTree tree) {
@@ -34,6 +36,11 @@ public class PermutationRewriter implements TreeListener<Void> {
   }
 
   protected ChainFactTree fact(ChainExprTree tree) {
-    return new ChainFactTree().with(tree.copy());
+    ChainExprTree expr = tree.copy();
+    GroupedExprTree grouped = new GroupedExprTree();
+    grouped.children().add(expr);
+    ChainFactTree fact = new ChainFactTree();
+    fact.children().add(grouped);
+    return fact;
   }
 }

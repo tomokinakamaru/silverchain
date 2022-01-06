@@ -4,6 +4,7 @@ import org.apiguardian.api.API;
 import silverchain.ag.data.DeclsTree;
 import silverchain.ag.data.TypeDeclTree;
 import silverchain.ag.walker.TreeListener;
+import silverchain.ag.walker.TreeStack;
 import silverchain.ag.walker.TreeWalker;
 import silverchain.graph.data.Graphs;
 
@@ -21,7 +22,7 @@ public final class GraphBuilder implements TreeListener<Graphs> {
   }
 
   @Override
-  public void enter(TypeDeclTree tree, Graphs arg) {
+  public void enter(TreeStack ancestors, TypeDeclTree tree, Graphs arg) {
     arg.add(GraphFactory.create(tree));
   }
 }

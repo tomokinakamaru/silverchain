@@ -3,37 +3,40 @@ package silverchain.ag.data;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class ChainElemTree<SELF extends ChainElemTree<SELF>> extends Tree<SELF> {
+public interface ChainElemTree extends Tree {
 
-  public boolean isFragmentRef() {
-    return is(FragmentRefTree.class);
+  default boolean isFragmentRef() {
+    return this instanceof FragmentRefTree;
   }
 
-  public FragmentRefTree asFragmentRef() {
-    return as(FragmentRefTree.class);
+  default FragmentRefTree asFragmentRef() {
+    return (FragmentRefTree) this;
   }
 
-  public boolean isGroupedExpr() {
-    return is(GroupedExprTree.class);
+  default boolean isGroupedExpr() {
+    return this instanceof GroupedExprTree;
   }
 
-  public GroupedExprTree asGroupedExpr() {
-    return as(GroupedExprTree.class);
+  default GroupedExprTree asGroupedExpr() {
+    return (GroupedExprTree) this;
   }
 
-  public boolean isMethod() {
-    return is(MethodTree.class);
+  default boolean isMethod() {
+    return this instanceof MethodTree;
   }
 
-  public MethodTree asMethod() {
-    return as(MethodTree.class);
+  default MethodTree asMethod() {
+    return (MethodTree) this;
   }
 
-  public boolean isPermutation() {
-    return is(PermutationTree.class);
+  default boolean isPermutation() {
+    return this instanceof PermutationTree;
   }
 
-  public PermutationTree asPermutation() {
-    return as(PermutationTree.class);
+  default PermutationTree asPermutation() {
+    return (PermutationTree) this;
   }
+
+  @Override
+  ChainElemTree copy();
 }

@@ -4,10 +4,11 @@ import java.util.Objects;
 import java.util.stream.Stream;
 import org.apiguardian.api.API;
 import silverchain.ag.data.TypeRefTree;
+import silverchain.graph.core.AttrImpl;
 import silverchain.graph.walker.AttrListener;
 
 @API(status = API.Status.INTERNAL)
-public class RetType extends EdgeAttr {
+public class RetType extends AttrImpl implements EdgeAttr {
 
   private TypeRef ref;
 
@@ -28,7 +29,7 @@ public class RetType extends EdgeAttr {
   }
 
   @Override
-  public Stream<? extends Attr> children() {
+  public Stream<? extends AttrImpl> children() {
     return Stream.of(ref).filter(Objects::nonNull);
   }
 

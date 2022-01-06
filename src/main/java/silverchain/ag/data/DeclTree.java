@@ -3,29 +3,32 @@ package silverchain.ag.data;
 import org.apiguardian.api.API;
 
 @API(status = API.Status.INTERNAL)
-public abstract class DeclTree<SELF extends DeclTree<SELF>> extends Tree<SELF> {
+public interface DeclTree extends Tree {
 
-  public boolean isAliasDecl() {
-    return is(AliasDeclTree.class);
+  default boolean isAliasDecl() {
+    return this instanceof AliasDeclTree;
   }
 
-  public AliasDeclTree asAliasDecl() {
-    return as(AliasDeclTree.class);
+  default AliasDeclTree asAliasDecl() {
+    return (AliasDeclTree) this;
   }
 
-  public boolean isFragmentDecl() {
-    return is(FragmentDeclTree.class);
+  default boolean isFragmentDecl() {
+    return this instanceof FragmentDeclTree;
   }
 
-  public FragmentDeclTree asFragmentDecl() {
-    return as(FragmentDeclTree.class);
+  default FragmentDeclTree asFragmentDecl() {
+    return (FragmentDeclTree) this;
   }
 
-  public boolean isTypeDecl() {
-    return is(TypeDeclTree.class);
+  default boolean isTypeDecl() {
+    return this instanceof TypeDeclTree;
   }
 
-  public TypeDeclTree asTypeDecl() {
-    return as(TypeDeclTree.class);
+  default TypeDeclTree asTypeDecl() {
+    return (TypeDeclTree) this;
   }
+
+  @Override
+  DeclTree copy();
 }
