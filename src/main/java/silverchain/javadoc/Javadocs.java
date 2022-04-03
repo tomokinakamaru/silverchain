@@ -227,7 +227,9 @@ public final class Javadocs {
     ResolvedType t;
     try {
       t = type.resolve();
-    } catch (UnsolvedSymbolException | UnsupportedOperationException ignored) {
+    } catch (UnsolvedSymbolException ignored) {
+      return false;
+    } catch (UnsupportedOperationException e) {
       return true;
     }
     return t.isTypeVariable();
