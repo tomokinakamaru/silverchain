@@ -22,6 +22,7 @@ import com.github.javaparser.javadoc.description.JavadocDescription;
 import com.github.javaparser.javadoc.description.JavadocDescriptionElement;
 import com.github.javaparser.javadoc.description.JavadocInlineTag;
 import com.github.javaparser.resolution.UnsolvedSymbolException;
+import com.github.javaparser.resolution.types.ResolvedType;
 import com.github.javaparser.symbolsolver.JavaSymbolSolver;
 import com.github.javaparser.symbolsolver.resolution.typesolvers.CombinedTypeSolver;
 import java.io.IOException;
@@ -223,13 +224,15 @@ public final class Javadocs {
   }
 
   private static boolean isTypeParameter(Type type) {
+    ResolvedType t;
     try {
-      type.resolve();
+      t = type.resolve();
     } catch (UnsolvedSymbolException ignored) {
+      return false;
     } catch (UnsupportedOperationException e) {
       return true;
     }
-    return false;
+    return t.isTypeVariable();
   }
 
   private static boolean isActionType(ClassOrInterfaceType type) {
