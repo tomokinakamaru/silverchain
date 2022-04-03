@@ -8,9 +8,9 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/test_coverage)](https://codeclimate.com/github/tomokinakamaru/silverchain/test_coverage)
 [![Maintainability](https://api.codeclimate.com/v1/badges/66d803605f5b2de0c000/maintainability)](https://codeclimate.com/github/tomokinakamaru/silverchain/maintainability)
 
-[![GitHub issues open](https://img.shields.io/github/issues-raw/tomokinakamaru/silverchain.svg?maxAge=2592000)]()
-[![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/tomokinakamaru/silverchain.svg?maxAge=2592000)]()
-[![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed-raw/tomokinakamaru/silverchain.svg?maxAge=2592000)]()
+[![GitHub issues open](https://img.shields.io/github/issues-raw/tomokinakamaru/silverchain.svg)](https://github.com/tomokinakamaru/silverchain/issues)
+[![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/tomokinakamaru/silverchain.svg)](https://github.com/tomokinakamaru/silverchain/issues?q=is%3Aissue+is%3Aclosed)
+[![GitHub pull requests closed](https://img.shields.io/github/issues-pr-closed-raw/tomokinakamaru/silverchain.svg)](https://github.com/tomokinakamaru/silverchain/pulls?q=is%3Apr+is%3Aclosed)
 
 ## What is Silverchain for?
 
