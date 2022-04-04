@@ -1,5 +1,7 @@
 package silverchain.parser.adapter;
 
+import static silverchain.parser.adapter.Utility.buildErrorMessage;
+
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
@@ -20,6 +22,6 @@ public class TokenizeErrorListener extends BaseErrorListener {
       String msg,
       RecognitionException e)
       throws ParseCancellationException {
-    throw new TokenizeError("line " + line + ":" + charPositionInLine + " " + msg);
+    throw new TokenizeError(buildErrorMessage(msg, line, charPositionInLine));
   }
 }

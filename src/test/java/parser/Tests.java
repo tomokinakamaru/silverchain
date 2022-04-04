@@ -182,4 +182,17 @@ final class Tests {
       throw new RuntimeException(e);
     }
   }
+
+  @Test
+  void testParseErrorMessage() {
+    assertThatThrownBy(() -> parse(AgParser::input, "123"))
+        .hasMessage(
+            "Extraneous input '123' expecting {<EOF>, 'import', FRAGMENT_NAME, NAME} (L1C1)");
+  }
+
+  @Test
+  void testTokenizeErrorMessage() {
+    assertThatThrownBy(() -> parse(AgParser::input, "~"))
+        .hasMessage("Token recognition error at: '~' (L1C1)");
+  }
 }
