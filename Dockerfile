@@ -1,5 +1,5 @@
 # Build JAR
-FROM openjdk:8-jdk-alpine as builder
+FROM eclipse-temurin:11-jdk-alpine as builder
 
 COPY . /src
 
@@ -9,7 +9,7 @@ RUN cd /src && \
 
 
 # Main
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:11-jre-alpine
 
 COPY --from=builder /silverchain.jar /silverchain.jar
 

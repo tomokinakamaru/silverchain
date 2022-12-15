@@ -11,16 +11,16 @@ plugins {
 
 group 'silverchain'
 
-sourceCompatibility = 1.8
+sourceCompatibility = JavaVersion.VERSION_11
 
-targetCompatibility = 1.8
+targetCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
-    antlr "org.antlr:antlr4:4.9.3"
+    antlr "org.antlr:antlr4:4.11.1"
     implementation 'info.picocli:picocli:4.7.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.24.9'
