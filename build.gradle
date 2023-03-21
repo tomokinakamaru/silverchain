@@ -4,7 +4,7 @@ plugins {
     id 'jacoco'
     id 'com.diffplug.spotless' version '6.17.0'
     id 'com.github.ben-manes.versions' version '0.46.0'
-    id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'com.github.johnrengelman.shadow' version '8.1.1'
     id 'maven-publish'
     id 'signing'
 }
@@ -67,12 +67,12 @@ check {
 }
 
 jacoco {
-    toolVersion = '0.8.7'
+    toolVersion = '0.8.8'
 }
 
 jacocoTestReport {
     reports {
-        xml.enabled true
+        xml.required = true
     }
     afterEvaluate {
         classDirectories.from = files(classDirectories.files.collect {
