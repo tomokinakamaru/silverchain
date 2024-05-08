@@ -21,7 +21,7 @@ repositories {
 
 dependencies {
     antlr "org.antlr:antlr4:4.13.1"
-    implementation 'info.picocli:picocli:4.7.5'
+    implementation 'info.picocli:picocli:4.7.6'
     implementation 'org.apache.commons:commons-collections4:4.4'
     implementation 'com.github.javaparser:javaparser-symbol-solver-core:3.25.10'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.2'
